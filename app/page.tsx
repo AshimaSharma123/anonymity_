@@ -1,65 +1,818 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+    <>
+      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-black/6">
+        <div className="flex items-center justify-between h-[92px] max-w-7xl mx-auto ">
+          {/* Anonymity Logo */}
+          <a href="/" className="flex items-center flex-shrink-0" aria-label="Anonymity">
+            <svg width="154" height="25" viewBox="0 0 154 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clipPath="url(#clip0_117_3844)">
+                <path d="M116.923 8.84582C117.853 7.63126 118.743 7.10214 120.296 6.96218C122.33 6.64456 124.28 7.86257 124.516 10.0248C124.822 12.8256 124.545 15.9745 124.718 18.8405C123.331 18.9075 122.316 18.9315 120.934 18.8277L120.945 18.4809C120.996 16.7222 121.144 13.1774 120.885 11.5639C120.811 11.1017 120.667 10.5328 120.334 10.188C120.024 9.86787 119.533 9.86434 119.118 9.85889C118.677 9.85309 118.31 9.92899 117.985 10.2509C116.876 11.352 117.245 15.9991 117.253 17.668L117.266 18.8536C116.014 18.9007 114.754 18.8735 113.501 18.8577C113.389 16.5907 113.569 14.1178 113.47 11.837C113.433 10.978 113.25 10.4579 112.613 9.90061C112.031 9.86325 111.595 9.87954 111.01 9.90414C110.253 10.4279 109.955 11.1359 109.923 12.0333C109.842 14.2888 109.97 16.5879 109.916 18.8423C108.598 18.9098 107.373 18.8826 106.057 18.8587C105.965 18.0136 105.989 15.3271 106.008 14.3592C106.052 12.1922 105.902 9.29148 106.106 7.19911C107.355 7.18568 108.606 7.19088 109.855 7.21456C109.909 7.86424 109.916 8.14106 109.862 8.7889C110.761 7.57257 111.424 7.27871 112.856 6.96394C114.12 6.9495 114.356 6.96117 115.56 7.32321C116.096 7.84854 116.497 8.21688 116.923 8.84582Z" fill="#0171F9"/>
+                <path d="M39.5626 2.49841C40.8874 2.56835 42.4654 2.48767 43.7559 2.59715C44.151 2.63065 45.5059 6.81052 45.7156 7.4079C46.5358 9.77314 47.3721 12.1328 48.2243 14.4867C48.7419 15.9551 49.188 17.4064 49.7909 18.8402C48.8646 18.8618 46.3917 19.0285 45.6623 18.7458C45.2054 18.3088 44.868 16.2036 44.544 15.3559C44.3884 15.2097 44.004 15.2185 43.7729 15.2028C42.2181 15.1638 40.2339 15.1415 38.6975 15.2513C38.4115 16.6624 38.1212 17.4776 37.6653 18.85C36.2718 18.8821 34.8778 18.8804 33.4844 18.8448C34.5063 16.095 35.5137 13.3399 36.5066 10.5796C36.9089 9.44217 39.0899 3.13105 39.5626 2.49841ZM39.6966 12.3132C40.3837 12.3254 41.1198 12.3526 41.8025 12.3483C42.3395 12.3364 42.9694 12.3387 43.4978 12.3068C43.0701 10.3224 42.1021 8.36446 41.7636 6.35714C41.7307 6.16185 41.7605 5.97218 41.6022 5.82542C41.1894 8.24095 40.1139 10.2647 39.6966 12.3132Z" fill="#0171F9"/>
+                <path d="M34.3065 20.0857C37.0131 19.9663 40.2042 20.1205 42.9676 20.1002L67.6724 20.0744C73.3635 20.0465 79.0543 20.053 84.7459 20.0941C86.5315 20.1189 88.5429 19.9796 90.299 20.1186C90.2914 20.6836 90.4426 21.9242 90.1907 22.3969C90.1377 22.4975 89.827 22.4852 89.6725 22.4967C87.9987 22.397 85.4338 22.4788 83.6634 22.4791L71.9849 22.4794L33.5244 22.4718C33.5075 21.6938 33.5203 20.8759 33.5201 20.0945L34.3065 20.0857Z" fill="#0171F9"/>
+                <path d="M69.8351 6.9537C71.5936 6.88485 73.2236 6.88107 74.8045 7.84099C77.6688 9.58014 78.0157 13.873 76.399 16.5663C75.4535 18.1416 73.9724 18.6985 72.2372 19.1016C70.4588 19.119 69.0979 19.2249 67.4635 18.3687C63.3615 16.2197 63.6824 9.07596 68.0752 7.42539C68.6475 7.21037 69.2423 7.12926 69.8351 6.9537ZM71.3261 16.2514C73.983 16.1431 74.0478 11.6822 72.5858 10.1803C72.2683 9.85402 71.1421 9.7976 70.6869 9.81388C70.0327 9.88231 69.6097 9.99893 69.1744 10.5593C68.1917 11.8246 68.1213 14.7271 69.4178 15.8139C70.0056 16.3067 70.6161 16.267 71.3261 16.2514Z" fill="#0171F9"/>
+                <path d="M92.127 7.20465C93.4287 7.19726 94.8119 7.16729 96.107 7.20835C96.8402 9.35185 97.5095 11.5635 98.0991 13.7504C98.2646 14.3644 98.472 14.7575 98.6349 15.4739C98.7449 15.3626 98.7886 14.9344 98.8197 14.7631C99.1716 12.8379 99.8645 10.9575 100.463 9.09846C100.668 8.46347 100.817 7.84846 101.055 7.22405C102.118 7.15293 103.602 7.19642 104.695 7.19743C104.465 8.08657 104.238 8.94212 103.894 9.7965C102.932 12.1941 102.096 14.6271 101.167 17.0388C100.048 20.3793 98.5686 25.0986 94.1376 24.5956C93.3573 24.507 93.2969 24.511 92.578 24.1658C92.5561 23.6115 92.4545 22.1917 92.6418 21.751C92.9483 21.0278 93.9125 22.1282 94.9152 21.6447C95.9441 21.1483 96.2876 19.927 96.6966 18.9103C95.9012 17.1695 95.0681 14.9437 94.3618 13.1572C93.6639 11.3927 92.5494 8.98914 92.127 7.20465Z" fill="#0171F9"/>
+                <path d="M147.842 15.6092C148.121 14.9644 148.394 13.9118 148.601 13.2144L149.788 9.2826C149.935 8.79857 150.226 7.70574 150.469 7.33489C151.056 7.08788 153.244 7.16638 153.916 7.24724L154.001 7.39114C153.976 8.16249 153.36 9.34809 153.124 10.1236C152.432 12.4039 151.279 14.7013 150.659 16.9861C149.154 20.07 148.551 24.8308 143.873 24.5821C143.035 24.5376 142.919 24.6756 142.109 24.2346C142.109 23.7881 142.007 21.8887 142.154 21.651C142.257 21.591 144.063 21.6721 144.45 21.6477C145.393 21.001 145.606 20.0729 146.028 19.01C145.811 18.1757 145.188 16.7474 144.841 15.8902L142.644 10.461C142.331 9.67923 141.617 7.97971 141.566 7.19972C142.335 7.21265 144.835 7.08763 145.394 7.27511C145.953 7.80801 147.792 14.6094 147.842 15.6092Z" fill="#0171F9"/>
+                <path d="M7.51944 4.01117C12.0164 4.04327 16.5206 4.02149 21.0178 4.00841C22.0184 4.0055 22.2478 4.05479 22.9551 4.77911C23.147 5.44718 23.2311 5.97436 23.2221 6.67207C23.1831 10.1749 23.245 13.6763 23.1977 17.1773C23.1705 19.1938 21.364 19.1304 19.8113 19.091C17.412 19.03 14.824 19.2333 12.4513 18.9974C12.1554 18.0007 11.8735 17.5586 11.1566 16.837L12.618 16.8097L13.8517 16.7223C13.9489 16.0263 13.9021 15.1909 13.8803 14.4777C14.9752 14.4077 17.8178 14.6427 18.6283 14.424C18.6408 15.1777 18.6174 15.9929 18.6104 16.7514L20.8532 16.7371C20.7777 13.3713 20.8287 9.70362 20.8439 6.31944C16.61 6.31457 12.3234 6.28124 8.09398 6.33438C8.16251 6.92958 8.14647 7.45878 8.13966 8.05716C7.43722 7.78202 6.40404 7.64886 6.00116 7.44199C5.83277 7.24661 5.75786 6.98591 5.76626 6.73143C5.81363 5.29261 5.79288 4.07191 7.51944 4.01117Z" fill="#0171F9"/>
+                <path d="M58.0543 6.96309C58.3262 6.951 58.5983 6.9437 58.8705 6.9411C63.173 6.92229 62.7363 11.6236 62.7391 14.5919L62.7377 18.8514C61.4488 18.882 60.1594 18.8831 58.8704 18.8547C58.8708 16.5659 58.9325 14.1628 58.8379 11.8809C58.8044 11.0691 58.5673 10.448 57.931 9.93134C56.7605 9.73437 55.9632 9.76123 55.3052 10.8494C54.6957 13.06 55.0807 15.7969 55.0093 18.0996C55.0025 18.3194 55.0416 18.632 55.0732 18.8521C53.7917 18.881 52.5099 18.8787 51.2285 18.8453C51.272 15.0757 51.3933 10.9762 51.2439 7.21447C52.3831 7.15881 53.8257 7.19844 54.9747 7.20994C54.9975 7.74602 54.9988 8.31888 55.01 8.85849C56.0707 7.53176 56.3927 7.29054 58.0543 6.96309Z" fill="#0171F9"/>
+                <path d="M86.1389 6.96141C87.3987 6.90255 88.6265 6.89223 89.615 7.81747C90.4851 8.62718 90.8211 9.87768 90.8303 11.0352C90.853 13.6348 90.7707 16.2511 90.8916 18.8485C89.636 18.8917 88.3796 18.8895 87.1241 18.8416C87.0006 16.373 87.3097 13.7779 87.0233 11.3134C86.8326 9.66879 85.6275 9.71329 84.3442 9.96307C84.1308 10.1781 83.9167 10.3919 83.7017 10.6045C83.1323 11.6511 83.2927 13.2166 83.2977 14.4072L83.3028 18.8555C82.5813 18.8688 80.0685 18.9721 79.5554 18.7845C79.321 18.1893 79.5545 8.6004 79.615 7.20725C80.842 7.19314 82.069 7.19381 83.296 7.20918L83.3095 8.85303C84.1426 7.61294 84.7129 7.31874 86.1389 6.96141Z" fill="#0171F9"/>
+                <path d="M103.566 20.0859C108.072 19.9583 113.195 20.0734 117.755 20.0683L132.936 20.1004C135.21 20.1031 137.466 20.0459 139.744 20.0728C139.772 20.8645 139.762 21.6833 139.762 22.4775L138.47 22.474L102.142 22.4783C102.12 21.7037 102.136 20.8656 102.137 20.086L103.566 20.0859Z" fill="#0171F9"/>
+                <path d="M138.389 3.58496C138.692 3.73147 138.544 6.68905 138.536 7.20179L141.023 7.20549C141.041 8.03485 141.09 9.06193 141.034 9.87492C140.238 9.90489 139.408 9.8572 138.553 9.89213C138.553 11.0731 138.379 15.2708 138.903 15.9952C139.522 16.4314 140.31 16.2372 141.023 16.1294C141.352 18.9764 141.093 19.1002 138.4 19.1085C135.7 19.2049 134.702 17.3133 134.76 14.9185C134.8 13.2807 134.8 11.5182 134.724 9.88634C134.355 9.89003 133.318 9.93327 133.027 9.83084C132.803 9.32741 132.836 7.88993 132.963 7.36258C133.27 7.0997 134.247 7.18945 134.701 7.19793C134.795 6.30493 134.779 5.58397 134.776 4.68677C135.562 4.31424 137.452 3.87152 138.389 3.58496Z" fill="#0171F9"/>
+                <path d="M3.03911 16.8395C3.52135 16.8448 5.36977 17.0143 5.65062 16.9756C8.78467 16.5439 11.2627 17.1676 11.6025 20.7792C11.6701 21.4978 11.1261 21.955 10.6235 22.4567C9.93736 22.6123 9.25247 22.5977 8.55522 22.578C6.96103 22.4771 5.045 22.6173 3.41738 22.5808C2.64556 22.5634 1.94034 22.6384 1.15983 22.5197C0.848762 22.2942 0.541202 22.064 0.237278 21.829C-0.549423 19.7859 0.912582 17.1713 3.03911 16.8395Z" fill="#0171F9"/>
+                <path d="M127.359 7.20459C128.578 7.19066 129.797 7.19284 131.016 7.21114C131.109 7.89894 131.055 11.0857 131.038 12.0112C130.993 14.2512 131.129 16.641 131.075 18.8333C130.008 18.9409 128.357 18.8828 127.285 18.8499C127.533 15.0507 127.261 10.9935 127.359 7.20459Z" fill="#0171F9"/>
+                <path d="M5.15606 8.66217C7.0547 8.31869 8.87397 9.57431 9.22545 11.471C9.57701 13.3676 8.32866 15.1916 6.43288 15.5509C4.52592 15.9125 2.68834 14.6554 2.33468 12.7475C1.98102 10.8396 3.24608 9.00775 5.15606 8.66217Z" fill="#0171F9"/>
+                <path d="M129.382 1.52991C129.614 1.49775 130.026 1.58919 130.272 1.63209C130.662 2.01512 130.915 2.26632 131.252 2.69435C131.287 3.12784 131.252 3.58844 131.231 4.02445C131.152 4.13805 131.068 4.24846 130.981 4.35542C130.386 5.07471 129.979 5.09838 129.102 5.18276C128.543 5.13751 128.184 5.00292 127.675 4.79604C127.482 4.56776 127.249 4.18372 127.08 3.92336L127.031 2.77966C127.741 1.62361 128.058 1.52504 129.382 1.52991Z" fill="#0171F9"/>
+                <path d="M151.61 20.0941C152.391 20.082 153.225 20.0992 154.009 20.103C154.034 20.8941 154.03 21.6859 154.001 22.4768C153.259 22.4572 152.373 22.4808 151.623 22.4834C151.586 21.7305 151.608 20.8562 151.61 20.0941Z" fill="#0171F9"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_117_3844">
+                  <rect width="154" height="24.5059" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          {/* Navigation Links */}
+          <nav className="hidden sm:flex items-center gap-10">
+            <a href="/" className="font-inter text-sm font-normal text-gray-950 hover:text-blue-600 transition-colors">Home</a>
+            <a href="/submit-report" className="font-inter text-sm font-normal text-gray-950 hover:text-blue-600 transition-colors">Submit Report</a>
+            <a href="/browse-school" className="font-inter text-sm font-normal text-gray-950 hover:text-blue-600 transition-colors">Browse School</a>
+          </nav>
+
+          {/* Sign In Button */}
+          <div className="flex items-center flex-shrink-0">
+            <a href="/sign-in" className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.0013 1.33337H12.0013C12.7346 1.33337 13.3346 1.93337 13.3346 2.66671V13.3334C13.3346 14.0667 12.7346 14.6667 12.0013 14.6667H6.0013C5.26797 14.6667 4.66797 14.0667 4.66797 13.3334V12.6667C4.66797 12.4899 4.73821 12.3203 4.86323 12.1953C4.98826 12.0703 5.15782 12 5.33464 12C5.51145 12 5.68102 12.0703 5.80604 12.1953C5.93106 12.3203 6.0013 12.4899 6.0013 12.6667V13.3334H12.0013V2.66671H6.0013V3.33337C6.0013 3.51019 5.93106 3.67975 5.80604 3.80478C5.68102 3.9298 5.51145 4.00004 5.33464 4.00004C5.15782 4.00004 4.98826 3.9298 4.86323 3.80478C4.73821 3.67975 4.66797 3.51019 4.66797 3.33337V2.66671C4.66797 1.93337 5.26797 1.33337 6.0013 1.33337Z" fill="white"/>
+                <path d="M7.19667 10.8633C7.45667 11.1233 7.87667 11.1233 8.13667 10.8633L10.5287 8.47129C10.6536 8.34628 10.7239 8.17674 10.7239 7.99996C10.7239 7.82319 10.6536 7.65365 10.5287 7.52863L8.13667 5.13663C8.00994 5.02209 7.84405 4.96062 7.67329 4.96493C7.50252 4.96924 7.33995 5.039 7.21916 5.15979C7.09837 5.28057 7.02862 5.44315 7.02431 5.61392C7.02 5.78468 7.08146 5.95057 7.196 6.07729L8.44667 7.33329H2.66667C2.48986 7.33329 2.32029 7.40353 2.19526 7.52856C2.07024 7.65358 2 7.82315 2 7.99996C2 8.17677 2.07024 8.34634 2.19526 8.47137C2.32029 8.59639 2.48986 8.66663 2.66667 8.66663H8.44667L7.196 9.92263C7.07172 10.0477 7.00202 10.2168 7.00214 10.3931C7.00226 10.5694 7.07221 10.7384 7.19667 10.8633Z" fill="white"/>
+              </svg>
+              <span>Sign In</span>
+            </a>
+          </div>
         </div>
+      </header>
+
+      <main>
+        {/* Hero Section */}
+        <section className="bg-blue-50 px-9 py-[35px]">
+          <div className="relative overflow-hidden rounded-3xl bg-blue-50 min-h-[680px] flex flex-col items-center">
+            {/* Decorative blue blur blobs */}
+            <div className="absolute w-[682px] h-[323px] rounded-full bg-blue-600 opacity-10 blur-[90px] pointer-events-none z-0 -left-[400px] top-[270px]" />
+            <div className="absolute w-[682px] h-[323px] rounded-full bg-blue-600 opacity-10 blur-[90px] pointer-events-none z-0 -right-[400px] top-[540px]" />
+
+            {/* Text content */}
+            <div className="relative z-10 flex flex-col items-center gap-8 px-6 pt-5 max-w-[1111px] text-center">
+              <div className="inline-flex px-[10px] py-2 rounded-lg bg-slate-900 text-blue-50 font-inter text-xs font-semibold leading-4">
+                Real Teacher Insights
+              </div>
+              <h1 className="text-gray-950 font-inter text-[clamp(25px,5vw,62px)] font-bold leading-[1.13]">
+                DISCOVER THE REALITY OF WHAT TO EXPECT FROM A SCHOOL SITE BEFORE SAYING YES TO AN UNFAMILIAR GUEST-TEACHING OPPORTUNITY
+              </h1>
+              <div className="flex items-center gap-[15px] flex-wrap justify-center">
+                <button className="flex items-center justify-center gap-2  px-8 py-4 rounded-xl bg-blue-600 text-white font-inter text-base font-bold leading-6 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/6">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.16667 15.7416H5.345L13.1067 7.97994L11.9283 6.80161L4.16667 14.5633V15.7416ZM17.5 17.4083H2.5V13.8724L13.6958 2.67661C13.8521 2.52038 14.064 2.43262 14.285 2.43262C14.506 2.43262 14.7179 2.52038 14.8742 2.67661L17.2317 5.03411C17.3879 5.19038 17.4757 5.4023 17.4757 5.62327C17.4757 5.84424 17.3879 6.05617 17.2317 6.21244L7.7025 15.7416H17.5V17.4083ZM13.1067 5.62327L14.285 6.80161L15.4633 5.62327L14.285 4.44494L13.1067 5.62327Z" fill="white"/>
+                  </svg>
+                  Submit a Report
+                </button>
+                <button className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-black/20 bg-white text-gray-800 font-inter text-base font-bold leading-6 hover:border-black/40 transition-colors">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.91667 13.3333C6.40278 13.3333 5.12167 12.8089 4.07333 11.76C3.025 10.7111 2.50056 9.43 2.5 7.91667C2.49944 6.40333 3.02389 5.12222 4.07333 4.07333C5.12278 3.02444 6.40389 2.5 7.91667 2.5C9.42945 2.5 10.7108 3.02444 11.7608 4.07333C12.8108 5.12222 13.335 6.40333 13.3333 7.91667C13.3333 8.52778 13.2361 9.10417 13.0417 9.64583C12.8472 10.1875 12.5833 10.6667 12.25 11.0833L16.9167 15.75C17.0694 15.9028 17.1458 16.0972 17.1458 16.3333C17.1458 16.5694 17.0694 16.7639 16.9167 16.9167C16.7639 17.0694 16.5694 17.1458 16.3333 17.1458C16.0972 17.1458 15.9028 17.0694 15.75 16.9167L11.0833 12.25C10.6667 12.5833 10.1875 12.8472 9.64583 13.0417C9.10417 13.2361 8.52778 13.3333 7.91667 13.3333ZM7.91667 11.6667C8.95833 11.6667 9.84389 11.3022 10.5733 10.5733C11.3028 9.84445 11.6672 8.95889 11.6667 7.91667C11.6661 6.87444 11.3017 5.98917 10.5733 5.26083C9.845 4.5325 8.95945 4.16778 7.91667 4.16667C6.87389 4.16556 5.98861 4.53028 5.26083 5.26083C4.53306 5.99139 4.16833 6.87667 4.16667 7.91667C4.165 8.95667 4.52972 9.84222 5.26083 10.5733C5.99195 11.3044 6.87722 11.6689 7.91667 11.6667Z" fill="#2C3031"/>
+                  </svg>
+                  Search School
+                </button>
+              </div>
+            </div>
+
+            {/* Phone mockup visual area */}
+            <div className="relative w-full flex-1 flex items-end justify-center mt-10 min-h-[360px]">
+              {/* Concentric decorative rings */}
+              <div className="absolute w-[787px] h-[787px] rounded-full border border-gray-300 opacity-48 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" />
+              <div className="absolute w-[709px] h-[709px] rounded-full border border-gray-300 opacity-72 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" />
+              <div className="absolute w-[617px] h-[617px] rounded-full border border-gray-300 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 pointer-events-none z-0" />
+              {/* Dark navy filled circle */}
+              <div className="absolute w-[526px] h-[526px] rounded-full bg-slate-900 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-10" />
+
+              {/* Phone mockup */}
+              <div className="relative z-20 -mb-1">
+                <div className="w-[285px] bg-white rounded-[42px] border-8 border-black shadow-2xl overflow-hidden flex flex-col" style={{boxShadow: '0 24px 60px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255,255,255,0.08)'}}>
+                  {/* Status bar */}
+                  <div className="flex items-center justify-between px-5 pt-[10px] pb-1 bg-blue-600">
+                    <span className="font-inter text-xs font-semibold text-white">9:41</span>
+                    <div className="flex items-center gap-1">
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                        <rect x="0" y="3" width="3" height="9" rx="1" fill="white"/>
+                        <rect x="4.5" y="2" width="3" height="10" rx="1" fill="white"/>
+                        <rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="white"/>
+                        <rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="white" opacity="0.4"/>
+                      </svg>
+                      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                        <path d="M8 2.5C9.8 2.5 11.4 3.2 12.6 4.4L14 3C12.4 1.5 10.3 0.5 8 0.5C5.7 0.5 3.6 1.5 2 3L3.4 4.4C4.6 3.2 6.2 2.5 8 2.5Z" fill="white"/>
+                        <path d="M8 5.5C9.1 5.5 10.1 5.9 10.8 6.6L12.2 5.2C11.1 4.2 9.6 3.5 8 3.5C6.4 3.5 4.9 4.2 3.8 5.2L5.2 6.6C5.9 5.9 6.9 5.5 8 5.5Z" fill="white"/>
+                        <circle cx="8" cy="9.5" r="1.5" fill="white"/>
+                      </svg>
+                      <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+                        <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="white" strokeOpacity="0.35"/>
+                        <rect x="2" y="2" width="16" height="8" rx="2" fill="white"/>
+                        <path d="M23 4.5V7.5C23.8 7.2 24.5 6.4 24.5 6C24.5 5.6 23.8 4.8 23 4.5Z" fill="white" fillOpacity="0.4"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Notch */}
+                  <div className="w-[120px] h-[26px] bg-black rounded-b-[18px] mx-auto -mt-0.5" />
+
+                  {/* App header bar */}
+                  <div className="flex items-center justify-between px-4 py-3 bg-blue-600">
+                    <div className="flex items-center gap-2">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect width="18" height="18" rx="4" fill="white" fillOpacity="0.2"/>
+                        <path d="M5 9C5 7.9 5.4 6.9 6.2 6.2C7 5.5 8 5 9 5C10 5 11 5.4 11.8 6.2" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                        <circle cx="9" cy="11" r="2" fill="white"/>
+                      </svg>
+                      <div className="flex flex-col">
+                        <span className="font-inter text-xs font-bold text-white underline">Anonymity</span>
+                        <span className="font-inter text-[10px] font-normal text-white/80">Guest-Teacher Report</span>
+                      </div>
+                    </div>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M3 5H17M3 10H17M3 15H17" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+
+                  {/* Form content */}
+                  <div className="px-4 py-4 flex flex-col gap-[14px] bg-white">
+                    <h3 className="font-inter text-[15px] font-bold text-gray-950">Submit a Report</h3>
+                    <div className="h-1 bg-gray-200 rounded overflow-hidden">
+                      <div className="w-[55%] h-full bg-blue-600 rounded" />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className="font-inter text-[11px] font-medium text-gray-500">School Name</label>
+                      <div className="flex items-center gap-1.5 px-3 py-[9px] border border-gray-200 rounded-2xl font-inter text-xs text-gray-800">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M7.5 1.5C9 1.5 10.3 2.1 11.3 3.1C12.3 4.1 12.9 5.4 12.9 7C12.9 7.5 12.8 7.9 12.7 8.3L14.5 10.1C14.8 10.4 14.8 10.9 14.5 11.2C14.2 11.5 13.7 11.5 13.4 11.2L11.6 9.4C11.1 9.8 10.5 10 9.9 10.2C9.3 10.3 8.6 10.4 7.9 10.4C6.4 10.4 5 9.8 4 8.8C3 7.8 2.5 6.5 2.5 5C2.5 3.5 3.1 2.2 4.1 1.2" stroke="#2C3031" strokeWidth="1.2" strokeLinecap="round"/>
+                        </svg>
+                        <span>Lincoln High School</span>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="ml-auto">
+                          <path d="M4 6L8 10L12 6" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className="font-inter text-[11px] font-medium text-gray-500">Grade Level</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white font-inter text-[11px] font-medium text-gray-800">Pre-K</span>
+                        <span className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white font-inter text-[11px] font-medium text-gray-800">Elementary</span>
+                        <span className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white font-inter text-[11px] font-medium text-gray-800">Middle School</span>
+                        <span className="px-2.5 py-1.5 rounded-lg border-blue-600 bg-blue-600 font-inter text-[11px] font-medium text-white">High</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className="font-inter text-xs font-bold text-gray-950">Ratings</label>
+                      <div className="flex items-center justify-between">
+                        <span className="font-inter text-[11px] text-gray-800">Classroom Behavior</span>
+                        <div className="flex gap-0.5">
+                          {[1, 2, 3].map((s) => (
+                            <svg key={s} width="18" height="18" viewBox="0 0 18 18" fill="none">
+                              <path d="M9 1.5L10.854 6.573L16.243 6.927L12.127 10.494L13.456 15.75L9 12.9L4.544 15.75L5.873 10.494L1.757 6.927L7.146 6.573L9 1.5Z" stroke="#F59E0B" strokeWidth="1.2" strokeLinejoin="round"/>
+                            </svg>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Guest-Teacher Report Section */}
+        <section className="bg-white px-6 py-[72px] flex flex-col items-center gap-12">
+          <h2 className="text-gray-950 text-center font-[Outfit] text-[clamp(28px,4vw,44px)] font-semibold leading-[1.2]">
+            Why Guest-Teacher Report
+          </h2>
+
+          {/* Row 1 – three columns */}
+          <div className="flex items-start justify-center w-full max-w-[1200px]">
+            {/* Step 1 */}
+            <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
+              <svg width="80" height="70" viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M66.7721 38.1178C66.6344 38.0374 66.4767 37.9967 66.3168 38.0002C66.157 38.0038 66.0013 38.0514 65.8674 38.1378C61.118 41.1943 53.7934 42.1224 53.483 42.1602L52.9084 42.2273C50.788 42.4713 48.7857 42.7016 46.8604 44.0978C45.5284 45.1396 44.3212 46.3286 43.2624 47.6418C42.6763 48.3156 42.1214 48.9526 41.5248 49.5519C41.0682 50.0545 40.4429 50.3765 39.7647 50.4582C39.0315 50.4064 38.3451 50.0827 37.8429 49.5519C37.2463 48.9526 36.692 48.3156 36.1053 47.6418C35.0467 46.3287 33.8397 45.1396 32.5079 44.0978C30.5826 42.7011 28.5798 42.4707 26.4593 42.2273L25.8836 42.1602C25.5737 42.1218 18.2457 41.192 13.5003 38.1378C13.3663 38.0516 13.2107 38.004 13.0509 38.0004C12.8911 37.9968 12.7334 38.0374 12.5956 38.1176C12.4578 38.1977 12.3454 38.3143 12.2709 38.4542C12.1964 38.5941 12.1628 38.7518 12.174 38.9096C12.2498 39.9838 14.1954 65.2129 28.5508 65.2129C29.3117 65.2107 30.0708 65.1421 30.8195 65.0078C30.8369 65.0044 36.0688 63.6999 39.4061 59.8115C39.6204 59.5382 39.771 59.5806 39.9871 59.8419C43.2995 63.6999 48.5314 65.0044 48.5488 65.0078C49.2977 65.1419 50.057 65.2106 50.8175 65.2129C65.1758 65.2129 67.1185 39.9838 67.1937 38.9096C67.2049 38.7518 67.1713 38.5942 67.0968 38.4543C67.0224 38.3144 66.9099 38.1979 66.7721 38.1178ZM20.4449 53.3955C20.4449 53.3955 28.0915 45.9242 34.7627 55.5067C34.7627 55.5067 25.8141 63.6277 20.4449 53.3955ZM44.6056 55.5067C51.2768 45.9242 58.9234 53.3955 58.9234 53.3955C53.5542 63.6277 44.6056 55.5067 44.6056 55.5067Z" fill="url(#anon-grad)"/>
+                <path d="M60.6588 18.0531C60.3514 13.6632 58.6533 10.1288 57.3187 7.97909C55.8768 5.6578 53.1814 4.62227 50.7564 5.46237C44.753 7.54176 34.2225 7.54296 28.2179 5.46237C25.7941 4.62346 23.0975 5.6578 21.6556 7.97909C19.5 11.4503 16.3838 18.5369 19.7395 27.0094L21.9559 26.1312C19.1329 19.0064 21.3363 13.0113 23.6802 9.23626C24.5441 7.84563 26.0492 7.23432 27.4386 7.71336C33.8555 9.93694 45.1176 9.93694 51.5369 7.71336C52.9192 7.23432 54.4302 7.84563 55.2941 9.23745C57.638 13.0113 59.8414 19.0064 57.0196 26.1312L59.236 27.0094C60.0677 24.9297 60.5531 22.7278 60.6731 20.4912C69.067 22.2703 72.8528 24.7882 72.8528 26.5709C72.8528 29.9313 60.1595 34.618 39.4871 34.618C18.8148 34.618 6.12154 29.9301 6.12154 26.5697C6.12154 25.1969 8.45713 23.0866 15.0123 21.2824L14.3807 18.985C7.41803 20.8999 3.73828 23.5239 3.73828 26.5697C3.73828 33.3453 22.1573 37 39.4871 37C56.817 37 75.236 33.3453 75.236 26.5697C75.236 21.8222 66.4907 19.2448 60.6588 18.0531Z" fill="#525252"/>
+                <path d="M39.4863 29.8491V32.2324C52.2689 32.2324 60.3923 30.4247 64.097 29.3463L63.4321 27.0583C59.8489 28.101 51.9734 29.8491 39.4863 29.8491Z" fill="#AFAFAF"/>
+                <path d="M67.5521 25.5116C66.9634 25.8178 66.2246 26.1301 65.3535 26.4411L66.1543 28.6849C67.1255 28.3393 67.9656 27.983 68.6496 27.6279L67.5533 25.5128L67.5521 25.5116Z" fill="#4D9BFB"/>
+                <defs>
+                  <linearGradient id="anon-grad" x1="15.4957" y1="22.0156" x2="67.97" y2="75.2584" gradientUnits="userSpaceOnUse">
+                    <stop offset="0.184" stopColor="#29ABE2"/>
+                    <stop offset="0.821" stopColor="#0171F9"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Stay Anonymous</h3>
+              <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Share classroom experiences without revealing your identity.</p>
+            </div>
+
+            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
+              <div className="relative w-20 h-[70px] flex items-center justify-center">
+                <svg width="55" height="60" viewBox="0 0 55 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M53.7723 11.5886C47.0868 11.5886 41.6483 6.87107 41.6483 1.0725C41.648 0.787957 41.5367 0.515165 41.3389 0.314063C41.141 0.112961 40.8727 -1.41704e-07 40.5931 0H14.2345C13.9548 -1.41704e-07 13.6866 0.112961 13.4887 0.314063C13.2908 0.515165 13.1795 0.787957 13.1793 1.0725C13.1793 6.87107 7.74074 11.5886 1.05527 11.5886C0.77558 11.5886 0.507327 11.7015 0.309457 11.9026C0.111586 12.1037 0.00028291 12.3765 3.77578e-06 12.6611V21.5143C-0.00736835 37.7411 10.7812 54.015 27.8319 60C44.4824 52.6789 54.8276 37.9318 54.8276 21.5143V12.6611C54.8273 12.3765 54.716 12.1037 54.5181 11.9026C54.3203 11.7015 54.052 11.5886 53.7723 11.5886ZM52.7181 21.5143C52.7181 36.9246 43.0343 50.8071 27.4138 57.8432C11.7933 50.8071 2.10949 36.9246 2.10949 21.5143V13.6993C9.06983 13.2439 14.6526 8.31857 15.2382 2.14607H39.5894C40.1739 8.3175 45.7578 13.2439 52.7181 13.6993V21.5143Z" fill="#525252"/>
+                </svg>
+                <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 right-0">
+                  <g clipPath="url(#clip0_117_3893)">
+                    <path d="M14.5 29C22.5081 29 29 22.5081 29 14.5C29 6.49187 22.5081 0 14.5 0C6.49187 0 0 6.49187 0 14.5C0 22.5081 6.49187 29 14.5 29Z" fill="url(#paint0_linear_117_3893)"/>
+                    <path fillRule="evenodd" clipRule="evenodd" d="M10.1258 20.6968L5.46065 15.7701C5.15116 15.4452 4.98584 15.0132 5.00095 14.569C5.01606 14.1248 5.21037 13.7046 5.54125 13.4006C5.87417 13.0986 6.31576 12.9383 6.76912 12.955C7.22248 12.9716 7.65058 13.1639 7.95948 13.4894L11.5667 17.2708L17.2797 12.0381C17.3308 11.9922 17.3846 11.9493 17.4409 11.9098L20.1211 9.45137C20.4527 9.14812 20.8936 8.98613 21.3469 9.00093C21.8002 9.01574 22.2291 9.20614 22.5394 9.53035C22.8488 9.85529 23.0142 10.2872 22.999 10.7314C22.9839 11.1757 22.7896 11.5959 22.4587 11.8999L14.2469 19.4034L11.3954 22L10.1359 20.677L10.1258 20.6968Z" fill="white"/>
+                  </g>
+                  <defs>
+                    <linearGradient id="paint0_linear_117_3893" x1="1.75178" y1="-17.0341" x2="46.5895" y2="5.46583" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.184" stopColor="#29ABE2"/>
+                      <stop offset="0.821" stopColor="#0171F9"/>
+                    </linearGradient>
+                    <clipPath id="clip0_117_3893">
+                      <rect width="29" height="29" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Structured Reports</h3>
+              <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Access clear, experience-based insights from other educators.</p>
+            </div>
+
+            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
+              <div className="relative w-20 h-[70px]">
+                <div className="absolute top-[3px] left-1 w-[70px] h-[25px] rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-600" />
+                <svg width="65" height="60" viewBox="0 0 65 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="21.9648" y1="37.3296" x2="47.833" y2="17.2445" stroke="#AFAFAF" strokeWidth="2"/>
+                  <path d="M21.5912 41.5089C19.6105 41.2597 18.1986 39.4719 18.4438 37.5237C18.689 35.5755 20.4998 34.1934 22.4805 34.4426C24.4611 34.6919 25.873 36.4796 25.6278 38.4278C25.3825 40.376 23.5717 41.7582 21.5912 41.5089ZM53.813 21.802L46.0431 19.6043L45.8493 11.7184L55.8184 4.10917L56.0355 12.0245L63.7821 14.1927L53.813 21.802Z" fill="url(#paint0_linear_117_3907)"/>
+                  <path d="M22.5427 33.9466C24.7894 34.2294 26.4039 36.2601 26.1235 38.4898C25.8428 40.7196 23.7753 42.2879 21.5285 42.0051C19.2818 41.7223 17.6672 39.6907 17.9478 37.4609C18.2286 35.2313 20.296 33.664 22.5427 33.9466Z" fill="url(#paint1_linear_117_3907)" stroke="white"/>
+                  <path d="M26.4483 25.8809C23.8899 25.0307 21.121 25.0588 18.5804 25.9609C16.0398 26.8629 13.8731 28.5872 12.4237 30.8604C10.9743 33.1335 10.3252 35.8255 10.5793 38.5094C10.8334 41.1934 11.9762 43.7157 13.8264 45.6765C15.6767 47.6372 18.1286 48.9242 20.7933 49.3335C23.458 49.7427 26.183 49.2506 28.5364 47.9354C30.8897 46.6201 32.7367 44.5569 33.7844 42.0729C34.8321 39.5889 35.0206 36.8262 34.3201 34.2229L32.2631 34.7764C32.8404 36.9216 32.685 39.1981 31.8216 41.2451C30.9583 43.292 29.4363 44.9921 27.4971 46.0759C25.5579 47.1597 23.3124 47.5652 21.1166 47.228C18.9208 46.8908 16.9004 45.8302 15.3757 44.2145C13.851 42.5988 12.9094 40.5203 12.7 38.3087C12.4906 36.097 13.0255 33.8788 14.2198 32.0056C15.4142 30.1324 17.1996 28.7116 19.2931 27.9683C21.3866 27.225 23.6683 27.2018 25.7765 27.9024L26.4483 25.8809Z" fill="#525252"/>
+                  <mask id="path-5-outside-1_117_3907" maskUnits="userSpaceOnUse" x="-1" y="13.7368" width="48" height="48" fill="black">
+                    <rect fill="white" x="-1" y="13.7368" width="48" height="48"/>
+                    <path d="M33.4824 17.5077C28.714 14.9025 23.1673 14.0998 17.8559 15.2464C12.5446 16.393 7.82301 19.4123 4.55394 23.7527C1.28487 28.0931 -0.313466 33.4647 0.0509543 38.8862C0.415374 44.3077 2.71822 49.4171 6.53875 53.2809C10.3593 57.1448 15.4424 59.505 20.8595 59.9305C26.2766 60.356 31.6659 58.8182 36.0428 55.5983C40.4197 52.3783 43.492 47.691 44.6984 42.3929C45.9047 37.0948 45.1646 31.5395 42.6133 26.742L40.3868 27.926C42.6539 32.189 43.3115 37.1253 42.2396 41.8331C41.1676 46.5408 38.4376 50.7058 34.5484 53.567C30.6592 56.4282 25.8704 57.7946 21.057 57.4165C16.2435 57.0384 11.7267 54.9412 8.3319 51.5079C4.93707 48.0746 2.89082 43.5345 2.56701 38.7171C2.24319 33.8997 3.66343 29.1266 6.56825 25.2698C9.47306 21.4131 13.6685 18.7302 18.3881 17.7114C23.1076 16.6925 28.0362 17.4057 32.2734 19.7207L33.4824 17.5077Z"/>
+                  </mask>
+                  <path d="M33.4824 17.5077C28.714 14.9025 23.1673 14.0998 17.8559 15.2464C12.5446 16.393 7.82301 19.4123 4.55394 23.7527C1.28487 28.0931 -0.313466 33.4647 0.0509543 38.8862C0.415374 44.3077 2.71822 49.4171 6.53875 53.2809C10.3593 57.1448 15.4424 59.505 20.8595 59.9305C26.2766 60.356 31.6659 58.8182 36.0428 55.5983C40.4197 52.3783 43.492 47.691 44.6984 42.3929C45.9047 37.0948 45.1646 31.5395 42.6133 26.742L40.3868 27.926C42.6539 32.189 43.3115 37.1253 42.2396 41.8331C41.1676 46.5408 38.4376 50.7058 34.5484 53.567C30.6592 56.4282 25.8704 57.7946 21.057 57.4165C16.2435 57.0384 11.7267 54.9412 8.3319 51.5079C4.93707 48.0746 2.89082 43.5345 2.56701 38.7171C2.24319 33.8997 3.66343 29.1266 6.56825 25.2698C9.47306 21.4131 13.6685 18.7302 18.3881 17.7114C23.1076 16.6925 28.0362 17.4057 32.2734 19.7207L33.4824 17.5077Z" fill="#525252" stroke="white" strokeWidth="2" mask="url(#path-5-outside-1_117_3907)"/>
+                  <defs>
+                    <linearGradient id="paint0_linear_117_3907" x1="28.7223" y1="-23.7987" x2="88.7105" y2="16.9723" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.184" stopColor="#29ABE2"/>
+                      <stop offset="0.821" stopColor="#0171F9"/>
+                    </linearGradient>
+                    <linearGradient id="paint1_linear_117_3907" x1="28.7223" y1="-23.7987" x2="88.7105" y2="16.9723" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.184" stopColor="#29ABE2"/>
+                      <stop offset="0.821" stopColor="#0171F9"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Make Better Decisions</h3>
+              <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Use real data to choose the right teaching assignments.</p>
+            </div>
+          </div>
+
+          {/* Row 2 – two columns centered */}
+          <div className="flex items-start justify-center w-full max-w-[768px] gap-0">
+            {/* Smart Search & Filters */}
+            <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
+              <svg width="80" height="70" viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M41.4675 15.0772C41.6008 15.2059 41.7071 15.3599 41.7802 15.5301C41.8534 15.7004 41.8919 15.8835 41.8935 16.0687C41.8951 16.254 41.8598 16.4378 41.7896 16.6092C41.7195 16.7807 41.6159 16.9365 41.4848 17.0675C41.3538 17.1985 41.198 17.3021 41.0265 17.3723C40.8551 17.4425 40.6713 17.4778 40.4861 17.4762C40.3008 17.4746 40.1177 17.4361 39.9474 17.3629C39.7772 17.2898 39.6232 17.1835 39.4945 17.0502C34.5968 12.1533 26.6308 12.1533 21.7338 17.0502C21.6051 17.1835 21.4511 17.2898 21.2809 17.3629C21.1107 17.4361 20.9276 17.4746 20.7423 17.4762C20.557 17.4778 20.3733 17.4425 20.2018 17.3723C20.0303 17.3021 19.8745 17.1985 19.7435 17.0675C19.6125 16.9365 19.5089 16.7807 19.4387 16.6092C19.3686 16.4378 19.3333 16.254 19.3349 16.0687C19.3365 15.8835 19.375 15.7004 19.4481 15.5301C19.5212 15.3599 19.6275 15.2059 19.7608 15.0772C25.7448 9.09256 35.4829 9.09256 41.4675 15.0772ZM69.6836 59.4186C69.6857 60.1518 69.5423 60.8782 69.2616 61.5556C68.9808 62.233 68.5684 62.8479 68.0482 63.3646C66.9947 64.4195 65.5931 65 64.1022 65C62.6113 65 61.2096 64.4195 60.1561 63.3646L45.505 48.7135C45.2434 48.4518 45.0964 48.097 45.0964 47.727C45.0964 47.357 45.2434 47.0021 45.505 46.7405L47.478 44.7674L44.3838 41.6733C40.7001 44.8986 35.8834 46.8605 30.6138 46.8605C19.0729 46.8605 9.68359 37.4712 9.68359 25.9302C9.68359 14.3893 19.0729 5 30.6138 5C42.1548 5 51.5441 14.3893 51.5441 25.9302C51.5441 31.1998 49.5822 36.0165 46.3568 39.7002L49.451 42.7944L51.4241 40.8214C51.6857 40.5598 51.9306 40.3223 52.1748 40.0812C52.42 39.8375 52.6563 39.5851 52.8836 39.3231C52.9537 39.2385 53.0238 39.1546 53.0956 39.0708L55.5131 39.1176C55.9944 39.1264 56.4663 38.9848 56.8565 38.7154C57.2481 38.4445 57.5389 38.0609 57.6956 37.6231C57.8519 37.1853 57.8654 36.7113 57.7336 36.2634C57.6024 35.8162 57.3333 35.4269 56.9677 35.1577C56.6021 34.8885 56.159 34.7538 55.7096 34.7716C55.2602 34.7895 54.8291 34.9587 54.4892 35.2527C54.1493 35.5467 53.9212 35.9421 53.8378 36.3733C53.9256 36.2821 54.0133 36.1896 54.1014 36.0985C54.4739 35.7056 54.7213 35.1971 54.7213 34.6463C54.7213 33.9862 54.4301 33.3707 53.9352 32.9422L48.0681 27.6056C47.9937 27.5392 47.917 27.4771 47.8381 27.419C47.59 27.2375 47.2987 27.1417 47.0001 27.1417C46.7015 27.1417 46.4102 27.2375 46.1621 27.419L42.2344 31.0251C42.9945 29.7873 43.55 28.4296 43.8731 27.0015C44.4919 24.0718 44.247 20.8988 43.2646 18.0727C42.2832 15.2465 40.5854 12.7958 38.2974 11.2159C36.0094 9.636 33.3478 8.9452 30.6483 9.23652C27.9487 9.52784 25.4579 10.8017 23.5074 12.882C21.557 14.9623 20.2787 17.6327 19.8815 20.5126C19.4843 23.3925 19.9887 26.3082 21.3034 28.8366C22.6182 31.365 24.682 33.3745 27.1697 34.6217C29.6574 35.869 32.4584 36.3093 35.2084 35.8965C35.4503 35.8599 35.6921 35.8411 35.9322 35.8408C37.3308 35.8408 38.7204 35.4797 39.921 34.7856C41.1216 34.0915 42.0754 33.0912 42.6565 31.8916C43.2374 30.692 43.4175 29.3545 43.1818 28.0565L47.127 32.3282L45.505 33.9802C45.2434 34.2419 45.0964 34.5968 45.0964 34.9668C45.0964 35.3368 45.2434 35.6916 45.505 35.9533L60.1561 50.6044C60.6763 51.1211 61.3887 51.41 62.1304 51.41C62.8721 51.41 63.5845 51.1211 64.1047 50.6044C64.624 50.0841 64.9139 49.3717 64.9139 48.63C64.9139 47.8883 64.624 47.1759 64.1047 46.6556L49.4536 31.9045C49.1921 31.6428 48.9447 31.4052 48.7002 31.1712L49.3218 30.5382C49.5864 30.7978 49.8649 31.0422 50.1565 31.2703L69.2603 50.5264C69.541 49.8491 69.6845 49.1227 69.6824 48.3895C69.6845 47.6563 69.541 46.9299 69.2603 46.2525C68.9796 45.5751 68.5672 44.9602 68.047 44.4434L53.3958 29.7923C53.1342 29.5306 52.7793 29.3836 52.4093 29.3836C52.0393 29.3836 51.6845 29.5306 51.4228 29.7923L49.4498 31.7653L47.4768 33.7383L45.5038 35.7113C45.2422 35.973 45.0952 36.3279 45.0952 36.6978C45.0952 37.0678 45.2422 37.4227 45.5038 37.6843L60.1549 52.3354C61.2084 53.3903 62.61 53.9708 64.101 53.9708C65.5919 53.9708 66.9935 53.3903 68.047 52.3354C68.5672 51.8187 68.9796 51.2038 69.2603 50.5264Z" fill="url(#paint0_linear_117_3921)"/>
+                <path d="M41.7814 15.5302C41.7082 15.3599 41.6019 15.2059 41.4687 15.0772C35.484 9.09258 25.7459 9.09258 19.7619 15.0772C19.6287 15.2059 19.5224 15.3599 19.4492 15.5302C19.3761 15.7004 19.3376 15.8835 19.336 16.0688C19.3344 16.254 19.3697 16.4378 19.4398 16.6093C19.51 16.7807 19.6136 16.9365 19.7446 17.0676C19.8756 17.1986 20.0314 17.3022 20.2029 17.3723C20.3744 17.4425 20.5581 17.4778 20.7434 17.4762C20.9287 17.4746 21.1118 17.4361 21.282 17.363C21.4523 17.2898 21.6062 17.1835 21.7349 17.0503C26.6319 12.1533 34.598 12.1533 39.4956 17.0503C39.6244 17.1835 39.7783 17.2898 39.9486 17.363C40.1188 17.4361 40.3019 17.4746 40.4872 17.4762C40.6724 17.4778 40.8562 17.4425 41.0277 17.3723C41.1992 17.3022 41.3549 17.1986 41.486 17.0676C41.617 16.9365 41.7206 16.7807 41.7907 16.6093C41.8609 16.4378 41.8962 16.254 41.8946 16.0688C41.893 15.8835 41.8545 15.7004 41.7814 15.5302Z" fill="#2A95DD"/>
+                <defs>
+                  <linearGradient id="paint0_linear_117_3921" x1="46.5804" y1="25.9708" x2="84.5954" y2="45.047" gradientUnits="userSpaceOnUse">
+                    <stop offset="0.184" stopColor="#29ABE2"/>
+                    <stop offset="0.821" stopColor="#0171F9"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Smart Search &amp; Filters</h3>
+              <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Quickly find regular teacher or schools using powerful filters.</p>
+            </div>
+
+            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
+
+            {/* AI-Powered Insights */}
+            <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
+              <div className="relative w-20 h-[70px] flex items-center justify-center">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.7673 13.6201C24.2623 9.24506 30.3073 9.11256 32.0798 13.2226L32.2298 13.6226L34.2473 19.5226C34.7096 20.8756 35.4568 22.1138 36.4383 23.1536C37.4199 24.1934 38.613 25.0106 39.9373 25.5501L40.4798 25.7526L46.3798 27.7676C50.7548 29.2626 50.8873 35.3076 46.7798 37.0801L46.3798 37.2301L40.4798 39.2476C39.1262 39.7096 37.8875 40.4566 36.8473 41.4382C35.8071 42.4198 34.9895 43.6131 34.4498 44.9376L34.2473 45.4776L32.2323 51.3801C30.7373 55.7551 24.6923 55.8876 22.9223 51.7801L22.7673 51.3801L20.7523 45.4801C20.2902 44.1265 19.5432 42.8878 18.5616 41.8476C17.58 40.8074 16.3868 39.9898 15.0623 39.4501L14.5223 39.2476L8.62227 37.2326C4.24477 35.7376 4.11227 29.6926 8.22227 27.9226L8.62227 27.7676L14.5223 25.7526C15.8754 25.2902 17.1136 24.543 18.1533 23.5615C19.1931 22.5799 20.0103 21.3868 20.5498 20.0626L20.7523 19.5226L22.7673 13.6201Z" fill="url(#paint0_linear_117_3932)"/>
+                  <defs>
+                    <linearGradient id="paint0_linear_117_3932" x1="7.92607" y1="-15.9185" x2="76.7716" y2="18.6284" gradientUnits="userSpaceOnUse">
+                      <stop offset="0.184" stopColor="#29ABE2"/>
+                      <stop offset="0.821" stopColor="#0171F9"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 right-0">
+                  <g clipPath="url(#clip0_117_3935)">
+                    <path d="M47.4485 1.42472C48.078 -0.417532 50.6235 -0.473326 51.3699 1.25733L51.433 1.42577L52.2826 3.91017C52.4773 4.47994 52.7919 5.00132 53.2052 5.43916C53.6185 5.87699 54.1209 6.2211 54.6786 6.44826L54.907 6.53353L57.3914 7.38202C59.2337 8.01154 59.2895 10.557 57.5598 11.3034L57.3914 11.3665L54.907 12.2161C54.337 12.4106 53.8154 12.7252 53.3774 13.1385C52.9394 13.5519 52.5951 14.0543 52.3678 14.6121L52.2826 14.8394L51.4341 17.3249C50.8045 19.1671 48.2591 19.2229 47.5137 17.4933L47.4485 17.3249L46.6 14.8405C46.4054 14.2705 46.0909 13.7489 45.6775 13.3109C45.2642 12.8729 44.7617 12.5286 44.204 12.3013L43.9766 12.2161L41.4922 11.3676C39.6489 10.7381 39.5931 8.19261 41.3238 7.44729L41.4922 7.38202L43.9766 6.53353C44.5464 6.33884 45.0678 6.02423 45.5056 5.6109C45.9434 5.19758 46.2875 4.69517 46.5147 4.13756L46.6 3.91017L47.4485 1.42472ZM49.4413 2.10477L48.5928 4.58917C48.2963 5.45798 47.8141 6.25173 47.1795 6.91514C46.545 7.57855 45.7735 8.09568 44.9188 8.43052L44.6556 8.52632L42.1712 9.37481L44.6556 10.2233C45.5244 10.5197 46.3182 11.002 46.9816 11.6365C47.645 12.271 48.1621 13.0425 48.497 13.8973L48.5928 14.1604L49.4413 16.6448L50.2898 14.1604C50.5862 13.2916 51.0685 12.4979 51.703 11.8345C52.3375 11.1711 53.109 10.6539 53.9638 10.3191L54.2269 10.2243L56.7114 9.37481L54.2269 8.52632C53.3581 8.22987 52.5644 7.74759 51.901 7.11309C51.2375 6.47858 50.7204 5.7071 50.3856 4.85235L50.2908 4.58917L49.4413 2.10477Z" fill="#525252"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_117_3935">
+                      <rect width="60" height="60" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">AI-Powered Insights</h3>
+              <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Understand sentiment and patterns with intelligent analysis.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Understand Every Classroom Section */}
+        <section className="bg-white px-6 py-[72px]">
+          <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+            {/* Left: Profile visual panel */}
+            <div className="relative w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
+
+              {/* White profile card */}
+              <div className="absolute left-[5.6%] top-[7.6%] w-[63.3%] h-[84.8%] bg-white rounded-2xl shadow-[0_4px_36px_0_rgba(1,113,249,0.06)]">
+                <p className="absolute left-5 top-5 font-inter text-base font-medium text-black leading-[26px]">Profile</p>
+
+                {/* Skeleton lines area */}
+                <div className="absolute left-5 right-5 top-[17.9%] h-[47%] bg-[#F8F9FD] rounded-2xl">
+                  <div className="absolute left-3.5 top-3.5 h-[13px] w-[80%] rounded-[10px] bg-[#E6E6E6]" />
+                  <div className="absolute left-3.5 top-[39px] h-[13px] w-[78%] rounded-[10px] bg-[#E6E6E6]" />
+                  <div className="absolute left-3.5 top-16 h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]" />
+                  <div className="absolute left-3.5 top-[89px] h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]" />
+                  <div className="absolute left-3.5 top-[114px] h-[13px] w-[67%] rounded-[10px] bg-[#E6E6E6]" />
+                </div>
+
+                {/* Dark navy quote box */}
+                <div className="absolute left-5 right-5 bottom-5 bg-[#384F87] rounded-2xl px-5 py-4">
+                  <p className="font-inter text-sm font-medium text-white leading-[22px]">
+                    Get the pulse of the building from those who work there every day.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature badge: Risk Level */}
+              <div className="absolute top-[19.7%] left-[57%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+                <div className="relative w-9 h-9 flex-shrink-0">
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                    <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3956)" />
+                    <defs>
+                      <linearGradient id="paint0_linear_117_3956" x1="2.17462" y1="-21.1457" x2="57.8353" y2="6.78517" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.184" stopColor="#29ABE2" />
+                        <stop offset="0.821" stopColor="#0171F9" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="absolute left-[10px] top-[10px]">
+                    <path d="M9.44602 0.666626L4.66602 5.45329V14H12.8727L15.3327 8.26663V5.33329H9.79268L10.5393 1.74663L9.44602 0.666626ZM0.666016 5.99996H3.33268V14H0.666016V5.99996Z" fill="white" />
+                  </svg>
+                </div>
+                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Risk Level</span>
+              </div>
+
+              {/* Feature badge: Pattern-based insights */}
+              <div className="absolute top-[39.1%] left-[50.6%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+                <div className="relative w-9 h-9 flex-shrink-0">
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                    <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3962)" />
+                    <defs>
+                      <linearGradient id="paint0_linear_117_3962" x1="2.17462" y1="-21.1457" x2="57.8353" y2="6.78517" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.184" stopColor="#29ABE2" />
+                        <stop offset="0.821" stopColor="#0171F9" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="absolute left-2 top-2">
+                    <path d="M11.7158 8.28328L10.8325 7.87495C10.7597 7.84181 10.698 7.78844 10.6548 7.72121C10.6115 7.65398 10.5885 7.57572 10.5885 7.49578C10.5885 7.41585 10.6115 7.33759 10.6548 7.27036C10.698 7.20313 10.7597 7.14976 10.8325 7.11662L11.7158 6.70828L12.1241 5.83328C12.1573 5.76054 12.2106 5.69886 12.2779 5.65562C12.3451 5.61237 12.4233 5.58937 12.5033 5.58937C12.5832 5.58937 12.6615 5.61237 12.7287 5.65562C12.7959 5.69886 12.8493 5.76054 12.8825 5.83328L13.2908 6.71662L14.1658 7.12495C14.2385 7.1581 14.3002 7.21147 14.3435 7.2787C14.3867 7.34593 14.4097 7.42418 14.4097 7.50412C14.4097 7.58406 14.3867 7.66231 14.3435 7.72954C14.3002 7.79677 14.2385 7.85014 14.1658 7.88329L13.2825 8.29162L12.8741 9.16662C12.841 9.23936 12.7876 9.30104 12.7204 9.34429C12.6531 9.38754 12.5749 9.41053 12.495 9.41053C12.415 9.41053 12.3368 9.38754 12.2695 9.34429C12.2023 9.30104 12.1489 9.23936 12.1158 9.16662L11.7158 8.28328ZM3.70745 10.8333L4.11579 9.94995L4.99912 9.54162C5.07187 9.50847 5.13354 9.4551 5.17679 9.38787C5.22004 9.32064 5.24303 9.24239 5.24303 9.16245C5.24303 9.08251 5.22004 9.00426 5.17679 8.93703C5.13354 8.8698 5.07187 8.81643 4.99912 8.78329L4.11579 8.37495L3.70745 7.49995C3.67533 7.42728 3.62279 7.36551 3.55622 7.32215C3.48964 7.27879 3.41191 7.25571 3.33245 7.25571C3.253 7.25571 3.17527 7.27879 3.10869 7.32215C3.04212 7.36551 2.98958 7.42728 2.95745 7.49995L2.54912 8.38329L1.66579 8.79162C1.59304 8.82476 1.53137 8.87813 1.48812 8.94536C1.44487 9.01259 1.42187 9.09085 1.42188 9.17078C1.42187 9.25072 1.44487 9.32898 1.48812 9.39621C1.53137 9.46344 1.59304 9.51681 1.66579 9.54995L2.54912 9.95828L2.95745 10.8333C3.09912 11.1583 3.56579 11.1583 3.70745 10.8333ZM7.46579 6.65828L7.99079 5.49162L9.15745 4.96662C9.2302 4.93347 9.29188 4.8801 9.33512 4.81287C9.37837 4.74564 9.40137 4.66739 9.40137 4.58745C9.40137 4.50751 9.37837 4.42926 9.33512 4.36203C9.29188 4.2948 9.2302 4.24143 9.15745 4.20829L7.99079 3.68328L7.46579 2.51662C7.43264 2.44387 7.37927 2.3822 7.31204 2.33895C7.24481 2.2957 7.16656 2.27271 7.08662 2.27271C7.00668 2.27271 6.92843 2.2957 6.8612 2.33895C6.79397 2.3822 6.7406 2.44387 6.70746 2.51662L6.18246 3.68328L5.01579 4.20829C4.94304 4.24143 4.88137 4.2948 4.83812 4.36203C4.79487 4.42926 4.77187 4.50751 4.77187 4.58745C4.77187 4.66739 4.79487 4.74564 4.83812 4.81287C4.88137 4.8801 4.94304 4.93347 5.01579 4.96662L6.18246 5.49162L6.70746 6.65828C6.84912 6.98328 7.31579 6.98328 7.46579 6.65828ZM18.6158 6.89162C18.5357 6.81178 18.4402 6.74907 18.3351 6.70732C18.23 6.66557 18.1175 6.64565 18.0045 6.64877C17.8914 6.65188 17.7802 6.67798 17.6776 6.72546C17.5749 6.77294 17.483 6.84082 17.4075 6.92495L12.0825 12.9083L9.34079 10.1666C9.26369 10.0894 9.17212 10.0281 9.07131 9.98626C8.9705 9.94444 8.86243 9.92291 8.75329 9.92291C8.64415 9.92291 8.53608 9.94444 8.43527 9.98626C8.33446 10.0281 8.24288 10.0894 8.16579 10.1666L3.13245 15.2083C2.79079 15.55 2.79079 16.1166 3.13245 16.4583C3.47412 16.8 4.04079 16.8 4.38246 16.4583L8.75745 12.075L11.4658 14.7833C11.8075 15.125 12.3575 15.1083 12.6741 14.75L18.6491 8.02495C18.9408 7.69995 18.9241 7.19995 18.6158 6.89162Z" fill="white" />
+                  </svg>
+                </div>
+                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Pattern-based insights</span>
+              </div>
+
+              {/* Feature badge: Complete History */}
+              <div className="absolute top-[57.6%] left-[55.8%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+                <div className="relative w-9 h-9 flex-shrink-0">
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                    <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3968)" />
+                    <defs>
+                      <linearGradient id="paint0_linear_117_3968" x1="2.17462" y1="-21.1457" x2="57.8353" y2="6.78517" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.184" stopColor="#29ABE2" />
+                        <stop offset="0.821" stopColor="#0171F9" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="absolute left-2 top-2">
+                    <path d="M3.555 13.3833C4.25989 14.8089 5.40339 15.9708 6.8175 16.6983C8.22126 17.4195 9.82199 17.6629 11.3767 17.3917C12.9361 17.1172 14.3648 16.3454 15.4492 15.1917C16.5433 14.0267 17.24 12.5449 17.4392 10.9592C17.6411 9.36978 17.3366 7.75721 16.5692 6.35083C15.8087 4.95515 14.6201 3.84068 13.1783 3.17166C11.7464 2.50847 10.1372 2.33058 8.595 2.665C7.05333 2.99916 5.79 3.75916 4.745 4.96083C4.61917 5.09416 4.1325 5.6325 3.72833 6.445M6.25 6.66666L3.2425 7.26666L2.5 4.16666M10 7.5V10.8333L12.5 12.5" stroke="white" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Complete History</span>
+              </div>
+            </div>
+
+            {/* Right: Text content */}
+            <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
+              <h2 className="font-[Outfit] text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+                Understand Every Classroom Before You Step In
+              </h2>
+              <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96]">
+                Explore detailed regular teacher profiles with aggregated reports, sentiment insights, and behavior patterns all in one structured view designed for clarity and confidence.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Find the Right Opportunities / AI-Powered Insights Section */}
+        <section className="bg-white px-6 py-[72px]">
+          <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+            {/* Left: Text content */}
+            <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
+              <h2 className="font-[Outfit] text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+                Find the Right Opportunities with AI-Powered Insights
+              </h2>
+              <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96]">
+                Search regular teachers or schools, filter reports instantly, and uncover trends through intelligent sentiment analysis helping you make faster and more informed decisions.
+              </p>
+            </div>
+
+            {/* Right: Search & filter UI mockup */}
+            <div className="relative w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
+
+              {/* White inner card */}
+              <div
+                className="absolute rounded-xl bg-white"
+                style={{
+                  left: '5.6%', top: '7.6%',
+                  width: '84.8%', height: '84.8%',
+                  boxShadow: '0 4px 36px 0 rgba(1, 113, 249, 0.06)',
+                }}
+              />
+
+              {/* Search input */}
+              <div
+                className="absolute flex items-center gap-2 rounded-full bg-[#F2F4F7] overflow-hidden"
+                style={{ left: '9.4%', top: '12.6%', width: '77.3%', height: '10.1%', padding: '12px 20px' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+                  <path d="M13.0667 14L8.86667 9.8C8.53333 10.0667 8.15 10.2778 7.71667 10.4333C7.28333 10.5889 6.82222 10.6667 6.33333 10.6667C5.12222 10.6667 4.09733 10.2471 3.25867 9.408C2.42 8.56889 2.00044 7.544 2 6.33333C1.99956 5.12267 2.41911 4.09778 3.25867 3.25867C4.09822 2.41956 5.12311 2 6.33333 2C7.54356 2 8.56867 2.41956 9.40867 3.25867C10.2487 4.09778 10.668 5.12267 10.6667 6.33333C10.6667 6.82222 10.5889 7.28333 10.4333 7.71667C10.2778 8.15 10.0667 8.53333 9.8 8.86667L14 13.0667L13.0667 14ZM6.33333 9.33333C7.16667 9.33333 7.87511 9.04178 8.45867 8.45867C9.04222 7.87556 9.33378 7.16711 9.33333 6.33333C9.33289 5.49956 9.04133 4.79133 8.45867 4.20867C7.876 3.626 7.16756 3.33422 6.33333 3.33333C5.49911 3.33244 4.79089 3.62422 4.20867 4.20867C3.62644 4.79311 3.33467 5.50133 3.33333 6.33333C3.332 7.16533 3.62378 7.87378 4.20867 8.45867C4.79356 9.04356 5.50178 9.33511 6.33333 9.33333Z" fill="#737786"/>
+                </svg>
+                <span className="font-inter text-sm text-[rgba(115,119,134,0.6)]">Search...</span>
+              </div>
+
+              {/* Skeleton lines block */}
+              <div
+                className="absolute rounded-2xl bg-[#F8F9FD]"
+                style={{ left: '9.4%', top: '27.8%', width: '77.3%', height: '36.4%' }}
+              >
+                <div className="absolute rounded-[10px] bg-[#E6E6E6]" style={{ left: '3.4%', top: '9.7%', width: '92.3%', height: '9%' }} />
+                <div className="absolute rounded-[10px] bg-[#E6E6E6]" style={{ left: '3.4%', top: '37%', width: '89.8%', height: '9%' }} />
+                <div className="absolute rounded-[10px] bg-[#E6E6E6]" style={{ left: '3.4%', top: '63%', width: '73.9%', height: '9%' }} />
+                <div className="absolute rounded-[10px] bg-[#E6E6E6]" style={{ left: '3.4%', top: '90%', width: '73.9%', height: '9%' }} />
+                <div className="absolute rounded-[10px] bg-[#E6E6E6]" style={{ left: '3.4%', top: '117%', width: '76.5%', height: '9%' }} />
+              </div>
+
+              {/* Bottom gray placeholder block */}
+              <div
+                className="absolute rounded-2xl bg-[#F4F4F4]"
+                style={{ left: '9.4%', top: '66.2%', width: '77.3%', height: '20.2%' }}
+              />
+
+              {/* "Clear Insights" floating card */}
+              <div
+                className="absolute rounded-[20px] bg-white"
+                style={{
+                  left: '50.4%', top: '54%',
+                  width: '47.2%', height: '26.3%',
+                  border: '1px solid #F9F9F9',
+                  boxShadow: '0 10px 50px -12px rgba(0, 0, 0, 0.16)',
+                  backdropFilter: 'blur(5px)',
+                }}
+              >
+                <span
+                  className="absolute font-inter font-semibold text-black"
+                  style={{ left: '20px', top: '20px', fontSize: '16px', lineHeight: '18px' }}
+                >
+                  Clear Insights
+                </span>
+                <div className="absolute flex items-center gap-3" style={{ left: '20px', top: '56px' }}>
+                  {/* Positive badge */}
+                  <div className="flex items-center gap-1.5 rounded-[10px] bg-[rgba(47,175,0,0.20)] px-2 py-1.5">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12.0007 14.0001H5.33398V5.33342L10.0007 0.666748L10.834 1.50008C10.9118 1.57786 10.9758 1.68341 11.026 1.81675C11.0762 1.95008 11.1011 2.07786 11.1007 2.20008V2.43341L10.3673 5.33342H14.0007C14.3562 5.33342 14.6673 5.46675 14.934 5.73342C15.2007 6.00008 15.334 6.31119 15.334 6.66675V8.00008C15.334 8.07786 15.3258 8.16119 15.3093 8.25008C15.2929 8.33897 15.2678 8.4223 15.234 8.50008L13.234 13.2001C13.134 13.4223 12.9673 13.6112 12.734 13.7667C12.5007 13.9223 12.2562 14.0001 12.0007 14.0001ZM4.00065 5.33342V14.0001H1.33398V5.33342H4.00065Z" fill="#2FAF00"/>
+                    </svg>
+                    <span className="font-inter font-medium text-[#2FAF00]" style={{ fontSize: '14px', lineHeight: '18px' }}>Positive</span>
+                  </div>
+                  {/* Negative badge */}
+                  <div className="flex items-center gap-1.5 rounded-[10px] bg-[rgba(255,0,0,0.20)] px-2 py-1.5">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12.0007 1.99992H5.33398V10.6666L10.0007 15.3333L10.834 14.4999C10.9118 14.4221 10.9758 14.3166 11.026 14.1833C11.0762 14.0499 11.1011 13.9221 11.1007 13.7999V13.5666L10.3673 10.6666H14.0007C14.3562 10.6666 14.6673 10.5333 14.934 10.2666C15.2007 9.99992 15.334 9.68881 15.334 9.33325V7.99992C15.334 7.92214 15.3258 7.83881 15.3093 7.74992C15.2929 7.66103 15.2678 7.5777 15.234 7.49992L13.234 2.79992C13.134 2.5777 12.9673 2.38881 12.734 2.23325C12.5007 2.0777 12.2562 1.99992 12.0007 1.99992ZM4.00065 10.6666V1.99992H1.33398V10.6666H4.00065Z" fill="#F32121"/>
+                    </svg>
+                    <span className="font-inter font-medium text-[#F32121]" style={{ fontSize: '14px', lineHeight: '18px' }}>Negative</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* "Filter results" floating badge */}
+              <div
+                className="absolute flex items-center gap-2.5 rounded-[20px] bg-white overflow-hidden"
+                style={{
+                  left: '69.7%', top: '22.2%',
+                  padding: '6px 16px 6px 6px',
+                  border: '1px solid #F9F9F9',
+                  boxShadow: '0 10px 50px -12px rgba(0, 0, 0, 0.16)',
+                  backdropFilter: 'blur(5px)',
+                }}
+              >
+                <div className="relative w-9 h-9 flex-shrink-0">
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="18" cy="18" r="18" fill="url(#filter-grad)"/>
+                    <defs>
+                      <linearGradient id="filter-grad" x1="2.17462" y1="-21.1457" x2="57.8353" y2="6.78517" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.184" stopColor="#29ABE2"/>
+                        <stop offset="0.821" stopColor="#0171F9"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-2 top-2">
+                    <path d="M11.6667 14.1667C11.8791 14.1669 12.0834 14.2483 12.2378 14.3941C12.3923 14.5399 12.4852 14.7391 12.4976 14.9512C12.5101 15.1632 12.4411 15.372 12.3048 15.5349C12.1685 15.6978 11.9751 15.8024 11.7642 15.8275L11.6667 15.8334H8.33333C8.12093 15.8331 7.91664 15.7518 7.76219 15.606C7.60775 15.4602 7.5148 15.2609 7.50236 15.0489C7.48991 14.8368 7.5589 14.628 7.69522 14.4652C7.83155 14.3023 8.02492 14.1976 8.23583 14.1725L8.33333 14.1667H11.6667ZM14.1667 9.16669C14.3877 9.16669 14.5996 9.25448 14.7559 9.41076C14.9122 9.56705 15 9.77901 15 10C15 10.221 14.9122 10.433 14.7559 10.5893C14.5996 10.7456 14.3877 10.8334 14.1667 10.8334H5.83333C5.61232 10.8334 5.40036 10.7456 5.24408 10.5893C5.0878 10.433 5 10.221 5 10C5 9.77901 5.0878 9.56705 5.24408 9.41076C5.40036 9.25448 5.61232 9.16669 5.83333 9.16669H14.1667ZM16.6667 4.16669C16.8877 4.16669 17.0996 4.25448 17.2559 4.41076C17.4122 4.56705 17.5 4.77901 17.5 5.00002C17.5 5.22103 17.4122 5.433 17.2559 5.58928C17.0996 5.74556 16.8877 5.83335 16.6667 5.83335H3.33333C3.11232 5.83335 2.90036 5.74556 2.74408 5.58928C2.5878 5.433 2.5 5.22103 2.5 5.00002C2.5 4.77901 2.5878 4.56705 2.74408 4.41076C2.90036 4.25448 3.11232 4.16669 3.33333 4.16669H16.6667Z" fill="white"/>
+                  </svg>
+                </div>
+                <span className="font-inter font-medium text-[#191C1D] whitespace-nowrap" style={{ fontSize: '14px', lineHeight: '18px' }}>Filter results</span>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* How to Make Smarter Teaching Decisions in 3 Steps Section */}
+        <section className="bg-white px-6 py-[72px]">
+          <div className="max-w-[1176px] mx-auto flex flex-col items-center gap-12">
+
+            {/* Heading */}
+            <h2 className="font-[Outfit] text-[clamp(28px,4vw,48px)] font-bold text-gray-950 text-center leading-[1.2] max-w-[640px]">
+              How to Make Smarter Teaching Decisions in 3 Steps
+            </h2>
+
+            {/* Steps row */}
+            <div className="w-full flex flex-col md:flex-row items-start">
+
+              {/* Step 1 */}
+              <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0">
+                <div className="w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center flex-shrink-0">
+                  <span className="font-[Outfit] text-xl font-bold text-[#0171F9]">1</span>
+                </div>
+                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                  Submit Your Experience
+                </h3>
+                <p className="font-inter text-base font-normal text-gray-700 leading-[26px] max-w-[280px]">
+                  Share detailed classroom insights with the option to remain anonymous.
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden md:block w-px self-stretch bg-gray-200 flex-shrink-0" />
+              <div className="md:hidden h-px w-full bg-gray-200 my-6" />
+
+              {/* Step 2 */}
+              <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0">
+                <div className="w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center flex-shrink-0">
+                  <span className="font-[Outfit] text-xl font-bold text-[#0171F9]">2</span>
+                </div>
+                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                  AI Analyzes &amp; Structures
+                </h3>
+                <p className="font-inter text-base font-normal text-gray-700 leading-[26px] max-w-[280px]">
+                  Your report is reviewed, categorized with AI-powered sentiment insights to ensure clarity and consistency.
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden md:block w-px self-stretch bg-gray-200 flex-shrink-0" />
+              <div className="md:hidden h-px w-full bg-gray-200 my-6" />
+
+              {/* Step 3 */}
+              <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0">
+                <div className="w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center flex-shrink-0">
+                  <span className="font-[Outfit] text-xl font-bold text-[#0171F9]">3</span>
+                </div>
+                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                  Explore &amp; Decide
+                </h3>
+                <p className="font-inter text-base font-normal text-gray-700 leading-[26px] max-w-[280px]">
+                  Search reports, review regular teacher profiles, and understand patterns before accepting assignments.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* Recent Classroom Experiences Section */}
+        <section className="bg-white px-9 py-[35px]">
+          <div className="rounded-[28px] bg-[#F8F9FD] p-14 flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
+
+            {/* Left: heading, subtitle, stats */}
+            <div className="flex flex-col justify-between gap-10 flex-shrink-0 lg:w-[556px]">
+              <div className="flex flex-col gap-8">
+                <h2 className="font-[Outfit] text-[clamp(28px,3.2vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+                  Recent Classroom Experiences
+                </h2>
+                <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96] max-w-[492px]">
+                  Real insights shared by Guest teacher to help you better understand schools and teaching environments.
+                </p>
+              </div>
+              <div className="flex items-start gap-12">
+                <div className="flex flex-col gap-5">
+                  <span className="font-[Outfit] text-5xl font-semibold text-[#121212] opacity-[0.96]">2M+</span>
+                  <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Reports</span>
+                </div>
+                <div className="flex flex-col gap-5">
+                  <span className="font-[Outfit] text-5xl font-semibold text-[#121212] opacity-[0.96]">1M+</span>
+                  <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Schools</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: review cards */}
+            <div className="flex flex-col gap-5 flex-1 min-w-0">
+
+              {/* Card 1 – Green Valley High School */}
+              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-3">
+                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Green Valley High School</span>
+                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 8th</span>
+                    </div>
+                    <div className="flex items-center gap-1 opacity-64">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Austin, Texas, USA</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(47,175,0,0.10)]">
+                    <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
+                    <p className="font-inter text-sm text-[#464555] leading-6">Classroom was mostly organized and lesson plans were available, but managing student behavior required extra attention throughout the day</p>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
+                    </div>
+                    <span className="font-inter text-xs text-[#777587] leading-4">1 days ago</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2 – Riverdale High School */}
+              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-3">
+                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Riverdale High School</span>
+                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 10th</span>
+                    </div>
+                    <div className="flex items-center gap-1 opacity-64">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Chicago, Illinois, USA</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(47,175,0,0.10)]">
+                    <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
+                    <p className="font-inter text-sm text-[#464555] leading-6">Clear instructions were provided and the staff was supportive, students were engaged which made the overall experience smooth</p>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
+                    </div>
+                    <span className="font-inter text-xs text-[#777587] leading-4">2 days ago</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3 – Maplewood Middle School */}
+              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-3">
+                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Maplewood Middle School</span>
+                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 7th</span>
+                    </div>
+                    <div className="flex items-center gap-1 opacity-64">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Denver, Colorado, USA</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(243,33,33,0.10)]">
+                    <span className="font-inter text-xs font-semibold text-[#F32121] leading-[15px]">Negative</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
+                    <p className="font-inter text-sm text-[#464555] leading-6">There was limited guidance from the regular teacher and classroom management was a bit challenging due to unclear expectations</p>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                      </svg>
+                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
+                    </div>
+                    <span className="font-inter text-xs text-[#777587] leading-4">2 days ago</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
       </main>
-    </div>
+
+      <footer className="bg-[#FAFCFE] border-t border-[rgba(226,232,240,0.64)] ">
+        <div className="px-6 sm:px-[120px] flex flex-col ">
+          {/* Top row: logo + nav links */}
+          <div className="flex items-start justify-between gap-6 w-full py-12">
+            {/* Logo */}
+            <a href="/" aria-label="Anonymity" className="flex items-center flex-shrink-0">
+              <svg width="154" height="25" viewBox="0 0 154 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#clip0_footer)">
+                  <path d="M116.923 8.84582C117.853 7.63126 118.743 7.10214 120.296 6.96218C122.33 6.64456 124.28 7.86257 124.516 10.0248C124.822 12.8256 124.545 15.9745 124.718 18.8405C123.331 18.9075 122.316 18.9315 120.934 18.8277L120.945 18.4809C120.996 16.7222 121.144 13.1774 120.885 11.5639C120.811 11.1017 120.667 10.5328 120.334 10.188C120.024 9.86787 119.533 9.86434 119.118 9.85889C118.677 9.85309 118.31 9.92899 117.985 10.2509C116.876 11.352 117.245 15.9991 117.253 17.668L117.266 18.8536C116.014 18.9007 114.754 18.8735 113.501 18.8577C113.389 16.5907 113.569 14.1178 113.47 11.837C113.433 10.978 113.25 10.4579 112.613 9.90061C112.031 9.86325 111.595 9.87954 111.01 9.90414C110.253 10.4279 109.955 11.1359 109.923 12.0333C109.842 14.2888 109.97 16.5879 109.916 18.8423C108.598 18.9098 107.373 18.8826 106.057 18.8587C105.965 18.0136 105.989 15.3271 106.008 14.3592C106.052 12.1922 105.902 9.29148 106.106 7.19911C107.355 7.18568 108.606 7.19088 109.855 7.21456C109.909 7.86424 109.916 8.14106 109.862 8.7889C110.761 7.57257 111.424 7.27871 112.856 6.96394C114.12 6.9495 114.356 6.96117 115.56 7.32321C116.096 7.84854 116.497 8.21688 116.923 8.84582Z" fill="#0171F9"/>
+                  <path d="M39.5626 2.49841C40.8874 2.56835 42.4654 2.48767 43.7559 2.59715C44.151 2.63065 45.5059 6.81052 45.7156 7.4079C46.5358 9.77314 47.3721 12.1328 48.2243 14.4867C48.7419 15.9551 49.188 17.4064 49.7909 18.8402C48.8646 18.8618 46.3917 19.0285 45.6623 18.7458C45.2054 18.3088 44.868 16.2036 44.544 15.3559C44.3884 15.2097 44.004 15.2185 43.7729 15.2028C42.2181 15.1638 40.2339 15.1415 38.6975 15.2513C38.4115 16.6624 38.1212 17.4776 37.6653 18.85C36.2718 18.8821 34.8778 18.8804 33.4844 18.8448C34.5063 16.095 35.5137 13.3399 36.5066 10.5796C36.9089 9.44217 39.0899 3.13105 39.5626 2.49841ZM39.6966 12.3132C40.3837 12.3254 41.1198 12.3526 41.8025 12.3483C42.3395 12.3364 42.9694 12.3387 43.4978 12.3068C43.0701 10.3224 42.1021 8.36446 41.7636 6.35714C41.7307 6.16185 41.7605 5.97218 41.6022 5.82542C41.1894 8.24095 40.1139 10.2647 39.6966 12.3132Z" fill="#0171F9"/>
+                  <path d="M34.3065 20.0857C37.0131 19.9663 40.2042 20.1205 42.9676 20.1002L67.6724 20.0744C73.3635 20.0465 79.0543 20.053 84.7459 20.0941C86.5315 20.1189 88.5429 19.9796 90.299 20.1186C90.2914 20.6836 90.4426 21.9242 90.1907 22.3969C90.1377 22.4975 89.827 22.4852 89.6725 22.4967C87.9987 22.397 85.4338 22.4788 83.6634 22.4791L71.9849 22.4794L33.5244 22.4718C33.5075 21.6938 33.5203 20.8759 33.5201 20.0945L34.3065 20.0857Z" fill="#0171F9"/>
+                  <path d="M69.8351 6.9537C71.5936 6.88485 73.2236 6.88107 74.8045 7.84099C77.6688 9.58014 78.0157 13.873 76.399 16.5663C75.4535 18.1416 73.9724 18.6985 72.2372 19.1016C70.4588 19.119 69.0979 19.2249 67.4635 18.3687C63.3615 16.2197 63.6824 9.07596 68.0752 7.42539C68.6475 7.21037 69.2423 7.12926 69.8351 6.9537ZM71.3261 16.2514C73.983 16.1431 74.0478 11.6822 72.5858 10.1803C72.2683 9.85402 71.1421 9.7976 70.6869 9.81388C70.0327 9.88231 69.6097 9.99893 69.1744 10.5593C68.1917 11.8246 68.1213 14.7271 69.4178 15.8139C70.0056 16.3067 70.6161 16.267 71.3261 16.2514Z" fill="#0171F9"/>
+                  <path d="M92.127 7.20465C93.4287 7.19726 94.8119 7.16729 96.107 7.20835C96.8402 9.35185 97.5095 11.5635 98.0991 13.7504C98.2646 14.3644 98.472 14.7575 98.6349 15.4739C98.7449 15.3626 98.7886 14.9344 98.8197 14.7631C99.1716 12.8379 99.8645 10.9575 100.463 9.09846C100.668 8.46347 100.817 7.84846 101.055 7.22405C102.118 7.15293 103.602 7.19642 104.695 7.19743C104.465 8.08657 104.238 8.94212 103.894 9.7965C102.932 12.1941 102.096 14.6271 101.167 17.0388C100.048 20.3793 98.5686 25.0986 94.1376 24.5956C93.3573 24.507 93.2969 24.511 92.578 24.1658C92.5561 23.6115 92.4545 22.1917 92.6418 21.751C92.9483 21.0278 93.9125 22.1282 94.9152 21.6447C95.9441 21.1483 96.2876 19.927 96.6966 18.9103C95.9012 17.1695 95.0681 14.9437 94.3618 13.1572C93.6639 11.3927 92.5494 8.98914 92.127 7.20465Z" fill="#0171F9"/>
+                  <path d="M147.842 15.6092C148.121 14.9644 148.394 13.9118 148.601 13.2144L149.788 9.2826C149.935 8.79857 150.226 7.70574 150.469 7.33489C151.056 7.08788 153.244 7.16638 153.916 7.24724L154.001 7.39114C153.976 8.16249 153.36 9.34809 153.124 10.1236C152.432 12.4039 151.279 14.7013 150.659 16.9861C149.154 20.07 148.551 24.8308 143.873 24.5821C143.035 24.5376 142.919 24.6756 142.109 24.2346C142.109 23.7881 142.007 21.8887 142.154 21.651C142.257 21.591 144.063 21.6721 144.45 21.6477C145.393 21.001 145.606 20.0729 146.028 19.01C145.811 18.1757 145.188 16.7474 144.841 15.8902L142.644 10.461C142.331 9.67923 141.617 7.97971 141.566 7.19972C142.335 7.21265 144.835 7.08763 145.394 7.27511C145.953 7.80801 147.792 14.6094 147.842 15.6092Z" fill="#0171F9"/>
+                  <path d="M7.51944 4.01117C12.0164 4.04327 16.5206 4.02149 21.0178 4.00841C22.0184 4.0055 22.2478 4.05479 22.9551 4.77911C23.147 5.44718 23.2311 5.97436 23.2221 6.67207C23.1831 10.1749 23.245 13.6763 23.1977 17.1773C23.1705 19.1938 21.364 19.1304 19.8113 19.091C17.412 19.03 14.824 19.2333 12.4513 18.9974C12.1554 18.0007 11.8735 17.5586 11.1566 16.837L12.618 16.8097L13.8517 16.7223C13.9489 16.0263 13.9021 15.1909 13.8803 14.4777C14.9752 14.4077 17.8178 14.6427 18.6283 14.424C18.6408 15.1777 18.6174 15.9929 18.6104 16.7514L20.8532 16.7371C20.7777 13.3713 20.8287 9.70362 20.8439 6.31944C16.61 6.31457 12.3234 6.28124 8.09398 6.33438C8.16251 6.92958 8.14647 7.45878 8.13966 8.05716C7.43722 7.78202 6.40404 7.64886 6.00116 7.44199C5.83277 7.24661 5.75786 6.98591 5.76626 6.73143C5.81363 5.29261 5.79288 4.07191 7.51944 4.01117Z" fill="#0171F9"/>
+                  <path d="M58.0543 6.96309C58.3262 6.951 58.5983 6.9437 58.8705 6.9411C63.173 6.92229 62.7363 11.6236 62.7391 14.5919L62.7377 18.8514C61.4488 18.882 60.1594 18.8831 58.8704 18.8547C58.8708 16.5659 58.9325 14.1628 58.8379 11.8809C58.8044 11.0691 58.5673 10.448 57.931 9.93134C56.7605 9.73437 55.9632 9.76123 55.3052 10.8494C54.6957 13.06 55.0807 15.7969 55.0093 18.0996C55.0025 18.3194 55.0416 18.632 55.0732 18.8521C53.7917 18.881 52.5099 18.8787 51.2285 18.8453C51.272 15.0757 51.3933 10.9762 51.2439 7.21447C52.3831 7.15881 53.8257 7.19844 54.9747 7.20994C54.9975 7.74602 54.9988 8.31888 55.01 8.85849C56.0707 7.53176 56.3927 7.29054 58.0543 6.96309Z" fill="#0171F9"/>
+                  <path d="M86.1389 6.96141C87.3987 6.90255 88.6265 6.89223 89.615 7.81747C90.4851 8.62718 90.8211 9.87768 90.8303 11.0352C90.853 13.6348 90.7707 16.2511 90.8916 18.8485C89.636 18.8917 88.3796 18.8895 87.1241 18.8416C87.0006 16.373 87.3097 13.7779 87.0233 11.3134C86.8326 9.66879 85.6275 9.71329 84.3442 9.96307C84.1308 10.1781 83.9167 10.3919 83.7017 10.6045C83.1323 11.6511 83.2927 13.2166 83.2977 14.4072L83.3028 18.8555C82.5813 18.8688 80.0685 18.9721 79.5554 18.7845C79.321 18.1893 79.5545 8.6004 79.615 7.20725C80.842 7.19314 82.069 7.19381 83.296 7.20918L83.3095 8.85303C84.1426 7.61294 84.7129 7.31874 86.1389 6.96141Z" fill="#0171F9"/>
+                  <path d="M103.566 20.0859C108.072 19.9583 113.195 20.0734 117.755 20.0683L132.936 20.1004C135.21 20.1031 137.466 20.0459 139.744 20.0728C139.772 20.8645 139.762 21.6833 139.762 22.4775L138.47 22.474L102.142 22.4783C102.12 21.7037 102.136 20.8656 102.137 20.086L103.566 20.0859Z" fill="#0171F9"/>
+                  <path d="M138.389 3.58496C138.692 3.73147 138.544 6.68905 138.536 7.20179L141.023 7.20549C141.041 8.03485 141.09 9.06193 141.034 9.87492C140.238 9.90489 139.408 9.8572 138.553 9.89213C138.553 11.0731 138.379 15.2708 138.903 15.9952C139.522 16.4314 140.31 16.2372 141.023 16.1294C141.352 18.9764 141.093 19.1002 138.4 19.1085C135.7 19.2049 134.702 17.3133 134.76 14.9185C134.8 13.2807 134.8 11.5182 134.724 9.88634C134.355 9.89003 133.318 9.93327 133.027 9.83084C132.803 9.32741 132.836 7.88993 132.963 7.36258C133.27 7.0997 134.247 7.18945 134.701 7.19793C134.795 6.30493 134.779 5.58397 134.776 4.68677C135.562 4.31424 137.452 3.87152 138.389 3.58496Z" fill="#0171F9"/>
+                  <path d="M3.03911 16.8395C3.52135 16.8448 5.36977 17.0143 5.65062 16.9756C8.78467 16.5439 11.2627 17.1676 11.6025 20.7792C11.6701 21.4978 11.1261 21.955 10.6235 22.4567C9.93736 22.6123 9.25247 22.5977 8.55522 22.578C6.96103 22.4771 5.045 22.6173 3.41738 22.5808C2.64556 22.5634 1.94034 22.6384 1.15983 22.5197C0.848762 22.2942 0.541202 22.064 0.237278 21.829C-0.549423 19.7859 0.912582 17.1713 3.03911 16.8395Z" fill="#0171F9"/>
+                  <path d="M127.359 7.20459C128.578 7.19066 129.797 7.19284 131.016 7.21114C131.109 7.89894 131.055 11.0857 131.038 12.0112C130.993 14.2512 131.129 16.641 131.075 18.8333C130.008 18.9409 128.357 18.8828 127.285 18.8499C127.533 15.0507 127.261 10.9935 127.359 7.20459Z" fill="#0171F9"/>
+                  <path d="M5.15606 8.66217C7.0547 8.31869 8.87397 9.57431 9.22545 11.471C9.57701 13.3676 8.32866 15.1916 6.43288 15.5509C4.52592 15.9125 2.68834 14.6554 2.33468 12.7475C1.98102 10.8396 3.24608 9.00775 5.15606 8.66217Z" fill="#0171F9"/>
+                  <path d="M129.382 1.52991C129.614 1.49775 130.026 1.58919 130.272 1.63209C130.662 2.01512 130.915 2.26632 131.252 2.69435C131.287 3.12784 131.252 3.58844 131.231 4.02445C131.152 4.13805 131.068 4.24846 130.981 4.35542C130.386 5.07471 129.979 5.09838 129.102 5.18276C128.543 5.13751 128.184 5.00292 127.675 4.79604C127.482 4.56776 127.249 4.18372 127.08 3.92336L127.031 2.77966C127.741 1.62361 128.058 1.52504 129.382 1.52991Z" fill="#0171F9"/>
+                  <path d="M151.61 20.0941C152.391 20.082 153.225 20.0992 154.009 20.103C154.034 20.8941 154.03 21.6859 154.001 22.4768C153.259 22.4572 152.373 22.4808 151.623 22.4834C151.586 21.7305 151.608 20.8562 151.61 20.0941Z" fill="#0171F9"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_footer">
+                    <rect width="154" height="24.5059" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            </a>
+
+            {/* Nav links */}
+            <nav className="flex items-start justify-end gap-8 flex-wrap">
+              <div className="w-44 flex-shrink-0">
+                <a href="/" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Home</a>
+              </div>
+              <div className="w-44 flex-shrink-0">
+                <a href="/submit-report" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Submit Report</a>
+              </div>
+              <div className="w-44 flex-shrink-0">
+                <a href="/browse-school" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Browse School</a>
+              </div>
+              <div className="w-44 flex-shrink-0">
+                <a href="/login" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Login/Signup</a>
+              </div>
+            </nav>
+          </div>
+
+          {/* Divider + copyright */}
+          <div className="border-t border-[#E2E8F0] pt-5 flex justify-center pb-5">
+            <p className="font-inter text-[12px] font-light text-[#64748B] leading-[15px] tracking-[1px]">
+              &copy; 2026 Anonymity. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+
+    </>
   );
 }
