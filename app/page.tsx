@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <>
+    <> 
       <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-black/6">
         <div className="flex items-center justify-between h-[92px] max-w-7xl mx-auto ">
           {/* Anonymity Logo */}
