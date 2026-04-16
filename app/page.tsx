@@ -17,7 +17,7 @@ export default function Home() {
 
             {/* Text content */}
             <div className="relative z-10 flex flex-col items-center gap-8 px-6 pt-5 max-w-[1111px] text-center">
-              <div className="inline-flex px-[10px] py-2 rounded-lg bg-slate-900 text-blue-50 font-inter text-xs font-semibold leading-4">
+              <div className="inline-flex px-[15px] py-1.5 rounded-lg bg-slate-900 text-blue-50 font-inter text-xs font-semibold leading-4">
                 Real Teacher Insights
               </div>
               <h1 className="text-gray-950 font-inter text-[clamp(25px,5vw,62px)] font-bold leading-[1.13]">
