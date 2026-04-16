@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -236,9 +237,12 @@ function SchoolCard({ school }: { school: School }) {
         </div>
 
         {/* View Details button */}
-        <button className="flex items-center justify-center gap-2 w-full py-1.5 px-8 rounded-md bg-[#0171F9] text-white font-[Inter] text-sm font-medium leading-6 hover:bg-blue-700 transition-colors cursor-pointer mt-auto">
+        <Link
+          href={`/school`}
+          className="flex items-center justify-center gap-2 w-full py-1.5 px-8 rounded-md bg-[#0171F9] text-white font-[Inter] text-sm font-medium leading-6 hover:bg-blue-700 transition-colors cursor-pointer mt-auto"
+        >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );
