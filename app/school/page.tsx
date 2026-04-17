@@ -368,7 +368,7 @@ function ReviewCard({ review }: { review: Review }) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-7 flex flex-col gap-6">
+    <div className={`bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] ${showDetails ? "p-7" : "px-7 pt-7"} flex flex-col gap-6`}>
       {/* Top row: stars, reviewer, teacher, date, sentiment */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4 flex-wrap">
@@ -576,7 +576,7 @@ export default function SchoolDetailPage() {
     <div className="min-h-screen bg-[#F8FAFE] flex flex-col">
       <Header />
 
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 sm:px-14 py-10">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 sm:px-14 py-10 pb-[80px]">
 
         {/* School Info Card */}
         <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-10 mb-10">

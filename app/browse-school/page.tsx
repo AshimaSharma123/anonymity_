@@ -300,7 +300,7 @@ export default function BrowseSchoolPage() {
 
       {/* Main content: filter + cards */}
       <main className="flex-1 w-full">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-14 py-8">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-14 py-8 pb-[80px]">
           <div className="flex flex-col lg:flex-row gap-7 items-start">
 
             {/* Filter sidebar */}
