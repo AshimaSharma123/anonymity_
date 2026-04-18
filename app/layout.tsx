@@ -23,8 +23,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Home",
-  description: "Anonymity",
+  title: {
+    default: "Anonymity",
+    template: "%s | Anonymity",
+  },
+  description: "Guest-Teacher Report",
 };
 
 export default function RootLayout({
