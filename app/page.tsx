@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -24,18 +25,18 @@ export default function Home() {
                 DISCOVER THE REALITY OF WHAT TO EXPECT FROM A SCHOOL SITE BEFORE SAYING YES TO AN UNFAMILIAR GUEST-TEACHING OPPORTUNITY
               </h1>
               <div className="flex items-center gap-[15px] flex-wrap justify-center">
-                <button className="flex items-center justify-center gap-2  px-8 py-4 rounded-xl bg-blue-600 text-white font-inter text-base font-bold leading-6 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/6">
+                <Link href="/submit-report" className="flex items-center justify-center gap-2  px-8 py-4 rounded-xl bg-blue-600 text-white font-inter text-base font-bold leading-6 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/6">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.16667 15.7416H5.345L13.1067 7.97994L11.9283 6.80161L4.16667 14.5633V15.7416ZM17.5 17.4083H2.5V13.8724L13.6958 2.67661C13.8521 2.52038 14.064 2.43262 14.285 2.43262C14.506 2.43262 14.7179 2.52038 14.8742 2.67661L17.2317 5.03411C17.3879 5.19038 17.4757 5.4023 17.4757 5.62327C17.4757 5.84424 17.3879 6.05617 17.2317 6.21244L7.7025 15.7416H17.5V17.4083ZM13.1067 5.62327L14.285 6.80161L15.4633 5.62327L14.285 4.44494L13.1067 5.62327Z" fill="white"/>
                   </svg>
                   Submit a Report
-                </button>
-                <button className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-black/20 bg-white text-gray-800 font-inter text-base font-bold leading-6 hover:border-black/40 transition-colors">
+                </Link>
+                <Link href="/browse-school" className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-black/20 bg-white text-gray-800 font-inter text-base font-bold leading-6 hover:border-black/40 transition-colors">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.91667 13.3333C6.40278 13.3333 5.12167 12.8089 4.07333 11.76C3.025 10.7111 2.50056 9.43 2.5 7.91667C2.49944 6.40333 3.02389 5.12222 4.07333 4.07333C5.12278 3.02444 6.40389 2.5 7.91667 2.5C9.42945 2.5 10.7108 3.02444 11.7608 4.07333C12.8108 5.12222 13.335 6.40333 13.3333 7.91667C13.3333 8.52778 13.2361 9.10417 13.0417 9.64583C12.8472 10.1875 12.5833 10.6667 12.25 11.0833L16.9167 15.75C17.0694 15.9028 17.1458 16.0972 17.1458 16.3333C17.1458 16.5694 17.0694 16.7639 16.9167 16.9167C16.7639 17.0694 16.5694 17.1458 16.3333 17.1458C16.0972 17.1458 15.9028 17.0694 15.75 16.9167L11.0833 12.25C10.6667 12.5833 10.1875 12.8472 9.64583 13.0417C9.10417 13.2361 8.52778 13.3333 7.91667 13.3333ZM7.91667 11.6667C8.95833 11.6667 9.84389 11.3022 10.5733 10.5733C11.3028 9.84445 11.6672 8.95889 11.6667 7.91667C11.6661 6.87444 11.3017 5.98917 10.5733 5.26083C9.845 4.5325 8.95945 4.16778 7.91667 4.16667C6.87389 4.16556 5.98861 4.53028 5.26083 5.26083C4.53306 5.99139 4.16833 6.87667 4.16667 7.91667C4.165 8.95667 4.52972 9.84222 5.26083 10.5733C5.99195 11.3044 6.87722 11.6689 7.91667 11.6667Z" fill="#2C3031"/>
                   </svg>
                   Search School
-                </button>
+                </Link>
               </div>
             </div>
 

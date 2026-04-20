@@ -8,7 +8,7 @@ const AnonymityLogo = () => (
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-black/6">
-      <div className="flex items-center justify-between h-[92px] max-w-[1440px] mx-auto px-6 sm:px-14">
+      <div className="flex items-center justify-between h-[92px] max-w-[1440px] mx-auto px-6 sm:px-8">
         <Link href="/" className="flex items-center flex-shrink-0" aria-label="Anonymity">
           <Image src="/logo.svg" height={150} width={150} alt="Logo"/>
         </Link>

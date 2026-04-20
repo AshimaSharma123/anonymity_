@@ -5,21 +5,24 @@ export default function Footer() {
   return (
     <footer className="bg-[#FAFCFE] border-t border-[rgba(226,232,240,0.64)]">
       <div className="px-6 sm:px-[120px] flex flex-col">
-        <div className="flex items-start justify-between gap-6 w-full py-12">
+        <div className="flex items-center justify-between gap-6 w-full py-12">
           <Link href="/" aria-label="Anonymity" className="flex items-center flex-shrink-0">
             <Image src="/logo.svg" height={150} width={150} alt="Logo"/>
           </Link>
-          <nav className="flex items-start justify-end gap-8 flex-wrap">
-            <div className="w-44 flex-shrink-0">
+          <nav className="flex items-start justify-end gap-8 flex-wrap text-center">
+            <div className="w-44">
               <Link href="/" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Home</Link>
             </div>
-            <div className="w-44 flex-shrink-0">
+            <div className="w-44 ">
+              <Link href="/about" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">About Us</Link>
+            </div>
+            <div className="w-44 ">
               <Link href="/submit-report" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Submit Report</Link>
             </div>
-            <div className="w-44 flex-shrink-0">
+            <div className="w-44">
               <Link href="/browse-school" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Browse School</Link>
             </div>
-            <div className="w-44 flex-shrink-0">
+            <div className="w-44">
               <Link href="/login" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Login/Signup</Link>
             </div>
           </nav>
