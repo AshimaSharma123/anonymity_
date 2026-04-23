@@ -1,341 +1,621 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
-const EyeIcon = () => (
-  <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15.4392 4.94562C15.4161 4.895 14.8686 3.67937 13.6592 2.47C12.0411 0.854375 10.0017 0 7.75171 0C5.50171 0 3.46234 0.854375 1.84609 2.47C0.63671 3.67937 0.0892102 4.895 0.0642102 4.94562C0.0218684 5.04162 0 5.14539 0 5.25031C0 5.35523 0.0218684 5.459 0.0642102 5.555C0.0873352 5.60625 0.634835 6.82125 1.84484 8.03063C3.46234 9.64625 5.50171 10.5 7.75171 10.5C10.0017 10.5 12.0411 9.64625 13.6567 8.03063C14.8667 6.82125 15.4142 5.60625 15.4373 5.555C15.48 5.45913 15.5022 5.35543 15.5025 5.25051C15.5028 5.14559 15.4813 5.04175 15.4392 4.94562ZM12.5605 7.00813C11.2186 8.32938 9.60109 9 7.75171 9C5.90234 9 4.28484 8.32937 2.94484 7.0075C2.41757 6.48575 1.96401 5.89445 1.59671 5.25C1.96412 4.60581 2.41768 4.01474 2.94484 3.49312C4.28546 2.17062 5.90234 1.5 7.75171 1.5C9.60109 1.5 11.218 2.17062 12.5586 3.49312C13.0858 4.01469 13.5394 4.60577 13.9067 5.25C13.5393 5.89441 13.0858 6.48569 12.5586 7.0075L12.5605 7.00813ZM7.75171 2.5C7.20781 2.5 6.67613 2.66128 6.22389 2.96346C5.77166 3.26563 5.41918 3.69512 5.21104 4.19762C5.0029 4.70012 4.94844 5.25305 5.05455 5.7865C5.16066 6.31995 5.42257 6.80995 5.80717 7.19454C6.19176 7.57914 6.68176 7.84105 7.21521 7.94716C7.74866 8.05327 8.30159 7.99881 8.80409 7.79067C9.30659 7.58253 9.73608 7.23005 10.0383 6.77782C10.3404 6.32558 10.5017 5.7939 10.5017 5.25C10.5009 4.52091 10.2109 3.82192 9.69534 3.30637C9.17979 2.79082 8.4808 2.50083 7.75171 2.5ZM7.75171 6.5C7.50448 6.5 7.26281 6.42669 7.05725 6.28934C6.85169 6.15199 6.69147 5.95676 6.59686 5.72835C6.50225 5.49995 6.4775 5.24861 6.52573 5.00614C6.57396 4.76366 6.69301 4.54093 6.86783 4.36612C7.04264 4.1913 7.26537 4.07225 7.50785 4.02402C7.75032 3.97579 8.00166 4.00054 8.23006 4.09515C8.45847 4.18976 8.6537 4.34998 8.79105 4.55554C8.9284 4.7611 9.00171 5.00277 9.00171 5.25C9.00171 5.58152 8.87001 5.89946 8.63559 6.13388C8.40117 6.3683 8.08323 6.5 7.75171 6.5Z" fill="white" />
+// ─── School Create Form ───────────────────────────────────────────────────────
+
+type Association = "School District" | "Private" | "Charter";
+type SchoolYear = "2025-2026" | "2026-2027" | "2027-2028" | "2028-2029";
+type GradeLevel = "Pre-K" | "Elementary" | "Middle School" | "High School" | "Special Ed";
+
+interface SchoolFormData {
+  name: string;
+  association: Association;
+  districtName: string;
+  schoolYear: SchoolYear;
+  gradeLevels: GradeLevel[];
+  streetAddress: string;
+  city: string;
+  state: string;
+  zip: string;
+}
+
+const GRADE_LEVELS: GradeLevel[] = ["Pre-K", "Elementary", "Middle School", "High School", "Special Ed"];
+const SCHOOL_YEARS: SchoolYear[] = ["2025-2026", "2026-2027", "2027-2028", "2028-2029"];
+const ASSOCIATIONS: Association[] = ["School District", "Private", "Charter"];
+
+function SchoolCreateForm({ onCancel }: { onCancel: () => void }) {
+  const [form, setForm] = useState<SchoolFormData>({
+    name: "",
+    association: "School District",
+    districtName: "",
+    schoolYear: "2025-2026",
+    gradeLevels: [],
+    streetAddress: "",
+    city: "",
+    state: "",
+    zip: "",
+  });
+
+  const toggleGradeLevel = (grade: GradeLevel) => {
+    setForm((prev) => ({
+      ...prev,
+      gradeLevels: prev.gradeLevels.includes(grade)
+        ? prev.gradeLevels.filter((g) => g !== grade)
+        : [...prev.gradeLevels, grade],
+    }));
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      {/* Page-level top bar */}
+      <div className="flex items-center justify-between px-8 py-[26px]">
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={onCancel}
+            className="flex items-center justify-center cursor-pointer"
+            aria-label="Go back"
+          >
+            <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+              <path d="M3.49202 9.04802L8.52603 14.2183C8.7315 14.4294 8.83013 14.6756 8.82191 14.9569C8.81369 15.2383 8.7065 15.4845 8.50035 15.6955C8.29488 15.889 8.05516 15.9903 7.7812 15.9994C7.50724 16.0086 7.26753 15.9073 7.06206 15.6955L0.281557 8.73147C0.178822 8.62596 0.10588 8.51165 0.0627314 8.38854C0.0195827 8.26544 -0.00130658 8.13355 6.32218e-05 7.99286C0.00143302 7.85217 0.0230071 7.72027 0.0647859 7.59717C0.106565 7.47407 0.179165 7.35976 0.282584 7.25424L7.06309 0.290169C7.25143 0.0967228 7.48704 0 7.7699 0C8.05277 0 8.29659 0.0967228 8.50138 0.290169C8.70685 0.501202 8.80958 0.751979 8.80958 1.0425C8.80958 1.33302 8.70685 1.58345 8.50138 1.79378L3.49202 6.9377H22.9726C23.2637 6.9377 23.5079 7.03899 23.7051 7.24158C23.9024 7.44417 24.0007 7.6946 24 7.99286C23.9993 8.29112 23.9007 8.54189 23.7041 8.74519C23.5076 8.94848 23.2637 9.04943 22.9726 9.04802H3.49202Z" fill="#1E1E1E" />
+            </svg>
+          </button>
+          <h1 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">School</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onCancel}
+            className="flex items-center gap-1.5 px-[17px] py-3 rounded-lg border border-[#EFF0F2] bg-white cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M9.99967 11.1668L5.91634 15.2502C5.76356 15.4029 5.56912 15.4793 5.33301 15.4793C5.0969 15.4793 4.90245 15.4029 4.74967 15.2502C4.5969 15.0974 4.52051 14.9029 4.52051 14.6668C4.52051 14.4307 4.5969 14.2363 4.74967 14.0835L8.83301 10.0002L4.74967 5.91683C4.5969 5.76405 4.52051 5.56961 4.52051 5.3335C4.52051 5.09738 4.5969 4.90294 4.74967 4.75016C4.90245 4.59738 5.0969 4.521 5.33301 4.521C5.56912 4.521 5.76356 4.59738 5.91634 4.75016L9.99967 8.8335L14.083 4.75016C14.2358 4.59738 14.4302 4.521 14.6663 4.521C14.9025 4.521 15.0969 4.59738 15.2497 4.75016C15.4025 4.90294 15.4788 5.09738 15.4788 5.3335C15.4788 5.56961 15.4025 5.76405 15.2497 5.91683L11.1663 10.0002L15.2497 14.0835C15.4025 14.2363 15.4788 14.4307 15.4788 14.6668C15.4788 14.9029 15.4025 15.0974 15.2497 15.2502C15.0969 15.4029 14.9025 15.4793 14.6663 15.4793C14.4302 15.4793 14.2358 15.4029 14.083 15.2502L9.99967 11.1668Z" fill="#333333" />
+            </svg>
+            <span className="font-inter font-medium text-base text-[#333]">Cancel</span>
+          </button>
+          <button
+            onClick={onCancel}
+            className="flex items-center gap-1.5 px-[17px] py-3 rounded-lg bg-[#0171F9] cursor-pointer hover:bg-[#0161d9] transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M2.5 4.16667C2.5 3.72464 2.67559 3.30072 2.98816 2.98816C3.30072 2.67559 3.72464 2.5 4.16667 2.5H13.8217C14.2637 2.50009 14.6875 2.67575 15 2.98833L17.2558 5.24417C17.4121 5.40041 17.5 5.61234 17.5 5.83333V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V4.16667ZM7.5 15.8333H12.5V10.8333H7.5V15.8333ZM14.1667 15.8333H15.8333V6.17833L14.1667 4.51167V5.83333C14.1667 6.27536 13.9911 6.69928 13.6785 7.01184C13.3659 7.3244 12.942 7.5 12.5 7.5H7.5C7.05797 7.5 6.63405 7.3244 6.32149 7.01184C6.00893 6.69928 5.83333 6.27536 5.83333 5.83333V4.16667H4.16667V15.8333H5.83333V10.8333C5.83333 10.3913 6.00893 9.96738 6.32149 9.65482C6.63405 9.34226 7.05797 9.16667 7.5 9.16667H12.5C12.942 9.16667 13.3659 9.34226 13.6785 9.65482C13.9911 9.96738 14.1667 10.3913 14.1667 10.8333V15.8333ZM7.5 4.16667V5.83333H12.5V4.16667H7.5Z" fill="white" />
+            </svg>
+            <span className="font-inter font-semibold text-base text-white">Save</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Form Card */}
+      <div className="px-8 pb-10">
+        <div className="bg-white rounded-2xl p-8 max-w-[720px] mx-auto flex flex-col gap-10">
+
+          {/* ── School Details ── */}
+          <div className="flex flex-col gap-8">
+            <h2 className="font-outfit font-semibold text-2xl text-[#0171F9]">School Details</h2>
+
+            <div className="flex flex-col gap-4">
+              {/* School Name */}
+              <div className="flex flex-col gap-2.5">
+                <label className="font-outfit font-medium text-md text-[#121212] leading-6">School Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter School Name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="h-[43px] px-4 rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition-all"
+                />
+              </div>
+
+              {/* School District / Association */}
+              <div className="flex flex-col gap-2.5">
+                <label className="font-outfit font-medium text-md text-[#121212] leading-6">School Disctrict/Association</label>
+                <div className="flex items-center gap-3 flex-wrap">
+                  {ASSOCIATIONS.map((assoc) => (
+                    <button
+                      key={assoc}
+                      onClick={() => setForm({ ...form, association: assoc })}
+                      className={`px-6 py-2 rounded-lg border font-inter text-sm font-medium transition-all cursor-pointer ${
+                        form.association === assoc
+                          ? "border-[#0B77F9] bg-[#DBECFF] text-[#0B77F9]"
+                          : "border-[#B2B2B2] bg-[#FCFDFE] text-[#121212]"
+                      }`}
+                    >
+                      {assoc}
+                    </button>
+                  ))}
+                </div>
+                {form.association === "School District" && (
+                  <input
+                    type="text"
+                    placeholder="Enter School Disctrict Name"
+                    value={form.districtName}
+                    onChange={(e) => setForm({ ...form, districtName: e.target.value })}
+                    className="h-[43px] px-4 rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition-all"
+                  />
+                )}
+              </div>
+
+              {/* School Year */}
+              <div className="flex flex-col gap-2.5">
+                <label className="font-outfit font-medium text-md text-[#121212] leading-6">School Year</label>
+                <p className="font-inter text-sm text-[#6B7280] -mt-1">
+                  Each school year creates a new record. Regular teachers often transfer between years, changing a school's dynamics.
+                </p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  {SCHOOL_YEARS.map((year) => (
+                    <button
+                      key={year}
+                      onClick={() => setForm({ ...form, schoolYear: year })}
+                      className={`px-6 py-2 rounded-lg border font-inter text-sm font-medium transition-all cursor-pointer ${
+                        form.schoolYear === year
+                          ? "border-[#0B77F9] bg-[#DBECFF] text-[#0B77F9]"
+                          : "border-[#B2B2B2] bg-[#FCFDFE] text-[#121212]"
+                      }`}
+                    >
+                      {year}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grade Level */}
+              <div className="flex flex-col gap-2.5">
+                <label className="font-outfit font-medium text-md text-[#121212] leading-6">Grade Level supported</label>
+                <div className="flex items-center gap-3 flex-wrap">
+                  {GRADE_LEVELS.map((grade) => {
+                    const selected = form.gradeLevels.includes(grade);
+                    return (
+                      <button
+                        key={grade}
+                        onClick={() => toggleGradeLevel(grade)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-inter text-sm font-medium transition-all cursor-pointer ${
+                          selected
+                            ? "bg-[#0B77F9] text-white"
+                            : "border border-[#B2B2B2] bg-[#FCFDFE] text-[#121212]"
+                        }`}
+                      >
+                        {grade}
+                        {selected && (
+                          <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                            <path d="M4.38333 5.31667L1.11667 8.58333C0.994444 8.70555 0.838889 8.76667 0.65 8.76667C0.461111 8.76667 0.305555 8.70555 0.183333 8.58333C0.0611109 8.46111 0 8.30556 0 8.11667C0 7.92778 0.0611109 7.77222 0.183333 7.65L3.45 4.38333L0.183333 1.11667C0.0611109 0.994444 0 0.838889 0 0.65C0 0.461111 0.0611109 0.305555 0.183333 0.183333C0.305555 0.0611109 0.461111 0 0.65 0C0.838889 0 0.994444 0.0611109 1.11667 0.183333L4.38333 3.45L7.65 0.183333C7.77222 0.0611109 7.92778 0 8.11667 0C8.30556 0 8.46111 0.0611109 8.58333 0.183333C8.70555 0.305555 8.76667 0.461111 8.76667 0.65C8.76667 0.838889 8.70555 0.994444 8.58333 1.11667L5.31667 4.38333L8.58333 7.65C8.70555 7.77222 8.76667 7.92778 8.76667 8.11667C8.76667 8.30556 8.70555 8.46111 8.58333 8.58333C8.46111 8.70555 8.30556 8.76667 8.11667 8.76667C7.92778 8.76667 7.77222 8.70555 7.65 8.58333L4.38333 5.31667Z" fill="white" />
+                          </svg>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-black opacity-10" />
+
+          {/* ── School Address ── */}
+          <div className="flex flex-col gap-6">
+            <h2 className="font-outfit font-semibold text-2xl text-[#0171F9]">School Address</h2>
+
+            <div className="flex flex-col gap-4">
+              {/* Street Address */}
+              <div className="flex flex-col gap-2.5">
+                <label className="font-outfit font-medium text-md text-[#121212] leading-6">Street Address</label>
+                <div className="flex items-center justify-between h-[43px] px-4 rounded-lg bg-[#F3F4F5] overflow-hidden">
+                  <input
+                    type="text"
+                    placeholder="Enter Street Address"
+                    value={form.streetAddress}
+                    onChange={(e) => setForm({ ...form, streetAddress: e.target.value })}
+                    className="flex-1 bg-transparent font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none"
+                  />
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="opacity-60 flex-shrink-0">
+                    <g clipPath="url(#clip_chevron_down)">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M8.47136 10.4712C8.34634 10.5962 8.1768 10.6664 8.00003 10.6664C7.82325 10.6664 7.65371 10.5962 7.52869 10.4712L3.75736 6.6999C3.63244 6.57488 3.5625 6.40534 3.5625 6.22857C3.5625 6.0518 3.63244 5.88226 3.75736 5.75724C3.88238 5.63232 4.05192 5.56238 4.22869 5.56238C4.40546 5.56238 4.575 5.63232 4.70003 5.75724L8.00003 9.05724L11.3 5.75724C11.4258 5.6358 11.5942 5.5686 11.769 5.57012C11.9438 5.57164 12.111 5.64175 12.2346 5.76536C12.3582 5.88896 12.4283 6.05617 12.4298 6.23097C12.4313 6.40577 12.3641 6.57417 12.2427 6.6999L8.47136 10.4712Z" fill="#1E1E1E" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip_chevron_down"><rect width="16" height="16" fill="white" /></clipPath>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+
+              {/* City / State / Zip */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex flex-col gap-2.5">
+                  <label className="font-outfit font-medium text-md text-[#121212] leading-6">City</label>
+                  <input
+                    type="text"
+                    placeholder="Enter City Name"
+                    value={form.city}
+                    onChange={(e) => setForm({ ...form, city: e.target.value })}
+                    className="h-[43px] px-4 rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition-all"
+                  />
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  <label className="font-outfit font-medium text-md text-[#121212] leading-6">State</label>
+                  <input
+                    type="text"
+                    placeholder="Enter State"
+                    value={form.state}
+                    onChange={(e) => setForm({ ...form, state: e.target.value })}
+                    className="h-[43px] px-4 rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition-all"
+                  />
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  <label className="font-outfit font-medium text-md text-[#121212] leading-6">Zip Code</label>
+                  <input
+                    type="text"
+                    placeholder="Enter ZIP Code"
+                    value={form.zip}
+                    onChange={(e) => setForm({ ...form, zip: e.target.value })}
+                    className="h-[43px] px-4 rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Form footer buttons */}
+          <div className="flex items-center justify-end gap-3">
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-[rgba(0,0,0,0.20)] bg-white cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M8.99973 10.0501L5.32473 13.7251C5.18723 13.8626 5.01223 13.9313 4.79973 13.9313C4.58723 13.9313 4.41223 13.8626 4.27473 13.7251C4.13723 13.5876 4.06848 13.4126 4.06848 13.2001C4.06848 12.9876 4.13723 12.8126 4.27473 12.6751L7.94973 9.0001L4.27473 5.3251C4.13723 5.1876 4.06848 5.0126 4.06848 4.8001C4.06848 4.5876 4.13723 4.4126 4.27473 4.2751C4.41223 4.1376 4.58723 4.06885 4.79973 4.06885C5.01223 4.06885 5.18723 4.1376 5.32473 4.2751L8.99973 7.9501L12.6747 4.2751C12.8122 4.1376 12.9872 4.06885 13.1997 4.06885C13.4122 4.06885 13.5872 4.1376 13.7247 4.2751C13.8622 4.4126 13.931 4.5876 13.931 4.8001C13.931 5.0126 13.8622 5.1876 13.7247 5.3251L10.0497 9.0001L13.7247 12.6751C13.8622 12.8126 13.931 12.9876 13.931 13.2001C13.931 13.4126 13.8622 13.5876 13.7247 13.7251C13.5872 13.8626 13.4122 13.9313 13.1997 13.9313C12.9872 13.9313 12.8122 13.8626 12.6747 13.7251L8.99973 10.0501Z" fill="#333333" />
+              </svg>
+              <span className="font-inter font-medium text-sm text-[#333]">Cancel</span>
+            </button>
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#0171F9] cursor-pointer hover:bg-[#0161d9] transition-colors"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M2.25 3.75C2.25 3.35218 2.40804 2.97064 2.68934 2.68934C2.97064 2.40804 3.35218 2.25 3.75 2.25H12.4395C12.8373 2.25008 13.2188 2.40818 13.5 2.6895L15.5303 4.71975C15.6709 4.86037 15.75 5.0511 15.75 5.25V14.25C15.75 14.6478 15.592 15.0294 15.3107 15.3107C15.0294 15.592 14.6478 15.75 14.25 15.75H3.75C3.35218 15.75 2.97064 15.592 2.68934 15.3107C2.40804 15.0294 2.25 14.6478 2.25 14.25V3.75ZM6.75 14.25H11.25V9.75H6.75V14.25ZM12.75 14.25H14.25V5.5605L12.75 4.0605V5.25C12.75 5.64782 12.592 6.02936 12.3107 6.31066C12.0294 6.59196 11.6478 6.75 11.25 6.75H6.75C6.35218 6.75 5.97064 6.59196 5.68934 6.31066C5.40804 6.02936 5.25 5.64782 5.25 5.25V3.75H3.75V14.25H5.25V9.75C5.25 9.35218 5.40804 8.97064 5.68934 8.68934C5.97064 8.40804 6.35218 8.25 6.75 8.25H11.25C11.6478 8.25 12.0294 8.40804 12.3107 8.68934C12.592 8.97064 12.75 9.35218 12.75 9.75V14.25ZM6.75 3.75V5.25H11.25V3.75H6.75Z" fill="white" />
+              </svg>
+              <span className="font-inter font-semibold text-sm text-white">Save</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
+
+const SearchIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+    <path fillRule="evenodd" clipRule="evenodd" d="M8 3.99979C6.93913 3.99979 5.92172 4.42122 5.17157 5.17136C4.42143 5.92151 4 6.93892 4 7.99979C4 9.06066 4.42143 10.0781 5.17157 10.8282C5.92172 11.5784 6.93913 11.9998 8 11.9998C9.06087 11.9998 10.0783 11.5784 10.8284 10.8282C11.5786 10.0781 12 9.06066 12 7.99979C12 6.93892 11.5786 5.92151 10.8284 5.17136C10.0783 4.42122 9.06087 3.99979 8 3.99979ZM2 7.99979C1.99988 7.05549 2.22264 6.1245 2.65017 5.28253C3.0777 4.44056 3.69792 3.71139 4.4604 3.15432C5.22287 2.59724 6.10606 2.228 7.03815 2.07662C7.97023 1.92524 8.92488 1.996 9.82446 2.28314C10.724 2.57028 11.5432 3.06569 12.2152 3.72909C12.8872 4.39248 13.3931 5.20512 13.6919 6.10092C13.9906 6.99672 14.0737 7.95038 13.9343 8.88434C13.795 9.8183 13.4372 10.7062 12.89 11.4758L17.707 16.2928C17.8892 16.4814 17.99 16.734 17.9877 16.9962C17.9854 17.2584 17.8802 17.5092 17.6948 17.6946C17.5094 17.88 17.2586 17.9852 16.9964 17.9875C16.7342 17.9897 16.4816 17.8889 16.293 17.7068L11.477 12.8908C10.5794 13.5291 9.52335 13.9079 8.42468 13.9859C7.326 14.0639 6.22707 13.8379 5.2483 13.3328C4.26953 12.8276 3.44869 12.0628 2.87572 11.1221C2.30276 10.1815 1.99979 9.10122 2 7.99979Z" fill="#323152" />
   </svg>
 );
 
-const CheckIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.95881 12.625L15.0213 5.5625C15.188 5.39583 15.3824 5.3125 15.6046 5.3125C15.8269 5.3125 16.0213 5.39583 16.188 5.5625C16.3546 5.72917 16.438 5.92722 16.438 6.15667C16.438 6.38611 16.3546 6.58389 16.188 6.75L8.54214 14.4167C8.37548 14.5833 8.18103 14.6667 7.95881 14.6667C7.73659 14.6667 7.54214 14.5833 7.37548 14.4167L3.79214 10.8333C3.62548 10.6667 3.54548 10.4689 3.55214 10.24C3.55881 10.0111 3.64575 9.81306 3.81298 9.64583C3.9802 9.47861 4.17825 9.39528 4.40714 9.39583C4.63603 9.39639 4.83381 9.47972 5.00048 9.64583L7.95881 12.625Z" fill="#086047" />
+const LocationIcon = () => (
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
+    <path d="M4.66699 0.400391C7.02593 0.400566 8.93359 2.30801 8.93359 4.66699C8.93352 5.46098 8.66643 6.38047 8.23926 7.33398C7.81438 8.28237 7.24374 9.23549 6.66797 10.0889C6.09302 10.941 5.51726 11.6871 5.08496 12.2197C4.92298 12.4193 4.77955 12.5871 4.66602 12.7207C4.55255 12.5872 4.40982 12.4191 4.24805 12.2197C3.81572 11.687 3.24003 10.9411 2.66504 10.0889C2.08926 9.23548 1.51863 8.28239 1.09375 7.33398C0.666593 6.38049 0.400464 5.46097 0.400391 4.66699C0.400391 2.30791 2.30791 0.400391 4.66699 0.400391ZM4.66699 2.59961C4.11888 2.59961 3.59265 2.8175 3.20508 3.20508C2.8175 3.59265 2.59961 4.11888 2.59961 4.66699C2.5997 5.21491 2.81768 5.74045 3.20508 6.12793C3.59265 6.5155 4.11888 6.7334 4.66699 6.7334C5.21499 6.73331 5.74043 6.51543 6.12793 6.12793C6.51543 5.74043 6.73331 5.21499 6.7334 4.66699C6.7334 4.11888 6.5155 3.59265 6.12793 3.20508C5.74045 2.81768 5.21491 2.5997 4.66699 2.59961Z" stroke="#191919" strokeWidth="0.8" />
   </svg>
 );
 
-const CloseIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9.99967 11.1668L5.91634 15.2502C5.76356 15.4029 5.56912 15.4793 5.33301 15.4793C5.0969 15.4793 4.90245 15.4029 4.74967 15.2502C4.5969 15.0974 4.52051 14.9029 4.52051 14.6668C4.52051 14.4307 4.5969 14.2363 4.74967 14.0835L8.83301 10.0002L4.74967 5.91683C4.5969 5.76405 4.52051 5.56961 4.52051 5.3335C4.52051 5.09738 4.5969 4.90294 4.74967 4.75016C4.90245 4.59738 5.0969 4.521 5.33301 4.521C5.56912 4.521 5.76356 4.59738 5.91634 4.75016L9.99967 8.8335L14.083 4.75016C14.2358 4.59738 14.4302 4.521 14.6663 4.521C14.9025 4.521 15.0969 4.59738 15.2497 4.75016C15.4025 4.90294 15.4788 5.09738 15.4788 5.3335C15.4788 5.56961 15.4025 5.76405 15.2497 5.91683L11.1663 10.0002L15.2497 14.0835C15.4025 14.2363 15.4788 14.4307 15.4788 14.6668C15.4788 14.9029 15.4025 15.0974 15.2497 15.2502C15.0969 15.4029 14.9025 15.4793 14.6663 15.4793C14.4302 15.4793 14.2358 15.4029 14.083 15.2502L9.99967 11.1668Z" fill="#991B1B" />
+const SentimentIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <g clipPath="url(#clip0_smile)">
+      <path d="M9.53792 6C9.66836 6.20146 9.84979 6.3676 10.0652 6.48277C10.2805 6.59795 10.5227 6.65839 10.769 6.65839C11.0152 6.65839 11.2574 6.59795 11.4728 6.48277C11.6881 6.3676 11.8696 6.20146 12 6M6.46144 6C6.33097 6.20132 6.14956 6.36733 5.93426 6.48242C5.71897 6.59751 5.47687 6.65789 5.23072 6.65789C4.98457 6.65789 4.74247 6.59751 4.52718 6.48242C4.31188 6.36733 4.13047 6.20132 4 6M4.30752 9.62581C4.61131 10.3289 5.12406 10.9296 5.78115 11.352C6.43825 11.7745 7.21029 12 8 12C8.78971 12 9.56175 11.7745 10.2188 11.352C10.8759 10.9296 11.3887 10.3289 11.6925 9.62581" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.00033 15.3337C12.0503 15.3337 15.3337 12.0503 15.3337 8.00033C15.3337 3.95033 12.0503 0.666992 8.00033 0.666992C3.95033 0.666992 0.666992 3.95033 0.666992 8.00033C0.666992 12.0503 3.95033 15.3337 8.00033 15.3337Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+    <defs>
+      <clipPath id="clip0_smile"><rect width="16" height="16" fill="white" /></clipPath>
+    </defs>
   </svg>
 );
 
-const TrendUpGreenIcon = ({ label }: { label: string }) => (
-  <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-[5px] bg-[#CDFFEE]">
-    
-<svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15.5 5V0.5H11" stroke="#10B981" strokeLinecap="round" strokeLinejoin="round"/>
-<path d="M15.5 0.5L10.2073 5.79267C10.1145 5.88559 10.0042 5.95931 9.88283 6.0096C9.76146 6.0599 9.63138 6.08579 9.5 6.08579C9.36862 6.08579 9.23854 6.0599 9.11717 6.0096C8.9958 5.95931 8.88553 5.88559 8.79267 5.79267L6.70733 3.70733C6.61447 3.61441 6.5042 3.54069 6.38283 3.4904C6.26146 3.4401 6.13138 3.41421 6 3.41421C5.86862 3.41421 5.73854 3.4401 5.61717 3.4904C5.4958 3.54069 5.38553 3.61441 5.29267 3.70733L0.5 8.5" stroke="#10B981" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
-
-    <span className="font-inter text-sm font-medium text-[#10B981]">{label}</span>
-  </div>
+const FilterIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M13.9849 3.19692C13.9849 2.778 13.9849 2.56854 13.9026 2.40845C13.8311 2.26781 13.7169 2.15339 13.5765 2.08154C13.4164 2 13.2069 2 12.788 2H3.21266C2.79374 2 2.58428 2 2.42419 2.08154C2.28344 2.15326 2.16901 2.2677 2.09729 2.40845C2.01575 2.56854 2.01575 2.778 2.01575 3.19692V3.74825C2.01575 3.93152 2.01575 4.02279 2.03669 4.10882C2.05501 4.18541 2.08531 4.25862 2.12646 4.32576C2.17209 4.40057 2.23718 4.46565 2.36585 4.59507L6.15334 8.38181C6.28276 8.51123 6.34784 8.57631 6.39347 8.65112C6.43486 8.71894 6.46479 8.79126 6.48324 8.86806C6.50419 8.95334 6.50419 9.04386 6.50419 9.22265V12.7805C6.50419 13.4216 6.50419 13.7425 6.63884 13.9355C6.69726 14.019 6.77211 14.0896 6.85882 14.1432C6.94552 14.1967 7.04224 14.2319 7.14304 14.2467C7.37569 14.2811 7.66295 14.1382 8.23597 13.851L8.83443 13.5517C9.07531 13.4321 9.195 13.3722 9.28253 13.2824C9.36017 13.2031 9.4192 13.1076 9.45533 13.0027C9.49648 12.8845 9.49648 12.7498 9.49648 12.4813V9.22863C9.49648 9.04535 9.49648 8.95409 9.51742 8.86806C9.53574 8.79147 9.56604 8.71826 9.60719 8.65112C9.65208 8.57631 9.71716 8.51198 9.84433 8.3848L9.84732 8.38181L13.6348 4.59507C13.7635 4.46565 13.8278 4.40057 13.8742 4.32576C13.9156 4.25793 13.9455 4.18562 13.964 4.10882C13.9849 4.02429 13.9849 3.93302 13.9849 3.75423V3.19692Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
 );
 
-const TrendUpRedIcon = ({ label }: { label: string }) => (
-  <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded-[5px] bg-[#FFEFEF]">
-    
-<svg width="16" height="9" viewBox="0 0 16 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15.5 5V0.5H11" stroke="#EC4143" strokeLinecap="round" strokeLinejoin="round"/>
-<path d="M15.5 0.5L10.2073 5.79267C10.1145 5.88559 10.0042 5.95931 9.88283 6.0096C9.76146 6.0599 9.63138 6.08579 9.5 6.08579C9.36862 6.08579 9.23854 6.0599 9.11717 6.0096C8.9958 5.95931 8.88553 5.88559 8.79267 5.79267L6.70733 3.70733C6.61447 3.61441 6.5042 3.54069 6.38283 3.4904C6.26146 3.4401 6.13138 3.41421 6 3.41421C5.86862 3.41421 5.73854 3.4401 5.61717 3.4904C5.4958 3.54069 5.38553 3.61441 5.29267 3.70733L0.5 8.5" stroke="#EC4143" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
-
-    <span className="font-inter text-sm font-medium text-[#EC4143]">{label}</span>
-  </div>
+const ChevronDownIcon = () => (
+  <svg width="9" height="6" viewBox="0 0 9 6" fill="none">
+    <path fillRule="evenodd" clipRule="evenodd" d="M4.91762 4.91753C4.7926 5.04251 4.62306 5.11272 4.44628 5.11272C4.26951 5.11272 4.09997 5.04251 3.97495 4.91753L0.203617 1.14619C0.139944 1.08469 0.0891555 1.01113 0.0542161 0.929795C0.0192768 0.848459 0.000885935 0.760979 0.000116724 0.67246C-0.000652487 0.58394 0.0162155 0.496154 0.0497361 0.414223C0.0832567 0.332292 0.132759 0.257857 0.195354 0.195262C0.257949 0.132667 0.332383 0.0831648 0.414314 0.0496442C0.496245 0.0161236 0.584032 -0.00074404 0.672551 2.51714e-05C0.761071 0.000794382 0.848551 0.0191852 0.929887 0.0541246C1.01122 0.0890639 1.08479 0.139852 1.14628 0.203525L4.44628 3.50353L7.74628 0.203525C7.87202 0.0820866 8.04042 0.0148904 8.21522 0.0164093C8.39002 0.0179282 8.55722 0.0880407 8.68083 0.211646C8.80443 0.335252 8.87455 0.50246 8.87607 0.677258C8.87759 0.852056 8.81039 1.02046 8.68895 1.14619L4.91762 4.91753Z" fill="#1E1E1E" />
+  </svg>
 );
 
-const recentReports = [
-  { id: "RPT-249", school: "Lincoln High School", teacher: "Albert Chambers", sentiment: "Positive", submittedBy: "Anonymous", date: "Mar 16, 2026", status: "Pending" },
-  { id: "RPT-237", school: "Riverside Academy", teacher: "--", sentiment: "Positive", submittedBy: "Anonymous", date: "Mar 16, 2026", status: "Pending" },
-  { id: "RPT-218", school: "Oakwood Primary", teacher: "James Morton", sentiment: "Positive", submittedBy: "Anonymous", date: "Mar 16, 2026", status: "Pending" },
+const ChevronLeftIcon = () => (
+  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
+    <path d="M5.67629 0L0 6L5.67629 12L7 10.5996L2.64856 6L7 1.4004L5.67629 0Z" fill="#323152" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
+    <path d="M1.32371 0L7 6L1.32371 12L0 10.5996L4.35144 6L0 1.4004L1.32371 0Z" fill="#323152" />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M9 11H4C3.71667 11 3.47934 10.904 3.288 10.712C3.09667 10.52 3.00067 10.2827 3 10C2.99934 9.71733 3.09534 9.48 3.288 9.288C3.48067 9.096 3.718 9 4 9H9V4C9 3.71667 9.096 3.47934 9.288 3.288C9.48 3.09667 9.71733 3.00067 10 3C10.2827 2.99934 10.5203 3.09534 10.713 3.288C10.9057 3.48067 11.0013 3.718 11 4V9H16C16.2833 9 16.521 9.096 16.713 9.288C16.905 9.48 17.0007 9.71733 17 10C16.9993 10.2827 16.9033 10.5203 16.712 10.713C16.5207 10.9057 16.2833 11.0013 16 11H11V16C11 16.2833 10.904 16.521 10.712 16.713C10.52 16.905 10.2827 17.0007 10 17C9.71733 16.9993 9.48 16.9033 9.288 16.712C9.096 16.5207 9 16.2833 9 16V11Z" fill="white" />
+  </svg>
+);
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type RiskLevel = "High" | "Medium" | "Low";
+type SchoolStatus = "Active" | "Inactive";
+
+interface School {
+  id: number;
+  name: string;
+  association: Association;
+  schoolYear: string;
+  location: string;
+  teachers: number;
+  risk: RiskLevel;
+  reports: number;
+  status: SchoolStatus;
+}
+
+// ─── Mock Data ────────────────────────────────────────────────────────────────
+
+const allSchools: School[] = [
+  { id: 1, name: "Lincoln High School", association: "School District", schoolYear: "2025-2026", location: "New York, NY", teachers: 28, risk: "Medium", reports: 35, status: "Active" },
+  { id: 2, name: "Riverside Academy", association: "Private", schoolYear: "2027-2028", location: "Los Angeles, CA", teachers: 24, risk: "High", reports: 29, status: "Active" },
+  { id: 3, name: "Oakwood Primary", association: "School District", schoolYear: "2026-2027", location: "Chicago, IL", teachers: 30, risk: "Low", reports: 42, status: "Active" },
+  { id: 4, name: "Cedar Valley Institute", association: "Charter", schoolYear: "2028-2029", location: "Houston, TX", teachers: 22, risk: "Medium", reports: 31, status: "Active" },
+  { id: 5, name: "Pinehill Preparatory", association: "School District", schoolYear: "2027-2028", location: "Phoenix, AZ", teachers: 26, risk: "High", reports: 27, status: "Active" },
+  { id: 6, name: "Sunset Charter School", association: "School District", schoolYear: "2025-2026", location: "Philadelphia, PA", teachers: 32, risk: "High", reports: 39, status: "Active" },
+  { id: 7, name: "Hillside Technical High", association: "Private", schoolYear: "2027-2028", location: "San Antonio, TX", teachers: 20, risk: "Low", reports: 33, status: "Active" },
+  { id: 8, name: "Brookside International", association: "Charter", schoolYear: "2025-2026", location: "San Diego, CA", teachers: 34, risk: "Medium", reports: 26, status: "Active" },
+  { id: 9, name: "Willow Creek Academy", association: "School District", schoolYear: "2027-2028", location: "Dallas, TX", teachers: 18, risk: "Low", reports: 44, status: "Active" },
+  { id: 10, name: "Evergreen STEM School", association: "Charter", schoolYear: "2026-2027", location: "San Jose, CA", teachers: 36, risk: "Low", reports: 35, status: "Active" },
+  { id: 11, name: "Maplewood Academy", association: "Private", schoolYear: "2026-2027", location: "Austin, TX", teachers: 21, risk: "Medium", reports: 18, status: "Inactive" },
+  { id: 12, name: "Harborview High School", association: "School District", schoolYear: "2025-2026", location: "Seattle, WA", teachers: 29, risk: "Low", reports: 51, status: "Active" },
+  { id: 13, name: "Northgate Elementary", association: "Charter", schoolYear: "2027-2028", location: "Denver, CO", teachers: 15, risk: "High", reports: 12, status: "Active" },
 ];
 
+const TOTAL_COUNT = 13928;
+const ITEMS_PER_PAGE = 10;
+
+// ─── Config Maps ──────────────────────────────────────────────────────────────
+
+const associationStyles: Record<Association, string> = {
+  "School District": "text-[#0171F9]",
+  "Private": "text-[#7C3AED]",
+  "Charter": "text-[#0891B2]",
+};
+
+const riskStyles: Record<RiskLevel, { bg: string; text: string }> = {
+  High: { bg: "bg-[#FFECEC]", text: "text-[#E53E3E]" },
+  Medium: { bg: "bg-[#FFF4E0]", text: "text-[#FFA600]" },
+  Low: { bg: "bg-[#E6FBF0]", text: "text-[#22A45D]" },
+};
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
+
 export default function SchoolsPage() {
+  const [showForm, setShowForm] = useState(false);
+  const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState("All");
+  const [riskFilter, setRiskFilter] = useState<"All" | RiskLevel>("All");
+  const [statusFilter, setStatusFilter] = useState<"All" | SchoolStatus>("All");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  if (showForm) {
+    return <SchoolCreateForm onCancel={() => setShowForm(false)} />;
+  }
+
+  const filtered = allSchools.filter((s) => {
+    const matchSearch =
+      search === "" ||
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.location.toLowerCase().includes(search.toLowerCase());
+    const matchRisk = riskFilter === "All" || s.risk === riskFilter;
+    const matchStatus = statusFilter === "All" || s.status === statusFilter;
+    return matchSearch && matchRisk && matchStatus;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+  const paginated = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  const handleFilterChange = (setter: (v: any) => void) => (val: any) => {
+    setter(val);
+    setCurrentPage(1);
+  };
+
+  const displayTotal = search || riskFilter !== "All" || statusFilter !== "All" ? filtered.length : TOTAL_COUNT;
+  const startItem = filtered.length === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const endItem = Math.min(currentPage * ITEMS_PER_PAGE, filtered.length);
+
   return (
-     <main className="flex-1 overflow-y-auto p-8">
+    <main className="flex-1 overflow-y-auto p-8">
+      {/* Page header */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">Schools</h1>
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-1.5 px-[17px] py-3 rounded-lg bg-[#0171F9] shadow-sm hover:bg-[#0161d9] transition-colors cursor-pointer"
+        >
+          <PlusIcon />
+          <span className="font-inter font-semibold text-base text-white leading-6">Create</span>
+        </button>
+      </div>
 
-          {/* Page title */}
-          <div className="mb-6">
-            <h1 className="font-outfit font-semibold text-3xl text-[#121212] leading-5">Schools</h1>
-          </div>
-
-          {/* Stats cards */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
-
-            {/* Total Reports */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Total Reports</span>
-                 <span className="font-outfit font-bold text-3xl text-[#191C1D]">1,244</span>
-                 </div>
-                <div className="w-11 h-11 rounded-md bg-[#DDEBFF] flex items-center justify-center flex-shrink-0">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 22C4.89617 22 4 21.1038 4 20V4C4 2.89617 4.89617 2 6 2H14C14.6394 1.99897 15.2527 2.25309 15.704 2.706L19.292 6.294C19.7461 6.74545 20.001 7.35966 20 8V20C20 21.1038 19.1038 22 18 22H6" stroke="#0171F9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M14 2V7C14 7.55192 14.4481 8 15 8H20M10 9H8M16 13H8M16 17H8" stroke="#0171F9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </div>
-             
-               
-                <div className="flex items-center gap-1.5">
-                  <TrendUpGreenIcon label="+24" />
-                  <span className="font-inter font-normal text-sm text-[#121212] opacity-64">from last month</span>
-                </div>
-           
-            </div>
-
-            {/* Reports This Week */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Reports This Week</span>
-                <span className="font-outfit font-bold text-3xl text-[#191C1D]">42</span>
-                </div>
-                <div className="w-11 h-11 rounded-md bg-[#EAFFF1] flex items-center justify-center flex-shrink-0">
-                  
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fillRule="evenodd" clipRule="evenodd" d="M17 16V18C17 18.1394 17.0388 18.276 17.1121 18.3945C17.1854 18.513 17.2903 18.6088 17.415 18.671L18.415 19.171C18.593 19.26 18.799 19.2746 18.9877 19.2117C19.1765 19.1488 19.3325 19.0135 19.4215 18.8355C19.5105 18.6575 19.5251 18.4515 19.4622 18.2628C19.3993 18.074 19.264 17.918 19.086 17.829L18.5 17.536V16C18.5 15.8011 18.421 15.6103 18.2803 15.4697C18.1397 15.329 17.9489 15.25 17.75 15.25C17.5511 15.25 17.3603 15.329 17.2197 15.4697C17.079 15.6103 17 15.8011 17 16Z" fill="#33C466"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M22.5 18C22.5 15.378 20.372 13.25 17.75 13.25C15.128 13.25 13 15.378 13 18C13 20.622 15.128 22.75 17.75 22.75C20.372 22.75 22.5 20.622 22.5 18ZM21 18C20.979 18.848 20.6273 19.6542 20.0201 20.2465C19.4129 20.8388 18.5983 21.1704 17.75 21.1704C16.9017 21.1704 16.0871 20.8388 15.4799 20.2465C14.8727 19.6542 14.521 18.848 14.5 18C14.521 17.152 14.8727 16.3458 15.4799 15.7535C16.0871 15.1612 16.9017 14.8296 17.75 14.8296C18.5983 14.8296 19.4129 15.1612 20.0201 15.7535C20.6273 16.3458 20.979 17.152 21 18Z" fill="#33C466"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M12.75 21.25H4.25C3.91864 21.2495 3.60101 21.1176 3.3667 20.8833C3.13239 20.649 3.00053 20.3314 3 20V4C3.00053 3.66864 3.13239 3.35101 3.3667 3.1167C3.60101 2.88239 3.91864 2.75053 4.25 2.75H11.363C11.4255 2.74979 11.4858 2.77298 11.532 2.815L16.418 7.257C16.4437 7.2805 16.4643 7.30907 16.4784 7.34091C16.4925 7.37275 16.4999 7.40717 16.5 7.442V12C16.5 12.1989 16.579 12.3897 16.7197 12.5303C16.8603 12.671 17.0511 12.75 17.25 12.75C17.4489 12.75 17.6397 12.671 17.7803 12.5303C17.921 12.3897 18 12.1989 18 12V7.442C18 7.19813 17.949 6.95696 17.8503 6.73395C17.7517 6.51094 17.6075 6.31102 17.427 6.147L12.541 1.705C12.2185 1.41217 11.7986 1.24996 11.363 1.25H4.25C3.521 1.25 2.821 1.54 2.305 2.055C1.7898 2.57122 1.50031 3.27067 1.5 4V20C1.5 20.729 1.79 21.429 2.305 21.945C2.82122 22.4602 3.52067 22.7497 4.25 22.75H12.75C12.9489 22.75 13.1397 22.671 13.2803 22.5303C13.421 22.3897 13.5 22.1989 13.5 22C13.5 21.8011 13.421 21.6103 13.2803 21.4697C13.1397 21.329 12.9489 21.25 12.75 21.25Z" fill="#33C466"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M12.5 6.25V2.5C12.5 2.30109 12.421 2.11032 12.2803 1.96967C12.1397 1.82902 11.9489 1.75 11.75 1.75C11.5511 1.75 11.3603 1.82902 11.2197 1.96967C11.079 2.11032 11 2.30109 11 2.5V6.5C11.0005 6.83136 11.1324 7.14899 11.3667 7.3833C11.601 7.61761 11.9186 7.74947 12.25 7.75H16.75C16.9489 7.75 17.1397 7.67098 17.2803 7.53033C17.421 7.38968 17.5 7.19891 17.5 7C17.5 6.80109 17.421 6.61032 17.2803 6.46967C17.1397 6.32902 16.9489 6.25 16.75 6.25H12.5ZM5.75 9.75H9.25C9.44891 9.75 9.63968 9.67098 9.78033 9.53033C9.92098 9.38968 10 9.19891 10 9C10 8.80109 9.92098 8.61032 9.78033 8.46967C9.63968 8.32902 9.44891 8.25 9.25 8.25H5.75C5.55109 8.25 5.36032 8.32902 5.21967 8.46967C5.07902 8.61032 5 8.80109 5 9C5 9.19891 5.07902 9.38968 5.21967 9.53033C5.36032 9.67098 5.55109 9.75 5.75 9.75ZM5.75 13.25H12.25C12.4489 13.25 12.6397 13.171 12.7803 13.0303C12.921 12.8897 13 12.6989 13 12.5C13 12.3011 12.921 12.1103 12.7803 11.9697C12.6397 11.829 12.4489 11.75 12.25 11.75H5.75C5.55109 11.75 5.36032 11.829 5.21967 11.9697C5.07902 12.1103 5 12.3011 5 12.5C5 12.6989 5.07902 12.8897 5.21967 13.0303C5.36032 13.171 5.55109 13.25 5.75 13.25ZM5.75 16.75H9.75C9.94891 16.75 10.1397 16.671 10.2803 16.5303C10.421 16.3897 10.5 16.1989 10.5 16C10.5 15.8011 10.421 15.6103 10.2803 15.4697C10.1397 15.329 9.94891 15.25 9.75 15.25H5.75C5.55109 15.25 5.36032 15.329 5.21967 15.4697C5.07902 15.6103 5 15.8011 5 16C5 16.1989 5.07902 16.3897 5.21967 16.5303C5.36032 16.671 5.55109 16.75 5.75 16.75Z" fill="#33C466"/>
-</svg>
-
-                </div>
-              </div>
-                
-                <div className="flex items-center gap-1.5">
-                  <TrendUpGreenIcon label="+5" />
-                  <span className="font-inter font-normal text-sm text-[#121212] opacity-64">more than last week</span>
-                </div>
-            </div>
-
-            {/* Negative Reports */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Negative Reports</span>
-                <span className="font-outfit font-bold text-3xl text-[#191C1D]">18</span>
-                </div>
-                <div className="w-11 h-11 rounded-md bg-[#FFEFEF] flex items-center justify-center flex-shrink-0">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.2 17.6335L14.0016 3.39569C13.7967 3.04687 13.5042 2.75764 13.1532 2.55668C12.8021 2.35572 12.4046 2.25 12 2.25C11.5955 2.25 11.198 2.35572 10.8469 2.55668C10.4958 2.75764 10.2033 3.04687 9.99847 3.39569L1.80003 17.6335C1.60291 17.9709 1.49902 18.3546 1.49902 18.7454C1.49902 19.1361 1.60291 19.5199 1.80003 19.8572C2.00228 20.2082 2.29425 20.499 2.64599 20.6998C2.99773 20.9006 3.39658 21.0043 3.80159 21.0001H20.1985C20.6032 21.0039 21.0016 20.9001 21.353 20.6993C21.7044 20.4985 21.9961 20.2079 22.1982 19.8572C22.3956 19.52 22.4998 19.1364 22.5001 18.7456C22.5004 18.3549 22.3969 17.9711 22.2 17.6335Z" stroke="#EC4143" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 9V13.5M12 16.875V17.25" stroke="#EC4143" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </div>
-             
-                
-                <div className="flex items-center gap-1.5">
-                  <TrendUpRedIcon label="+2" />
-                  <span className="font-inter font-normal text-sm text-[#121212] opacity-64">from last month</span>
-                </div>
-             
-            </div>
-
-            {/* Active Schools */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
-                <div className="flex flex-col gap-2">
-                  <span className="font-inter font-medium text-xs text-[#434654] uppercase">Active Schools</span>
-                  <span className="font-outfit font-bold text-3xl text-[#191C1D]">15</span>
-                </div>
-                <div className="w-11 h-11 rounded-md bg-[#FFF9F0] flex items-center justify-center flex-shrink-0">
-                  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9.75 11.9168H11.9167V14.0835H9.75V11.9168ZM9.75 7.5835H11.9167V9.75016H9.75V7.5835ZM14.0833 11.9168H16.25V14.0835H14.0833V11.9168ZM14.0833 7.5835H16.25V9.75016H14.0833V7.5835Z" fill="#F3AC4B" />
-                    <path d="M22.7498 9.75H19.4998V5.41667H20.5832V3.25H5.4165V5.41667H6.49984V9.75H3.24984C2.654 9.75 2.1665 10.2375 2.1665 10.8333V21.6667C2.1665 22.2625 2.654 22.75 3.24984 22.75H22.7498C23.3457 22.75 23.8332 22.2625 23.8332 21.6667V10.8333C23.8332 10.2375 23.3457 9.75 22.7498 9.75ZM4.33317 11.9167H6.49984V20.5833H4.33317V11.9167ZM10.8332 16.25V20.5833H8.6665V5.41667H17.3332V20.5833H15.1665V16.25H10.8332ZM21.6665 20.5833H19.4998V11.9167H21.6665V20.5833Z" fill="#F3AC4B" />
-                  </svg>
-                </div>
-              </div>
-               
-                <div className="flex items-center gap-1.5">
-                  <TrendUpGreenIcon label="+1" />
-                  <span className="font-inter font-normal text-sm text-[#121212] opacity-64">from last month</span>
-                </div>
+      {/* Table card */}
+      <div className="bg-white rounded-lg overflow-hidden">
+        {/* Search + Filters */}
+        <div className="px-8 pt-6 pb-0 flex flex-col gap-3">
+          {/* Search */}
+          <div className="w-full max-w-[426px]">
+            <div className="flex items-center gap-2.5 h-11 px-4 rounded-[14px] border border-[#EBEBF0] bg-[#FBFBFC]">
+              <span className="opacity-70 flex-shrink-0"><SearchIcon /></span>
+              <input
+                type="text"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                className="flex-1 bg-transparent outline-none font-inter font-medium text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
+              />
             </div>
           </div>
 
-          {/* Middle section: alerts + sentiment */}
-          <div className="flex gap-6 mb-6">
-
-            {/* Recent High-Risk Alerts */}
-            <div className="flex-1 min-w-0 bg-white rounded-xl p-6 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <h2 className="font-outfit font-medium text-2xl text-[#121212]">Recent High-Risk Alerts</h2>
-                <Link href="#" className="font-outfit font-normal text-[16px] text-[#0171F9]">View all</Link>
-              </div>
-
-              <div className="flex flex-col gap-3">
-
-                {/* Alert card 1 */}
-                <div className="flex items-start gap-6 p-4 rounded-xl border border-[#F0F0F0] shadow-[0_0_6px_-1px_rgba(0,0,0,0.05)]">
-                  <div className="flex-1 flex flex-col gap-5">
-                    <div className="flex items-start gap-3">
-                      <div className="relative w-10 h-10 flex-shrink-0">
-                        <div className="w-10 h-10 rounded-[10px] bg-[#F5F6F7]" />
-                        <span className="absolute inset-0 flex items-center justify-center font-outfit font-medium text-lg text-[#6B727F]">SJ</span>
-                      </div>
-                      <div className="flex-1 flex flex-col gap-2">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center justify-between">
-                            <span className="font-outfit font-semibold text-md text-[#303030]">Dr. Sarah Jenkins</span>
-                            <span className="px-3 py-0.5 rounded-xl bg-[#EC4143] font-inter text-[11px] text-white tracking-[0.5px]">High Risk</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="font-inter font-medium text-sm text-[#6B727F] opacity-88">Lincoln High School</span>
-                            <span className="font-inter text-sm text-[#6B727F]">•</span>
-                            <span className="font-inter font-medium text-sm text-[#6B727F] opacity-88">12 reports</span>
-                          </div>
-                        </div>
-                        <p className="font-inter font-normal text-[13px] text-[#353941] leading-4">Multiple behavioral concerns and repeated complaints have been reported over the past two weeks.</p>
-                      </div>
-                    </div>
-                    <button className="self-start flex items-center gap-1.5 px-4 py-1 rounded-lg bg-[#0171F9]">
-                      <EyeIcon />
-                      <span className="font-inter font-medium text-xs text-white leading-6">View</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Alert card 2 */}
-                <div className="flex items-start gap-6 p-4 rounded-xl border border-[#F0F0F0] shadow-[0_0_6px_-1px_rgba(0,0,0,0.05)]">
-                  <div className="flex-1 flex flex-col gap-5">
-                    <div className="flex items-start gap-3">
-                      <div className="relative w-10 h-10 flex-shrink-0">
-                        <div className="w-10 h-10 rounded-[10px] bg-[#F5F6F7]" />
-                        <span className="absolute inset-0 flex items-center justify-center font-outfit font-medium text-lg text-[#6B727F]">JD</span>
-                      </div>
-                      <div className="flex-1 flex flex-col gap-2">
-                        <div className="flex flex-col gap-2">
-                          <div className="flex items-center justify-between">
-                            <span className="font-outfit font-semibold text-md text-[#303030]">John Doe</span>
-                            <span className="px-3 py-0.5 rounded-xl bg-[#EC4143] font-inter text-[11px] text-white tracking-[0.5px]">High Risk</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="font-inter font-medium text-sm text-[#6B727F] opacity-88">Oakridge Elementary</span>
-                            <span className="font-inter text-sm text-[#6B727F]">•</span>
-                            <span className="font-inter font-medium text-sm text-[#6B727F] opacity-88">10 reports</span>
-                          </div>
-                        </div>
-                        <p className="font-inter font-normal text-[13px] text-[#353941] leading-4">Based on 12 reports, with 75% indicating negative feedback over the past 6 months.</p>
-                      </div>
-                    </div>
-                    <button className="self-start flex items-center gap-1.5 px-4 py-1 rounded-lg bg-[#0171F9]">
-                      <EyeIcon />
-                      <span className="font-inter font-medium text-xs text-white leading-6">View</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+          {/* Filter dropdowns */}
+          <div className="flex items-center gap-3 pb-4 flex-wrap">
+            {/* Location */}
+            <div className="relative">
+              <select
+                value={locationFilter}
+                onChange={(e) => handleFilterChange(setLocationFilter)(e.target.value)}
+                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+              >
+                <option value="All">Location  All</option>
+                <option value="NY">New York</option>
+                <option value="CA">California</option>
+                <option value="TX">Texas</option>
+              </select>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
 
-            {/* Sentiment Insights */}
-            <div className="w-[300px] flex-shrink-0 bg-white rounded-xl p-6 flex flex-col gap-8">
-              <h2 className="font-outfit font-semibold text-xl text-[#121212]">Sentiment Insights</h2>
-              <div className="flex flex-col items-center gap-8">
-                {/* Donut chart */}
-                <svg width="162" height="162" viewBox="0 0 162 162" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M82.4136 0.0123366C96.608 0.260099 110.488 4.23413 122.663 11.5362C134.837 18.8382 144.879 29.2118 151.781 41.6174C158.684 54.023 162.205 68.0248 161.991 82.2198C161.777 96.4147 157.836 110.304 150.563 122.496C143.29 134.688 132.941 144.755 120.552 151.687C108.163 158.619 94.1695 162.173 79.9741 161.993C65.7787 161.814 51.8799 157.906 39.6704 150.663C27.4609 143.419 17.3697 133.093 10.4079 120.721L30.1737 109.599C35.1862 118.507 42.4519 125.942 51.2427 131.157C60.0335 136.372 70.0407 139.186 80.2614 139.315C90.4821 139.445 100.557 136.886 109.477 131.895C118.397 126.903 125.849 119.656 131.086 110.877C136.322 102.099 139.159 92.0986 139.313 81.8782C139.467 71.6579 136.932 61.5765 131.963 52.6445C126.993 43.7125 119.763 36.2435 110.997 30.986C102.231 25.7286 92.2378 22.8673 82.0178 22.6889L82.4136 0.0123366Z" fill="#2FAF00" />
-                  <path d="M8.19768 116.508C-0.0651843 99.5667 -2.16104 80.274 2.27116 61.9535C6.70336 43.633 17.3861 27.4318 32.4791 16.1408L46.0649 34.3013C35.198 42.4309 27.5064 54.0957 24.3152 67.2865C21.124 80.4773 22.6331 94.368 28.5823 106.566L8.19768 116.508Z" fill="#FFA600" />
-                  <path d="M35.7054 13.8479C48.4483 5.25276 63.3737 0.460742 78.7384 0.031579L79.3717 22.7027C68.3091 23.0117 57.5628 26.462 48.3879 32.6505L35.7054 13.8479Z" fill="#F32121" />
-                </svg>
+            {/* Risk */}
+            <div className="relative">
+              <select
+                value={riskFilter}
+                onChange={(e) => handleFilterChange(setRiskFilter)(e.target.value as "All" | RiskLevel)}
+                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+              >
+                <option value="All">Risk:  All</option>
+                <option value="High">Risk:  High</option>
+                <option value="Medium">Risk:  Medium</option>
+                <option value="Low">Risk:  Low</option>
+              </select>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><SentimentIcon /></span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
+            </div>
 
-                {/* Legend */}
-                <div className="flex items-center gap-10">
-                  <div className="flex items-start gap-1.5">
-                    <div className="w-1 h-4.5 rounded bg-[#2FAF00] mt-1" />
-                    <div className="flex flex-col ">
-                      <span className="font-inter font-normal text-sm text-[#424952]">Positive</span>
-                      <span className="font-inter font-bold text-[17px] text-[#212B36]">66%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-1.5">
-                    <div className="w-1 h-4.5 rounded bg-[#FFA600] mt-1" />
-                    <div className="flex flex-col ">
-                      <span className="font-inter font-normal text-sm text-[#424952]">Neutral</span>
-                      <span className="font-inter font-bold text-[17px] text-[#212B36]">22%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-1.5">
-                    <div className="w-1 h-4.5 rounded bg-[#F32121] mt-1" />
-                    <div className="flex flex-col ">
-                      <span className="font-inter font-normal text-sm text-[#424952]">Negative</span>
-                      <span className="font-inter font-bold text-[17px] text-[#212B36]">9%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* Status */}
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | SchoolStatus)}
+                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+              >
+                <option value="All">Status:  All</option>
+                <option value="Active">Status:  Active</option>
+                <option value="Inactive">Status:  Inactive</option>
+              </select>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><FilterIcon /></span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
           </div>
+        </div>
 
-          {/* Recent Reports table */}
-          <div className="bg-white rounded-lg overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-6">
-              <h2 className="font-outfit font-medium text-2xl text-[#121212]">Recent Reports</h2>
-              <Link href="#" className="font-outfit font-normal text-[16px] text-[#0171F9]">View all</Link>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-y border-[#E5E7EB] bg-white">
-                    <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment Analysis</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submission Date</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
-                    <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentReports.map((report) => (
-                    <tr key={report.id} className="border-b border-[#F2F4F7]">
-                      <td className="px-5 py-[17.5px]">
-                        <span className="font-inter font-medium text-sm text-[#0B77F9] opacity-80">{report.id}</span>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="border-y border-[#E5E7EB] bg-white">
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Name</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Association</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Year</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Location</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Teachers</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Risk</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Reports</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Status</th>
+                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginated.length === 0 ? (
+                <tr>
+                  <td colSpan={9} className="px-5 py-10 text-center font-inter text-sm text-[#6F6C70]">
+                    No schools found.
+                  </td>
+                </tr>
+              ) : (
+                paginated.map((school) => {
+                  const risk = riskStyles[school.risk];
+                  const assocClass = associationStyles[school.association];
+                  return (
+                    <tr key={school.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.name}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.school}</span>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className={`font-inter font-normal text-[13px] ${assocClass}`}>{school.association}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.teacher}</span>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.schoolYear}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-xs text-[#059669]">
-                          {report.sentiment}
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.location}</span>
+                      </td>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.teachers}</span>
+                      </td>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-md font-inter font-medium text-[13px] ${risk.bg} ${risk.text}`}>
+                          {school.risk}
                         </span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.submittedBy}</span>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.reports}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.date}</span>
-                      </td>
-                      <td className="px-2 py-[17.5px]">
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
                         <span className="inline-flex items-center px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-sm text-[#030711]">
-                          {report.status}
+                          {school.status}
                         </span>
                       </td>
-                      <td className="px-5 py-[17.5px]">
-                        <div className="flex items-center justify-start gap-3">
-                          <button className="p-2 rounded-md bg-[#D1FAE5]">
-                            <CheckIcon />
-                          </button>
-                          <button className="p-2 rounded-md bg-[#FEE2E2]">
-                            <CloseIcon />
-                          </button>
-                          <button className="flex items-center justify-center h-9 px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-sm text-black opacity-80 tracking-[-0.2px]">
-                            View
-                          </button>
-                        </div>
+                      <td className="px-5 py-[17.5px] whitespace-nowrap">
+                        <Link href={`/schools/${school.id}`} className="font-inter font-normal text-sm text-[#030711] opacity-80 tracking-[-0.2px] px-3 py-1.5 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors">
+                          View Detail
+                        </Link>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
 
-        </main>
+        {/* Pagination */}
+        <div className="flex items-center justify-between px-8 py-5">
+          <span className="font-inter font-normal text-sm text-[#191C1E] opacity-80">
+            {filtered.length === 0
+              ? "Show 0 results"
+              : `Show ${startItem}-${endItem} of ${displayTotal.toLocaleString()}`}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+            >
+              <ChevronLeftIcon />
+            </button>
+            {Array.from({ length: Math.min(4, totalPages) }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-[38px] h-[38px] flex items-center justify-center rounded-lg font-inter text-[15px] transition-colors ${
+                  currentPage === page
+                    ? "bg-[#0171F9] text-white font-semibold"
+                    : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+            >
+              <ChevronRightIcon />
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
