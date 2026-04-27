@@ -56,8 +56,8 @@ export default function Header() {
       </div>
 
       {isMenuOpen && (
-        <nav className="sm:hidden bg-white border-t border-black/6 animate-in slide-in-from-top-2 duration-300">
-          <div className="max-w-[1440px] mx-auto px-6 py-4 flex flex-col gap-3">
+        <nav className="sm:hidden bg-white border-t border-black/6 relative z-40 pointer-events-auto">
+          <div className="max-w-[1440px] mx-auto px-6 py-4 flex flex-col gap-3 pointer-events-auto">
             <Link
               href="/"
               onClick={closeMenu}
@@ -83,7 +83,7 @@ export default function Header() {
               <Link
                 href="/login"
                 onClick={closeMenu}
-                className="flex items-center gap-2 px-4 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.0013 1.33337H12.0013C12.7346 1.33337 13.3346 1.93337 13.3346 2.66671V13.3334C13.3346 14.0667 12.7346 14.6667 12.0013 14.6667H6.0013C5.26797 14.6667 4.66797 14.0667 4.66797 13.3334V12.6667C4.66797 12.4899 4.73821 12.3203 4.86323 12.1953C4.98826 12.0703 5.15782 12 5.33464 12C5.51145 12 5.68102 12.0703 5.80604 12.1953C5.93106 12.3203 6.0013 12.4899 6.0013 12.6667V13.3334H12.0013V2.66671H6.0013V3.33337C6.0013 3.51019 5.93106 3.67975 5.80604 3.80478C5.68102 3.9298 5.51145 4.00004 5.33464 4.00004C5.15782 4.00004 4.98826 3.9298 4.86323 3.80478C4.73821 3.67975 4.66797 3.51019 4.66797 3.33337V2.66671C4.66797 1.93337 5.26797 1.33337 6.0013 1.33337Z" fill="white"/>
