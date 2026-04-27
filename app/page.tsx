@@ -10,7 +10,7 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-blue-50 px-9 pt-[35px]">
+        <section className="bg-blue-50 sm:px-9 px-6 pt-[35px]">
           <div className="relative overflow-hidden rounded-3xl bg-blue-50 min-h-[680px] flex flex-col items-center">
             {/* Decorative blue blur blobs */}
             <div className="absolute w-[682px] h-[323px] rounded-full bg-blue-600 opacity-10 blur-[90px] pointer-events-none z-0 -left-[400px] top-[270px]" />
@@ -40,10 +40,11 @@ export default function Home() {
               </div>
             </div>
 
-          
+            <Image src="/homeImage1.png" height={400} width={600} className="mt-[40px] sm:hidden block z-2" alt="Image"/>
+
            
               {/* Phone mockup */}
-                        <div className="hero-mockup-area">
+                        <div className="hero-mockup-area sm:flex hidden">
                           <div className="hero-ring hero-ring--outer" />
                           <div className="hero-ring hero-ring--mid" />
                           <div className="hero-ring hero-ring--inner" />
@@ -92,13 +93,13 @@ export default function Home() {
         </section>
 
         {/* Why Guest-Teacher Report Section */}
-        <section className="bg-white px-6 py-[72px] flex flex-col items-center gap-12">
+        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px] flex flex-col items-center gap-12">
           <h2 className="text-gray-950 text-center font-[Outfit] text-[clamp(28px,4vw,44px)] font-semibold leading-[1.2]">
             Why Guest-Teacher Report
           </h2>
 
           {/* Row 1 – three columns */}
-          <div className="flex items-start justify-center w-full max-w-[1200px]">
+          <div className="flex sm:flex-row flex-col sm:items-start items-center justify-center w-full max-w-[1200px] gap-[40px] sm:gap-0">
             {/* Step 1 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
               <Image src="/anonymous.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
@@ -106,8 +107,7 @@ export default function Home() {
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Share classroom experiences without revealing your identity.</p>
             </div>
 
-            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
-
+          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
             {/* Step 2 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
               <div className="relative w-20 h-[70px] flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function Home() {
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Access clear, experience-based insights from other educators.</p>
             </div>
 
-            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
+          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
 
             {/* Step 3 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
@@ -128,9 +128,9 @@ export default function Home() {
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Use real data to choose the right teaching assignments.</p>
             </div>
           </div>
-
+ <div className="sm:hidden w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
           {/* Row 2 – two columns centered */}
-          <div className="flex items-start justify-center w-full max-w-[768px] gap-0">
+          <div className="flex sm:flex-row flex-col sm:items-start items-center justify-center w-full max-w-[1200px] gap-[40px] sm:gap-0">
             {/* Smart Search & Filters */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
                               <Image src="/Frame.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
@@ -139,7 +139,7 @@ export default function Home() {
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Quickly find regular teacher or schools using powerful filters.</p>
             </div>
 
-            <div className="w-px min-h-[173px] bg-gray-300 opacity-72 flex-shrink-0" />
+          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
 
             {/* AI-Powered Insights */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
@@ -154,12 +154,12 @@ export default function Home() {
         </section>
 
         {/* Understand Every Classroom Section */}
-        <section className="bg-white px-6 py-[72px]">
+        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+          <Image src="/homeImage2.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
 
             {/* Left: Profile visual panel */}
-            <div className="relative w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
-
+            <div className="relative sm:flex  hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
               {/* White profile card */}
               <div className="absolute left-[5.6%] top-[7.6%] w-[63.3%] h-[84.8%] bg-white rounded-2xl shadow-[0_4px_36px_0_rgba(1,113,249,0.06)]">
                 <p className="absolute left-5 top-5 font-inter text-base font-medium text-black leading-[26px]">Profile</p>
@@ -241,10 +241,10 @@ export default function Home() {
 
             {/* Right: Text content */}
             <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
-              <h2 className="font-[Outfit] text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+              <h2 className="font-[Outfit] sm:text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32] text-[clamp(20px,3.8vw,44px)]">
                 Understand Every Classroom Before You Step In
               </h2>
-              <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96]">
+              <p className="font-inter sm:text-base text-[#212121] leading-[26px] opacity-[0.96] text-[15px]">
                 Explore detailed regular teacher profiles with aggregated reports, sentiment insights, and behavior patterns all in one structured view designed for clarity and confidence.
               </p>
             </div>
@@ -253,15 +253,16 @@ export default function Home() {
         </section>
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
-        <section className="bg-white px-6 py-[72px]">
-          <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
+          <Image src="/homeImage3.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
+          <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
             <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
-              <h2 className="font-[Outfit] text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+              <h2 className="font-[Outfit] sm:text-[clamp(28px,3.8vw,44px)] text-[clamp(20px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32]">
                 Find the Right Opportunities with AI-Powered Insights
               </h2>
-              <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96]">
+              <p className="font-inter sm:text-base text-[#212121] leading-[26px] opacity-[0.96] text-[15px]">
                 Search regular teachers or schools, filter reports instantly, and uncover trends through intelligent sentiment analysis helping you make faster and more informed decisions.
               </p>
             </div>
@@ -373,55 +374,55 @@ export default function Home() {
         </section>
 
         {/* How to Make Smarter Teaching Decisions in 3 Steps Section */}
-        <section className="bg-white px-6 py-[72px]">
+        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col items-center gap-12">
 
             {/* Heading */}
-            <h2 className="font-[Outfit] text-[clamp(28px,4vw,48px)] font-bold text-gray-950 text-center leading-[1.2] max-w-[640px]">
+            <h2 className="font-[Outfit] sm:text-[clamp(28px,4vw,48px)] text-[clamp(20px,4vw,48px)] font-bold text-gray-950 text-center leading-[1.2] max-w-[640px]">
               How to Make Smarter Teaching Decisions in 3 Steps
             </h2>
 
             {/* Steps row */}
-            <div className="w-full flex flex-col md:flex-row justify-center">
+            <div className="w-full flex flex-col md:flex-row justify-center items-center">
 
               {/* Step 1 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0 items-center">
                                               <Image src="/one.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
 
-                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   Submit Your Experience
                 </h3>
-                <p className="font-inter text-base font-normal text-center text-gray-700 leading-[26px] text-center">
+                <p className="font-inter sm:text-base text-[15px] font-normal text-center text-gray-700 leading-[26px] text-center">
                   Share detailed classroom insights with the option to remain anonymous.
                 </p>
               </div>
 
               {/* Divider */}
               <div className="hidden md:block w-px self-stretch bg-gray-200 flex-shrink-0" />
-              <div className="md:hidden h-px w-full bg-gray-200 my-6" />
+              <div className="md:hidden h-px w-[250px] bg-gray-200 my-6" />
 
               {/* Step 2 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0 items-center">
                 <Image src="/two.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
-                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   AI Analyzes &amp; Structures
                 </h3>
-                <p className="font-inter text-base font-normal text-gray-700 leading-[26px]  text-center">
+                <p className="font-inter sm:text-base text-[15px] font-normal text-gray-700 leading-[26px]  text-center">
                   Your report is reviewed, categorized with AI-powered sentiment insights to ensure clarity and consistency.
                 </p>
               </div>
 
               {/* Divider */}
               <div className="hidden md:block w-px self-stretch bg-gray-200 flex-shrink-0  items-center" />
-              <div className="md:hidden h-px w-full bg-gray-200 my-6" />
+              <div className="md:hidden h-px w-[250px] bg-gray-200 my-6" />
 
               {/* Step 3 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0  items-center">
                 <Image src="/three.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
-                <h3 className="font-[Outfit] text-[22px] font-bold text-gray-950 leading-[1.3]">
+                <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   Explore &amp; Decide
                 </h3>
-                <p className="font-inter text-base font-normal text-gray-700 leading-[26px]   text-center">
+                <p className="font-inter sm:text-base text-[15px] font-normal text-gray-700 leading-[26px]   text-center">
                   Search reports, review regular teacher profiles, and understand patterns before accepting assignments.
                 </p>
               </div>
@@ -431,26 +432,26 @@ export default function Home() {
         </section>
 
         {/* Recent Classroom Experiences Section */}
-        <section className="bg-white px-9 py-[35px] pb-[80px]">
-          <div className="rounded-[28px] bg-[#F8F9FD] p-14 flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
+        <section className="bg-white sm:px-9 px-6 py-[35px] pb-[80px]">
+          <div className="rounded-[28px] bg-[#F8F9FD] sm:p-14 px-4 pt-10 flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
 
             {/* Left: heading, subtitle, stats */}
             <div className="flex flex-col justify-between gap-10 flex-shrink-0 lg:w-[556px]">
-              <div className="flex flex-col gap-8">
-                <h2 className="font-[Outfit] text-[clamp(28px,3.2vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+              <div className="flex flex-col sm:gap-8 gap-4">
+                <h2 className="font-[Outfit] sm:text-[clamp(28px,3.2vw,44px)] text-[clamp(20px,3.2vw,44px)] font-semibold text-[#121212] leading-[1.32]">
                   Recent Classroom Experiences
                 </h2>
-                <p className="font-inter text-base text-[#212121] leading-[26px] opacity-[0.96] max-w-[492px]">
+                <p className="font-inter sm:text-base text-[15px] text-[#212121] leading-[26px] opacity-[0.96] max-w-[492px]">
                   Real insights shared by Guest teacher to help you better understand schools and teaching environments.
                 </p>
               </div>
               <div className="flex items-start gap-12">
                 <div className="flex flex-col gap-5">
-                  <span className="font-[Outfit] text-5xl font-semibold text-[#121212] opacity-[0.96]">2M+</span>
+                  <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">2M+</span>
                   <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Reports</span>
                 </div>
                 <div className="flex flex-col gap-5">
-                  <span className="font-[Outfit] text-5xl font-semibold text-[#121212] opacity-[0.96]">1M+</span>
+                  <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">1M+</span>
                   <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Schools</span>
                 </div>
               </div>
@@ -463,7 +464,7 @@ export default function Home() {
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
+                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Green Valley High School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 8th</span>
                     </div>
@@ -475,7 +476,7 @@ export default function Home() {
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Austin, Texas, USA</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(47,175,0,0.10)]">
+                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(47,175,0,0.10)]">
                     <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
                   </div>
                 </div>
@@ -499,7 +500,7 @@ export default function Home() {
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
+                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Riverdale High School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 10th</span>
                     </div>
@@ -511,7 +512,7 @@ export default function Home() {
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Chicago, Illinois, USA</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(47,175,0,0.10)]">
+                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(47,175,0,0.10)]">
                     <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
                   </div>
                 </div>
@@ -535,7 +536,7 @@ export default function Home() {
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-3">
+                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Maplewood Middle School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 7th</span>
                     </div>
@@ -547,7 +548,7 @@ export default function Home() {
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Denver, Colorado, USA</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 px-2 py-1 rounded bg-[rgba(243,33,33,0.10)]">
+                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(243,33,33,0.10)]">
                     <span className="font-inter text-xs font-semibold text-[#F32121] leading-[15px]">Negative</span>
                   </div>
                 </div>
