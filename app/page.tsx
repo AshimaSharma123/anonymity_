@@ -40,7 +40,7 @@ export default function Home() {
               </div>
             </div>
 
-            <Image src="/homeImage1.svg" height={400} width={600} className="mt-[40px] md:hidden block z-2" alt="Image"/>
+            <img src="/homebanner.png" className="mt-[40px] md:hidden block z-2" alt="Image"/>
 
            
               {/* Phone mockup */}
@@ -156,7 +156,7 @@ export default function Home() {
         {/* Understand Every Classroom Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          <Image src="/homeImage2.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
+          <img src="/homeImage2.svg" alt="Image" className="w-full sm:hidden block"/>
 
             {/* Left: Profile visual panel */}
             <div className="relative sm:flex  hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
@@ -254,7 +254,7 @@ export default function Home() {
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
-          <Image  src="/homeImage3.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
+          <img  src="/homeImage3.svg"  alt="Image" className="w-full sm:hidden block"/>
           <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
@@ -462,9 +462,9 @@ export default function Home() {
 
               {/* Card 1 – Green Valley High School */}
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex items-center justify-between">
+                <div className="flex sm:items-center items-start justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
+                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Green Valley High School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 8th</span>
                     </div>
@@ -484,7 +484,7 @@ export default function Home() {
                   <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
                     <p className="font-inter text-sm text-[#464555] leading-6">Classroom was mostly organized and lesson plans were available, but managing student behavior required extra attention throughout the day</p>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
@@ -498,9 +498,9 @@ export default function Home() {
 
               {/* Card 2 – Riverdale High School */}
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex items-center justify-between">
+                <div className="flex sm:items-center items-start justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
+                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Riverdale High School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 10th</span>
                     </div>
@@ -520,7 +520,7 @@ export default function Home() {
                   <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
                     <p className="font-inter text-sm text-[#464555] leading-6">Clear instructions were provided and the staff was supportive, students were engaged which made the overall experience smooth</p>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
@@ -534,9 +534,9 @@ export default function Home() {
 
               {/* Card 3 – Maplewood Middle School */}
               <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex items-center justify-between">
+                <div className="flex sm:items-center items-start justify-between">
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start gap-3 flex-col sm:flex-row">
+                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
                       <span className="font-inter text-sm font-bold text-[#121212] leading-5">Maplewood Middle School</span>
                       <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 7th</span>
                     </div>
@@ -556,7 +556,7 @@ export default function Home() {
                   <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
                     <p className="font-inter text-sm text-[#464555] leading-6">There was limited guidance from the regular teacher and classroom management was a bit challenging due to unclear expectations</p>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
