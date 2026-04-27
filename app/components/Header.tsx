@@ -10,6 +10,7 @@ const AnonymityLogo = () => (
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSignInDropdownOpen, setIsSignInDropdownOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -17,6 +18,15 @@ export default function Header() {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+    setIsSignInDropdownOpen(false);
+  };
+
+  const toggleSignInDropdown = () => {
+    setIsSignInDropdownOpen(!isSignInDropdownOpen);
+  };
+
+  const closeSignInDropdown = () => {
+    setIsSignInDropdownOpen(false);
   };
 
   return (
@@ -44,13 +54,61 @@ export default function Header() {
             <div className={`w-6 h-0.5 bg-[#121212] transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
           </button>
 
-          <Link href="/login" className="flex items-center gap-2 px-6 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+          {/* Desktop Sign In Button */}
+          <Link href="/login" className="hidden sm:flex items-center gap-2 px-6 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6.0013 1.33337H12.0013C12.7346 1.33337 13.3346 1.93337 13.3346 2.66671V13.3334C13.3346 14.0667 12.7346 14.6667 12.0013 14.6667H6.0013C5.26797 14.6667 4.66797 14.0667 4.66797 13.3334V12.6667C4.66797 12.4899 4.73821 12.3203 4.86323 12.1953C4.98826 12.0703 5.15782 12 5.33464 12C5.51145 12 5.68102 12.0703 5.80604 12.1953C5.93106 12.3203 6.0013 12.4899 6.0013 12.6667V13.3334H12.0013V2.66671H6.0013V3.33337C6.0013 3.51019 5.93106 3.67975 5.80604 3.80478C5.68102 3.9298 5.51145 4.00004 5.33464 4.00004C5.15782 4.00004 4.98826 3.9298 4.86323 3.80478C4.73821 3.67975 4.66797 3.51019 4.66797 3.33337V2.66671C4.66797 1.93337 5.26797 1.33337 6.0013 1.33337Z" fill="white"/>
               <path d="M7.19667 10.8633C7.45667 11.1233 7.87667 11.1233 8.13667 10.8633L10.5287 8.47129C10.6536 8.34628 10.7239 8.17674 10.7239 7.99996C10.7239 7.82319 10.6536 7.65365 10.5287 7.52863L8.13667 5.13663C8.00994 5.02209 7.84405 4.96062 7.67329 4.96493C7.50252 4.96924 7.33995 5.039 7.21916 5.15979C7.09837 5.28057 7.02862 5.44315 7.02431 5.61392C7.02 5.78468 7.08146 5.95057 7.196 6.07729L8.44667 7.33329H2.66667C2.48986 7.33329 2.32029 7.40353 2.19526 7.52856C2.07024 7.65358 2 7.82315 2 7.99996C2 8.17677 2.07024 8.34634 2.19526 8.47137C2.32029 8.59639 2.48986 8.66663 2.66667 8.66663H8.44667L7.196 9.92263C7.07172 10.0477 7.00202 10.2168 7.00214 10.3931C7.00226 10.5694 7.07221 10.7384 7.19667 10.8633Z" fill="white"/>
             </svg>
             <span>Sign In</span>
           </Link>
+
+          {/* Mobile Sign In Dropdown */}
+          <div className="sm:hidden relative">
+            <button
+              onClick={toggleSignInDropdown}
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#0171F9] text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              aria-label="Sign in menu"
+              aria-expanded={isSignInDropdownOpen}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.0013 1.33337H12.0013C12.7346 1.33337 13.3346 1.93337 13.3346 2.66671V13.3334C13.3346 14.0667 12.7346 14.6667 12.0013 14.6667H6.0013C5.26797 14.6667 4.66797 14.0667 4.66797 13.3334V12.6667C4.66797 12.4899 4.73821 12.3203 4.86323 12.1953C4.98826 12.0703 5.15782 12 5.33464 12C5.51145 12 5.68102 12.0703 5.80604 12.1953C5.93106 12.3203 6.0013 12.4899 6.0013 12.6667V13.3334H12.0013V2.66671H6.0013V3.33337C6.0013 3.51019 5.93106 3.67975 5.80604 3.80478C5.68102 3.9298 5.51145 4.00004 5.33464 4.00004C5.15782 4.00004 4.98826 3.9298 4.86323 3.80478C4.73821 3.67975 4.66797 3.51019 4.66797 3.33337V2.66671C4.66797 1.93337 5.26797 1.33337 6.0013 1.33337Z" fill="white"/>
+                <path d="M7.19667 10.8633C7.45667 11.1233 7.87667 11.1233 8.13667 10.8633L10.5287 8.47129C10.6536 8.34628 10.7239 8.17674 10.7239 7.99996C10.7239 7.82319 10.6536 7.65365 10.5287 7.52863L8.13667 5.13663C8.00994 5.02209 7.84405 4.96062 7.67329 4.96493C7.50252 4.96924 7.33995 5.039 7.21916 5.15979C7.09837 5.28057 7.02862 5.44315 7.02431 5.61392C7.02 5.78468 7.08146 5.95057 7.196 6.07729L8.44667 7.33329H2.66667C2.48986 7.33329 2.32029 7.40353 2.19526 7.52856C2.07024 7.65358 2 7.82315 2 7.99996C2 8.17677 2.07024 8.34634 2.19526 8.47137C2.32029 8.59639 2.48986 8.66663 2.66667 8.66663H8.44667L7.196 9.92263C7.07172 10.0477 7.00202 10.2168 7.00214 10.3931C7.00226 10.5694 7.07221 10.7384 7.19667 10.8633Z" fill="white"/>
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            {isSignInDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-black/8 overflow-hidden z-40">
+                <Link
+                  href="/login"
+                  onClick={closeSignInDropdown}
+                  className="flex items-center gap-3 px-4 py-3 text-[#121212] hover:bg-blue-50 transition-colors border-b border-black/6"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="#0171F9"/>
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-sm">Sign In</p>
+                    <p className="text-xs text-[#666666]">Access your account</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={closeSignInDropdown}
+                  className="flex items-center gap-3 px-4 py-3 text-[#121212] hover:bg-blue-50 transition-colors"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="#0171F9"/>
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-sm">Create Account</p>
+                    <p className="text-xs text-[#666666]">Join Anonymity</p>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
