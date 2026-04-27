@@ -14,7 +14,7 @@ export default function AdminLayout({
 
 
   return (
-     <div className="flex h-screen bg-[#F3F4F7] overflow-hidden">
+     <div className="flex h-screen bg-[#F3F4F7]">
 
       {/* Sidebar */}
       <Sidebar/>

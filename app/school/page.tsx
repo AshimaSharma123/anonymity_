@@ -555,11 +555,224 @@ function ReviewCard({ review }: { review: Review }) {
   );
 }
 
+// --- Teacher data ---
+interface Teacher {
+  id: number;
+  name: string;
+  reports: number;
+}
+
+const teachersData: Teacher[] = [
+  { id: 1, name: "Albert Chambers", reports: 35 },
+  { id: 2, name: "Methew", reports: 29 },
+  { id: 3, name: "James Morton", reports: 42 },
+  { id: 4, name: "Sophia Reynolds", reports: 31 },
+  { id: 5, name: "Liam Gallagher", reports: 27 },
+  { id: 6, name: "Maya Patel", reports: 39 },
+  { id: 7, name: "Ethan Brooks", reports: 33 },
+  { id: 8, name: "Isabella Cruz", reports: 26 },
+  { id: 9, name: "Noah Bennett", reports: 44 },
+  { id: 10, name: "Olivia Martinez", reports: 35 },
+];
+
+// --- Add Teacher Sidebar ---
+function AddTeacherSidebar({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 bg-black/40"
+        onClick={onClose}
+      />
+
+      {/* Slide-in panel */}
+      <div className="relative ml-auto w-full max-w-[524px] h-full bg-white shadow-2xl flex flex-col">
+        {/* Thin divider at top of content area */}
+        <div className="h-px bg-black/10 mt-[98px]" />
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-8">
+          <h2 className="text-[#212121] font-inter text-[32px] font-semibold leading-6">
+            Add Teacher
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-[#212121] hover:opacity-70 transition-opacity cursor-pointer"
+            aria-label="Close"
+          >
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.0001 18.9835L10.0585 25.9251C9.79874 26.1849 9.46819 26.3147 9.0668 26.3147C8.66541 26.3147 8.33485 26.1849 8.07513 25.9251C7.81541 25.6654 7.68555 25.3349 7.68555 24.9335C7.68555 24.5321 7.81541 24.2015 8.07513 23.9418L15.0168 17.0001L8.07513 10.0585C7.81541 9.79874 7.68555 9.46819 7.68555 9.0668C7.68555 8.66541 7.81541 8.33485 8.07513 8.07513C8.33485 7.81541 8.66541 7.68555 9.0668 7.68555C9.46819 7.68555 9.79874 7.81541 10.0585 8.07513L17.0001 15.0168L23.9418 8.07513C24.2015 7.81541 24.5321 7.68555 24.9335 7.68555C25.3349 7.68555 25.6654 7.81541 25.9251 8.07513C26.1849 8.33485 26.3147 8.66541 26.3147 9.0668C26.3147 9.46819 26.1849 9.79874 25.9251 10.0585L18.9835 17.0001L25.9251 23.9418C26.1849 24.2015 26.3147 24.5321 26.3147 24.9335C26.3147 25.3349 26.1849 25.6654 25.9251 25.9251C25.6654 26.1849 25.3349 26.3147 24.9335 26.3147C24.5321 26.3147 24.2015 26.1849 23.9418 25.9251L17.0001 18.9835Z" fill="#212121"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Form */}
+        <div className="flex flex-col gap-8 px-6">
+          <div className="flex flex-col gap-6">
+            {/* Name field */}
+            <div className="flex flex-col gap-2.5">
+              <label className="text-[#212121] font-[Outfit] text-base font-medium leading-6">
+                Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter Name"
+                className="h-12 px-4 rounded-lg bg-[#F3F4F5] text-[#6B7280] font-inter text-sm font-normal outline-none placeholder:text-[#6B7280]/80 focus:ring-2 focus:ring-[#0171F9]/30"
+              />
+            </div>
+
+            {/* Status field */}
+            <div className="flex flex-col gap-2.5">
+              <label className="text-[#212121] font-[Outfit] text-base font-medium leading-6">
+                Status
+              </label>
+              <div className="relative">
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full h-12 px-4 pr-10 rounded-lg bg-[#F3F4F5] text-[#6B7280] font-inter text-sm font-normal outline-none appearance-none cursor-pointer focus:ring-2 focus:ring-[#0171F9]/30"
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="pending">Pending</option>
+                </select>
+                <svg
+                  className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-60"
+                  width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g clip-path="url(#clip0)">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M8.47124 10.4712C8.34622 10.5962 8.17668 10.6664 7.9999 10.6664C7.82313 10.6664 7.65359 10.5962 7.52857 10.4712L3.75724 6.6999C3.63356 6.57353 3.56384 6.40318 3.56384 6.22578C3.56384 6.04838 3.63356 5.87803 3.75724 5.75166C3.88091 5.62528 4.05007 5.55469 4.22624 5.55469C4.40241 5.55469 4.57157 5.62528 4.69524 5.75166L7.9999 9.05724L11.3046 5.75166C11.4282 5.62528 11.5974 5.55469 11.7736 5.55469C11.9497 5.55469 12.1189 5.62528 12.2426 5.75166C12.3662 5.87803 12.4359 6.04838 12.4359 6.22578C12.4359 6.40318 12.3662 6.57353 12.2426 6.6999L8.47124 10.4712Z" fill="#1E1E1E"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Save button */}
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center px-5 py-4 rounded-lg bg-[#0171F9] text-white font-inter text-sm font-semibold leading-6 hover:bg-blue-700 transition-colors cursor-pointer w-fit"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- Teachers Tab Content ---
+function TeachersTab() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  return (
+    <>
+      <div className="bg-white rounded-xl overflow-hidden">
+        {/* Header row */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#F2F4F7]">
+          <h3 className="text-[#121212] font-[Outfit] text-xl font-medium">Teachers</h3>
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="flex items-center gap-1 text-[#0171F9] font-[Outfit] text-sm font-normal hover:opacity-75 transition-opacity cursor-pointer"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.99967 1.3335C4.31967 1.3335 1.33301 4.32016 1.33301 8.00016C1.33301 11.6802 4.31967 14.6668 7.99967 14.6668C11.6797 14.6668 14.6663 11.6802 14.6663 8.00016C14.6663 4.32016 11.6797 1.3335 7.99967 1.3335ZM10.6663 8.66683H8.66634V10.6668C8.66634 11.0335 8.36634 11.3335 7.99967 11.3335C7.63301 11.3335 7.33301 11.0335 7.33301 10.6668V8.66683H5.33301C4.96634 8.66683 4.66634 8.36683 4.66634 8.00016C4.66634 7.6335 4.96634 7.3335 5.33301 7.3335H7.33301V5.3335C7.33301 4.96683 7.63301 4.66683 7.99967 4.66683C8.36634 4.66683 8.66634 4.96683 8.66634 5.3335V7.3335H10.6663C11.033 7.3335 11.333 7.6335 11.333 8.00016C11.333 8.36683 11.033 8.66683 10.6663 8.66683Z" fill="#0171F9"/>
+            </svg>
+            Add New
+          </button>
+        </div>
+
+        {/* Filters */}
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-[#F2F4F7]">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0)">
+                <path d="M9.53792 6C9.66836 6.20146 9.84979 6.3676 10.0652 6.48277C10.2805 6.59795 10.5227 6.65839 10.769 6.65839C11.0152 6.65839 11.2574 6.59795 11.4728 6.48277C11.6881 6.3676 11.8696 6.20146 12 6M6.46144 6C6.33097 6.20132 6.14956 6.36733 5.93426 6.48242C5.71897 6.59751 5.47687 6.65789 5.23072 6.65789C4.98457 6.65789 4.74247 6.59751 4.52718 6.48242C4.31188 6.36733 4.13047 6.20132 4 6M4.30752 9.62581C4.61131 10.3289 5.12406 10.9296 5.78115 11.352C6.43825 11.7745 7.21029 12 8 12C8.78971 12 9.56175 11.7745 10.2188 11.352C10.8759 10.9296 11.3887 10.3289 11.6925 9.62581" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8.00033 15.3337C12.0503 15.3337 15.3337 12.0503 15.3337 8.00033C15.3337 3.95033 12.0503 0.666992 8.00033 0.666992C3.95033 0.666992 0.666992 3.95033 0.666992 8.00033C0.666992 12.0503 3.95033 15.3337 8.00033 15.3337Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+            </svg>
+            <span className="text-[#121212]/80 font-inter text-sm">Risk:</span>
+            <span className="text-[#121212]/80 font-inter text-sm">All</span>
+            <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M4.91753 4.91753C4.79251 5.04251 4.62297 5.11272 4.44619 5.11272C4.26942 5.11272 4.09988 5.04251 3.97486 4.91753L0.203526 1.14619C0.0795255 1.02046 0.0123291 0.852056 0.0138480 0.677258C0.0153669 0.502460 0.0854794 0.335252 0.209085 0.211646C0.332691 0.0880407 0.499899 0.0179282 0.674697 0.0164093C0.849495 0.0148904 1.01790 0.0820866 1.14363 0.203525L4.44363 3.50353L7.74363 0.203525C7.86937 0.0820866 8.03777 0.0148904 8.21257 0.0164093C8.38736 0.0179282 8.55457 0.0880407 8.67818 0.211646C8.80178 0.335252 8.87190 0.502460 8.87341 0.677258C8.87493 0.852056 8.80774 1.02046 8.68630 1.14619L4.91753 4.91753Z" fill="#1E1E1E"/>
+            </svg>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.9848 3.19692C13.9848 2.778 13.9848 2.56854 13.9025 2.40845C13.831 2.26781 13.7168 2.15339 13.5763 2.08154C13.4163 2 13.2068 2 12.7879 2H3.21254C2.79362 2 2.58416 2 2.42407 2.08154C2.28332 2.15326 2.16888 2.2677 2.09717 2.40845C2.01563 2.56854 2.01562 2.778 2.01562 3.19692V3.74825C2.01562 3.93152 2.01562 4.02279 2.03657 4.10882C2.05489 4.18541 2.08518 4.25862 2.12634 4.32576C2.17197 4.40057 2.23705 4.46565 2.36572 4.59507L6.15322 8.38181C6.28263 8.51123 6.34772 8.57631 6.39335 8.65112C6.43474 8.71894 6.46466 8.79126 6.48312 8.86806C6.50406 8.95334 6.50406 9.04386 6.50406 9.22265V12.7805C6.50406 13.4216 6.50406 13.7425 6.63872 13.9355C6.75557 14.1067 6.93089 14.2313 7.13251 14.2869C7.37557 14.2811 7.66283 14.1382 8.23585 13.851L8.83431 13.5517C9.07519 13.4321 9.19488 13.3722 9.28241 13.2824C9.36005 13.2031 9.41907 13.1076 9.45521 13.0027C9.49636 12.8845 9.49636 12.7498 9.49636 12.4813V9.22863C9.49636 9.04535 9.49636 8.95409 9.5173 8.86806C9.53562 8.79147 9.56592 8.71826 9.60707 8.65112C9.65195 8.57631 9.71704 8.51198 9.84421 8.3848L9.8472 8.38181L13.6347 4.59507C13.7634 4.46565 13.8277 4.40057 13.8741 4.32576C13.9155 4.25793 13.9454 4.18562 13.9638 4.10882C13.9848 4.02429 13.9848 3.93302 13.9848 3.75423V3.19692Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-[#121212]/80 font-inter text-sm">Status:</span>
+            <span className="text-[#121212]/80 font-inter text-sm">All</span>
+            <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M4.91753 4.91753C4.79251 5.04251 4.62297 5.11272 4.44619 5.11272C4.26942 5.11272 4.09988 5.04251 3.97486 4.91753L0.203526 1.14619C0.0795255 1.02046 0.0123291 0.852056 0.0138480 0.677258C0.0153669 0.502460 0.0854794 0.335252 0.209085 0.211646C0.332691 0.0880407 0.499899 0.0179282 0.674697 0.0164093C0.849495 0.0148904 1.01790 0.0820866 1.14363 0.203525L4.44363 3.50353L7.74363 0.203525C7.86937 0.0820866 8.03777 0.0148904 8.21257 0.0164093C8.38736 0.0179282 8.55457 0.0880407 8.67818 0.211646C8.80178 0.335252 8.87190 0.502460 8.87341 0.677258C8.87493 0.852056 8.80774 1.02046 8.68630 1.14619L4.91753 4.91753Z" fill="#1E1E1E"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* Table header */}
+        <div className="grid grid-cols-[1fr_auto] px-3 py-3.5 border-b border-[#E5E7EB] bg-white">
+          <span className="text-[#6F6C70] font-inter text-xs font-medium uppercase tracking-wide px-3">Teacher</span>
+          <span className="text-[#6F6C70] font-inter text-xs font-medium uppercase tracking-wide px-3 text-right">Reports</span>
+        </div>
+
+        {/* Teacher rows */}
+        {teachersData.map((teacher) => (
+          <div
+            key={teacher.id}
+            className="grid grid-cols-[1fr_auto] items-center px-3 py-[17.5px] border-b border-[#F2F4F7] bg-white hover:bg-[#FAFCFF] transition-colors"
+          >
+            <span className="text-[#030711] font-inter text-[13px] font-normal leading-5 px-3">{teacher.name}</span>
+            <span className="text-[#030711] font-inter text-[13px] font-normal px-3 text-right">{teacher.reports}</span>
+          </div>
+        ))}
+
+        {/* Footer */}
+        <div className="flex items-center justify-between px-6 py-5">
+          <span className="text-[#191C1E]/80 font-inter text-sm font-normal">Show 1-10 of 28</span>
+          <div className="flex items-center gap-2">
+            <button className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+              <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.67629 0L0 6L5.67629 12L7 10.5996L2.64856 6L7 1.4004L5.67629 0Z" fill="#323152"/>
+              </svg>
+            </button>
+            <button className="w-[38px] h-[38px] flex items-center justify-center rounded-lg bg-[#0171F9] text-white font-inter text-sm font-semibold cursor-pointer">1</button>
+            <button className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white text-[#323152] font-inter text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">2</button>
+            <button className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white text-[#323152] font-inter text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">3</button>
+            <button className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+              <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.32371 0L7 6L1.32371 12L0 10.5996L4.35144 6L0 1.4004L1.32371 0Z" fill="#323152"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <AddTeacherSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+    </>
+  );
+}
+
 // --- Main Page ---
 type FilterType = "All" | "Positive" | "Neutral" | "Negative";
+type TabType = "reports" | "teachers";
 
 export default function SchoolDetailPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
+  const [activeTab, setActiveTab] = useState<TabType>("reports");
 
   const filterConfig: { label: FilterType; count: number }[] = [
     { label: "All", count: 124 },

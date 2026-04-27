@@ -81,7 +81,7 @@ export default function Sidebar() {
         {/* Nav links */}
         <nav className="flex flex-col gap-1.5 p-4 flex-1">
          {menuItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathname.includes(item.href) ;
           const Icon = item.icon;
 
           return (
