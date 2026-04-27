@@ -40,7 +40,7 @@ export default function Home() {
               </div>
             </div>
 
-            <Image src="/homeImage1.png" height={400} width={600} className="mt-[40px] sm:hidden block z-2" alt="Image"/>
+            <Image src="/homeImage1.svg" height={400} width={600} className="mt-[40px] md:hidden block z-2" alt="Image"/>
 
            
               {/* Phone mockup */}
@@ -254,7 +254,7 @@ export default function Home() {
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
-          <Image src="/homeImage3.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
+          <Image  src="/homeImage3.svg" height={600} width={600} alt="Image" className="w-full sm:hidden block"/>
           <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
