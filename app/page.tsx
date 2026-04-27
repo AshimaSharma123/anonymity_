@@ -40,7 +40,7 @@ export default function Home() {
               </div>
             </div>
 
-            <img src="/homebanner.png" className="mt-[40px] md:hidden block z-2" alt="Image"/>
+            <img src="/homebanner.png" className="mt-[40px] md:hidden z-2" alt="Image"/>
 
            
               {/* Phone mockup */}
@@ -156,7 +156,7 @@ export default function Home() {
         {/* Understand Every Classroom Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          <img src="/homeImage2.svg" alt="Image" className="w-full sm:hidden block"/>
+          <img src="/homeImage2.svg" alt="Image" className="sm:hidden w-full h-full"/>
 
             {/* Left: Profile visual panel */}
             <div className="relative sm:flex  hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
@@ -254,7 +254,7 @@ export default function Home() {
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
-          <img  src="/homeImage3.svg"  alt="Image" className="w-full sm:hidden block"/>
+          <img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
           <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
