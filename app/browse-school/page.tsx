@@ -272,7 +272,7 @@ export default function BrowseSchoolPage() {
 
           {/* Search bar */}
           <div className="pb-6 sm:pb-8">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center bg-[#E9F2FF] rounded-2xl p-2 sm:p-3 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center bg-[#E9F2FF] rounded-2xl p-2  shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
               {/* School name input */}
               <div className="flex items-center gap-2 flex-1 py-3.5 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)]">
                 <SearchIcon />

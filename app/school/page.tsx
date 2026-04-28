@@ -425,7 +425,7 @@ function ReviewCard({ review }: { review: Review }) {
             <div key={idx}>
               <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:gap-3">
                 {/* Question + Answer badge */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 flex-wrap">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                     {thought.icon === "school" ? <SchoolIcon /> : <UserIcon />}
                     <span className="text-[#0F1724] font-[Outfit] text-sm sm:text-base font-medium leading-5">{thought.question}</span>
