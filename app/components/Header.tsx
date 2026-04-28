@@ -83,7 +83,7 @@ export default function Header() {
           >
             Browse School
           </Link>
-          <div className="border-t border-black/6 pt-3 mt-2">
+          <div className="border-t border-black/6 pt-3 mt-2"> 
             <Link
               href="/login"
               onClick={closeMenu}
