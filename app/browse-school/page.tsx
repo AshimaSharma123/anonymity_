@@ -175,23 +175,23 @@ function SchoolCard({ school }: { school: School }) {
   const sentimentStyle = getSentimentStyle(school.sentiment);
 
   return (
-    <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] flex flex-col">
-      <div className="flex flex-col gap-4 p-5 flex-1">
+    <div className="bg-white rounded-lg sm:rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] flex flex-col">
+      <div className="flex flex-col gap-3 sm:gap-4 p-4 sm:p-5 flex-1">
         {/* Card top section */}
-        <div className="flex flex-col gap-[14px]">
+        <div className="flex flex-col gap-3 sm:gap-[14px]">
           {/* School name, location, grade + sentiment badge */}
-          <div className="flex items-start gap-3">
-            <div className="flex flex-col gap-3 flex-1 min-w-0">
-              <h3 className="text-[#121212] font-[Inter] text-base font-bold leading-5">{school.name}</h3>
+          <div className="flex items-start gap-2 sm:gap-3">
+            <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-w-0">
+              <h3 className="text-[#121212] font-[Inter] text-sm sm:text-base font-bold leading-5">{school.name}</h3>
               <div className="flex items-center gap-1.5 opacity-80">
                 <CardMapPinIcon />
-                <span className="font-[Outfit] text-xs text-[#414141]">{school.location}</span>
+                <span className="font-[Outfit] text-xs text-[#414141] truncate">{school.location}</span>
               </div>
-              <span className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
+              <span className="inline-flex self-start px-2 py-1 rounded text-[11px] sm:text-xs bg-[#DFEEFF] text-[#0171F9] font-[Inter] font-semibold leading-[15px]">
                 {school.gradeLevel}
               </span>
             </div>
-            <span className={`flex-shrink-0 inline-flex px-2 py-1 rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
+            <span className={`flex-shrink-0 inline-flex px-2 py-1 rounded font-[Inter] text-[11px] sm:text-xs font-semibold leading-[15px] whitespace-nowrap ${sentimentStyle.bg} ${sentimentStyle.text}`}>
               {school.sentiment}
             </span>
           </div>
@@ -200,46 +200,48 @@ function SchoolCard({ school }: { school: School }) {
           <div className="h-px w-full bg-[#DADADA] opacity-40" />
 
           {/* Stats: Avg Rating / Would Return / Reviews */}
-          <div className="flex items-center gap-2">
-            <div className="flex flex-col flex-1 p-2.5 rounded-[8px_8px_0_8px] bg-white">
-              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[15px] opacity-80">Avg Rating</span>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg sm:rounded-[8px_8px_0_8px] bg-white">
+              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[15px] opacity-80">Avg Rating</span>
               <div className="flex justify-left items-center gap-1">
-                <span className="font-[Inter] text-lg font-semibold leading-7" style={{ color: ratingColor }}>
+                <span className="font-[Inter] text-base sm:text-lg font-semibold leading-7" style={{ color: ratingColor }}>
                   {school.avgRating}
                 </span>
-                <StarOutlineIcon color={ratingColor} />
+                <div className="scale-75 sm:scale-100 origin-left">
+                  <StarOutlineIcon color={ratingColor} />
+                </div>
               </div>
             </div>
-            <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
-            <div className="flex flex-col flex-1 p-2.5 rounded-lg bg-white">
-              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[15px] opacity-80">Would Return</span>
-              <span className="font-[Inter] text-lg font-semibold leading-7" style={{ color: ratingColor }}>
+            <div className="w-px h-10 sm:h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
+            <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
+              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[15px] opacity-80">Would Return</span>
+              <span className="font-[Inter] text-base sm:text-lg font-semibold leading-7" style={{ color: ratingColor }}>
                 {school.wouldReturn}
               </span>
             </div>
-            <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
-            <div className="flex flex-col flex-1 p-2.5 rounded-lg bg-white">
-              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[15px] tracking-[-0.5px] opacity-80">Reviews</span>
-              <span className="text-[#191C1D] font-[Inter] text-lg font-semibold leading-7">{school.reviews}</span>
+            <div className="w-px h-10 sm:h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
+            <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
+              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[15px] tracking-[-0.5px] opacity-80">Reviews</span>
+              <span className="text-[#191C1D] font-[Inter] text-base sm:text-lg font-semibold leading-7">{school.reviews}</span>
             </div>
-          </div>
+          </div>"
 
           {/* Divider */}
           <div className="h-px w-full bg-[#DADADA] opacity-40" />
 
           {/* Quote snippet */}
-          <div className="flex items-start gap-2 p-2.5 rounded bg-[#F8F9FD]">
-            <div className="flex-shrink-0 mt-1">
+          <div className="flex items-start gap-2 p-2 sm:p-2.5 rounded bg-[#F8F9FD]">
+            <div className="flex-shrink-0 mt-1 scale-75 sm:scale-100 origin-top-left">
               <QuoteIcon />
             </div>
-            <p className="flex-1 text-[#464555] font-[Inter] text-[13px] font-normal leading-[18px]">{school.quote}</p>
+            <p className="flex-1 text-[#464555] font-[Inter] text-[12px] sm:text-[13px] font-normal leading-[16px] sm:leading-[18px]">{school.quote}</p>
           </div>
         </div>
 
         {/* View Details button */}
         <Link
           href={`/school`}
-          className="flex items-center justify-center gap-2 w-full py-1.5 px-8 rounded-md bg-[#0171F9] text-white font-[Inter] text-sm font-medium leading-6 hover:bg-blue-700 transition-colors cursor-pointer mt-auto"
+          className="flex items-center justify-center gap-2 w-full py-2 sm:py-1.5 px-4 sm:px-8 rounded-md bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-medium leading-6 hover:bg-blue-700 transition-colors cursor-pointer mt-auto"
         >
           View Details
         </Link>
@@ -257,40 +259,40 @@ export default function BrowseSchoolPage() {
 
       {/* Hero + Search — white background section */}
       <div className="bg-white w-full">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-14">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14">
           {/* Page title */}
-          <div className="pt-[72px] pb-8">
-            <h1 className="text-[#121212] font-[Inter] text-[clamp(32px,5vw,48px)] font-bold leading-[1.2]">
+          <div className="pt-8 sm:pt-12 lg:pt-[72px] pb-6 sm:pb-8">
+            <h1 className="text-[#121212] font-[Inter] text-2xl sm:text-3xl lg:text-4xl font-bold leading-[1.2]">
               Browse School
             </h1>
-            <p className="text-[#121212] font-[Inter] text-lg font-normal leading-[26px] tracking-[0.2px] opacity-[0.88] mt-2">
+            <p className="text-[#121212] font-[Inter] text-sm sm:text-base lg:text-lg font-normal leading-[22px] sm:leading-[26px] tracking-[0.2px] opacity-[0.88] mt-2">
               Share your experience to help other guest teachers.
             </p>
           </div>
 
           {/* Search bar */}
-          <div className="pb-8">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-[#E9F2FF] rounded-2xl p-2 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
+          <div className="pb-6 sm:pb-8">
+            <div className="flex flex-col gap-2 sm:gap-2 lg:flex-row lg:items-center bg-[#E9F2FF] rounded-xl sm:rounded-2xl p-2 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
               {/* School name input */}
-              <div className="flex items-center gap-2 flex-1 px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[54px]">
+              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[48px] sm:h-[54px]">
                 <SearchIcon />
                 <input
                   type="text"
                   placeholder="Search by School Name..."
-                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
+                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
               </div>
               {/* Teacher name input */}
-              <div className="flex items-center gap-2 flex-1 px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[54px]">
+              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[48px] sm:h-[54px]">
                 <SearchIcon />
                 <input
                   type="text"
                   placeholder="Search by Teacher Name..."
-                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
+                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
               </div>
               {/* Search button */}
-              <button className="flex-shrink-0 h-[54px] px-11 bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
+              <button className="flex-shrink-0 h-[48px] sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
                 Search
               </button>
             </div>
@@ -300,27 +302,27 @@ export default function BrowseSchoolPage() {
 
       {/* Main content: filter + cards */}
       <main className="flex-1 w-full">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-14 py-8 pb-[80px]">
-          <div className="flex flex-col lg:flex-row gap-7 items-start">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14 py-6 sm:py-8 pb-12 sm:pb-[80px]">
+          <div className="flex flex-col lg:flex-row gap-6 sm:gap-7 items-start">
 
             {/* Filter sidebar */}
             <aside className="w-full lg:w-[302px] flex-shrink-0">
-              <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-6">
+              <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-6">
                 {/* Filter header */}
-                <div className="flex items-end justify-between mb-7">
-                  <span className="font-[Outfit] text-lg font-medium leading-5 text-black">Filter</span>
-                  <button className="font-[Outfit] text-[13px] font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
+                <div className="flex items-end justify-between mb-5 sm:mb-7">
+                  <span className="font-[Outfit] text-base sm:text-lg font-medium leading-5 text-black">Filter</span>
+                  <button className="font-[Outfit] text-[12px] sm:text-[13px] font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
                     Clear all
                   </button>
                 </div>
 
                 {/* Location filter */}
-                <div className="flex flex-col gap-3 mb-7">
-                  <span className="font-[Outfit] text-base font-medium leading-6 text-[#121212]">
+                <div className="flex flex-col gap-3 mb-5 sm:mb-7">
+                  <span className="font-[Outfit] text-sm sm:text-base font-medium leading-6 text-[#121212]">
                     Location
                   </span>
 
-                  <div className="flex items-center gap-1 px-[14px] py-3 bg-[#F3F4F5] rounded-lg">
+                  <div className="flex items-center gap-1 px-3 sm:px-[14px] py-2 sm:py-3 bg-[#F3F4F5] rounded-lg">
                     <LocationPinIcon />
 
                     <input
@@ -331,9 +333,9 @@ export default function BrowseSchoolPage() {
                   </div>
                 </div>
                 {/* Grade Level filter */}
-                <div className="flex flex-col gap-5 mb-7">
-                  <span className="font-[Outfit] text-base font-medium leading-6 text-[#121212]">Grade Level</span>
-                  <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 sm:gap-5 mb-5 sm:mb-7">
+                  <span className="font-[Outfit] text-sm sm:text-base font-medium leading-6 text-[#121212]">Grade Level</span>
+                  <div className="flex flex-col gap-2 sm:gap-3">
                     {gradeOptions.map((grade, index) => (
                       <label
                         key={grade}
@@ -351,7 +353,7 @@ export default function BrowseSchoolPage() {
                           <CheckIcon />
                         </div>
 
-                        <span className="font-[Outfit] text-sm font-normal text-[#212121] opacity-[0.88]">
+                        <span className="font-[Outfit] text-xs sm:text-sm font-normal text-[#212121] opacity-[0.88]">
                           {grade}
                         </span>
                       </label>
@@ -360,9 +362,9 @@ export default function BrowseSchoolPage() {
                 </div>
 
                 {/* Rating filter */}
-                <div className="flex flex-col gap-5">
-                  <span className="font-[Outfit] text-base font-medium leading-6 text-[#121212]">Rating</span>
-                  <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 sm:gap-5">
+                  <span className="font-[Outfit] text-sm sm:text-base font-medium leading-6 text-[#121212]">Rating</span>
+                  <div className="flex flex-col gap-2 sm:gap-3">
                     {[
                       { label: "4.0+", icon: <FourStars />, checked: false },
                       { label: "3.0+", icon: <ThreeStars />, checked: true },
@@ -383,9 +385,11 @@ export default function BrowseSchoolPage() {
                           <CheckIcon />
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          {item.icon}
-                          <span className="font-[Outfit] text-sm font-normal text-[#212121] opacity-[0.88]">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="scale-75 sm:scale-100 origin-left">
+                            {item.icon}
+                          </div>
+                          <span className="font-[Outfit] text-xs sm:text-sm font-normal text-[#212121] opacity-[0.88]">
                             {item.label}
                           </span>
                         </div>
@@ -397,7 +401,7 @@ export default function BrowseSchoolPage() {
             </aside>
 
             {/* School cards grid */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-7 content-start">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-7 content-start">
               {schools.map((school) => (
                 <SchoolCard key={school.name} school={school} />
               ))}
