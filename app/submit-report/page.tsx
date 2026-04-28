@@ -214,12 +214,12 @@ export default function SubmitReportPage() {
       <Header />
 
       <main className="min-h-screen bg-gradient-to-b from-[#F7F9FE] via-[#F7F9FE] to-[#F7F9FE]">
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-15 pb-[80px] flex flex-col gap-7">
+        <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-8 sm:pt-15 pb-12 sm:pb-[80px] flex flex-col gap-6 sm:gap-7">
 
           {/* Page heading */}
-          <div className="flex flex-col items-center gap-4 text-center">
-            <h1 className="font-inter text-4xl sm:text-5xl font-bold text-[#121212] leading-[1.2]">Submit a Report</h1>
-            <p className="font-inter text-base text-[#121212]/88 leading-relaxed tracking-[0.2px]">
+          <div className="flex flex-col items-center gap-2 sm:gap-4 text-center">
+            <h1 className="font-inter text-2xl sm:text-4xl lg:text-5xl font-bold text-[#121212] leading-[1.2]">Submit a Report</h1>
+            <p className="font-inter text-sm sm:text-base text-[#121212]/88 leading-relaxed tracking-[0.2px]">
               Share your experience to help other guest teachers.
             </p>
           </div>
@@ -228,11 +228,11 @@ export default function SubmitReportPage() {
           <WarningBanner />
 
           {/* Form card */}
-          <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-8 sm:p-12 flex flex-col gap-10">
+          <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-10">
 
             {/* ── Assignment Details ── */}
-            <section className="flex flex-col gap-8">
-              <h2 className={`${sectionHeading} text-[#121212]`}>Assignment Details</h2>
+            <section className="flex flex-col gap-5 sm:gap-8">
+              <h2 className={`${sectionHeading} text-[#121212] text-lg sm:text-xl`}>Assignment Details</h2>
 
               {/* School Name */}
               <div className="flex flex-col gap-2">
@@ -282,13 +282,13 @@ export default function SubmitReportPage() {
               {/* Grade Level */}
               <div className="flex flex-col gap-2">
                 <label className={fieldLabel}>Grade Level</label>
-                <div className="flex flex-wrap justify-between">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
                   {GRADE_LEVELS.map((level) => (
                     <button
                       key={level}
                       type="button"
                       onClick={() => setGradeLevel(level)}
-                      className={`flex items-center justify-center px-5 py-[10px] rounded-lg font-inter text-sm cursor-pointer transition-all ${gradeLevel === level
+                      className={`flex items-center justify-center px-3 sm:px-5 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${gradeLevel === level
                           ? "bg-[#0B77F9] text-white font-bold border-0"
                           : "bg-[#FCFDFE] text-[#121212] font-medium border border-[#B2B2B2]"
                         }`}
@@ -303,12 +303,12 @@ export default function SubmitReportPage() {
             <div className="h-px bg-black opacity-10" />
 
             {/* ── Ratings ── */}
-            <section className="flex flex-col gap-6">
-              <h2 className={`${sectionHeading} text-[#0171F9]`}>Ratings</h2>
-              <div className="flex flex-col gap-3">
+            <section className="flex flex-col gap-5 sm:gap-6">
+              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Ratings</h2>
+              <div className="flex flex-col gap-3 sm:gap-4">
                 {RATING_CATEGORIES.map(({ label, key }) => (
-                  <div key={key} className="flex items-center">
-                    <span className="flex-1 font-outfit text-base font-medium text-[#121212] leading-6">{label}</span>
+                  <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
+                    <span className="flex-1 font-outfit text-sm sm:text-base font-medium text-[#121212] leading-6">{label}</span>
                     <StarRating value={ratings[key]} onChange={(val) => setRating(key, val)} />
                   </div>
                 ))}
@@ -318,8 +318,8 @@ export default function SubmitReportPage() {
             <div className="h-px bg-black opacity-10" />
 
             {/* ── Your Experience ── */}
-            <section className="flex flex-col gap-8">
-              <h2 className={`${sectionHeading} text-[#0171F9]`}>Your Experience</h2>
+            <section className="flex flex-col gap-5 sm:gap-8">
+              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Your Experience</h2>
 
               {/* Feedback textarea */}
               <div className="flex flex-col gap-2">
@@ -338,7 +338,7 @@ export default function SubmitReportPage() {
                   <span className={fieldLabel}>Tags</span>
                   <span className="font-outfit text-sm font-light text-[#121212]/56 leading-6">(Select all that apply)</span>
                 </div>
-                <div className="flex flex-wrap gap-[9px]">
+                <div className="flex flex-wrap gap-2 sm:gap-[9px]">
                   {ALL_TAGS.map((tag) => {
                     const isSelected = selectedTags.includes(tag);
                     const isNeg = NEGATIVE_TAGS.has(tag);
@@ -347,7 +347,7 @@ export default function SubmitReportPage() {
                         key={tag}
                         type="button"
                         onClick={() => toggleTag(tag)}
-                        className={`flex items-center justify-center px-[19px] py-[9px] rounded-xl font-inter text-sm cursor-pointer transition-all ${isSelected && !isNeg
+                        className={`flex items-center justify-center px-3 sm:px-[19px] py-2 sm:py-[9px] rounded-xl font-inter text-xs sm:text-sm cursor-pointer transition-all ${isSelected && !isNeg
                             ? "border border-[#0171F9] bg-[#EFF6FF] text-[#0171F9]"
                             : isSelected && isNeg
                               ? "border border-[#EF4444] bg-red-50 text-[#EF4444]"
@@ -365,8 +365,8 @@ export default function SubmitReportPage() {
             <div className="h-px bg-black opacity-10" />
 
             {/* ── Final Thoughts ── */}
-            <section className="flex flex-col gap-8">
-              <h2 className={`${sectionHeading} text-[#0171F9]`}>Final Thoughts</h2>
+            <section className="flex flex-col gap-5 sm:gap-8">
+              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Final Thoughts</h2>
 
               {/* Return to school + teacher */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -397,7 +397,7 @@ export default function SubmitReportPage() {
               {/* Post As */}
               <div className="flex flex-col gap-2">
                 <label className={fieldLabel}>Post As</label>
-                <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit">
+                <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit overflow-x-auto">
                   <button
                     type="button"
                     onClick={() => setPostAs("anonymous")}
@@ -430,20 +430,20 @@ export default function SubmitReportPage() {
             <div className="flex flex-col gap-6">
               <WarningBanner />
 
-              <div className="flex flex-col justify-end gap-4 items-end">
-                <p className="font-inter text-sm text-[#121212]/60 align-right">
+              <div className="flex flex-col justify-end gap-3 sm:gap-4 items-end">
+                <p className="font-inter text-xs sm:text-sm text-[#121212]/60 text-right">
                   Once submitted, reports cannot be edited or undone.
                 </p>
-                <div className="flex items-center gap-[10px]">
+                <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-2 sm:gap-[10px]">
                   <button
                     type="button"
-                    className="flex h-[52px] px-8 items-center justify-center gap-2 rounded-xl border border-black/20 bg-white font-inter text-base font-medium text-[#2C3031] cursor-pointer hover:bg-gray-50 transition-colors"
+                    className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl border border-black/20 bg-white font-inter text-sm sm:text-base font-medium text-[#2C3031] cursor-pointer hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="flex h-[52px] px-8 items-center justify-center gap-2 rounded-xl bg-[#0171F9] font-inter text-base font-semibold text-white cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl bg-[#0171F9] font-inter text-sm sm:text-base font-semibold text-white cursor-pointer hover:bg-blue-700 transition-colors"
                   >
                     Submit Report
                     <SendIcon />
