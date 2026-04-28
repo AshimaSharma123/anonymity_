@@ -797,7 +797,7 @@ export default function SchoolDetailPage() {
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
             {/* Left: name, location, grade */}
             <div className="flex flex-col gap-2 sm:gap-3">
-              <h1 className="text-[#121212] font-inter font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl leading-tight">
+              <h1 className="text-[#121212] font-inter font-bold text-2xl sm:text-3xl leading-tight">
                 Lincoln High School
               </h1>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
