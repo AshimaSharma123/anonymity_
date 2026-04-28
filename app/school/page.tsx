@@ -368,44 +368,44 @@ function ReviewCard({ review }: { review: Review }) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className={`bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] ${showDetails ? "p-7" : "px-7 pt-7"} flex flex-col gap-6`}>
+    <div className={`bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] ${showDetails ? "p-4 sm:p-6 lg:p-7" : "px-4 sm:px-6 lg:px-7 pt-4 sm:pt-6 lg:pt-7"} flex flex-col gap-4 sm:gap-5 lg:gap-6`}>
       {/* Top row: stars, reviewer, teacher, date, sentiment */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-4 flex-wrap">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 lg:gap-4 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-wrap">
           <ReviewStars count={review.rating} />
-          <span className="text-[#121212] font-inter text-lg font-bold leading-5">{review.reviewer}</span>
+          <span className="text-[#121212] font-inter text-base sm:text-lg font-bold leading-5">{review.reviewer}</span>
           <span className="w-[3px] h-[3px] rounded-full bg-[#676767]" />
           {review.teacher && (
             <>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1 sm:gap-1.5">
 
                 <svg width="17" height="17" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" clipRule="evenodd" d="M7.39539 7.41538C7.5097 7.45906 7.60199 7.54635 7.65195 7.65806C7.70192 7.76976 7.70548 7.89674 7.66185 8.01107C7.26862 9.03999 6.67047 9.60738 5.94431 9.89168C5.27231 10.1538 4.5277 10.1538 3.88585 10.1538H3.84585C3.15662 10.1538 2.57816 10.16 2.08339 10.3532C1.62862 10.5305 1.20462 10.8861 0.892625 11.7034C0.848884 11.8177 0.761519 11.91 0.649747 11.9599C0.537976 12.0098 0.410954 12.0133 0.296625 11.9695C0.182297 11.9258 0.0900263 11.8384 0.0401128 11.7267C-0.00980069 11.6149 -0.0132688 11.4879 0.0304715 11.3735C0.423087 10.3446 1.02124 9.77722 1.74739 9.49292C2.42001 9.23076 3.16462 9.23076 3.80585 9.23076H3.84585C4.53508 9.23076 5.11354 9.22461 5.60831 9.03138C6.0637 8.85415 6.4877 8.49845 6.7997 7.68122C6.84338 7.56691 6.93067 7.47463 7.04237 7.42466C7.15408 7.37469 7.28106 7.37175 7.39539 7.41538ZM7.19847 0H9.72585C10.4231 0 10.9929 3.35276e-08 11.4428 0.0603077C11.9129 0.123692 12.3203 0.260307 12.6458 0.585846C12.9708 0.911384 13.1074 1.31815 13.1708 1.78892C13.2311 2.23815 13.2311 2.808 13.2311 3.50584V4.80246C13.2311 5.49969 13.2311 6.06892 13.1708 6.51938C13.108 6.98892 12.9708 7.3963 12.6458 7.72184C12.3209 8.04738 11.9129 8.18399 11.4428 8.24738C10.9929 8.30769 10.4231 8.30769 9.72585 8.30769H8.76893C8.64652 8.30769 8.52912 8.25906 8.44257 8.1725C8.35601 8.08595 8.30739 7.96856 8.30739 7.84615C8.30739 7.72374 8.35601 7.60635 8.44257 7.51979C8.52912 7.43324 8.64652 7.38461 8.76893 7.38461H9.69262C10.4311 7.38461 10.9388 7.38338 11.3197 7.3323C11.6871 7.28307 11.8674 7.19446 11.9929 7.06892C12.1185 6.94399 12.2065 6.76369 12.2563 6.39569C12.3074 6.01476 12.3086 5.50769 12.3086 4.76923V3.53846C12.3086 2.8 12.3074 2.29292 12.2563 1.912C12.2071 1.544 12.1185 1.36431 11.9929 1.23877C11.8674 1.11323 11.6871 1.02461 11.3197 0.975384C10.9382 0.924307 10.4311 0.923076 9.69323 0.923076H7.2317C6.49324 0.923076 5.98554 0.924307 5.60462 0.975384C5.23724 1.02461 5.05693 1.11323 4.93139 1.23877C4.82431 1.34585 4.74554 1.49169 4.69385 1.75569C4.6397 2.03261 4.62185 2.4 4.61754 2.92677C4.61706 2.98738 4.60464 3.0473 4.581 3.10311C4.55736 3.15892 4.52295 3.20953 4.47975 3.25204C4.43655 3.29456 4.3854 3.32815 4.32922 3.35089C4.27304 3.37364 4.21292 3.3851 4.15231 3.38461C4.0917 3.38413 4.03178 3.37171 3.97597 3.34807C3.92016 3.32442 3.86955 3.29002 3.82704 3.24682C3.78452 3.20362 3.75093 3.15247 3.72819 3.09629C3.70544 3.0401 3.69398 2.97999 3.69447 2.91938C3.69878 2.39569 3.71539 1.94892 3.78801 1.57784C3.86308 1.19446 4.00401 0.860307 4.27847 0.585846C4.60462 0.260307 5.01139 0.123692 5.48154 0.0603077C5.93139 3.35276e-08 6.50124 0 7.19847 0Z" fill="#121212" />
                   <path fillRule="evenodd" clipRule="evenodd" d="M3.84564 5.23126C3.56002 5.23126 3.2861 5.34473 3.08414 5.54669C2.88218 5.74865 2.76872 6.02257 2.76872 6.30819C2.76872 6.5938 2.88218 6.86772 3.08414 7.06969C3.2861 7.27165 3.56002 7.38511 3.84564 7.38511C4.13126 7.38511 4.40518 7.27165 4.60714 7.06969C4.8091 6.86772 4.92256 6.5938 4.92256 6.30819C4.92256 6.02257 4.8091 5.74865 4.60714 5.54669C4.40518 5.34473 4.13126 5.23126 3.84564 5.23126ZM1.84564 6.30819C1.84564 5.77775 2.05636 5.26905 2.43143 4.89397C2.8065 4.5189 3.31521 4.30819 3.84564 4.30819C4.37607 4.30819 4.88478 4.5189 5.25985 4.89397C5.63492 5.26905 5.84564 5.77775 5.84564 6.30819C5.84564 6.83862 5.63492 7.34733 5.25985 7.7224C4.88478 8.09747 4.37607 8.30818 3.84564 8.30818C3.31521 8.30818 2.8065 8.09747 2.43143 7.7224C2.05636 7.34733 1.84564 6.83862 1.84564 6.30819ZM6.15333 2.92357C6.15333 2.80117 6.20196 2.68377 6.28851 2.59722C6.37507 2.51066 6.49246 2.46204 6.61487 2.46204H10.3072C10.4296 2.46204 10.547 2.51066 10.6335 2.59722C10.7201 2.68377 10.7687 2.80117 10.7687 2.92357C10.7687 3.04598 10.7201 3.16338 10.6335 3.24993C10.547 3.33649 10.4296 3.38511 10.3072 3.38511H6.61487C6.49246 3.38511 6.37507 3.33649 6.28851 3.24993C6.20196 3.16338 6.15333 3.04598 6.15333 2.92357ZM7.99948 5.38511C7.99948 5.2627 8.04811 5.14531 8.13466 5.05875C8.22122 4.9722 8.33861 4.92357 8.46102 4.92357H10.3072C10.4296 4.92357 10.547 4.9722 10.6335 5.05875C10.7201 5.14531 10.7687 5.2627 10.7687 5.38511C10.7687 5.50752 10.7201 5.62491 10.6335 5.71147C10.547 5.79802 10.4296 5.84665 10.3072 5.84665H8.46102C8.33861 5.84665 8.22122 5.79802 8.13466 5.71147C8.04811 5.62491 7.99948 5.50752 7.99948 5.38511Z" fill="#121212" />
                 </svg>
 
-                <span className="text-[#121212] font-inter text-sm font-medium">{review.teacher}</span>
+                <span className="text-[#121212] font-inter text-xs sm:text-sm font-medium">{review.teacher}</span>
               </div>
               <span className="w-[3px] h-[3px] rounded-full bg-[#676767]" />
             </>
           )}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 sm:gap-1.5">
             <CalendarIcon />
-            <span className="text-[#121212] font-inter text-sm font-normal leading-5">{review.date}</span>
+            <span className="text-[#121212] font-inter text-xs sm:text-sm font-normal leading-5">{review.date}</span>
           </div>
         </div>
-        <span className={`px-2.5 py-1 rounded-md font-inter text-xs font-semibold leading-[15px] ${getSentimentBadgeStyle(review.sentiment)}`}>
+        <span className={`px-2 sm:px-2.5 py-1 w-fit h-fit rounded-md font-inter text-xs font-semibold leading-[15px] flex-shrink-0 ${getSentimentBadgeStyle(review.sentiment)}`}>
           {review.sentiment}
         </span>
       </div>
 
       {/* Review body */}
-      <p className="text-black font-inter text-base font-normal leading-7 opacity-70">{review.body}</p>
+      <p className="text-black font-inter text-sm sm:text-base font-normal leading-6 sm:leading-7 opacity-70">{review.body}</p>
 
       {/* Tags */}
-      <div className="flex items-center gap-3 flex-wrap w-full">
+      <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full">
         {review.tags.map((tag) => (
-          <span key={tag} className="px-2.5 py-2 rounded-md border border-[#EAEAEA] bg-[#F2F2F2] text-[#9A9A9A] font-inter text-sm font-medium leading-[15px]">
+          <span key={tag} className="px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-md border border-[#EAEAEA] bg-[#F2F2F2] text-[#9A9A9A] font-inter text-xs sm:text-sm font-medium leading-[15px]">
             {tag}
           </span>
         ))}
@@ -414,30 +414,30 @@ function ReviewCard({ review }: { review: Review }) {
       {/* Final Thoughts section */}
       <div className="rounded-xl border border-[rgba(178,178,178,0.40)] bg-[#F8FAFF] overflow-hidden">
         {/* Header */}
-        <div className="h-[42px] flex items-center gap-2 px-6 bg-[#EFF6FF] border-b border-[rgba(178,178,178,0.40)] rounded-t-xl">
+        <div className="min-h-[42px] flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-2.5 bg-[#EFF6FF] border-b border-[rgba(178,178,178,0.40)] rounded-t-xl">
           <ChatIcon />
-          <span className="text-[#0171F9] font-inter text-sm font-medium leading-[15px]">FINAL THOUGHTS</span>
+          <span className="text-[#0171F9] font-inter text-xs sm:text-sm font-medium leading-[15px]">FINAL THOUGHTS</span>
         </div>
 
         {/* Divider between questions */}
         <div className="flex flex-col">
           {review.finalThoughts.map((thought, idx) => (
             <div key={idx}>
-              <div className="px-6 py-4 flex flex-col gap-3">
+              <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:gap-3">
                 {/* Question + Answer badge */}
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 flex-wrap">
+                  <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                     {thought.icon === "school" ? <SchoolIcon /> : <UserIcon />}
-                    <span className="text-[#0F1724] font-[Outfit] text-md font-medium">{thought.question}</span>
+                    <span className="text-[#0F1724] font-[Outfit] text-sm sm:text-base font-medium leading-5">{thought.question}</span>
                   </div>
-                  <span className={`px-[18px] py-1 rounded-full font-inter text-xs font-semibold leading-[15px] ${getReturnAnswerStyle(thought.answer)}`}>
+                  <span className={`px-3 w-fit h-fit sm:px-[18px] py-1 rounded-full font-inter text-xs font-semibold leading-[15px] flex-shrink-0 ${getReturnAnswerStyle(thought.answer)}`}>
                     {thought.answer}
                   </span>
                 </div>
                 {/* Quote */}
-                <div className="flex items-center gap-2.5 pl-5">
+                <div className="flex items-start gap-2 sm:gap-2.5 pl-4 sm:pl-5">
                   <div className="min-h-[30px] w-[3px] self-stretch bg-[#22C55E] flex-shrink-0 rounded-full" />
-                  <p className="text-[#464555] font-inter text-[15px] italic font-normal leading-5">{thought.quote}</p>
+                  <p className="text-[#464555] font-inter text-sm sm:text-[15px] italic font-normal leading-5">{thought.quote}</p>
                 </div>
               </div>
               {idx < review.finalThoughts.length - 1 && (
@@ -451,7 +451,7 @@ function ReviewCard({ review }: { review: Review }) {
       {/* Show rating details */}
       <button
         onClick={() => setShowDetails(!showDetails)}
-        className="flex items-center gap-1 text-[#0171F9] font-inter text-sm font-medium leading-[15px] hover:opacity-80 transition-opacity cursor-pointer"
+        className="flex items-center gap-1 text-[#0171F9] font-inter text-xs sm:text-sm font-medium leading-[15px] hover:opacity-80 transition-opacity cursor-pointer"
       >
         <span>{showDetails ? 'Hide rating details' : 'Show rating details'}</span>
         <span className={`transition-transform ${showDetails ? "rotate-180" : ""}`}>
@@ -462,11 +462,11 @@ function ReviewCard({ review }: { review: Review }) {
 
       {/* Rating Details — smooth CSS grid collapse */}
       <div
-        className="grid transition-[grid-template-rows] duration-300 ease-in-out w-[30%]"
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out w-full sm:w-[60%] lg:w-[30%]"
         style={{ gridTemplateRows: showDetails ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden">
-          <div className="space-y-3.5 pb-1">
+          <div className="space-y-2.5 sm:space-y-3 lg:space-y-3.5 pb-1">
             {[
               { label: "Classroom Behavior", score: 5 },
               { label: "Lesson Preparedness", score: 5 },
@@ -476,14 +476,14 @@ function ReviewCard({ review }: { review: Review }) {
             ].map(({ label, score }) => (
               <div
                 key={label}
-                className="flex items-center justify-between gap-4"
+                className="flex flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 lg:gap-4"
               >
-                <span className="text-base font-normal text-[#6B7280] font-outfit flex-1">
+                <span className="text-sm sm:text-base font-normal text-[#6B7280] font-outfit flex-1">
                   {label}
                 </span>
 
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-0.5 min-w-[88px]">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <div className="flex items-center gap-0.5 min-w-[70px] sm:min-w-[88px]">
                     {Array.from({ length: 5 }).map((_, index) => {
                       const i = index + 1;
                       const full = i <= Math.floor(score);
@@ -496,10 +496,11 @@ function ReviewCard({ review }: { review: Review }) {
                       return (
                         <svg
                           key={i}
-                          width="16"
-                          height="16"
+                          width="14"
+                          height="14"
                           viewBox="0 0 16 16"
                           fill="none"
+                          className="sm:w-4 sm:h-4"
                         >
                           <defs>
                             <clipPath id={`half-${label}-${i}`}>
@@ -542,7 +543,7 @@ function ReviewCard({ review }: { review: Review }) {
                     })}
                   </div>
 
-                  <span className="text-sm font-normal text-black font-outfit w-10 text-right">
+                  <span className="text-xs sm:text-sm font-normal text-black font-outfit w-8 sm:w-10 text-right">
                     {score}/5
                   </span>
                 </div>
@@ -683,11 +684,11 @@ function TeachersTab() {
     <>
       <div className="bg-white rounded-xl overflow-hidden">
         {/* Header row */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[#F2F4F7]">
-          <h3 className="text-[#121212] font-[Outfit] text-xl font-medium">Teachers</h3>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-5 border-b border-[#F2F4F7]">
+          <h3 className="text-[#121212] font-[Outfit] text-lg sm:text-xl font-medium">Teachers</h3>
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="flex items-center gap-1 text-[#0171F9] font-[Outfit] text-sm font-normal hover:opacity-75 transition-opacity cursor-pointer"
+            className="flex items-center gap-0.5 sm:gap-1 text-[#0171F9] font-[Outfit] text-xs sm:text-sm font-normal hover:opacity-75 transition-opacity cursor-pointer"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M7.99967 1.3335C4.31967 1.3335 1.33301 4.32016 1.33301 8.00016C1.33301 11.6802 4.31967 14.6668 7.99967 14.6668C11.6797 14.6668 14.6663 11.6802 14.6663 8.00016C14.6663 4.32016 11.6797 1.3335 7.99967 1.3335ZM10.6663 8.66683H8.66634V10.6668C8.66634 11.0335 8.36634 11.3335 7.99967 11.3335C7.63301 11.3335 7.33301 11.0335 7.33301 10.6668V8.66683H5.33301C4.96634 8.66683 4.66634 8.36683 4.66634 8.00016C4.66634 7.6335 4.96634 7.3335 5.33301 7.3335H7.33301V5.3335C7.33301 4.96683 7.63301 4.66683 7.99967 4.66683C8.36634 4.66683 8.66634 4.96683 8.66634 5.3335V7.3335H10.6663C11.033 7.3335 11.333 7.6335 11.333 8.00016C11.333 8.36683 11.033 8.66683 10.6663 8.66683Z" fill="#0171F9"/>
@@ -697,27 +698,27 @@ function TeachersTab() {
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-[#F2F4F7]">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 border-b border-[#F2F4F7]">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-4 sm:h-4">
               <g clip-path="url(#clip0)">
                 <path d="M9.53792 6C9.66836 6.20146 9.84979 6.3676 10.0652 6.48277C10.2805 6.59795 10.5227 6.65839 10.769 6.65839C11.0152 6.65839 11.2574 6.59795 11.4728 6.48277C11.6881 6.3676 11.8696 6.20146 12 6M6.46144 6C6.33097 6.20132 6.14956 6.36733 5.93426 6.48242C5.71897 6.59751 5.47687 6.65789 5.23072 6.65789C4.98457 6.65789 4.74247 6.59751 4.52718 6.48242C4.31188 6.36733 4.13047 6.20132 4 6M4.30752 9.62581C4.61131 10.3289 5.12406 10.9296 5.78115 11.352C6.43825 11.7745 7.21029 12 8 12C8.78971 12 9.56175 11.7745 10.2188 11.352C10.8759 10.9296 11.3887 10.3289 11.6925 9.62581" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M8.00033 15.3337C12.0503 15.3337 15.3337 12.0503 15.3337 8.00033C15.3337 3.95033 12.0503 0.666992 8.00033 0.666992C3.95033 0.666992 0.666992 3.95033 0.666992 8.00033C0.666992 12.0503 3.95033 15.3337 8.00033 15.3337Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
               </g>
             </svg>
-            <span className="text-[#121212]/80 font-inter text-sm">Risk:</span>
-            <span className="text-[#121212]/80 font-inter text-sm">All</span>
-            <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <span className="text-[#121212]/80 font-inter text-xs sm:text-sm">Risk:</span>
+            <span className="text-[#121212]/80 font-inter text-xs sm:text-sm">All</span>
+            <svg width="7" height="5" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-[9px] sm:h-1.5">
               <path fillRule="evenodd" clipRule="evenodd" d="M4.91753 4.91753C4.79251 5.04251 4.62297 5.11272 4.44619 5.11272C4.26942 5.11272 4.09988 5.04251 3.97486 4.91753L0.203526 1.14619C0.0795255 1.02046 0.0123291 0.852056 0.0138480 0.677258C0.0153669 0.502460 0.0854794 0.335252 0.209085 0.211646C0.332691 0.0880407 0.499899 0.0179282 0.674697 0.0164093C0.849495 0.0148904 1.01790 0.0820866 1.14363 0.203525L4.44363 3.50353L7.74363 0.203525C7.86937 0.0820866 8.03777 0.0148904 8.21257 0.0164093C8.38736 0.0179282 8.55457 0.0880407 8.67818 0.211646C8.80178 0.335252 8.87190 0.502460 8.87341 0.677258C8.87493 0.852056 8.80774 1.02046 8.68630 1.14619L4.91753 4.91753Z" fill="#1E1E1E"/>
             </svg>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF]">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-4 sm:h-4">
               <path d="M13.9848 3.19692C13.9848 2.778 13.9848 2.56854 13.9025 2.40845C13.831 2.26781 13.7168 2.15339 13.5763 2.08154C13.4163 2 13.2068 2 12.7879 2H3.21254C2.79362 2 2.58416 2 2.42407 2.08154C2.28332 2.15326 2.16888 2.2677 2.09717 2.40845C2.01563 2.56854 2.01562 2.778 2.01562 3.19692V3.74825C2.01562 3.93152 2.01562 4.02279 2.03657 4.10882C2.05489 4.18541 2.08518 4.25862 2.12634 4.32576C2.17197 4.40057 2.23705 4.46565 2.36572 4.59507L6.15322 8.38181C6.28263 8.51123 6.34772 8.57631 6.39335 8.65112C6.43474 8.71894 6.46466 8.79126 6.48312 8.86806C6.50406 8.95334 6.50406 9.04386 6.50406 9.22265V12.7805C6.50406 13.4216 6.50406 13.7425 6.63872 13.9355C6.75557 14.1067 6.93089 14.2313 7.13251 14.2869C7.37557 14.2811 7.66283 14.1382 8.23585 13.851L8.83431 13.5517C9.07519 13.4321 9.19488 13.3722 9.28241 13.2824C9.36005 13.2031 9.41907 13.1076 9.45521 13.0027C9.49636 12.8845 9.49636 12.7498 9.49636 12.4813V9.22863C9.49636 9.04535 9.49636 8.95409 9.5173 8.86806C9.53562 8.79147 9.56592 8.71826 9.60707 8.65112C9.65195 8.57631 9.71704 8.51198 9.84421 8.3848L9.8472 8.38181L13.6347 4.59507C13.7634 4.46565 13.8277 4.40057 13.8741 4.32576C13.9155 4.25793 13.9454 4.18562 13.9638 4.10882C13.9848 4.02429 13.9848 3.93302 13.9848 3.75423V3.19692Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="text-[#121212]/80 font-inter text-sm">Status:</span>
-            <span className="text-[#121212]/80 font-inter text-sm">All</span>
-            <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <span className="text-[#121212]/80 font-inter text-xs sm:text-sm">Status:</span>
+            <span className="text-[#121212]/80 font-inter text-xs sm:text-sm">All</span>
+            <svg width="7" height="5" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="sm:w-[9px] sm:h-1.5">
               <path fillRule="evenodd" clipRule="evenodd" d="M4.91753 4.91753C4.79251 5.04251 4.62297 5.11272 4.44619 5.11272C4.26942 5.11272 4.09988 5.04251 3.97486 4.91753L0.203526 1.14619C0.0795255 1.02046 0.0123291 0.852056 0.0138480 0.677258C0.0153669 0.502460 0.0854794 0.335252 0.209085 0.211646C0.332691 0.0880407 0.499899 0.0179282 0.674697 0.0164093C0.849495 0.0148904 1.01790 0.0820866 1.14363 0.203525L4.44363 3.50353L7.74363 0.203525C7.86937 0.0820866 8.03777 0.0148904 8.21257 0.0164093C8.38736 0.0179282 8.55457 0.0880407 8.67818 0.211646C8.80178 0.335252 8.87190 0.502460 8.87341 0.677258C8.87493 0.852056 8.80774 1.02046 8.68630 1.14619L4.91753 4.91753Z" fill="#1E1E1E"/>
             </svg>
           </div>
@@ -789,28 +790,28 @@ export default function SchoolDetailPage() {
     <div className="min-h-screen bg-[#F8FAFE] flex flex-col">
       <Header />
 
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 sm:px-14 py-10 pb-[80px]">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14 py-6 sm:py-10 pb-12 sm:pb-[80px]">
 
         {/* School Info Card */}
-        <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-10 mb-10">
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+        <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-6 lg:p-10 mb-6 sm:mb-10">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
             {/* Left: name, location, grade */}
-            <div className="flex flex-col gap-2">
-              <h1 className="text-[#121212] font-inter font-bold text-[clamp(32px,5vw,48px)] leading-tight">
+            <div className="flex flex-col gap-2 sm:gap-3">
+              <h1 className="text-[#121212] font-inter font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl leading-tight">
                 Lincoln High School
               </h1>
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <LocationIcon />
-                <span className="inline-flex items-center px-2.5 py-1.5 rounded bg-[#DFEEFF] text-[#0171F9] font-inter text-sm font-semibold leading-[15px]">
+                <span className="inline-flex items-center px-2 sm:px-2.5 py-1 sm:py-1.5 rounded text-xs sm:text-sm bg-[#DFEEFF] text-[#0171F9] font-inter font-semibold leading-[15px]">
                   Pre-K
                 </span>
               </div>
             </div>
 
             {/* Right: rating */}
-            <div className="flex items-start gap-4 lg:flex-shrink-0">
-              <span className="text-[#191C1D] font-[Outfit] font-bold text-[50px] leading-10">4.5</span>
-              <div className="flex flex-col items-end gap-1.5 pb-1">
+            <div className="flex items-start gap-2 sm:gap-4 lg:flex-shrink-0 ">
+              <span className="text-[#191C1D] font-[Outfit] font-bold text-3xl sm:text-4xl lg:text-5xl sm:mt-0 mt-[-7px] leading-10">4.5</span>
+              <div className="flex flex-col items-end gap-1 sm:gap-1.5 pb-1">
                 <StarRating rating={4.5} size="lg" />
                 <span className="text-[#9CA3AF] font-inter text-xs font-normal">142 reviews</span>
               </div>
@@ -818,34 +819,34 @@ export default function SchoolDetailPage() {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-black opacity-10 mt-10 mb-3" />
+          <div className="h-px bg-black opacity-10 mt-6 sm:mt-8 lg:mt-10 mb-3 sm:mb-4" />
 
           {/* Stats */}
-          <div className="flex items-center gap-7 flex-wrap">
-            <div className="flex flex-col gap-2">
-              <span className="text-[#AFAFB2] font-[Outfit] text-md font-medium leading-7">Total Reports</span>
-              <div className="flex items-center gap-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 lg:gap-7 flex-wrap">
+            <div className="flex flex-col gap-1 sm:gap-2">
+              <span className="text-[#AFAFB2] font-[Outfit] text-sm sm:text-base font-medium leading-6 sm:leading-7">Total Reports</span>
+              <div className="flex items-center gap-1 sm:gap-1.5">
                 <FileIcon />
-                <span className="text-[#191C1D] font-[Outfit] text-xl font-semibold">142</span>
+                <span className="text-[#191C1D] font-[Outfit] text-lg sm:text-xl font-semibold">142</span>
               </div>
             </div>
 
-            <div className="w-px h-[46px] opacity-10 bg-black" />
+            <div className="hidden sm:block w-px h-[46px] opacity-10 bg-black" />
 
-            <div className="flex flex-col gap-2">
-              <span className="text-[#AFAFB2] font-[Outfit] text-md font-medium leading-7">Would Return to School</span>
-              <div className="flex items-center gap-5 flex-wrap">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#10B981] font-[Outfit] text-xl font-semibold">85%</span>
-                  <span className="text-[#10B981] font-[Outfit] text-xl font-semibold">Yes</span>
+            <div className="flex flex-col gap-1 sm:gap-2">
+              <span className="text-[#AFAFB2] font-[Outfit] text-sm sm:text-base font-medium leading-6 sm:leading-7">Would Return to School</span>
+              <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 flex-wrap">
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="text-[#10B981] font-[Outfit] text-lg sm:text-xl font-semibold">85%</span>
+                  <span className="text-[#10B981] font-[Outfit] text-lg sm:text-xl font-semibold">Yes</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#E8A411] font-[Outfit] text-xl font-semibold">5%</span>
-                  <span className="text-[#E8A411] font-[Outfit] text-xl font-semibold">Maybe</span>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="text-[#E8A411] font-[Outfit] text-lg sm:text-xl font-semibold">5%</span>
+                  <span className="text-[#E8A411] font-[Outfit] text-lg sm:text-xl font-semibold">Maybe</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#E02C2C] font-[Outfit] text-xl font-semibold">10%</span>
-                  <span className="text-[#E02C2C] font-[Outfit] text-xl font-semibold">No</span>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="text-[#E02C2C] font-[Outfit] text-lg sm:text-xl font-semibold">10%</span>
+                  <span className="text-[#E02C2C] font-[Outfit] text-lg sm:text-xl font-semibold">No</span>
                 </div>
               </div>
             </div>
@@ -855,14 +856,14 @@ export default function SchoolDetailPage() {
         {/* Reports Section */}
         <div>
           {/* Section header + filter tabs */}
-          <div className="flex items-end justify-between gap-4 flex-wrap mb-6">
-            <h2 className="text-[#121212] font-[Outfit] text-3xl font-semibold leading-none">Recent Report</h2>
-            <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <h2 className="text-[#121212] font-[Outfit] text-2xl sm:text-3xl font-semibold leading-none">Recent Report</h2>
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               {filterConfig.map(({ label, count }) => (
                 <button
                   key={label}
                   onClick={() => setActiveFilter(label)}
-                  className={`flex items-center gap-1.5 px-4 py-3.5 rounded-lg font-inter text-sm font-medium leading-none transition-colors cursor-pointer ${activeFilter === label
+                  className={`flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-2 sm:py-3.5 rounded-lg font-inter text-xs sm:text-sm font-medium leading-none transition-colors cursor-pointer ${activeFilter === label
                     ? "bg-[#0B77F9] text-white font-bold"
                     : "bg-white border border-[rgba(178,178,178,0.20)] text-[#121212]"
                     }`}
@@ -874,21 +875,21 @@ export default function SchoolDetailPage() {
           </div>
 
           {/* Review cards */}
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4 sm:gap-6 lg:gap-8">
             {filteredReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-center gap-2 mt-8 flex-wrap">
-            <button className="w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8 flex-wrap">
+            <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
               <ChevronLeftIcon />
             </button>
             {[1, 2, 3].map((page) => (
               <button
                 key={page}
-                className={`w-9 h-9 flex items-center justify-center rounded-md font-inter text-sm font-medium transition-colors cursor-pointer ${page === 1
+                className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md font-inter text-xs sm:text-sm font-medium transition-colors cursor-pointer ${page === 1
                   ? "bg-[#0171F9] border border-[#0171F9] text-white"
                   : "border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] hover:bg-gray-50"
                   }`}
@@ -896,13 +897,13 @@ export default function SchoolDetailPage() {
                 {page}
               </button>
             ))}
-            <span className="w-9 h-9 flex items-center justify-center text-[#0171F9] font-inter text-sm font-medium">
+            <span className="w-6 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-[#0171F9] font-inter text-xs sm:text-sm font-medium">
               ...
             </span>
-            <button className="w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] font-inter text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+            <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] font-inter text-xs sm:text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
               12
             </button>
-            <button className="w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+            <button className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
               <ChevronRightIcon />
             </button>
           </div>
