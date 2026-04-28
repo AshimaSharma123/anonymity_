@@ -232,7 +232,7 @@ export default function SubmitReportPage() {
 
             {/* ── Assignment Details ── */}
             <section className="flex flex-col gap-5 sm:gap-8">
-              <h2 className={`${sectionHeading} text-[#121212] text-lg sm:text-xl`}>Assignment Details</h2>
+              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Assignment Details</h2>
 
               {/* School Name */}
               <div className="flex flex-col gap-2">
@@ -288,9 +288,9 @@ export default function SubmitReportPage() {
                       key={level}
                       type="button"
                       onClick={() => setGradeLevel(level)}
-                      className={`flex items-center justify-center px-3 sm:px-5 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${gradeLevel === level
-                          ? "bg-[#0B77F9] text-white font-bold border-0"
-                          : "bg-[#FCFDFE] text-[#121212] font-medium border border-[#B2B2B2]"
+                      className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${gradeLevel === level
+                          ? "bg-[#0B77F9] text-white font-medium"
+                          : "bg-[#FCFDFE] text-[#121212] font-medium border-[#B2B2B2]"
                         }`}
                     >
                       {level}
@@ -431,7 +431,7 @@ export default function SubmitReportPage() {
               <WarningBanner />
 
               <div className="flex flex-col justify-end gap-3 sm:gap-4 items-end">
-                <p className="font-inter text-xs sm:text-sm text-[#121212]/60 text-right">
+                <p className="font-inter w-full text-xs sm:text-sm text-[#121212]/60 sm:text-right text-center">
                   Once submitted, reports cannot be edited or undone.
                 </p>
                 <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-2 sm:gap-[10px]">
