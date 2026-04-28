@@ -272,27 +272,27 @@ export default function BrowseSchoolPage() {
 
           {/* Search bar */}
           <div className="pb-6 sm:pb-8">
-            <div className="flex flex-col gap-2 sm:gap-2 lg:flex-row lg:items-center bg-[#E9F2FF] rounded-xl sm:rounded-2xl p-2 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 bg-[#E9F2FF] rounded-lg sm:rounded-2xl p-3 sm:p-2 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
               {/* School name input */}
-              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[48px] sm:h-[54px]">
+              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-12 sm:h-[54px]">
                 <SearchIcon />
                 <input
                   type="text"
                   placeholder="Search by School Name..."
-                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
+                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-sm sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
               </div>
               {/* Teacher name input */}
-              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-[48px] sm:h-[54px]">
+              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-12 sm:h-[54px]">
                 <SearchIcon />
                 <input
                   type="text"
                   placeholder="Search by Teacher Name..."
-                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
+                  className="flex-1 bg-transparent text-[#737685] font-[Inter] text-sm sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
               </div>
               {/* Search button */}
-              <button className="flex-shrink-0 h-[48px] sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
+              <button className="h-12 sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap flex-1 sm:flex-initial">
                 Search
               </button>
             </div>
