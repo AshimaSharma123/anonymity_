@@ -180,7 +180,7 @@ function SchoolCard({ school }: { school: School }) {
         {/* Card top section */}
         <div className="flex flex-col gap-3 sm:gap-[14px]">
           {/* School name, location, grade + sentiment badge */}
-          <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
+          <div className="flex flex-row sm:items-start gap-2 sm:gap-3">
             <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-w-0">
               <h3 className="text-[#121212] font-[Inter] text-sm sm:text-base font-bold leading-5">{school.name}</h3>
               <div className="flex items-center gap-1.5 opacity-80">
@@ -191,7 +191,7 @@ function SchoolCard({ school }: { school: School }) {
                 {school.gradeLevel}
               </span>
             </div>
-            <span className={`flex-shrink-0 inline-flex px-2 py-1 rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
+            <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
               {school.sentiment}
             </span>
           </div>
@@ -200,9 +200,9 @@ function SchoolCard({ school }: { school: School }) {
           <div className="h-px w-full bg-[#DADADA] opacity-40" />
 
           {/* Stats: Avg Rating / Would Return / Reviews */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-2">
+          <div className="flex items-center gap-2">
             <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-[8px_8px_0_8px] bg-white">
-              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Avg Rating</span>
+              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Avg Rating</span>
               <div className="flex justify-left items-center gap-1 mt-1">
                 <span className="font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7" style={{ color: ratingColor }}>
                   {school.avgRating}
@@ -212,14 +212,16 @@ function SchoolCard({ school }: { school: School }) {
                 </div>
               </div>
             </div>
+            <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
             <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
-              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Would Return</span>
+              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Would Return</span>
               <span className="font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1" style={{ color: ratingColor }}>
                 {school.wouldReturn}
               </span>
             </div>
+            <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
             <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
-              <span className="text-[#434654] font-[Inter] text-[10px] sm:text-xs font-normal leading-[13px] sm:leading-[15px] tracking-[-0.5px] opacity-80">Reviews</span>
+              <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] tracking-[-0.5px] opacity-80">Reviews</span>
               <span className="text-[#191C1D] font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1">{school.reviews}</span>
             </div>
           </div>
@@ -272,7 +274,7 @@ export default function BrowseSchoolPage() {
           <div className="pb-6 sm:pb-8">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center bg-[#E9F2FF] rounded-2xl p-2 sm:p-3 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
               {/* School name input */}
-              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-12 sm:h-[54px]">
+              <div className="flex items-center gap-2 flex-1 py-3.5 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)]">
                 <SearchIcon />
                 <input
                   type="text"
@@ -281,7 +283,7 @@ export default function BrowseSchoolPage() {
                 />
               </div>
               {/* Teacher name input */}
-              <div className="flex items-center gap-2 flex-1 px-3 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)] h-12 sm:h-[54px]">
+              <div className="flex items-center gap-2 flex-1 px-3 py-3.5 sm:px-4 bg-white rounded-lg border border-[rgba(195,198,214,0.20)]">
                 <SearchIcon />
                 <input
                   type="text"
@@ -308,8 +310,8 @@ export default function BrowseSchoolPage() {
               <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-6">
                 {/* Filter header */}
                 <div className="flex items-end justify-between mb-5 sm:mb-7">
-                  <span className="font-[Outfit] text-base sm:text-lg font-medium leading-5 text-black">Filter</span>
-                  <button className="font-[Outfit] text-xs sm:text-[13px] font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
+                  <span className="font-[Outfit] text-lg font-medium leading-5 text-black">Filter</span>
+                  <button className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
                     Clear all
                   </button>
                 </div>
@@ -384,7 +386,7 @@ export default function BrowseSchoolPage() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <div className="w-14 sm:w-auto">
+                          <div className="w-auto">
                             {item.icon}
                           </div>
                           <span className="font-[Outfit] text-xs sm:text-sm font-normal text-[#212121] opacity-[0.88]">
