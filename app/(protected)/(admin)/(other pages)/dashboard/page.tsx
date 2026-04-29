@@ -51,23 +51,23 @@ const recentReports = [
 
 export default function DashboardPage() {
   return (
-     <main className="flex-1 overflow-y-auto p-8">
+     <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 
           {/* Page title */}
           <div className="mb-6">
-            <h1 className="font-outfit font-semibold text-3xl text-[#121212] leading-5">Dashboard</h1>
-            <p className="font-outfit font-normal text-[18px] text-[#414141] mt-3">System Overview</p>
+            <h1 className="font-outfit font-semibold text-2xl sm:text-3xl text-[#121212] leading-5">Dashboard</h1>
+            <p className="font-outfit font-normal text-base sm:text-[18px] text-[#414141] mt-3">System Overview</p>
           </div>
 
           {/* Stats cards */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
 
             {/* Total Reports */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
+            <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
+              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Total Reports</span>
-                 <span className="font-outfit font-bold text-3xl text-[#191C1D]">1,244</span>
+                <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Total Reports</span>
+                 <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">1,244</span>
                  </div>
                 <div className="w-11 h-11 rounded-md bg-[#DDEBFF] flex items-center justify-center flex-shrink-0">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,11 +86,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Reports This Week */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
+            <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
+              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Reports This Week</span>
-                <span className="font-outfit font-bold text-3xl text-[#191C1D]">42</span>
+                <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Reports This Week</span>
+                <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">42</span>
                 </div>
                 <div className="w-11 h-11 rounded-md bg-[#EAFFF1] flex items-center justify-center flex-shrink-0">
                   
@@ -111,11 +111,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Negative Reports */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
+            <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
+              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
-                <span className="font-inter font-medium text-sm text-[#434654] uppercase">Negative Reports</span>
-                <span className="font-outfit font-bold text-3xl text-[#191C1D]">18</span>
+                <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Negative Reports</span>
+                <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">18</span>
                 </div>
                 <div className="w-11 h-11 rounded-md bg-[#FFEFEF] flex items-center justify-center flex-shrink-0">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -134,11 +134,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Active Schools */}
-            <div className="bg-white rounded-lg p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between">
+            <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
+              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
                   <span className="font-inter font-medium text-xs text-[#434654] uppercase">Active Schools</span>
-                  <span className="font-outfit font-bold text-3xl text-[#191C1D]">15</span>
+                  <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">15</span>
                 </div>
                 <div className="w-11 h-11 rounded-md bg-[#FFF9F0] flex items-center justify-center flex-shrink-0">
                   <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -156,13 +156,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Middle section: alerts + sentiment */}
-          <div className="flex gap-6 mb-6">
+          <div className="flex flex-col lg:flex-row gap-6 mb-6">
 
             {/* Recent High-Risk Alerts */}
-            <div className="flex-1 min-w-0 bg-white rounded-xl p-6 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <h2 className="font-outfit font-medium text-2xl text-[#121212]">Recent High-Risk Alerts</h2>
-                <Link href="#" className="font-outfit font-normal text-[16px] text-[#0171F9]">View all</Link>
+            <div className="flex-1 min-w-0 bg-white rounded-xl p-4 sm:p-6 flex flex-col gap-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
+                <h2 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Recent High-Risk Alerts</h2>
+                <Link href="#" className="font-outfit font-normal text-[14px] sm:text-[16px] text-[#0171F9] whitespace-nowrap">View all</Link>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -230,7 +230,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Sentiment Insights */}
-            <div className="w-[300px] flex-shrink-0 bg-white rounded-xl p-6 flex flex-col gap-8">
+            <div className="w-full lg:w-[300px] lg:flex-shrink-0 bg-white rounded-xl p-4 sm:p-6 flex flex-col gap-8">
               <h2 className="font-outfit font-semibold text-xl text-[#121212]">Sentiment Insights</h2>
               <div className="flex flex-col items-center gap-8">
                 {/* Donut chart */}
@@ -270,62 +270,62 @@ export default function DashboardPage() {
 
           {/* Recent Reports table */}
           <div className="bg-white rounded-lg overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-6">
-              <h2 className="font-outfit font-medium text-2xl text-[#121212]">Recent Reports</h2>
-              <Link href="#" className="font-outfit font-normal text-[16px] text-[#0171F9]">View all</Link>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-6 gap-4 sm:gap-0">
+              <h2 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Recent Reports</h2>
+              <Link href="#" className="font-outfit font-normal text-[14px] sm:text-[16px] text-[#0171F9] whitespace-nowrap">View all</Link>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-max">
                 <thead>
                   <tr className="border-y border-[#E5E7EB] bg-white">
-                    <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
+                    <th className="text-left px-4 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
                     <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
+                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden sm:table-cell">Teacher</th>
                     <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment Analysis</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submission Date</th>
+                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden lg:table-cell">Submitted By</th>
+                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden md:table-cell">Submission Date</th>
                     <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
-                    <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
+                    <th className="text-left px-4 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentReports.map((report) => (
                     <tr key={report.id} className="border-b border-[#F2F4F7]">
-                      <td className="px-5 py-[17.5px]">
-                        <span className="font-inter font-medium text-sm text-[#0B77F9] opacity-80">{report.id}</span>
+                      <td className="px-4 sm:px-5 py-[17.5px]">
+                        <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9] opacity-80">{report.id}</span>
                       </td>
                       <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.school}</span>
+                        <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.school}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.teacher}</span>
+                      <td className="px-2 py-[17.5px] hidden sm:table-cell">
+                        <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.teacher}</span>
                       </td>
                       <td className="px-2 py-[17.5px]">
                         <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-xs text-[#059669]">
                           {report.sentiment}
                         </span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.submittedBy}</span>
+                      <td className="px-2 py-[17.5px] hidden lg:table-cell">
+                        <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.submittedBy}</span>
+                      </td>
+                      <td className="px-2 py-[17.5px] hidden md:table-cell">
+                        <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.date}</span>
                       </td>
                       <td className="px-2 py-[17.5px]">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{report.date}</span>
-                      </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="inline-flex items-center px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-sm text-[#030711]">
+                        <span className="inline-flex items-center px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-xs sm:text-sm text-[#030711]">
                           {report.status}
                         </span>
                       </td>
-                      <td className="px-5 py-[17.5px]">
-                        <div className="flex items-center justify-start gap-3">
-                          <button className="p-2 rounded-md bg-[#D1FAE5]">
+                      <td className="px-4 sm:px-5 py-[17.5px]">
+                        <div className="flex items-center justify-start gap-2 sm:gap-3">
+                          <button className="p-1.5 sm:p-2 rounded-md bg-[#D1FAE5]">
                             <CheckIcon />
                           </button>
-                          <button className="p-2 rounded-md bg-[#FEE2E2]">
+                          <button className="p-1.5 sm:p-2 rounded-md bg-[#FEE2E2]">
                             <CloseIcon />
                           </button>
-                          <button className="flex items-center justify-center h-9 px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-sm text-black opacity-80 tracking-[-0.2px]">
+                          <button className="hidden sm:flex items-center justify-center h-9 px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-sm text-black opacity-80 tracking-[-0.2px]">
                             View
                           </button>
                         </div>
