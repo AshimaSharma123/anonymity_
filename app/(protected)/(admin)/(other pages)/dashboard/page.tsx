@@ -279,41 +279,41 @@ export default function DashboardPage() {
               <table className="w-full min-w-max">
                 <thead>
                   <tr className="border-y border-[#E5E7EB] bg-white">
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-12">ID</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-32">School</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-28">Teacher</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-20">Sentiment</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-24">Submitted By</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-24">Date</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-16">Status</th>
-                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-32">Actions</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-12">ID</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-32">School</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-28">Teacher</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-20">Sentiment</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-24">Submitted By</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-24">Date</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-16">Status</th>
+                    <th className="text-left px-3 sm:px-5 py-3 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap min-w-32">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentReports.map((report) => (
                     <tr key={report.id} className="border-b border-[#F2F4F7]">
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="font-inter font-medium text-[10px] sm:text-sm text-[#0B77F9] opacity-80 whitespace-nowrap">{report.id}</span>
+                        <span className="font-inter font-medium text-[12px] sm:text-sm text-[#0B77F9] opacity-80 whitespace-nowrap">{report.id}</span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.school}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.school}</span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.teacher}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.teacher}</span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-[10px] sm:text-xs text-[#059669] whitespace-nowrap">
+                        <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-[12px] sm:text-xs text-[#059669] whitespace-nowrap">
                           {report.sentiment}
                         </span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.submittedBy}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.submittedBy}</span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.date}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] whitespace-nowrap">{report.date}</span>
                       </td>
                       <td className="px-3 sm:px-5 py-3 sm:py-[17.5px]">
-                        <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[10px] sm:text-sm text-[#030711] whitespace-nowrap">
+                        <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[12px] sm:text-sm text-[#030711] whitespace-nowrap">
                           {report.status}
                         </span>
                       </td>
@@ -325,7 +325,7 @@ export default function DashboardPage() {
                           <button className="p-0.5 sm:p-2 rounded-md bg-[#FEE2E2] flex-shrink-0" aria-label="Reject">
                             <CloseIcon />
                           </button>
-                          <button className="flex items-center justify-center h-6 sm:h-9 px-1.5 sm:px-3 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[9px] sm:text-sm text-black opacity-80 tracking-[-0.2px] whitespace-nowrap">
+                          <button className="flex items-center justify-center h-6 sm:h-9 px-1.5 sm:px-3 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-sm text-black opacity-80 tracking-[-0.2px] whitespace-nowrap">
                             View
                           </button>
                         </div>

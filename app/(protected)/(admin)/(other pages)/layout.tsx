@@ -54,7 +54,7 @@ export default function AdminLayout({
               <span className="font-inter font-semibold text-xs sm:text-sm text-[#191C1E] leading-5">Marcus</span>
               <span className="font-inter font-normal text-[10px] sm:text-[11px] text-[#737786] leading-[16.5px] tracking-[0.55px] uppercase">Super Admin</span>
             </div>
-            <div className="relative w-8 sm:w-10 h-8 sm:h-10">
+            <div className="relative w-8 sm:w-10 h-8 sm:h-10 sm:block hidden">
               <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-[10px] bg-[#EDF5FF]" />
               <span className="absolute inset-0 flex items-center justify-center font-outfit font-medium text-sm sm:text-lg text-[#0171F9]">M</span>
             </div>
