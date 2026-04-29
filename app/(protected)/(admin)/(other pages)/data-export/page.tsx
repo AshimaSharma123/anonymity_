@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 
@@ -40,6 +40,18 @@ const ExportRowIcon = () => (
     <path
       d="M7.52802 14.4713C7.65303 14.5963 7.82257 14.6665 7.99935 14.6665C8.17613 14.6665 8.34566 14.5963 8.47068 14.4713L11.1374 11.8046C11.2588 11.6789 11.326 11.5105 11.3245 11.3357C11.3229 11.1609 11.2528 10.9937 11.1292 10.8701C11.0056 10.7465 10.8384 10.6764 10.6636 10.6749C10.4888 10.6733 10.3204 10.7405 10.1947 10.862L8.66602 12.3906V5.33331C8.66602 5.1565 8.59578 4.98693 8.47075 4.86191C8.34573 4.73688 8.17616 4.66665 7.99935 4.66665C7.82254 4.66665 7.65297 4.73688 7.52794 4.86191C7.40292 4.98693 7.33268 5.1565 7.33268 5.33331V12.3906L5.80402 10.862C5.67828 10.7405 5.50988 10.6733 5.33508 10.6749C5.16028 10.6764 4.99308 10.7465 4.86947 10.8701C4.74586 10.9937 4.67575 11.1609 4.67423 11.3357C4.67271 11.5105 4.73991 11.6789 4.86135 11.8046L7.52802 14.4713ZM3.33268 4.66665C3.50949 4.66665 3.67906 4.59641 3.80409 4.47138C3.92911 4.34636 3.99935 4.17679 3.99935 3.99998V2.66665H11.9993V3.99998C11.9993 4.17679 12.0696 4.34636 12.1946 4.47138C12.3196 4.59641 12.4892 4.66665 12.666 4.66665C12.8428 4.66665 13.0124 4.59641 13.1374 4.47138C13.2624 4.34636 13.3327 4.17679 13.3327 3.99998V2.66665C13.3327 2.31302 13.1922 1.97389 12.9422 1.72384C12.6921 1.47379 12.353 1.33331 11.9993 1.33331H3.99935C3.64573 1.33331 3.30659 1.47379 3.05654 1.72384C2.80649 1.97389 2.66602 2.31302 2.66602 2.66665V3.99998C2.66602 4.17679 2.73625 4.34636 2.86128 4.47138C2.9863 4.59641 3.15587 4.66665 3.33268 4.66665Z"
       fill="#1E1E1E"
+    />
+  </svg>
+);
+
+const ScrollIndicatorIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M5 12L19 12M19 12L15 8M19 12L15 16"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -216,6 +228,8 @@ export default function DataExportPage() {
   const [endDate, setEndDate] = useState("");
   const [grade, setGrade] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const schoolOptions = district ? (SCHOOLS_BY_DISTRICT[district] ?? []) : [];
   const teacherOptions = school ? (TEACHERS_BY_SCHOOL[school] ?? []) : [];
@@ -230,6 +244,29 @@ export default function DataExportPage() {
     setSchool(val);
     setTeacher("");
   }
+
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+
+    const checkScroll = () => {
+      setHasHorizontalScroll(container.scrollWidth > container.clientWidth);
+    };
+
+    checkScroll();
+
+    const resizeObserver = new ResizeObserver(checkScroll);
+    resizeObserver.observe(container);
+
+    container.addEventListener("scroll", checkScroll);
+    window.addEventListener("resize", checkScroll);
+
+    return () => {
+      resizeObserver.disconnect();
+      container.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, []);
 
   return (
     <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative">
@@ -314,8 +351,12 @@ export default function DataExportPage() {
           </h2>
         </div>
 
-        <div className="overflow-x-auto border-t border-[#E5E7EB]">
-          <table className="w-full min-w-max">
+        <div className="relative">
+          <div
+            ref={tableContainerRef}
+            className="overflow-x-auto border-t border-[#E5E7EB]"
+          >
+            <table className="w-full min-w-max">
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
                 <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
@@ -402,9 +443,33 @@ export default function DataExportPage() {
                 );
               })}
             </tbody>
-          </table>
+            </table>
+          </div>
+          {hasHorizontalScroll && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center w-16 h-16 bg-gradient-to-l from-white via-white to-transparent">
+              <style>{`
+                @keyframes scroll-right {
+                  0%, 100% {
+                    transform: translateX(0);
+                    opacity: 1;
+                  }
+                  50% {
+                    transform: translateX(8px);
+                    opacity: 0.7;
+                  }
+                }
+                .scroll-indicator {
+                  animation: scroll-right 1.5s ease-in-out infinite;
+                }
+              `}</style>
+              <div className="text-[#0171F9] scroll-indicator">
+                <ScrollIndicatorIcon />
+              </div>
+            </div>
+          )}
         </div>
-      </div></div>
+      </div>
+    </div>
     </main>
   );
 }
