@@ -64,7 +64,7 @@ export default function DashboardPage() {
 
             {/* Total Reports */}
             <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
+              <div className="flex items-start justify-between flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
                 <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Total Reports</span>
                  <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">1,244</span>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
 
             {/* Reports This Week */}
             <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
+              <div className="flex items-start justify-between flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
                 <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Reports This Week</span>
                 <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">42</span>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
 
             {/* Negative Reports */}
             <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
+              <div className="flex items-start justify-between flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
                 <span className="font-inter font-medium text-xs sm:text-sm text-[#434654] uppercase">Negative Reports</span>
                 <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">18</span>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
 
             {/* Active Schools */}
             <div className="bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-[10px] h-full">
-              <div className="flex items-start justify-between flex-col sm:flex-row sm:items-start gap-3 sm:gap-0">
+              <div className="flex items-start justify-between flex-row sm:items-start gap-3 sm:gap-0">
                 <div className="flex flex-col gap-2">
                   <span className="font-inter font-medium text-xs text-[#434654] uppercase">Active Schools</span>
                   <span className="font-outfit font-bold text-2xl sm:text-3xl text-[#191C1D]">15</span>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
 
             {/* Recent High-Risk Alerts */}
             <div className="flex-1 min-w-0 bg-white rounded-xl p-4 sm:p-6 flex flex-col gap-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
+              <div className="flex flex-row items-center justify-between gap-4 sm:gap-0">
                 <h2 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Recent High-Risk Alerts</h2>
                 <Link href="#" className="font-outfit font-normal text-[14px] sm:text-[16px] text-[#0171F9] whitespace-nowrap">View all</Link>
               </div>
@@ -270,62 +270,62 @@ export default function DashboardPage() {
 
           {/* Recent Reports table */}
           <div className="bg-white rounded-lg overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-6 gap-4 sm:gap-0">
+            <div className="flex flex-row items-center justify-between px-4 sm:px-6 py-6 gap-4 sm:gap-0">
               <h2 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Recent Reports</h2>
               <Link href="#" className="font-outfit font-normal text-[14px] sm:text-[16px] text-[#0171F9] whitespace-nowrap">View all</Link>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full min-w-max">
+              <table className="w-full">
                 <thead>
                   <tr className="border-y border-[#E5E7EB] bg-white">
-                    <th className="text-left px-4 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden sm:table-cell">Teacher</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment Analysis</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden lg:table-cell">Submitted By</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap hidden md:table-cell">Submission Date</th>
-                    <th className="text-left px-2 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
-                    <th className="text-left px-4 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Date</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
+                    <th className="text-left px-2 sm:px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentReports.map((report) => (
                     <tr key={report.id} className="border-b border-[#F2F4F7]">
-                      <td className="px-4 sm:px-5 py-[17.5px]">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
                         <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9] opacity-80">{report.id}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
                         <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.school}</span>
                       </td>
-                      <td className="px-2 py-[17.5px] hidden sm:table-cell">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
                         <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.teacher}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-xs text-[#059669]">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
+                        <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#CDFFEE] font-inter font-medium text-xs text-[#059669]">
                           {report.sentiment}
                         </span>
                       </td>
-                      <td className="px-2 py-[17.5px] hidden lg:table-cell">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
                         <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.submittedBy}</span>
                       </td>
-                      <td className="px-2 py-[17.5px] hidden md:table-cell">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
                         <span className="font-inter font-normal text-xs sm:text-[13px] text-[#030711]">{report.date}</span>
                       </td>
-                      <td className="px-2 py-[17.5px]">
-                        <span className="inline-flex items-center px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-xs sm:text-sm text-[#030711]">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
+                        <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-xs sm:text-sm text-[#030711]">
                           {report.status}
                         </span>
                       </td>
-                      <td className="px-4 sm:px-5 py-[17.5px]">
-                        <div className="flex items-center justify-start gap-2 sm:gap-3">
-                          <button className="p-1.5 sm:p-2 rounded-md bg-[#D1FAE5]">
+                      <td className="px-2 sm:px-5 py-[17.5px]">
+                        <div className="flex items-center justify-start gap-1 sm:gap-2">
+                          <button className="p-1 sm:p-2 rounded-md bg-[#D1FAE5]" aria-label="Approve">
                             <CheckIcon />
                           </button>
-                          <button className="p-1.5 sm:p-2 rounded-md bg-[#FEE2E2]">
+                          <button className="p-1 sm:p-2 rounded-md bg-[#FEE2E2]" aria-label="Reject">
                             <CloseIcon />
                           </button>
-                          <button className="hidden sm:flex items-center justify-center h-9 px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-sm text-black opacity-80 tracking-[-0.2px]">
+                          <button className="hidden sm:flex items-center justify-center h-9 px-3 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-xs sm:text-sm text-black opacity-80 tracking-[-0.2px]">
                             View
                           </button>
                         </div>

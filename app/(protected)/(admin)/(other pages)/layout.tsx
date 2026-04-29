@@ -39,7 +39,7 @@ export default function AdminLayout({
         {/* Top header bar */}
         <header className="relative z-50 h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
           {/* Logo - Left side */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 sm:hidden">
             <Link href="/" className="flex items-center">
               <Image src="/logo.svg" height={40} width={40} alt="Logo" className="h-8 sm:h-10 w-auto" />
             </Link>
