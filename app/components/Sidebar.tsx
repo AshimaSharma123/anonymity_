@@ -71,8 +71,8 @@ export default function Sidebar() {
     },
   ];
     return <aside className="w-72 flex-shrink-0 bg-white flex flex-col border-b lg:border-b border-black/10 h-full">
-        {/* Logo area */}
-        <div className="h-16 sm:h-20 lg:h-23 flex items-center px-6 sm:px-8 lg:px-12 border-b border-black/10 flex-shrink-0">
+        {/* Logo area - Hidden on mobile since header serves this purpose */}
+        <div className="hidden lg:flex h-23 items-center px-12 border-b border-black/10 flex-shrink-0">
           <Link href="/" className="flex flex-col gap-1">
             <Image src="/logo.svg" height={150} width={150} alt="Logo" />
           </Link>

@@ -21,33 +21,25 @@ export default function AdminLayout({
         <Sidebar/>
       </div>
 
-      {/* Mobile sidebar overlay */}
+      {/* Mobile sidebar overlay - starts below header */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed left-0 right-0 top-16 sm:top-20 bottom-0 bg-black/40 z-30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Mobile sidebar */}
-      <div className={`fixed left-0 top-23 bottom-0 w-72 z-40 lg:hidden transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      {/* Mobile sidebar - starts below header */}
+      <div className={`fixed left-0 top-16 sm:top-20 bottom-0 w-72 z-40 lg:hidden transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar/>
       </div>
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
         {/* Top header bar */}
-        <header className="h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center justify-between px-4 sm:px-6 lg:px-8 flex-shrink-0">
+        <header className="relative z-50 h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center sm:justify-between gap-2 px-4 sm:px-6 lg:px-8 flex-shrink-0">
           {/* Mobile menu button */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label="Toggle sidebar"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 6H21M3 12H21M3 18H21" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+          
 
           {/* User info */}
           <div className="flex items-center gap-2 sm:gap-3">
@@ -60,6 +52,15 @@ export default function AdminLayout({
               <span className="absolute inset-0 flex items-center justify-center font-outfit font-medium text-sm sm:text-lg text-[#0171F9]">M</span>
             </div>
           </div>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Toggle sidebar"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6H21M3 12H21M3 18H21" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </header>
 
       {/* Main content */}
