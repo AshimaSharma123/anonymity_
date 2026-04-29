@@ -23,7 +23,7 @@ const AddIcon = () => (
 );
 
 const CloseIcon = () => (
-  <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="25" height="25" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M17.0001 18.9835L10.0585 25.9251C9.79874 26.1849 9.46819 26.3147 9.0668 26.3147C8.66541 26.3147 8.33485 26.1849 8.07513 25.9251C7.81541 25.6654 7.68555 25.3349 7.68555 24.9335C7.68555 24.5321 7.81541 24.2015 8.07513 23.9418L15.0168 17.0001L8.07513 10.0585C7.81541 9.79874 7.68555 9.46819 7.68555 9.0668C7.68555 8.66541 7.81541 8.33485 8.07513 8.07513C8.33485 7.81541 8.66541 7.68555 9.0668 7.68555C9.46819 7.68555 9.79874 7.81541 10.0585 8.07513L17.0001 15.0168L23.9418 8.07513C24.2015 7.81541 24.5321 7.68555 24.9335 7.68555C25.3349 7.68555 25.6654 7.81541 25.9251 8.07513C26.1849 8.33485 26.3147 8.66541 26.3147 9.0668C26.3147 9.46819 26.1849 9.79874 25.9251 10.0585L18.9835 17.0001L25.9251 23.9418C26.1849 24.2015 26.3147 24.5321 26.3147 24.9335C26.3147 25.3349 26.1849 25.6654 25.9251 25.9251C25.6654 26.1849 25.3349 26.3147 24.9335 26.3147C24.5321 26.3147 24.2015 26.1849 23.9418 25.9251L17.0001 18.9835Z"
       fill="#212121"
@@ -57,15 +57,15 @@ export default function UsersRolesPage() {
 
   return (
     <div className="flex flex-1 overflow-hidden relative">
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         {/* Page header */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
+          <h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5">
             Users &amp; Roles
           </h1>
           <button
             onClick={openSidebar}
-            className="flex cursor-pointer items-center gap-1.5 px-[17px] py-3 rounded-lg bg-[#0171F9] text-white font-inter font-semibold text-base leading-6 shadow-sm hover:bg-[#0562d8] transition-colors"
+            className="flex cursor-pointer items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg bg-[#0171F9] text-white font-inter font-semibold text-sm sm:text-base leading-6 shadow-sm hover:bg-[#0562d8] transition-colors whitespace-nowrap"
           >
             <AddIcon />
             Add Role
@@ -75,40 +75,34 @@ export default function UsersRolesPage() {
         {/* Table card */}
         <div className="bg-white rounded-lg overflow-hidden">
           {/* Search bar */}
-          <div className="px-6 py-5 border-b border-[#E5E7EB]">
-            <div className="flex items-center gap-2.5 w-full max-w-[340px] px-4 py-2.5 rounded-lg border border-[#E5E7EB] bg-white">
+          <div className="px-4 py-4 border-b border-[#E5E7EB]">
+            <div className="flex items-center gap-2.5 w-full max-w-[540px] px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-[#E5E7EB] bg-white">
               <SearchIcon />
               <input
                 type="text"
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="flex-1 bg-transparent font-inter text-sm text-[#030711] placeholder-[#9CA3AF] outline-none"
+                className="flex-1 bg-transparent outline-none font-inter font-medium text-sm sm:text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
               />
             </div>
           </div>
 
           {/* Table */}
           <div className="overflow-x-auto">
-            <table className="w-full table-fixed">
-              <colgroup>
-                <col className="w-auto" />
-                <col className="w-[200px]" />
-                <col className="w-[120px]" />
-                <col className="w-[200px]" />
-              </colgroup>
+            <table className="w-full min-w-max">
               <thead>
                 <tr className="border-y border-[#E5E7EB] bg-white">
-                  <th className="text-left px-5 py-[14px] font-inter font-medium text-sm text-[#6F6C70] uppercase whitespace-nowrap">
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-[14px] font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase whitespace-nowrap">
                     User Name
                   </th>
-                  <th className="text-left px-3 py-[14px] font-inter font-medium text-sm text-[#6F6C70] uppercase whitespace-nowrap">
+                  <th className="text-left px-2 sm:px-3 py-2.5 sm:py-[14px] font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase whitespace-nowrap">
                     Email
                   </th>
-                  <th className="text-left px-3 py-[14px] font-inter font-medium text-sm text-[#6F6C70] uppercase whitespace-nowrap">
+                  <th className="text-left px-2 sm:px-3 py-2.5 sm:py-[14px] font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase whitespace-nowrap">
                     Role
                   </th>
-                  <th className="text-left px-3 py-[14px] font-inter font-medium text-sm text-[#6F6C70] uppercase whitespace-nowrap">
+                  <th className="text-left px-2 sm:px-3 py-2.5 sm:py-[14px] font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase whitespace-nowrap">
                     Actions
                   </th>
                 </tr>
@@ -116,27 +110,27 @@ export default function UsersRolesPage() {
               <tbody>
                 {filtered.map((user) => (
                   <tr key={user.id} className="border-b border-[#F2F4F7] hover:bg-[#FAFAFA] transition-colors">
-                    <td className="h-[68px] px-5 py-[17.5px] align-middle">
-                      <span className="font-inter font-normal text-[14px] text-[#030711] leading-5">
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] align-middle">
+                      <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711] leading-5">
                         {user.name}
                       </span>
                     </td>
-                    <td className="h-[68px] px-3 py-[17.5px] align-middle">
-                      <span className="font-inter font-normal text-[14px] text-[#030711] leading-5">
+                    <td className="px-2 sm:px-3 py-3 sm:py-[17.5px] align-middle">
+                      <span className="font-inter font-normal text-[11px] sm:text-[14px] text-[#030711] leading-5">
                         {user.email}
                       </span>
                     </td>
-                    <td className="h-[68px] px-3 py-[17.5px] align-middle">
-                      <span className="font-inter font-normal text-[14px] text-[#030711] leading-5">
+                    <td className="px-2 sm:px-3 py-3 sm:py-[17.5px] align-middle">
+                      <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711] leading-5">
                         {user.role}
                       </span>
                     </td>
-                    <td className="h-[68px] px-3 py-[17.5px] align-middle">
-                      <div className="flex items-center gap-2">
-                        <button className="px-4 py-1.5 rounded border border-[#E5E7EB] bg-white font-inter font-normal text-md text-[#030711] hover:bg-gray-50 transition-colors">
+                    <td className="px-2 sm:px-3 py-3 sm:py-[17.5px] align-middle">
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <button className="px-2 sm:px-4 py-1 sm:py-1.5 rounded border border-[#E5E7EB] bg-white font-inter font-normal text-xs sm:text-md text-[#030711] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           Edit
                         </button>
-                        <button className="px-4 py-1.5 rounded border border-[#E5E7EB] bg-white font-inter font-normal text-md text-[#030711] hover:bg-gray-50 transition-colors">
+                        <button className="px-2 sm:px-4 py-1 sm:py-1.5 rounded border border-[#E5E7EB] bg-white font-inter font-normal text-xs sm:text-md text-[#030711] hover:bg-gray-50 transition-colors whitespace-nowrap">
                           Delete
                         </button>
                       </div>
@@ -146,7 +140,7 @@ export default function UsersRolesPage() {
 
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-5 py-10 text-center font-inter text-sm text-[#6F6C70]">
+                    <td colSpan={4} className="px-4 sm:px-5 py-8 sm:py-10 text-center font-inter text-xs sm:text-sm text-[#6F6C70]">
                       No users found.
                     </td>
                   </tr>
@@ -167,18 +161,18 @@ export default function UsersRolesPage() {
 
       {/* Add Role right sidebar */}
       <aside
-        className={`fixed top-0 right-0 h-full w-[524px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full sm:max-w-[524px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Sidebar header */}
-        <div className="flex items-center justify-between px-6 pt-8 pb-6">
-          <h2 className="font-inter font-semibold text-[32px] text-[#212121] leading-6">
+        <div className="flex items-center justify-between px-4 sm:px-6 pt-6 pb-6 sm:pb-6">
+          <h2 className="font-inter font-semibold text-xl sm:text-[25px] text-[#212121] leading-6">
             Add Role
           </h2>
           <button
             onClick={closeSidebar}
-            className="cursor-pointer flex items-center justify-center hover:opacity-70 transition-opacity"
+            className="cursor-pointer flex items-center justify-center hover:opacity-70 transition-opacity flex-shrink-0"
             aria-label="Close sidebar"
           >
             <CloseIcon />
@@ -188,10 +182,10 @@ export default function UsersRolesPage() {
         <div className="h-px bg-black/10 mx-0" />
 
         {/* Form fields */}
-        <div className="flex flex-col gap-4 px-6 pt-8">
+        <div className="flex flex-col gap-3 sm:gap-4 px-4 sm:px-6 pt-6 sm:pt-8">
           {/* User Name field */}
           <div className="flex flex-col gap-0.5">
-            <label className="font-outfit font-medium text-base text-[#212121] leading-6">
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">
               User Name
             </label>
             <input
@@ -199,13 +193,13 @@ export default function UsersRolesPage() {
               placeholder="Enter User Name"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              className="h-12 px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
+              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
             />
           </div>
 
           {/* Email Address field */}
           <div className="flex flex-col gap-0.5">
-            <label className="font-outfit font-medium text-base text-[#212121] leading-6">
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">
               Email Address
             </label>
             <input
@@ -213,12 +207,12 @@ export default function UsersRolesPage() {
               placeholder="Enter Email Address"
               value={emailAddress}
               onChange={(e) => setEmailAddress(e.target.value)}
-              className="h-12 px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
+              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
             />
           </div>
 
           {/* Create Role button */}
-          <button className="flex items-center justify-center mt-8 px-5 py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer">
+          <button className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer">
             Create Role
           </button>
         </div>

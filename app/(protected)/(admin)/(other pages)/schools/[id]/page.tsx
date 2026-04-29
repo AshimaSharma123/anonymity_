@@ -54,7 +54,7 @@ const PaginationChevronRightIcon = () => (
 );
 
 const BackArrowIcon = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="20" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M3.49202 9.04802L8.52603 14.2183C8.7315 14.4294 8.83013 14.6756 8.82191 14.9569C8.81369 15.2383 8.7065 15.4845 8.50035 15.6955C8.29488 15.889 8.05516 15.9903 7.7812 15.9994C7.50724 16.0086 7.26753 15.9073 7.06206 15.6955L0.281557 8.73147C0.178822 8.62596 0.10588 8.51165 0.0627314 8.38854C0.0195827 8.26544 -0.00130658 8.13355 6.32218e-05 7.99286C0.00143302 7.85217 0.0230071 7.72027 0.0647859 7.59717C0.106565 7.47407 0.179165 7.35976 0.282584 7.25424L7.06309 0.290169C7.25143 0.0967228 7.48704 0 7.7699 0C8.05277 0 8.29659 0.0967228 8.50138 0.290169C8.70685 0.501202 8.80958 0.751979 8.80958 1.0425C8.80958 1.33302 8.70685 1.58345 8.50138 1.79378L3.49202 6.9377H22.9726C23.2637 6.9377 23.5079 7.03899 23.7051 7.24158C23.9024 7.44417 24.0007 7.6946 24 7.99286C23.9993 8.29112 23.9007 8.54189 23.7041 8.74519C23.5076 8.94848 23.2637 9.04943 22.9726 9.04802H3.49202Z" fill="#1E1E1E" />
   </svg>
 );
@@ -182,7 +182,7 @@ const TEACHERS_PER_PAGE = 10;
 // ─── Add Teacher Sidebar ──────────────────────────────────────────────────────
 
 const CloseIcon = () => (
-  <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+  <svg width="25" height="25" viewBox="0 0 34 34" fill="none">
     <path d="M17.0001 18.9835L10.0585 25.9251C9.79874 26.1849 9.46819 26.3147 9.0668 26.3147C8.66541 26.3147 8.33485 26.1849 8.07513 25.9251C7.81541 25.6654 7.68555 25.3349 7.68555 24.9335C7.68555 24.5321 7.81541 24.2015 8.07513 23.9418L15.0168 17.0001L8.07513 10.0585C7.81541 9.79874 7.68555 9.46819 7.68555 9.0668C7.68555 8.66541 7.81541 8.33485 8.07513 8.07513C8.33485 7.81541 8.66541 7.68555 9.0668 7.68555C9.46819 7.68555 9.79874 7.81541 10.0585 8.07513L17.0001 15.0168L23.9418 8.07513C24.2015 7.81541 24.5321 7.68555 24.9335 7.68555C25.3349 7.68555 25.6654 7.81541 25.9251 8.07513C26.1849 8.33485 26.3147 8.66541 26.3147 9.0668C26.3147 9.46819 26.1849 9.79874 25.9251 10.0585L18.9835 17.0001L25.9251 23.9418C26.1849 24.2015 26.3147 24.5321 26.3147 24.9335C26.3147 25.3349 26.1849 25.6654 25.9251 25.9251C25.6654 26.1849 25.3349 26.3147 24.9335 26.3147C24.5321 26.3147 24.2015 26.1849 23.9418 25.9251L17.0001 18.9835Z" fill="#212121" />
   </svg>
 );
@@ -231,11 +231,11 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-8 pb-6">
-          <h2 className="font-inter font-semibold text-[32px] text-[#212121] leading-6">Add Teacher</h2>
+        <div className="flex items-center justify-between px-4 sm:px-6 pt-6 pb-6 sm:pb-6">
+          <h2 className="font-inter font-semibold text-xl sm:text-[25px] text-[#212121] leading-6">Add Teacher</h2>
           <button
             onClick={onClose}
-            className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer"
+            className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer flex-shrink-0"
             aria-label="Close sidebar"
           >
             <CloseIcon />
@@ -246,33 +246,33 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
         <div className="h-px bg-black/10 mx-0" />
 
         {/* Form */}
-        <div className="flex flex-col gap-4 px-6 pt-8">
+        <div className="flex flex-col gap-3 sm:gap-4 px-4 sm:px-6 pt-6 sm:pt-8">
           {/* Name field */}
           <div className="flex flex-col gap-0.5">
-            <label className="font-outfit font-medium text-base text-[#212121] leading-6">Name</label>
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter Name"
-              className="h-12 px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
+              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
             />
           </div>
 
           {/* Status field */}
           <div className="flex flex-col gap-0.5">
-            <label className="font-outfit font-medium text-base text-[#212121] leading-6">Status</label>
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">Status</label>
             <div className="relative">
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="appearance-none w-full h-12 px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer"
+                className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer"
               >
                 <option value="" disabled>Select</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+              <span className="pointer-events-none absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
                 <ChevronDownIcon />
               </span>
             </div>
@@ -281,7 +281,7 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
           {/* Save button */}
           <button
             onClick={handleSave}
-            className="flex items-center justify-center mt-8 px-5 py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer"
+            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer"
           >
             Save
           </button>
@@ -324,19 +324,19 @@ function TeachersTab() {
       <AddTeacherSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Tab header */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-0">
-        <h3 className="font-outfit font-medium text-xl text-[#121212]">Teachers</h3>
+      <div className="flex flex-row items-center justify-between gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-0">
+        <h3 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Teachers</h3>
         <button
           onClick={() => setSidebarOpen(true)}
-          className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap"
         >
           <AddCircleIcon />
-          <span className="font-outfit font-normal text-md text-[#0171F9]">Add New</span>
+          <span className="font-outfit font-normal text-sm sm:text-[16px] text-[#0171F9]">Add New</span>
         </button>
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 px-4 py-3 flex-wrap">
+      <div className="flex flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3 flex-wrap">
         {/* Risk filter */}
         <div className="relative">
           
@@ -380,21 +380,21 @@ function TeachersTab() {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-max">
           <thead>
             <tr className="border-y border-[#E5E7EB] bg-white">
-              <th className="text-left px-3 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Teacher</th>
-              <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Reports</th>
-              <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Avg Rating</th>
-              <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Risk</th>
-              <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Status</th>
-              <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide">Actions</th>
+              <th className="text-left px-2 sm:px-3 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Teacher</th>
+              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Reports</th>
+              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Avg Rating</th>
+              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Risk</th>
+              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Status</th>
+              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Actions</th>
             </tr>
           </thead>
           <tbody>
             {paginated.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-10 text-center font-inter text-sm text-[#6F6C70]">
+                <td colSpan={6} className="px-4 sm:px-5 py-8 sm:py-10 text-center font-inter text-[12px] sm:text-sm text-[#6F6C70]">
                   No teachers found.
                 </td>
               </tr>
@@ -404,39 +404,39 @@ function TeachersTab() {
                 return (
                   <tr key={teacher.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
                     {/* Name */}
-                    <td className="px-3 py-[17.5px]">
-                      <span className="font-inter font-normal text-[13px] text-[#030711] leading-5">
+                    <td className="px-2 sm:px-3 py-3 sm:py-[17.5px]">
+                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] leading-5">
                         {teacher.name}
                       </span>
                     </td>
                     {/* Reports */}
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <span className="font-inter font-normal text-[13px] text-[#030711] ">
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] ">
                         {teacher.reports}
                       </span>
                     </td>
                     {/* Avg Rating */}
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <span className="font-inter font-normal text-[13px] text-[#030711]">
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711]">
                         {teacher.avgRating.toFixed(1)}
                         <span className="text-[#9CA3AF]">/5</span>
                       </span>
                     </td>
                     {/* Risk badge */}
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <span className={`inline-flex items-center justify-center w-[88px] px-2.5 py-1 rounded-md font-inter font-medium text-xs ${risk.bg} ${risk.text}`}>
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                      <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs ${risk.bg} ${risk.text}`}>
                         {teacher.risk}
                       </span>
                     </td>
                     {/* Status */}
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-xs text-[#030711]">
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                      <span className="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[11px] sm:text-xs text-[#030711]">
                         {teacher.status}
                       </span>
                     </td>
                     {/* Actions */}
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <button className="flex items-center justify-center h-9 w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                      <button className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
                         <TrashIcon />
                       </button>
                     </td>
@@ -449,17 +449,17 @@ function TeachersTab() {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-8 py-5">
-        <span className="font-inter font-normal text-sm text-[#191C1E] opacity-80">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-8 py-4 sm:py-5">
+        <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80">
           {filtered.length === 0
             ? "Show 0 results"
             : `Show ${startItem}-${endItem} of ${filtered.length}`}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+            className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
           >
             <PaginationChevronLeftIcon />
           </button>
@@ -467,7 +467,7 @@ function TeachersTab() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`w-[38px] h-[38px] flex items-center justify-center rounded-lg font-inter text-[15px] transition-colors cursor-pointer ${
+              className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${
                 currentPage === page
                   ? "bg-[#0171F9] text-white font-semibold"
                   : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
@@ -479,7 +479,7 @@ function TeachersTab() {
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+            className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
           >
             <PaginationChevronRightIcon />
           </button>
@@ -574,21 +574,21 @@ function getReturnStyle(answer: ReturnAnswer) {
 
 function ReportCard({ report, isLast }: { report: SchoolReport; isLast: boolean }) {
   return (
-    <div className={`flex flex-col gap-4 py-5 px-6 ${!isLast ? "border-b border-[#EFEFEF]" : ""}`}>
+    <div className={`flex flex-col gap-3 sm:gap-4 py-4 sm:py-5 px-4 sm:px-6 ${!isLast ? "border-b border-[#EFEFEF]" : ""}`}>
       {/* Top row */}
-      <div className="flex items-center justify-start flex-wrap gap-5">
-        <div className="flex items-center gap-4 flex-wrap">
-          <span className="font-inter font-bold text-[17px] text-[#0171F9] leading-5">{report.id}</span>
-          <span className="font-inter font-medium text-sm text-[#121212] opacity-70 leading-5">{report.grade}</span>
-          <DotIcon />
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-3 lg:gap-5 flex-wrap">
+        <div className="flex flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
+          <span className="font-inter font-bold text-base sm:text-[17px] text-[#0171F9] leading-5">{report.id}</span>
+          <span className="font-inter font-medium text-xs sm:text-sm text-[#121212] opacity-70 leading-5">{report.grade}</span>
+          <div className="hidden sm:block"><DotIcon /></div>
           <div className="flex items-center gap-1.5">
             <TeacherIdIcon />
-            <span className="font-inter font-medium text-sm text-[#121212] opacity-70">{report.teacher}</span>
+            <span className="font-inter font-medium text-xs sm:text-sm text-[#121212] opacity-70">{report.teacher}</span>
           </div>
-          <DotIcon />
-          <span className="font-inter font-medium text-sm text-[#121212] opacity-70 leading-5">{report.date}</span>
+          <div className="hidden sm:block"><DotIcon /></div>
+          <span className="font-inter font-medium text-xs sm:text-sm text-[#121212] opacity-70 leading-5">{report.date}</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <span className={`px-2.5 py-1 rounded-md font-inter font-semibold text-xs leading-[15px] ${getSentimentStyle(report.sentiment)}`}>
             {report.sentiment}
           </span>
@@ -599,14 +599,14 @@ function ReportCard({ report, isLast }: { report: SchoolReport; isLast: boolean 
       </div>
 
       {/* Quote */}
-      <p className="font-inter font-normal text-[16px] italic text-[#464555] leading-5">{report.quote}</p>
+      <p className="font-inter font-normal text-sm sm:text-[16px] italic text-[#464555] leading-5">{report.quote}</p>
 
       {/* Return badges */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <span className={`px-2.5 py-1.5 rounded-md font-inter font-medium text-xs leading-[15px] ${getReturnStyle(report.schoolReturn)}`}>
+      <div className="flex flex-row sm:items-center gap-2 sm:gap-3 flex-wrap">
+        <span className={`w-fit px-2.5 py-1.5 rounded-md font-inter font-medium text-xs leading-[15px] ${getReturnStyle(report.schoolReturn)}`}>
           School: {report.schoolReturn}
         </span>
-        <span className={`px-2.5 py-1.5 rounded-md font-inter font-medium text-xs leading-[15px] ${getReturnStyle(report.teacherReturn)}`}>
+        <span className={`w-fit px-2.5 py-1.5 rounded-md font-inter font-medium text-xs leading-[15px] ${getReturnStyle(report.teacherReturn)}`}>
           Teacher: {report.teacherReturn}
         </span>
       </div>
@@ -620,62 +620,64 @@ export default function SchoolDetailPage() {
   const [activeTab, setActiveTab] = useState<"Reports" | "Teachers">("Reports");
 
   return (
-    <main className="flex-1 overflow-y-auto p-8 bg-[#F3F4F7]">
+    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#F3F4F7]">
       {/* Page top bar */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/schools" className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer">
             <BackArrowIcon />
           </Link>
-          <h1 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">School</h1>
+          <h1 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-[28px] text-[#121212] leading-5">School</h1>
         </div>
-        <Link href={"/schools"} className="flex items-center gap-1.5 px-[17px] py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+        <Link href={"/schools"} className="flex items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap text-sm sm:text-base">
           <EditIcon />
-          <span className="font-inter font-semibold text-base text-[#333]">Edit</span>
+          <span className="font-inter font-semibold text-[#333]">Edit</span>
         </Link>
       </div>
 
       {/* School info card */}
       <div className="bg-white rounded-lg overflow-hidden mb-4">
         {/* Top section: school name + rating */}
-        <div className="flex items-start justify-between flex-wrap gap-6 px-7 py-3">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-0 lg:gap-6 px-4 sm:px-6 lg:px-7 py-4 sm:py-5 lg:py-3">
           {/* Left: name, badges, location */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 flex-1">
             {/* Name row */}
-            <div className="flex items-center gap-2.5 flex-wrap pt-2">
-              <h2 className="font-inter font-bold text-2xl text-[#030711] leading-5">Lincoln High School</h2>
-              <span className="flex items-center px-4 py-1 rounded-full border border-[rgba(11,119,249,0.40)] bg-[#EFF6FF]">
-                <span className="font-inter font-medium text-sm text-[#0B77F9]">School District</span>
-              </span>
-              <span className="flex items-center px-4 py-1 rounded-full border border-[rgba(224,44,44,0.40)] bg-[#FEEFEF]">
-                <span className="font-inter font-medium text-sm text-[#E02C2C]">High Risk</span>
-              </span>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5 flex-wrap pt-2">
+              <h2 className="font-inter font-bold text-lg sm:text-xl lg:text-2xl text-[#030711] leading-5">Lincoln High School</h2>
+              <div className="flex gap-2 flex-wrap">
+                <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(11,119,249,0.40)] bg-[#EFF6FF]">
+                  <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9]">School District</span>
+                </span>
+                <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(224,44,44,0.40)] bg-[#FEEFEF]">
+                  <span className="font-inter font-medium text-xs sm:text-sm text-[#E02C2C]">High Risk</span>
+                </span>
+              </div>
             </div>
 
             {/* Location row */}
-            <div className="flex items-center gap-5 flex-wrap">
+            <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
               <div className="flex items-center gap-1.5">
               <LocationPinIcon />
-              <span className="font-outfit font-normal text-sm text-[#414141] leading-7">Portland, OR</span>
+              <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">Portland, OR</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <BuildingIcon />
-                <span className="font-outfit font-normal text-sm text-[#414141] leading-7">Los Angeles Unified School District</span>
+                <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">Los Angeles Unified School District</span>
               </div>
             </div>
           </div>
 
           {/* Right: rating */}
-          <div className="flex items-start gap-2 flex-shrink-0 pt-2">
-           
-            <div className="flex flex-col items-end pt-2">
-              
+          <div className="flex items-start gap-2 flex-shrink-0 pt-2 w-full sm:w-auto sm:justify-end">
+
+            <div className="flex flex-col items-start sm:items-end pt-2">
+
               <div className="flex items-center gap-2">
-                <div><span className="font-outfit font-bold text-[30px] text-[#191C1D] leading-[40px]">4.2</span></div>
-                 
+                <div><span className="font-outfit font-bold text-2xl sm:text-[30px] text-[#191C1D] leading-[40px]">4.2</span></div>
+
                 <div className="flex items-center"><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarHalfIcon /></div>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-col sm:flex-row sm:gap-1.5">
                 <span className="font-inter font-normal text-xs text-[#9CA3AF] leading-[16.5px]">142 reviews</span>
                 <span className="font-inter font-normal text-xs text-[#9CA3AF] leading-[16.5px]">2025-2026</span>
               </div>
@@ -684,70 +686,70 @@ export default function SchoolDetailPage() {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-black opacity-10 mx-7" />
+        <div className="h-px bg-black opacity-10 mx-4 sm:mx-6 lg:mx-7" />
 
         {/* Stats row */}
-        <div className="flex items-center gap-8 flex-wrap px-7 py-3">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-8 px-4 sm:px-6 lg:px-7 py-4 sm:py-5 lg:py-3">
           {/* This Month vs Last */}
           <div className="flex flex-col">
-            <span className="font-outfit font-medium text-md text-[#AFAFB2] leading-7">This Month vs Last</span>
+            <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">This Month vs Last</span>
             <div className="flex items-baseline gap-2 flex-wrap">
               <TrendDownIcon />
-              <span className="font-outfit font-semibold text-lg text-[#000]">8</span>
-              <span className="font-outfit font-medium text-[12px] text-[#AFAFB2]">vs 14 last Month</span>
+              <span className="font-outfit font-semibold text-base sm:text-lg text-[#000]">8</span>
+              <span className="font-outfit font-medium text-xs sm:text-[12px] text-[#AFAFB2]">vs 14 last Month</span>
             </div>
           </div>
 
-          <div className="w-px h-[46px] bg-black opacity-10" />
+          <div className="hidden lg:block w-px h-[46px] bg-black opacity-10" />
 
           {/* Would Return to School (current period) */}
           <div className="flex flex-col ">
-            <span className="font-outfit font-medium text-md text-[#AFAFB2] leading-7">Would Return to School</span>
-            <div className="flex items-center gap-5 flex-wrap">
+            <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">Would Return to School</span>
+            <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#10B981]">85%</span>
-                <span className="font-outfit font-semibold text-lg text-[#10B981]">Yes</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">85%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">Yes</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#E8A411]">5%</span>
-                <span className="font-outfit font-semibold text-lg text-[#E8A411]">Maybe</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">5%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">Maybe</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#E02C2C]">10%</span>
-                <span className="font-outfit font-semibold text-lg text-[#E02C2C]">No</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">10%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">No</span>
               </div>
             </div>
           </div>
 
-          <div className="w-px h-[46px] bg-black opacity-10" />
+          <div className="hidden lg:block w-px h-[46px] bg-black opacity-10" />
 
           {/* Would Return to School (all-time) */}
           <div className="flex flex-col ">
-            <span className="font-outfit font-medium text-md text-[#AFAFB2] leading-7">Would Return to School</span>
-            <div className="flex items-center gap-5 flex-wrap">
+            <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">Would Return to School</span>
+            <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#10B981]">25%</span>
-                <span className="font-outfit font-semibold text-lg text-[#10B981]">Yes</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">25%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">Yes</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#E8A411]">30%</span>
-                <span className="font-outfit font-semibold text-lg text-[#E8A411]">Maybe</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">30%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">Maybe</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-lg text-[#E02C2C]">45%</span>
-                <span className="font-outfit font-semibold text-lg text-[#E02C2C]">No</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">45%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">No</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 px-7 mt-2">
+        <div className="flex items-center gap-1 px-4 sm:px-6 lg:px-7 mt-2">
           {(["Reports", "Teachers"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-3.5 font-inter font-medium text-md leading-5 transition-colors cursor-pointer border-b-2 ${
+              className={`px-3 sm:px-4 py-2.5 sm:py-3.5 font-inter font-medium text-sm sm:text-md leading-5 transition-colors cursor-pointer border-b-2 ${
                 activeTab === tab
                   ? "text-[#0171F9] border-[#0171F9]"
                   : "text-[#121212] border-transparent hover:text-[#0171F9]"
@@ -763,9 +765,9 @@ export default function SchoolDetailPage() {
       {activeTab === "Reports" && (
         <div className="bg-white rounded-lg overflow-hidden relative">
           {/* Section header */}
-          <div className="flex items-center justify-between px-6 py-4">
-            <span className="font-outfit font-medium text-2xl text-[#121212]">Reports</span>
-           
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
+            <span className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Reports</span>
+
           </div>
 
           {/* Report cards */}

@@ -37,7 +37,7 @@ export default function AdminLayout({
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
         {/* Top header bar */}
-        <header className="relative z-50 h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
+        <header className="relative h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
           {/* Logo - Left side */}
           <div className="flex-shrink-0 sm:hidden">
             <Link href="/" className="flex items-center">
