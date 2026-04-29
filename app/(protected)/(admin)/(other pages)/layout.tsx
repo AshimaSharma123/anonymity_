@@ -30,18 +30,18 @@ export default function AdminLayout({
       )}
 
       {/* Mobile sidebar - starts below header */}
-      <div className={`fixed left-0 top-16 sm:top-20 bottom-0 w-72 z-40 lg:hidden transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed left-0 top-[92] sm:top-20 bottom-0 w-72 z-40 lg:hidden transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <Sidebar/>
       </div>
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
         {/* Top header bar */}
-        <header className="relative h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
+        <header className="z-50 relative h-[92px] bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
           {/* Logo - Left side */}
           <div className="flex-shrink-0 sm:hidden">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.svg" height={40} width={40} alt="Logo" className="h-8 sm:h-10 w-auto" />
+              <Image src="/logo.svg" height={150} width={150} alt="Logo" className="w-auto" />
             </Link>
           </div>
 
@@ -61,7 +61,17 @@ export default function AdminLayout({
           </div>
 
           {/* Toggle button - Shows menu icon when closed, close icon when open */}
+
           <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="sm:hidden flex flex-col gap-1.5 p-2"
+            aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            <div className={`w-6 h-0.5 bg-[#121212] transition-all duration-300 ${sidebarOpen ? "rotate-45 translate-y-2" : ""}`}></div>
+            <div className={`w-6 h-0.5 bg-[#121212] transition-all duration-300 ${sidebarOpen ? "opacity-0" : ""}`}></div>
+            <div className={`w-6 h-0.5 bg-[#121212] transition-all duration-300 ${sidebarOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
+          </button>
+          {/* <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors ml-2"
             aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
@@ -75,7 +85,7 @@ export default function AdminLayout({
                 <path d="M3 6H21M3 12H21M3 18H21" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             )}
-          </button>
+          </button> */}
         </header>
 
       {/* Main content */}

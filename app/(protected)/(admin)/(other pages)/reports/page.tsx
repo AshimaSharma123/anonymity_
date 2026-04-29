@@ -544,13 +544,13 @@ export default function ReportsPage() {
   const handleStatusChange = (val: "All" | Status) => { setStatusFilter(val); setCurrentPage(1); };
 
   return (
-    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative">
-      <h1 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-[28px] text-[#121212] leading-5 mb-4 sm:mb-6 lg:mb-8">Reports</h1>
+    <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative">
+      <h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5 mb-6 ">Reports</h1>
 
       <div className="bg-white rounded-lg overflow-hidden">
         {/* Search + Filters */}
-        <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 pb-0 flex flex-col gap-3 sm:gap-4">
-          <div className="w-full">
+        <div className="px-4 pt-4 pb-0 flex flex-col gap-3 sm:gap-4">
+          <div className="w-full max-w-[540px]">
             <div className="flex items-center gap-2 sm:gap-2.5 h-10 sm:h-11 px-3 sm:px-4 rounded-[14px] border border-[#EBEBF0] bg-[#FBFBFC]">
               <span className="opacity-70 flex-shrink-0"><SearchIcon /></span>
               <input
@@ -561,7 +561,7 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
+          <div className="flex flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
             <div className="relative flex-1 sm:flex-none">
               <select
                 value={sentimentFilter}
@@ -598,14 +598,14 @@ export default function ReportsPage() {
           <table className="w-full min-w-max">
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Date</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Date</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -624,27 +624,27 @@ export default function ReportsPage() {
                       className={`border-b border-[#F2F4F7] cursor-pointer transition-colors hover:bg-[#F8FAFF] ${isSelected ? "bg-[#EFF6FF]" : ""}`}
                     >
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-medium text-[10px] sm:text-[12px] lg:text-[12px] text-[#0B77F9] opacity-80">{report.id}</span>
+                        <span className="font-inter font-medium text-[12px] sm:text-[13px] lg:text-sm text-[#0B77F9] opacity-80">{report.id}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] lg:text-sm text-[#030711]">{report.school}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.school}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] lg:text-sm text-[#030711]">{report.teacher}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.teacher}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className={`inline-flex items-center px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md ${sc.bg} font-inter font-medium text-[9px] sm:text-xs ${sc.text}`}>
+                        <span className={`inline-flex items-center px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md ${sc.bg} font-inter font-medium text-[10px] sm:text-xs ${sc.text}`}>
                           {report.sentiment}
                         </span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] lg:text-sm text-[#030711]">{report.submittedBy}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.submittedBy}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[10px] sm:text-[13px] lg:text-sm text-[#030711]">{report.date}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.date}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[10px] sm:text-sm text-[#030711]">
+                        <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[12px] sm:text-sm text-[#030711]">
                           {report.status}
                         </span>
                       </td>
@@ -658,7 +658,7 @@ export default function ReportsPage() {
                           </button>
                           <button
                             onClick={() => setSelectedReport(report)}
-                            className="hidden sm:flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[10px] sm:text-sm text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity"
+                            className="flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[12px] sm:text-[14px] text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity"
                           >
                             View
                           </button>

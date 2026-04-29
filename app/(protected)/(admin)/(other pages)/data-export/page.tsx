@@ -269,8 +269,8 @@ export default function DataExportPage() {
   }, []);
 
   return (
-    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative">
-<h1 className="font-outfit font-semibold text-xl sm:text-2xl text-[#121212] leading-5 mb-4 sm:mb-6 lg:mb-8">Data Export</h1>
+    <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative">
+<h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5 mb-6 ">Data Export</h1>
 <div className="flex flex-col gap-10">
       {/* ── Export Data Card ── */}
       <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] sm:p-8 p-6 flex flex-col lg:flex-row gap-8">

@@ -51,12 +51,12 @@ const recentReports = [
 
 export default function DashboardPage() {
   return (
-     <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+     <main className="flex-1 overflow-y-auto p-6 lg:p-8">
 
           {/* Page title */}
           <div className="mb-6">
             <h1 className="font-outfit font-semibold text-2xl sm:text-3xl text-[#121212] leading-5">Dashboard</h1>
-            <p className="font-outfit font-normal text-base sm:text-[18px] text-[#414141] mt-3">System Overview</p>
+            <p className="font-outfit font-normal text-base sm:text-[18px] text-[#414141] mt-2">System Overview</p>
           </div>
 
           {/* Stats cards */}

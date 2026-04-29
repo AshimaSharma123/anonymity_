@@ -57,7 +57,7 @@ export default function UsersRolesPage() {
 
   return (
     <div className="flex flex-1 overflow-hidden relative">
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8">
         {/* Page header */}
         <div className="flex flex-row items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
           <h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5">

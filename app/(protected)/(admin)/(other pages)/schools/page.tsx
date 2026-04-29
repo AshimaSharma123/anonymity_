@@ -426,7 +426,7 @@ export default function SchoolsPage() {
   const endItem = Math.min(currentPage * ITEMS_PER_PAGE, filtered.length);
 
   return (
-    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+    <main className="flex-1 overflow-y-auto p-6 lg:p-8">
       {/* Page header */}
       <div className="flex flex-row items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6 lg:mb-8">
         <h1 className="font-outfit font-semibold text-2xl sm:text-3xl text-[#121212] leading-5">Schools</h1>
