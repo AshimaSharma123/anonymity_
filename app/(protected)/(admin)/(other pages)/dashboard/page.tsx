@@ -325,7 +325,7 @@ export default function DashboardPage() {
                           <button className="p-1 sm:p-2 rounded-md bg-[#FEE2E2]" aria-label="Reject">
                             <CloseIcon />
                           </button>
-                          <button className="hidden sm:flex items-center justify-center h-9 px-3 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-xs sm:text-sm text-black opacity-80 tracking-[-0.2px]">
+                          <button className="flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-xs sm:text-sm text-black opacity-80 tracking-[-0.2px]">
                             View
                           </button>
                         </div>
