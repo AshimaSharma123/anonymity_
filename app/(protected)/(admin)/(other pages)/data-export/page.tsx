@@ -232,14 +232,15 @@ export default function DataExportPage() {
   }
 
   return (
-    <main className="flex-1 overflow-y-auto bg-[#F3F4F7] p-8 flex flex-col gap-10">
-<h1 className="font-outfit font-semibold text-2xl sm:text-3xl text-[#121212] leading-5">Data Export</h1>
+    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative">
+<h1 className="font-outfit font-semibold text-xl sm:text-2xl text-[#121212] leading-5 mb-4 sm:mb-6 lg:mb-8">Data Export</h1>
+<div className="flex flex-col gap-10">
       {/* ── Export Data Card ── */}
-      <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] p-8 flex flex-col lg:flex-row gap-8">
+      <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] sm:p-8 p-6 flex flex-col lg:flex-row gap-8">
 
         {/* Left: title + description */}
         <div className="lg:w-64 flex-shrink-0 flex flex-col gap-1">
-          <h2 className="font-[Inter] font-bold text-2xl text-[#121C28] leading-8">
+          <h2 className="font-[Inter] font-bold text-xl sm:text-2xl text-[#121C28] leading-8">
             Export Data
           </h2>
           <p className="font-[Inter] font-normal text-base text-[#434655] leading-[26px]">
@@ -298,7 +299,7 @@ export default function DataExportPage() {
           </div>
 
           <div>
-            <button className="flex items-center gap-1.5 px-5 py-3 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white leading-6 hover:bg-blue-700 transition-colors cursor-pointer">
+            <button className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white leading-6 hover:bg-blue-700 transition-colors cursor-pointer">
               Export Data
             </button>
           </div>
@@ -308,7 +309,7 @@ export default function DataExportPage() {
       {/* ── Recent Data Export Table ── */}
       <div className="bg-white rounded-lg">
         <div className="px-5 py-6">
-          <h2 className="font-[Outfit] font-semibold text-2xl text-[#121212] leading-5">
+          <h2 className="font-[Outfit] font-semibold sm:text-2xl text-xl text-[#121212] leading-5">
             Recent Data Export
           </h2>
         </div>
@@ -317,19 +318,19 @@ export default function DataExportPage() {
           <table className="w-full">
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   School Name
                 </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   Start Date
                 </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   End Date
                 </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   Report Date
                 </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   Actions
                 </th>
               </tr>
@@ -339,18 +340,18 @@ export default function DataExportPage() {
                 if (row.type === "district") {
                   return (
                     <tr key={idx} className="border-b border-[#E5E7EB] bg-[#F8F9FB]">
-                      <td className="px-5 py-3.5" colSpan={4}>
+                      <td className="px-5 py-3.5 whitespace-nowrap" colSpan={4}>
                         <div className="flex items-center gap-2.5">
-                          <span className="font-[Inter] font-bold text-md text-[#121212]">
+                          <span className="font-[Inter] font-bold sm:text-md text-sm text-[#121212]">
                             {row.name}
                           </span>
-                          <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#EFF6FF] font-[Inter] font-medium text-[12px] text-[#0171F9]">
+                          <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#EFF6FF] font-[Inter] font-medium sm:text-[12px] text-[11px] text-[#0171F9]">
                             District
                           </span>
                         </div>
                       </td>
-                      <td className="px-5 py-3.5 text-right">
-                        <button className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-medium text-sm text-white leading-6 whitespace-nowrap hover:bg-blue-700 transition-colors cursor-pointer">
+                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                        <button className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-medium sm:text-sm text-white leading-6 whitespace-nowrap hover:bg-blue-700 transition-colors cursor-pointer text-xs">
                           <ExportAllBtnIcon />
                           Export All
                         </button>
@@ -361,9 +362,9 @@ export default function DataExportPage() {
 
                 return (
                   <tr key={idx} className="border-b border-[#F2F4F7] bg-white hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-[17.5px]">
+                    <td className="px-5 py-[17.5px] whitespace-nowrap">
                       <div className="flex flex-col gap-1.5">
-                        <span className="font-[Inter] font-normal text-[14px] text-[#030711] leading-5">
+                        <span className="font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] leading-5">
                           {row.name}
                         </span>
                         {row.tags && (
@@ -371,7 +372,7 @@ export default function DataExportPage() {
                             {row.tags.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className="inline-flex items-center px-2 py-0.5 rounded border border-[#E5E7EB] font-[Inter] font-medium text-sm text-[#6F6C70] bg-white"
+                                className="inline-flex items-center px-2 py-0.5 rounded border border-[#E5E7EB] font-[Inter] font-medium text-xs sm:text-sm text-[#6F6C70] bg-white"
                               >
                                 {tag.label}
                               </span>
@@ -380,19 +381,19 @@ export default function DataExportPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal text-[14px] text-[#030711] whitespace-nowrap">
+                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
                       {row.startDate}
                     </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal text-[14px] text-[#030711] whitespace-nowrap">
+                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
                       {row.endDate}
                     </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal text-[14px] text-[#030711] whitespace-nowrap">
+                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
                       {row.reportDate}
                     </td>
-                    <td className="px-5 py-[17.5px]">
+                    <td className="px-5 py-[17.5px] whitespace-nowrap">
                       <div className="flex items-center justify-start gap-3">
                         <ExportRowIcon />
-                        <button className="flex items-center justify-center px-4 py-1 rounded-md border border-[#EFF0F2] bg-white font-[Inter] font-normal text-sm text-black/80 tracking-[-0.2px] leading-6 whitespace-nowrap hover:bg-gray-50 transition-colors cursor-pointer">
+                        <button className="flex items-center justify-center px-4 py-1 rounded-md border border-[#EFF0F2] bg-white font-[Inter] font-normal sm:text-[14px] text-[12px] text-black/80 tracking-[-0.2px] leading-6 whitespace-nowrap hover:bg-gray-50 transition-colors cursor-pointer">
                           View
                         </button>
                       </div>
@@ -403,7 +404,7 @@ export default function DataExportPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div></div>
     </main>
   );
 }
