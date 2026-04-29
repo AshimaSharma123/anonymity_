@@ -233,7 +233,7 @@ export default function DataExportPage() {
 
   return (
     <main className="flex-1 overflow-y-auto bg-[#F3F4F7] p-8 flex flex-col gap-10">
-
+<h1 className="font-outfit font-semibold text-2xl sm:text-3xl text-[#121212] leading-5">Data Export</h1>
       {/* ── Export Data Card ── */}
       <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] p-8 flex flex-col lg:flex-row gap-8">
 
@@ -329,7 +329,7 @@ export default function DataExportPage() {
                 <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   Report Date
                 </th>
-                <th className="text-right px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-5 py-3.5 font-[Inter] font-medium text-sm text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
                   Actions
                 </th>
               </tr>
@@ -344,7 +344,7 @@ export default function DataExportPage() {
                           <span className="font-[Inter] font-bold text-md text-[#121212]">
                             {row.name}
                           </span>
-                          <span className="inline-flex items-center justify-center px-2 py-1.5 rounded-full bg-[#EFF6FF] font-[Inter] font-medium text-[12px] text-[#0171F9]">
+                          <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#EFF6FF] font-[Inter] font-medium text-[12px] text-[#0171F9]">
                             District
                           </span>
                         </div>
@@ -390,7 +390,7 @@ export default function DataExportPage() {
                       {row.reportDate}
                     </td>
                     <td className="px-5 py-[17.5px]">
-                      <div className="flex items-center justify-end gap-3">
+                      <div className="flex items-center justify-start gap-3">
                         <ExportRowIcon />
                         <button className="flex items-center justify-center px-4 py-1 rounded-md border border-[#EFF0F2] bg-white font-[Inter] font-normal text-sm text-black/80 tracking-[-0.2px] leading-6 whitespace-nowrap hover:bg-gray-50 transition-colors cursor-pointer">
                           View
