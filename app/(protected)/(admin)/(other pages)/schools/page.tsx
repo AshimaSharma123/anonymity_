@@ -426,108 +426,108 @@ export default function SchoolsPage() {
   const endItem = Math.min(currentPage * ITEMS_PER_PAGE, filtered.length);
 
   return (
-    <main className="flex-1 overflow-y-auto p-8">
+    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
       {/* Page header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">Schools</h1>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6 lg:mb-8">
+        <h1 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-[28px] text-[#121212] leading-5">Schools</h1>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-1.5 px-[17px] py-3 rounded-lg bg-[#0171F9] shadow-sm hover:bg-[#0161d9] transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-4 sm:px-[17px] py-2.5 sm:py-3 rounded-lg bg-[#0171F9] shadow-sm hover:bg-[#0161d9] transition-colors cursor-pointer flex-shrink-0 w-full sm:w-auto justify-center sm:justify-start"
         >
           <PlusIcon />
-          <span className="font-inter font-semibold text-base text-white leading-6">Create</span>
+          <span className="font-inter font-semibold text-sm sm:text-base text-white leading-6">Create</span>
         </button>
       </div>
 
       {/* Table card */}
       <div className="bg-white rounded-lg overflow-hidden">
         {/* Search + Filters */}
-        <div className="px-8 pt-6 pb-0 flex flex-col gap-3">
+        <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 pb-0 flex flex-col gap-3 sm:gap-4">
           {/* Search */}
-          <div className="w-full max-w-[426px]">
-            <div className="flex items-center gap-2.5 h-11 px-4 rounded-[14px] border border-[#EBEBF0] bg-[#FBFBFC]">
+          <div className="w-full">
+            <div className="flex items-center gap-2 sm:gap-2.5 h-10 sm:h-11 px-3 sm:px-4 rounded-[14px] border border-[#EBEBF0] bg-[#FBFBFC]">
               <span className="opacity-70 flex-shrink-0"><SearchIcon /></span>
               <input
                 type="text"
                 placeholder="Search"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-                className="flex-1 bg-transparent outline-none font-inter font-medium text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
+                className="flex-1 bg-transparent outline-none font-inter font-medium text-sm sm:text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
               />
             </div>
           </div>
 
           {/* Filter dropdowns */}
-          <div className="flex items-center gap-3 pb-4 flex-wrap">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
             {/* Location */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-none">
               <select
                 value={locationFilter}
                 onChange={(e) => handleFilterChange(setLocationFilter)(e.target.value)}
-                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+                className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
-                <option value="All">Location  All</option>
+                <option value="All">Location: All</option>
                 <option value="NY">New York</option>
                 <option value="CA">California</option>
                 <option value="TX">Texas</option>
               </select>
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
+              <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
+              <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
 
             {/* Risk */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-none">
               <select
                 value={riskFilter}
                 onChange={(e) => handleFilterChange(setRiskFilter)(e.target.value as "All" | RiskLevel)}
-                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+                className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
-                <option value="All">Risk:  All</option>
-                <option value="High">Risk:  High</option>
-                <option value="Medium">Risk:  Medium</option>
-                <option value="Low">Risk:  Low</option>
+                <option value="All">Risk: All</option>
+                <option value="High">Risk: High</option>
+                <option value="Medium">Risk: Medium</option>
+                <option value="Low">Risk: Low</option>
               </select>
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><SentimentIcon /></span>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
+              <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><SentimentIcon /></span>
+              <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
 
             {/* Status */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-none">
               <select
                 value={statusFilter}
                 onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | SchoolStatus)}
-                className="appearance-none pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none whitespace-nowrap"
+                className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
-                <option value="All">Status:  All</option>
-                <option value="Active">Status:  Active</option>
-                <option value="Inactive">Status:  Inactive</option>
+                <option value="All">Status: All</option>
+                <option value="Active">Status: Active</option>
+                <option value="Inactive">Status: Inactive</option>
               </select>
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"><FilterIcon /></span>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
+              <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><FilterIcon /></span>
+              <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
           </div>
         </div>
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full min-w-max border-collapse">
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Name</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Association</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Year</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Location</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Teachers</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Risk</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Reports</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Status</th>
-                <th className="text-left px-5 py-3.5 font-inter font-medium text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Actions</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Name</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Association</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Year</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Location</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Teachers</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Risk</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Reports</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Status</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[10px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody>
               {paginated.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-5 py-10 text-center font-inter text-sm text-[#6F6C70]">
+                  <td colSpan={9} className="px-4 sm:px-6 lg:px-8 py-8 text-center font-inter text-sm text-[#6F6C70]">
                     No schools found.
                   </td>
                 </tr>
@@ -537,37 +537,37 @@ export default function SchoolsPage() {
                   const assocClass = associationStyles[school.association];
                   return (
                     <tr key={school.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.name}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711]">{school.name}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className={`font-inter font-normal text-[13px] ${assocClass}`}>{school.association}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className={`font-inter font-normal text-[10px] sm:text-[13px] ${assocClass}`}>{school.association}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.schoolYear}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711]">{school.schoolYear}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.location}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711]">{school.location}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.teachers}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711]">{school.teachers}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-md font-inter font-medium text-[13px] ${risk.bg} ${risk.text}`}>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[9px] sm:text-[13px] ${risk.bg} ${risk.text}`}>
                           {school.risk}
                         </span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[13px] text-[#030711]">{school.reports}</span>
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="font-inter font-normal text-[10px] sm:text-[13px] text-[#030711]">{school.reports}</span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <span className="inline-flex items-center px-3 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-sm text-[#030711]">
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[10px] sm:text-sm text-[#030711]">
                           {school.status}
                         </span>
                       </td>
-                      <td className="px-5 py-[17.5px] whitespace-nowrap">
-                        <Link href={`/schools/${school.id}`} className="font-inter font-normal text-sm text-[#030711] opacity-80 tracking-[-0.2px] px-3 py-1.5 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors">
-                          View Detail
+                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
+                        <Link href={`/schools/${school.id}`} className="hidden sm:flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[10px] sm:text-sm text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity">
+                          View
                         </Link>
                       </td>
                     </tr>
@@ -579,17 +579,17 @@ export default function SchoolsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-8 py-5">
-          <span className="font-inter font-normal text-sm text-[#191C1E] opacity-80">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80 order-2 sm:order-1">
             {filtered.length === 0
               ? "Show 0 results"
               : `Show ${startItem}-${endItem} of ${displayTotal.toLocaleString()}`}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+              className="w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
               <ChevronLeftIcon />
             </button>
@@ -597,7 +597,7 @@ export default function SchoolsPage() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-[38px] h-[38px] flex items-center justify-center rounded-lg font-inter text-[15px] transition-colors ${
+                className={`w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-[13px] sm:text-[15px] transition-colors ${
                   currentPage === page
                     ? "bg-[#0171F9] text-white font-semibold"
                     : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
@@ -609,7 +609,7 @@ export default function SchoolsPage() {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="w-[38px] h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
+              className="w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
               <ChevronRightIcon />
             </button>
