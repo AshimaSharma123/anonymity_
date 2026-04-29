@@ -37,9 +37,16 @@ export default function AdminLayout({
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
         {/* Top header bar */}
-        <header className="relative z-50 h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center sm:justify-between gap-2 px-4 sm:px-6 lg:px-8 flex-shrink-0">
-          {/* Mobile menu button */}
-          
+        <header className="relative z-50 h-16 sm:h-20 lg:h-23 bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
+          {/* Logo - Left side */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.svg" height={40} width={40} alt="Logo" className="h-8 sm:h-10 w-auto" />
+            </Link>
+          </div>
+
+          {/* Spacer */}
+          <div className="flex-1" />
 
           {/* User info */}
           <div className="flex items-center gap-2 sm:gap-3">
@@ -52,14 +59,22 @@ export default function AdminLayout({
               <span className="absolute inset-0 flex items-center justify-center font-outfit font-medium text-sm sm:text-lg text-[#0171F9]">M</span>
             </div>
           </div>
+
+          {/* Toggle button - Shows menu icon when closed, close icon when open */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label="Toggle sidebar"
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition-colors ml-2"
+            aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 6H21M3 12H21M3 18H21" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            {sidebarOpen ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 6H21M3 12H21M3 18H21" stroke="#191C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
           </button>
         </header>
 
