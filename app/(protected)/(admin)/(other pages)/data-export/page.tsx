@@ -225,7 +225,7 @@ export default function DataExportPage() {
   const [school, setSchool] = useState("");
   const [teacher, setTeacher] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [endDate, setEndDate] = useState(""); 
   const [grade, setGrade] = useState("");
   const [userRole, setUserRole] = useState("");
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
