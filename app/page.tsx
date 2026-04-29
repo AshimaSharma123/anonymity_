@@ -156,7 +156,7 @@ export default function Home() {
         {/* Understand Every Classroom Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          <img src="/homeimagetest.svg" alt="Image" className="sm:hidden w-full h-full"/>
+          <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/>
 
             {/* Left: Profile visual panel */}
             <div className="relative sm:flex  hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
