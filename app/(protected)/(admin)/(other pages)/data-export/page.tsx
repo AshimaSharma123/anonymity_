@@ -445,28 +445,7 @@ export default function DataExportPage() {
             </tbody>
             </table>
           </div>
-          {hasHorizontalScroll && (
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center w-16 h-16 bg-gradient-to-l from-white via-white to-transparent">
-              <style>{`
-                @keyframes scroll-right {
-                  0%, 100% {
-                    transform: translateX(0);
-                    opacity: 1;
-                  }
-                  50% {
-                    transform: translateX(8px);
-                    opacity: 0.7;
-                  }
-                }
-                .scroll-indicator {
-                  animation: scroll-right 1.5s ease-in-out infinite;
-                }
-              `}</style>
-              <div className="text-[#0171F9] scroll-indicator">
-                <ScrollIndicatorIcon />
-              </div>
-            </div>
-          )}
+         
         </div>
       </div>
     </div>
