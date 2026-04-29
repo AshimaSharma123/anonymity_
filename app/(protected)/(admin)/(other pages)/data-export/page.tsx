@@ -146,7 +146,7 @@ function DateField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onClick={() => inputRef.current?.showPicker?.()}
-          className="w-full px-4 py-3 text-[#121212] bg-transparent outline-none cursor-pointer"
+          className="w-full px-4 py-3 text-[#121212] placeholder:text-gray-400 bg-transparent outline-none cursor-pointer"
         />
 
         <button
