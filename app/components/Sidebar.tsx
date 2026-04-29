@@ -70,16 +70,16 @@ export default function Sidebar() {
       icon: DataExportIcon,
     },
   ];
-    return <aside className="w-72 flex-shrink-0 bg-white flex flex-col border-black/10">
+    return <aside className="w-72 flex-shrink-0 bg-white flex flex-col border-b lg:border-b border-black/10 h-full">
         {/* Logo area */}
-        <div className="h-23 flex items-center px-12 border-b border-black/10">
+        <div className="h-16 sm:h-20 lg:h-23 flex items-center px-6 sm:px-8 lg:px-12 border-b border-black/10 flex-shrink-0">
           <Link href="/" className="flex flex-col gap-1">
             <Image src="/logo.svg" height={150} width={150} alt="Logo" />
           </Link>
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-col gap-1.5 p-4 flex-1">
+        <nav className="flex flex-col gap-1.5 p-3 sm:p-4 flex-1 overflow-y-auto">
          {menuItems.map((item) => {
           const isActive = pathname.includes(item.href) ;
           const Icon = item.icon;
@@ -88,14 +88,14 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-4 px-4 py-3 rounded-md transition-colors ${
+              className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 rounded-md transition-colors ${
                 isActive
                   ? "bg-[#0171F9] text-white"
                   : "hover:bg-gray-50 text-[#666666]"
               }`}
             >
               <Icon active={isActive} />
-              <span className="font-inter font-medium text-base leading-6">
+              <span className="font-inter font-medium text-sm sm:text-base leading-6 whitespace-nowrap">
                 {item.name}
               </span>
             </Link>
