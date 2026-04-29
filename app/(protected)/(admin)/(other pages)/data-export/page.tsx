@@ -243,7 +243,7 @@ export default function DataExportPage() {
           <h2 className="font-[Inter] font-bold text-xl sm:text-2xl text-[#121C28] leading-8">
             Export Data
           </h2>
-          <p className="font-[Inter] font-normal text-base text-[#434655] leading-[26px]">
+          <p className="font-[Inter] font-normal sm:text-base text-sm text-[#434655] leading-[26px]">
             Select a School and date range<br className="hidden sm:block" />to generate Report.
           </p>
         </div>
@@ -314,8 +314,8 @@ export default function DataExportPage() {
           </h2>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto border-t border-[#E5E7EB]">
+          <table className="w-full min-w-max">
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
                 <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
