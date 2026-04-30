@@ -159,7 +159,7 @@ export default function Home() {
           {/* <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/> */}
 
             {/* Left: Profile visual panel */}
-            <div className="relative flex w-full lg:max-w-[534px] lg:flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden lg:aspect-[534/396] aspect-auto min-h-[400px] lg:min-h-auto">
+            <div className="sm:order-1 order-2 relative flex w-full lg:max-w-[534px] lg:flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden lg:aspect-[534/396] aspect-auto min-h-[400px] lg:min-h-auto">
               {/* White profile card */}
               <div className="absolute left-[5.6%] top-[7.6%] w-[72.3%] h-[84.8%] bg-white rounded-2xl shadow-[0_4px_36px_0_rgba(1,113,249,0.06)]">
                 <p className="absolute left-5 top-5 font-inter text-base font-medium text-black leading-[26px]">Profile</p>
@@ -240,7 +240,7 @@ export default function Home() {
             </div>
 
             {/* Right: Text content */}
-            <div className="flex flex-col gap-7 flex-1 lg:max-w-[522px] w-full">
+            <div className="sm:order-2 order-1 flex flex-col gap-7 flex-1 lg:max-w-[522px] w-full">
               <h2 className="font-[Outfit] sm:text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32] text-[clamp(20px,3.8vw,44px)]">
                 Understand Every Classroom Before You Step In
               </h2>
@@ -253,9 +253,9 @@ export default function Home() {
         </section>
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
-        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
+        <section className="bg-white px-6 sm:pb-[72px] pb-6 pt-[72px]">
           <img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
-          <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
+          <div className="flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
             <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
