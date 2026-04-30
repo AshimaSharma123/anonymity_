@@ -255,7 +255,7 @@ export default function Home() {
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-6 pt-[72px]">
           <img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
-          <div className="flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
+          <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
             <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
