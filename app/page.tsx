@@ -156,12 +156,12 @@ export default function Home() {
         {/* Understand Every Classroom Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/>
+          {/* <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/> */}
 
             {/* Left: Profile visual panel */}
-            <div className="relative sm:flex  hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
+            <div className="relative flex w-full lg:max-w-[534px] lg:flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden lg:aspect-[534/396] aspect-auto min-h-[400px] lg:min-h-auto">
               {/* White profile card */}
-              <div className="absolute left-[5.6%] top-[7.6%] w-[63.3%] h-[84.8%] bg-white rounded-2xl shadow-[0_4px_36px_0_rgba(1,113,249,0.06)]">
+              <div className="absolute left-[5.6%] top-[7.6%] w-[72.3%] h-[84.8%] bg-white rounded-2xl shadow-[0_4px_36px_0_rgba(1,113,249,0.06)]">
                 <p className="absolute left-5 top-5 font-inter text-base font-medium text-black leading-[26px]">Profile</p>
 
                 {/* Skeleton lines area */}
@@ -174,15 +174,15 @@ export default function Home() {
                 </div>
 
                 {/* Dark navy quote box */}
-                <div className="absolute left-5 right-5 bottom-5 bg-[#384F87] rounded-2xl px-5 py-4">
-                  <p className="font-inter text-sm font-medium text-white leading-[22px]">
+                <div className="absolute left-5 right-5 bottom-5 bg-[#384F87] rounded-2xl px-5 sm:py-4 py-2">
+                  <p className="font-inter sm:text-sm text-[12px] font-medium text-white leading-[22px]">
                     Get the pulse of the building from those who work there every day.
                   </p>
                 </div>
               </div>
 
               {/* Feature badge: Risk Level */}
-              <div className="absolute top-[19.7%] left-[57%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+              <div className="absolute lg:top-[19.7%] lg:left-[57%] top-[19%] right-[8%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
                 <div className="relative w-9 h-9 flex-shrink-0">
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                     <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3956)" />
@@ -197,11 +197,11 @@ export default function Home() {
                     <path d="M9.44602 0.666626L4.66602 5.45329V14H12.8727L15.3327 8.26663V5.33329H9.79268L10.5393 1.74663L9.44602 0.666626ZM0.666016 5.99996H3.33268V14H0.666016V5.99996Z" fill="white" />
                   </svg>
                 </div>
-                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Risk Level</span>
+                <span className="font-inter sm:text-sm text-xs font-medium text-[#191C1D] whitespace-nowrap">Risk Level</span>
               </div>
 
               {/* Feature badge: Pattern-based insights */}
-              <div className="absolute top-[39.1%] left-[50.6%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+              <div className="absolute lg:top-[39.1%] lg:left-[50.6%] top-[35%] right-[8px] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
                 <div className="relative w-9 h-9 flex-shrink-0">
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                     <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3962)" />
@@ -216,11 +216,11 @@ export default function Home() {
                     <path d="M11.7158 8.28328L10.8325 7.87495C10.7597 7.84181 10.698 7.78844 10.6548 7.72121C10.6115 7.65398 10.5885 7.57572 10.5885 7.49578C10.5885 7.41585 10.6115 7.33759 10.6548 7.27036C10.698 7.20313 10.7597 7.14976 10.8325 7.11662L11.7158 6.70828L12.1241 5.83328C12.1573 5.76054 12.2106 5.69886 12.2779 5.65562C12.3451 5.61237 12.4233 5.58937 12.5033 5.58937C12.5832 5.58937 12.6615 5.61237 12.7287 5.65562C12.7959 5.69886 12.8493 5.76054 12.8825 5.83328L13.2908 6.71662L14.1658 7.12495C14.2385 7.1581 14.3002 7.21147 14.3435 7.2787C14.3867 7.34593 14.4097 7.42418 14.4097 7.50412C14.4097 7.58406 14.3867 7.66231 14.3435 7.72954C14.3002 7.79677 14.2385 7.85014 14.1658 7.88329L13.2825 8.29162L12.8741 9.16662C12.841 9.23936 12.7876 9.30104 12.7204 9.34429C12.6531 9.38754 12.5749 9.41053 12.495 9.41053C12.415 9.41053 12.3368 9.38754 12.2695 9.34429C12.2023 9.30104 12.1489 9.23936 12.1158 9.16662L11.7158 8.28328ZM3.70745 10.8333L4.11579 9.94995L4.99912 9.54162C5.07187 9.50847 5.13354 9.4551 5.17679 9.38787C5.22004 9.32064 5.24303 9.24239 5.24303 9.16245C5.24303 9.08251 5.22004 9.00426 5.17679 8.93703C5.13354 8.8698 5.07187 8.81643 4.99912 8.78329L4.11579 8.37495L3.70745 7.49995C3.67533 7.42728 3.62279 7.36551 3.55622 7.32215C3.48964 7.27879 3.41191 7.25571 3.33245 7.25571C3.253 7.25571 3.17527 7.27879 3.10869 7.32215C3.04212 7.36551 2.98958 7.42728 2.95745 7.49995L2.54912 8.38329L1.66579 8.79162C1.59304 8.82476 1.53137 8.87813 1.48812 8.94536C1.44487 9.01259 1.42187 9.09085 1.42188 9.17078C1.42187 9.25072 1.44487 9.32898 1.48812 9.39621C1.53137 9.46344 1.59304 9.51681 1.66579 9.54995L2.54912 9.95828L2.95745 10.8333C3.09912 11.1583 3.56579 11.1583 3.70745 10.8333ZM7.46579 6.65828L7.99079 5.49162L9.15745 4.96662C9.2302 4.93347 9.29188 4.8801 9.33512 4.81287C9.37837 4.74564 9.40137 4.66739 9.40137 4.58745C9.40137 4.50751 9.37837 4.42926 9.33512 4.36203C9.29188 4.2948 9.2302 4.24143 9.15745 4.20829L7.99079 3.68328L7.46579 2.51662C7.43264 2.44387 7.37927 2.3822 7.31204 2.33895C7.24481 2.2957 7.16656 2.27271 7.08662 2.27271C7.00668 2.27271 6.92843 2.2957 6.8612 2.33895C6.79397 2.3822 6.7406 2.44387 6.70746 2.51662L6.18246 3.68328L5.01579 4.20829C4.94304 4.24143 4.88137 4.2948 4.83812 4.36203C4.79487 4.42926 4.77187 4.50751 4.77187 4.58745C4.77187 4.66739 4.79487 4.74564 4.83812 4.81287C4.88137 4.8801 4.94304 4.93347 5.01579 4.96662L6.18246 5.49162L6.70746 6.65828C6.84912 6.98328 7.31579 6.98328 7.46579 6.65828ZM18.6158 6.89162C18.5357 6.81178 18.4402 6.74907 18.3351 6.70732C18.23 6.66557 18.1175 6.64565 18.0045 6.64877C17.8914 6.65188 17.7802 6.67798 17.6776 6.72546C17.5749 6.77294 17.483 6.84082 17.4075 6.92495L12.0825 12.9083L9.34079 10.1666C9.26369 10.0894 9.17212 10.0281 9.07131 9.98626C8.9705 9.94444 8.86243 9.92291 8.75329 9.92291C8.64415 9.92291 8.53608 9.94444 8.43527 9.98626C8.33446 10.0281 8.24288 10.0894 8.16579 10.1666L3.13245 15.2083C2.79079 15.55 2.79079 16.1166 3.13245 16.4583C3.47412 16.8 4.04079 16.8 4.38246 16.4583L8.75745 12.075L11.4658 14.7833C11.8075 15.125 12.3575 15.1083 12.6741 14.75L18.6491 8.02495C18.9408 7.69995 18.9241 7.19995 18.6158 6.89162Z" fill="white" />
                   </svg>
                 </div>
-                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Pattern-based insights</span>
+                <span className="font-inter sm:text-sm text-xs font-medium text-[#191C1D] whitespace-nowrap">Pattern-based insights</span>
               </div>
 
               {/* Feature badge: Complete History */}
-              <div className="absolute top-[57.6%] left-[55.8%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
+              <div className="absolute lg:top-[57.6%] lg:left-[55.8%] top-[51%] right-[2%] flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 bg-white rounded-full border border-[#F9F9F9] shadow-[0_10px_50px_-12px_rgba(0,0,0,0.16)] backdrop-blur-[5px]">
                 <div className="relative w-9 h-9 flex-shrink-0">
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                     <circle cx="18" cy="18" r="18" fill="url(#paint0_linear_117_3968)" />
@@ -235,12 +235,12 @@ export default function Home() {
                     <path d="M3.555 13.3833C4.25989 14.8089 5.40339 15.9708 6.8175 16.6983C8.22126 17.4195 9.82199 17.6629 11.3767 17.3917C12.9361 17.1172 14.3648 16.3454 15.4492 15.1917C16.5433 14.0267 17.24 12.5449 17.4392 10.9592C17.6411 9.36978 17.3366 7.75721 16.5692 6.35083C15.8087 4.95515 14.6201 3.84068 13.1783 3.17166C11.7464 2.50847 10.1372 2.33058 8.595 2.665C7.05333 2.99916 5.79 3.75916 4.745 4.96083C4.61917 5.09416 4.1325 5.6325 3.72833 6.445M6.25 6.66666L3.2425 7.26666L2.5 4.16666M10 7.5V10.8333L12.5 12.5" stroke="white" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="font-inter text-sm font-medium text-[#191C1D] whitespace-nowrap">Complete History</span>
+                <span className="font-inter sm:text-sm text-xs font-medium text-[#191C1D] whitespace-nowrap">Complete History</span>
               </div>
             </div>
 
             {/* Right: Text content */}
-            <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
+            <div className="flex flex-col gap-7 flex-1 lg:max-w-[522px] w-full">
               <h2 className="font-[Outfit] sm:text-[clamp(28px,3.8vw,44px)] font-semibold text-[#121212] leading-[1.32] text-[clamp(20px,3.8vw,44px)]">
                 Understand Every Classroom Before You Step In
               </h2>
