@@ -253,9 +253,9 @@ export default function Home() {
         </section>
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
-        <section className="bg-white px-6 sm:pb-[72px] pb-6 pt-[72px]">
-          <img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
-          <div className="sm:flex hidden max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
+          
+          <div className="flex  max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
             <div className="flex flex-col gap-7 flex-1 max-w-[522px]">
@@ -266,13 +266,13 @@ export default function Home() {
                 Search regular teachers or schools, filter reports instantly, and uncover trends through intelligent sentiment analysis helping you make faster and more informed decisions.
               </p>
             </div>
-
+<img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
             {/* Right: Search & filter UI mockup */}
-            <div className="relative w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
+            <div className="relative sm:block hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
 
               {/* White inner card */}
               <div
-                className="absolute rounded-xl bg-white"
+                className=" absolute rounded-xl bg-white"
                 style={{
                   left: '5.6%', top: '7.6%',
                   width: '84.8%', height: '84.8%',
