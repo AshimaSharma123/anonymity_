@@ -1,8 +1,143 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useReducer, useCallback } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+/* ─── Types ───────────────────────────────────────── */
+
+type RatingKeys =
+  | "classroomBehavior"
+  | "lessonPreparedness"
+  | "staffFriendliness"
+  | "schoolCleanliness"
+  | "supportLevel";
+
+type FormState = {
+  schoolName: string,
+  teacherName: string,
+  date: string,
+  gradeLevel: string;
+  ratings: Record<RatingKeys, number>;
+  selectedTags: string[];
+  returnToSchool: ReturnChoice;
+  returnToTeacher: ReturnChoice;
+  postAs: "anonymous" | "show";
+  feedback: string;
+  schoolComment: string;
+  teacherComment: string;
+};
+
+type FormErrors = Partial<Record<keyof FormState | "ratings", string>>;
+
+type Action =
+  | { type: "SET_FIELD"; field: keyof FormState; value: any }
+  | { type: "SET_RATING"; key: RatingKeys; value: number }
+  | { type: "TOGGLE_TAG"; tag: string }
+  | { type: "RESET" };
+
+/* ─── Initial State ───────────────────────────────── */
+
+const initialState: FormState = {
+  schoolName: "",
+  teacherName: "",
+  date: "",
+  gradeLevel: "Elementary",
+  ratings: {
+    classroomBehavior: 2,
+    lessonPreparedness: 0,
+    staffFriendliness: 0,
+    schoolCleanliness: 5,
+    supportLevel: 0,
+  },
+  selectedTags: ["Friendly Teachers", "Unfriendly Students"],
+  returnToSchool: "yes",
+  returnToTeacher: "yes",
+  postAs: "anonymous",
+  feedback: "",
+  schoolComment: "",
+  teacherComment: "",
+};
+
+/* ─── Reducer ─────────────────────────────────────── */
+
+function formReducer(state: FormState, action: Action): FormState {
+  switch (action.type) {
+    case "SET_FIELD":
+      return { ...state, [action.field]: action.value };
+
+    case "SET_RATING":
+      return {
+        ...state,
+        ratings: {
+          ...state.ratings,
+          [action.key]: action.value,
+        },
+      };
+
+    case "TOGGLE_TAG":
+      return {
+        ...state,
+        selectedTags: state.selectedTags.includes(action.tag)
+          ? state.selectedTags.filter((t) => t !== action.tag)
+          : [...state.selectedTags, action.tag],
+      };
+
+    case "RESET":
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+/* ─── Validation ─────────────────────────────────── */
+
+function validateForm(state: FormState): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!state.schoolName.trim()) {
+    errors.schoolName = "School Name is required";
+  }
+
+  if (!state.teacherName.trim()) {
+    errors.teacherName = "Teacher Name is required";
+  }
+
+  if (!state.date) {
+    errors.date = "Date is required";
+  }
+
+
+
+  if (!state.gradeLevel) {
+    errors.gradeLevel = "Grade level is required";
+  }
+
+  if (!state.feedback.trim()) {
+    errors.feedback = "Feedback is required";
+  }
+
+  if (state.selectedTags.length === 0) {
+    errors.selectedTags = "Select at least one tag";
+  }
+
+  if (!state.returnToSchool) {
+    errors.returnToSchool = "Required";
+  }
+
+  if (!state.returnToTeacher) {
+    errors.returnToTeacher = "Required";
+  }
+
+  // ratings validation
+  const hasAnyRating = Object.values(state.ratings).some((v) => v > 0);
+  if (!hasAnyRating) {
+    errors.ratings = "At least one rating must be given";
+  }
+
+  return errors;
+}
 
 /* ─── Icon components ─────────────────────────────────────────────────── */
 
@@ -95,7 +230,7 @@ const WarningBanner = () => (
 
 const GRADE_LEVELS = ["Pre-K", "Elementary", "Middle School", "High School", "Special Ed"];
 
-const RATING_CATEGORIES = [
+const RATING_CATEGORIES: { label: string; key: RatingKeys }[] = [
   { label: "Classroom Behavior", key: "classroomBehavior" },
   { label: "Lesson Preparedness", key: "lessonPreparedness" },
   { label: "Staff Friendliness", key: "staffFriendliness" },
@@ -180,34 +315,47 @@ function ReturnChoiceGroup({ value, onChange }: { value: ReturnChoice; onChange:
 /* ─── Page ───────────────────────────────────────────────────────────── */
 
 export default function SubmitReportPage() {
-  const [gradeLevel, setGradeLevel] = useState("Elementary");
-  const [ratings, setRatings] = useState<Record<string, number>>({
-    classroomBehavior: 2,
-    lessonPreparedness: 0,
-    staffFriendliness: 0,
-    schoolCleanliness: 5,
-    supportLevel: 0,
-  });
-  const [selectedTags, setSelectedTags] = useState<string[]>(["Friendly Teachers", "Unfriendly Students"]);
-  const [returnToSchool, setReturnToSchool] = useState<ReturnChoice>("yes");
-  const [returnToTeacher, setReturnToTeacher] = useState<ReturnChoice>("yes");
-  const [postAs, setPostAs] = useState<"anonymous" | "show">("anonymous");
-  const [feedback, setFeedback] = useState("");
-  const [schoolComment, setSchoolComment] = useState("");
-  const [teacherComment, setTeacherComment] = useState("");
+  const [state, dispatch] = useReducer(formReducer, initialState);
+  const [errors, setErrors] = useState<FormErrors>({});
   const dateRef = useRef<HTMLInputElement>(null);
 
-  const toggleTag = (tag: string) =>
-    setSelectedTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]);
+  const updateField = useCallback(
+    (field: keyof FormState, value: any) => {
+      dispatch({ type: "SET_FIELD", field, value });
+    },
+    []
+  );
 
-  const setRating = (key: string, val: number) =>
-    setRatings((prev) => ({ ...prev, [key]: val }));
+  const setRating = useCallback(
+    (key: RatingKeys, value: number) => {
+      dispatch({ type: "SET_RATING", key, value });
+    },
+    []
+  );
+
+  
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const validationErrors = validateForm(state);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      console.log("Validation failed", validationErrors);
+      return;
+    }
+
+    console.log("Form Submitted:", state);
+
+    // optional reset
+    dispatch({ type: "RESET" });
+  };
 
   /* shared input style */
   const inputBase = "flex items-center text-sm gap-[6px] px-4  rounded-lg bg-[#F3F4F5] overflow-hidden";
-  const placeholderText = "font-inter text-sm text-[#6B7280] leading-none";
   const fieldLabel = "font-outfit text-base font-medium text-[#121212] leading-6";
-  const sectionHeading = "font-outfit text-xl font-semibold leading-none";
+  const sectionHeading = "font-outfit text-xl font-semibold leading-none text-[#0171F9] text-lg sm:text-xl";
 
   return (
     <>
@@ -228,234 +376,295 @@ export default function SubmitReportPage() {
           <WarningBanner />
 
           {/* Form card */}
-          <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-8 lg:p-12 flex flex-col gap-6 sm:gap-10">
+          <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-8 lg:p-12">
+            <form onSubmit={handleSubmit} className=" flex flex-col gap-6 sm:gap-10">
+              {/* ── Assignment Details ── */}
+              <section className="flex flex-col gap-5 sm:gap-8">
+                <h2 className={sectionHeading}>Assignment Details</h2>
 
-            {/* ── Assignment Details ── */}
-            <section className="flex flex-col gap-5 sm:gap-8">
-              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Assignment Details</h2>
-
-              {/* School Name */}
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabel}>School Name</label>
-                <div className={`${inputBase} py-[14px]`}>
-                  <SearchIcon />
-                  <input
-                    type="text"
-                    placeholder="Search for institution..."
-                    className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
-                  />
-                </div>
-              </div>
-
-              {/* Teacher + Date row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {/* School Name */}
                 <div className="flex flex-col gap-2">
-                  <label className={fieldLabel}>Teacher Name</label>
+                  <label className={fieldLabel}>School Name</label>
                   <div className={`${inputBase} py-[14px]`}>
                     <SearchIcon />
                     <input
                       type="text"
-                      placeholder="Search for Teacher..."
+                      placeholder="Search for institution..."
+                      value={state.schoolName}
+                      onChange={(e) => updateField("schoolName", e.target.value)}
+
                       className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
                     />
+
                   </div>
+                  {errors.schoolName && (
+                    <p className="text-red-500 text-xs mt-1">{errors.schoolName}</p>
+                  )}
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className={fieldLabel}>Date of Assignment</label>
-                  <div onClick={() => dateRef.current?.showPicker()} className={`${inputBase} justify-between py-[14px]`}>
-                    <input
-                      ref={dateRef}
-                      type="date"
-                      className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] appearance-none"
-                    />
 
-                    <div
+                {/* Teacher + Date row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-2">
+                    <label className={fieldLabel}>Teacher Name</label>
+                    <div className={`${inputBase} py-[14px]`}>
+                      <SearchIcon />
+                      <input
+                        type="text"
+                        placeholder="Search for Teacher..."
+                        value={state.teacherName}
+                        onChange={(e) => updateField("teacherName", e.target.value)}
 
-                      className="cursor-pointer"
-                    >
-                      <CalendarIcon />
+                        className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
+                      />
+
                     </div>
+                    {errors.teacherName && (
+                      <p className="text-red-500 text-xs mt-1">{errors.teacherName}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className={fieldLabel}>Date of Assignment</label>
+                    <div onClick={() => dateRef.current?.showPicker()} className={`${inputBase} justify-between py-[14px]`}>
+                      <input
+                        ref={dateRef}
+                        type="date"
+                        value={state.date}
+                        onChange={(e) => updateField("date", e.target.value)}
+                        className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] appearance-none"
+                      />
+                      <div
+                        className="cursor-pointer"
+                      >
+                        <CalendarIcon />
+                      </div>
+                    </div>
+                    {errors.date && (
+                      <p className="text-red-500 text-xs mt-1">{errors.date}</p>
+                    )}
                   </div>
                 </div>
-              </div>
 
-              {/* Grade Level */}
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabel}>Grade Level</label>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
-                  {GRADE_LEVELS.map((level) => (
-                    <button
-                      key={level}
-                      type="button"
-                      onClick={() => setGradeLevel(level)}
-                      className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${gradeLevel === level
+                {/* Grade Level */}
+                <div className="flex flex-col gap-2">
+                  <label className={fieldLabel}>Grade Level</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
+                    {GRADE_LEVELS.map((level) => (
+                      <button
+                        key={level}
+                        type="button"
+                        onClick={() => updateField("gradeLevel", level)}
+                        className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${state.gradeLevel === level
                           ? "bg-[#0B77F9] text-white font-medium"
                           : "bg-[#FCFDFE] text-[#121212] font-medium border-[#B2B2B2]"
-                        }`}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <div className="h-px bg-black opacity-10" />
-
-            {/* ── Ratings ── */}
-            <section className="flex flex-col gap-5 sm:gap-6">
-              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Ratings</h2>
-              <div className="flex flex-col gap-3 sm:gap-4">
-                {RATING_CATEGORIES.map(({ label, key }) => (
-                  <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
-                    <span className="flex-1 font-outfit text-sm sm:text-base font-medium text-[#121212] leading-6">{label}</span>
-                    <StarRating value={ratings[key]} onChange={(val) => setRating(key, val)} />
+                          }`}
+                      >
+                        {level}
+                      </button>
+                    ))}
+                    {errors.gradeLevel && (
+                      <p className="text-red-500 text-xs mt-1">{errors.gradeLevel}</p>
+                    )}
                   </div>
-                ))}
-              </div>
-            </section>
-
-            <div className="h-px bg-black opacity-10" />
-
-            {/* ── Your Experience ── */}
-            <section className="flex flex-col gap-5 sm:gap-8">
-              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Your Experience</h2>
-
-              {/* Feedback textarea */}
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabel}>Write Feedback</label>
-                <textarea
-                  className="h-[102px] px-4 pt-[13px] pb-[14px] rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder-[#6B7280] resize-none outline-none"
-                  placeholder="Enter your feedback here"
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                />
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-end gap-1">
-                  <span className={fieldLabel}>Tags</span>
-                  <span className="font-outfit text-sm font-light text-[#121212]/56 leading-6">(Select all that apply)</span>
                 </div>
-                <div className="flex flex-wrap gap-2 sm:gap-[9px]">
-                  {ALL_TAGS.map((tag) => {
-                    const isSelected = selectedTags.includes(tag);
-                    const isNeg = NEGATIVE_TAGS.has(tag);
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => toggleTag(tag)}
-                        className={`flex items-center justify-center px-3 sm:px-[19px] py-2 sm:py-[9px] rounded-xl font-inter text-xs sm:text-sm cursor-pointer transition-all ${isSelected && !isNeg
+              </section>
+
+              <div className="h-px bg-black opacity-10" />
+
+              {/* ── Ratings ── */}
+              <section className="flex flex-col gap-5 sm:gap-6">
+                <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Ratings</h2>
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  {RATING_CATEGORIES.map(({ label, key }) => (
+                    <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
+                      <span className="flex-1 font-outfit text-sm sm:text-base font-medium text-[#121212] leading-6">{label}</span>
+                      <StarRating value={state.ratings[key]} onChange={(val) => setRating(key as RatingKeys, val)} />
+                    </div>
+                  ))}
+                  {errors.ratings && (
+                    <p className="text-red-500 text-xs mt-1">{errors.ratings}</p>
+                  )}
+                </div>
+              </section>
+
+              <div className="h-px bg-black opacity-10" />
+
+              {/* ── Your Experience ── */}
+              <section className="flex flex-col gap-5 sm:gap-8">
+                <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Your Experience</h2>
+
+                {/* Feedback textarea */}
+                <div className="flex flex-col gap-2">
+                  <label className={fieldLabel}>Write Feedback</label>
+                  <textarea
+                    className="h-[102px] px-4 pt-[13px] pb-[14px] rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder-[#6B7280] resize-none outline-none"
+                    placeholder="Enter your feedback here"
+                    value={state.feedback}
+                    onChange={(e) => updateField("feedback", e.target.value)}
+                  />
+
+                  {errors.feedback && (
+                    <p className="text-red-500 text-xs mt-1">{errors.feedback}</p>
+                  )}
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-end gap-1">
+                    <span className={fieldLabel}>Tags</span>
+                    <span className="font-outfit text-sm font-light text-[#121212]/56 leading-6">(Select all that apply)</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 sm:gap-[9px]">
+                    {ALL_TAGS.map((tag) => {
+                      const isSelected = state.selectedTags.includes(tag);
+                      const isNeg = NEGATIVE_TAGS.has(tag);
+
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => dispatch({ type: "TOGGLE_TAG", tag })}
+                          className={`flex items-center justify-center px-3 sm:px-[19px] py-2 sm:py-[9px] rounded-xl font-inter text-xs sm:text-sm cursor-pointer transition-all ${isSelected && !isNeg
                             ? "border border-[#0171F9] bg-[#EFF6FF] text-[#0171F9]"
                             : isSelected && isNeg
                               ? "border border-[#EF4444] bg-red-50 text-[#EF4444]"
                               : "border border-[#E0E0E2] bg-[#F3F4F6] text-[#121212]"
+                            }`}
+                        >
+                          {tag}
+                        </button>
+                      );
+                    })}
+                    {errors.selectedTags && (
+                      <p className="text-red-500 text-xs mt-1">{errors.selectedTags}</p>
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <div className="h-px bg-black opacity-10" />
+
+              {/* ── Final Thoughts ── */}
+              <section className="flex flex-col gap-5 sm:gap-8">
+                <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Final Thoughts</h2>
+
+                {/* Return to school + teacher */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-2">
+                    <label className={fieldLabel}>Would you return to this school</label>
+                    <ReturnChoiceGroup value={state.returnToSchool}
+                      onChange={(val) => updateField("returnToSchool", val)} />
+                    <input
+                      type="text"
+                      className={`${inputBase} w-full py-[10px]`}
+                      placeholder="Any Comments...."
+                      value={state.schoolComment}
+                      onChange={(e) => updateField("schoolComment", e.target.value)}
+                    />
+                    {errors.returnToSchool && (
+                      <p className="text-red-500 text-xs mt-1">{errors.returnToSchool}</p>
+                    )}
+                    
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className={fieldLabel}>Would you return for this teacher or class</label>
+                    <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => updateField("returnToTeacher", val)} />
+                    <input
+                      type="text"
+                      className={`${inputBase} w-full py-[10px]`}
+                      placeholder="Any Comments...."
+                      value={state.teacherComment}
+                      onChange={(e) => updateField("teacherComment", e.target.value)}
+                    />
+                    {errors.returnToTeacher && (
+                      <p className="text-red-500 text-xs mt-1">{errors.returnToTeacher}</p>
+                    )}
+                    
+                  </div>
+                </div>
+
+                {/* Post As */}
+                <div className="flex flex-col gap-2">
+                  <label className={fieldLabel}>Post As</label>
+                  <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit overflow-x-auto">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        dispatch({ type: "SET_FIELD", field: "postAs", value: "anonymous" })
+                      }
+                      className={`flex items-center gap-[6px] px-4 py-[13px] rounded-lg cursor-pointer transition-all ${state.postAs === "anonymous"
+                        ? "bg-white shadow-[0_1px_4px_0_rgba(0,0,0,0.08)]"
+                        : "bg-transparent"
+                        }`}
+                    >
+                      <AnonymousIcon active={state.postAs === "anonymous"} />
+                      <span
+                        className={`font-inter text-sm leading-none ${state.postAs === "anonymous"
+                          ? "text-[#121212]"
+                          : "text-[#6B7280]"
                           }`}
                       >
-                        {tag}
-                      </button>
-                    );
-                  })}
+                        Anonymous
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        dispatch({ type: "SET_FIELD", field: "postAs", value: "show" })
+                      }
+                      className={`flex items-center gap-[6px] px-4 py-[13px] rounded-lg cursor-pointer transition-all ${state.postAs === "show"
+                        ? "bg-white shadow-[0_1px_4px_0_rgba(0,0,0,0.08)]"
+                        : "bg-transparent"
+                        }`}
+                    >
+                      <UserIcon active={state.postAs === "show"} />
+                      <span
+                        className={`font-inter text-sm leading-none ${state.postAs === "show"
+                          ? "text-[#121212]"
+                          : "text-[#6B7280]"
+                          }`}
+                      >
+                        Show Name
+                      </span>
+                    </button>
+                    {errors.postAs && (
+                      <p className="text-red-500 text-xs mt-1">{errors.postAs}</p>
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <div className="h-px bg-black opacity-10" />
+
+              {/* Bottom warning + submit */}
+              <div className="flex flex-col gap-6">
+                <WarningBanner />
+
+                <div className="flex flex-col justify-end gap-3 sm:gap-4 items-end">
+                  <p className="font-inter w-full text-xs sm:text-sm text-[#121212]/60 sm:text-right text-center">
+                    Once submitted, reports cannot be edited or undone.
+                  </p>
+                  <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-2 sm:gap-[10px]">
+                    <button
+                      type="button"
+                      className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl border border-black/20 bg-white font-inter text-sm sm:text-base font-medium text-[#2C3031] cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl bg-[#0171F9] font-inter text-sm sm:text-base font-semibold text-white cursor-pointer hover:bg-blue-700 transition-colors"
+                    >
+                      Submit Report
+                      <SendIcon />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </section>
-
-            <div className="h-px bg-black opacity-10" />
-
-            {/* ── Final Thoughts ── */}
-            <section className="flex flex-col gap-5 sm:gap-8">
-              <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Final Thoughts</h2>
-
-              {/* Return to school + teacher */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="flex flex-col gap-2">
-                  <label className={fieldLabel}>Would you return to this school</label>
-                  <ReturnChoiceGroup value={returnToSchool} onChange={setReturnToSchool} />
-                  <input
-                    type="text"
-                    className={`${inputBase} w-full py-[10px]`}
-                    placeholder="Any Comments...."
-                    value={schoolComment}
-                    onChange={(e) => setSchoolComment(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className={fieldLabel}>Would you return for this teacher or class</label>
-                  <ReturnChoiceGroup value={returnToTeacher} onChange={setReturnToTeacher} />
-                  <input
-                    type="text"
-                    className={`${inputBase} w-full py-[10px]`}
-                    placeholder="Any Comments...."
-                    value={teacherComment}
-                    onChange={(e) => setTeacherComment(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Post As */}
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabel}>Post As</label>
-                <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit overflow-x-auto">
-                  <button
-                    type="button"
-                    onClick={() => setPostAs("anonymous")}
-                    className={`flex items-center gap-[6px] px-4 py-[13px] rounded-lg cursor-pointer transition-all ${postAs === "anonymous" ? "bg-white shadow-[0_1px_4px_0_rgba(0,0,0,0.08)]" : "bg-transparent"
-                      }`}
-                  >
-                    <AnonymousIcon active={postAs === "anonymous"} />
-                    <span className={`font-inter text-sm leading-none ${postAs === "anonymous" ? "text-[#121212]" : "text-[#6B7280]"}`}>
-                      Anonymous
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPostAs("show")}
-                    className={`flex items-center gap-[6px] px-4 py-[13px] rounded-lg cursor-pointer transition-all ${postAs === "show" ? "bg-white shadow-[0_1px_4px_0_rgba(0,0,0,0.08)]" : "bg-transparent"
-                      }`}
-                  >
-                    <UserIcon active={postAs === "show"} />
-                    <span className={`font-inter text-sm leading-none ${postAs === "show" ? "text-[#121212]" : "text-[#6B7280]"}`}>
-                      Show Name
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            <div className="h-px bg-black opacity-10" />
-
-            {/* Bottom warning + submit */}
-            <div className="flex flex-col gap-6">
-              <WarningBanner />
-
-              <div className="flex flex-col justify-end gap-3 sm:gap-4 items-end">
-                <p className="font-inter w-full text-xs sm:text-sm text-[#121212]/60 sm:text-right text-center">
-                  Once submitted, reports cannot be edited or undone.
-                </p>
-                <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-2 sm:gap-[10px]">
-                  <button
-                    type="button"
-                    className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl border border-black/20 bg-white font-inter text-sm sm:text-base font-medium text-[#2C3031] cursor-pointer hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl bg-[#0171F9] font-inter text-sm sm:text-base font-semibold text-white cursor-pointer hover:bg-blue-700 transition-colors"
-                  >
-                    Submit Report
-                    <SendIcon />
-                  </button>
-                </div>
-              </div>
-            </div>
-
+            </form>
           </div>
         </div>
       </main>
-
       <Footer />
     </>
   );
