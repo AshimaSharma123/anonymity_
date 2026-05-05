@@ -1,8 +1,10 @@
 "use client";
 
 import { useRef, useState, useReducer, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { scrollToError } from "@/lib/function";
 
 /* ─── Types ───────────────────────────────────────── */
 
@@ -315,6 +317,7 @@ function ReturnChoiceGroup({ value, onChange }: { value: ReturnChoice; onChange:
 /* ─── Page ───────────────────────────────────────────────────────────── */
 
 export default function SubmitReportPage() {
+  const router = useRouter();
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [errors, setErrors] = useState<FormErrors>({});
   const dateRef = useRef<HTMLInputElement>(null);
@@ -335,21 +338,37 @@ export default function SubmitReportPage() {
 
   
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationErrors = validateForm(state);
     setErrors(validationErrors);
-
+   
     if (Object.keys(validationErrors).length > 0) {
-      console.log("Validation failed", validationErrors);
+      scrollToError(validationErrors);
       return;
     }
 
-    console.log("Form Submitted:", state);
+     try {
+ 
+      const response = await fetch("/api/submit-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(state),
+      });
 
-    // optional reset
-    dispatch({ type: "RESET" });
+      if (!response.ok) {
+        throw new Error("Failed to submit report");
+      }
+
+      dispatch({ type: "RESET" });
+      router.push(`/submit-report/success${state.postAs === "anonymous" ? `?anonymous=true` : ""}`);
+
+  } catch (error) {
+    console.error("Error submitting report:", error);
+  }
   };
 
   /* shared input style */
@@ -389,6 +408,7 @@ export default function SubmitReportPage() {
                     <SearchIcon />
                     <input
                       type="text"
+                      id="schoolName"
                       placeholder="Search for institution..."
                       value={state.schoolName}
                       onChange={(e) => updateField("schoolName", e.target.value)}
@@ -410,6 +430,7 @@ export default function SubmitReportPage() {
                       <SearchIcon />
                       <input
                         type="text"
+                        id="teacherName"
                         placeholder="Search for Teacher..."
                         value={state.teacherName}
                         onChange={(e) => updateField("teacherName", e.target.value)}
@@ -428,6 +449,7 @@ export default function SubmitReportPage() {
                       <input
                         ref={dateRef}
                         type="date"
+                        id="date"
                         value={state.date}
                         onChange={(e) => updateField("date", e.target.value)}
                         className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] appearance-none"
@@ -452,6 +474,7 @@ export default function SubmitReportPage() {
                       <button
                         key={level}
                         type="button"
+                        id="gradeLevel"
                         onClick={() => updateField("gradeLevel", level)}
                         className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${state.gradeLevel === level
                           ? "bg-[#0B77F9] text-white font-medium"
@@ -471,13 +494,13 @@ export default function SubmitReportPage() {
               <div className="h-px bg-black opacity-10" />
 
               {/* ── Ratings ── */}
-              <section className="flex flex-col gap-5 sm:gap-6">
+              <section className="flex flex-col gap-5 sm:gap-6" id="ratings">
                 <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Ratings</h2>
-                <div className="flex flex-col gap-3 sm:gap-4">
+                <div className="flex flex-col gap-3 sm:gap-4" >
                   {RATING_CATEGORIES.map(({ label, key }) => (
                     <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
                       <span className="flex-1 font-outfit text-sm sm:text-base font-medium text-[#121212] leading-6">{label}</span>
-                      <StarRating value={state.ratings[key]} onChange={(val) => setRating(key as RatingKeys, val)} />
+                      <StarRating  value={state.ratings[key]} onChange={(val) => setRating(key as RatingKeys, val)} />
                     </div>
                   ))}
                   {errors.ratings && (
@@ -496,6 +519,7 @@ export default function SubmitReportPage() {
                 <div className="flex flex-col gap-2">
                   <label className={fieldLabel}>Write Feedback</label>
                   <textarea
+                  id="feedback"
                     className="h-[102px] px-4 pt-[13px] pb-[14px] rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder-[#6B7280] resize-none outline-none"
                     placeholder="Enter your feedback here"
                     value={state.feedback}
@@ -513,7 +537,7 @@ export default function SubmitReportPage() {
                     <span className={fieldLabel}>Tags</span>
                     <span className="font-outfit text-sm font-light text-[#121212]/56 leading-6">(Select all that apply)</span>
                   </div>
-                  <div className="flex flex-wrap gap-2 sm:gap-[9px]">
+                  <div className="flex flex-wrap gap-2 sm:gap-[9px]" id="selectedTags">
                     {ALL_TAGS.map((tag) => {
                       const isSelected = state.selectedTags.includes(tag);
                       const isNeg = NEGATIVE_TAGS.has(tag);
@@ -548,7 +572,7 @@ export default function SubmitReportPage() {
                 <h2 className={`${sectionHeading} text-[#0171F9] text-lg sm:text-xl`}>Final Thoughts</h2>
 
                 {/* Return to school + teacher */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5" id="returnToSchool">
                   <div className="flex flex-col gap-2">
                     <label className={fieldLabel}>Would you return to this school</label>
                     <ReturnChoiceGroup value={state.returnToSchool}
@@ -565,7 +589,7 @@ export default function SubmitReportPage() {
                     )}
                     
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2" id="returnToTeacher">
                     <label className={fieldLabel}>Would you return for this teacher or class</label>
                     <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => updateField("returnToTeacher", val)} />
                     <input
@@ -583,7 +607,7 @@ export default function SubmitReportPage() {
                 </div>
 
                 {/* Post As */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" id="postAs">
                   <label className={fieldLabel}>Post As</label>
                   <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit overflow-x-auto">
                     <button

@@ -1,6 +1,5 @@
 "use client";
 
-
 import Sidebar from "@/app/components/Sidebar";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +11,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  
   return (
      <div className="flex h-screen bg-[#F3F4F7]">
 

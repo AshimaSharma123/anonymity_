@@ -26,12 +26,11 @@ function validateForm(state: objectType) {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [formValues, setFormValues] = useState<objectType>({email:"", password: ""});
+  const [formValues, setFormValues] = useState<objectType>({ email: "", password: "" });
   const [errors, setErrors] = useState<objectType>({});
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async () => {
 
     const validationErrors = validateForm(formValues);
     setErrors(validationErrors);
@@ -40,23 +39,17 @@ export default function LoginPage() {
       return;
     }
 
-     const res = await fetch("/api/users/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues),
+    const res = await signIn("credentials", {
+      email: formValues.email,
+      password: formValues.password,
+      redirect: false,
     });
 
-    const data = await res.json();
-    
-     if (!res.ok) {
-        setErrors({...errors,["error"]:data.error})
-      } else {
-        router.push("/admin/dashboard"); 
-        console.log("loggedin successfully");
-      }
-
+    if (res?.error) {
+      setErrors({ ...errors, ["error"]: res.error }); // show in UI
+    } else {
+      router.push("/admin/dashboard");
+    }
   };
 
   return (
@@ -64,7 +57,7 @@ export default function LoginPage() {
       {/* Logo + Tagline */}
       <div className="flex flex-col items-center gap-3 mb-6">
         <Link href={"/"}>
-        <Image src="/logo.svg" height={150} width={150} alt="Logo"/>
+          <Image src="/logo.svg" height={150} width={150} alt="Logo" />
         </Link>
         <p className="font-inter text-sm text-[#737786] text-center">
           Your identity stays private - always.
@@ -73,7 +66,7 @@ export default function LoginPage() {
 
       {/* Anonymity Banner */}
       <div className="w-full max-w-[512px] flex items-start gap-3 px-4 py-[17px] rounded-[6px] border border-[#BFDCFD] bg-[#EFF6FF] mb-6">
-        
+
         <svg
           width="18"
           height="18"
@@ -123,7 +116,7 @@ export default function LoginPage() {
         {/* Form */}
         <div className="px-8 pt-7 pb-9 flex flex-col gap-6">
           {/* Email Address */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <label className="font-[Outfit] text-base font-medium text-[#212121]">
               Email Address
             </label>
@@ -141,13 +134,13 @@ export default function LoginPage() {
               placeholder="Enter Email Address"
               className="w-full px-4 py-[15px] rounded-lg bg-[#F3F4F5] font-inter text-sm font-medium text-[#6B7280] placeholder-[#6B7280]/64 outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
             />
-             {errors.email && (
+            {errors.email && (
               <p className="text-red-500 text-xs">{errors.email}</p>
             )}
           </div>
 
           {/* Password */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <label className="font-[Outfit] text-base font-medium text-[#212121]">
               Password
             </label>
@@ -166,8 +159,8 @@ export default function LoginPage() {
                 placeholder="Enter Password"
                 className="flex-1 bg-transparent font-inter text-sm font-medium text-[#6B7280] placeholder-[#6B7280]/64 outline-none"
               />
-             
-            
+
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -177,23 +170,17 @@ export default function LoginPage() {
                 <EyeIcon />
               </button>
             </div>
-             {errors.password && (
+            {errors.password && (
               <p className="text-red-500 text-xs">{errors.password}</p>
             )}
           </div>
-             {errors.error && (
-              <p className="text-red-500 text-xs">{errors.error}</p>
-            )}
+          {errors.error && (
+            <p className="text-red-500 text-xs">{errors.error}</p>
+          )}
           {/* Login Button */}
           <button
             type="submit"
-            onClick={() =>
-              signIn("credentials", {
-                email: formValues?.email,
-                password: formValues?.password,
-                callbackUrl: "/admin/dashboard",
-              })
-            }
+            onClick={async () => { handleLogin() }}
             className="cursor-pointer w-full py-3 rounded-lg bg-[#0171F9] text-white font-inter text-base font-semibold leading-6 text-center hover:bg-blue-600 active:bg-blue-700 transition-colors mt-1"
           >
             Login
@@ -205,34 +192,34 @@ export default function LoginPage() {
             <span className="text-xs text-[#9CA3AF]">Or continue with</span>
             <div className="flex-1 h-px bg-[#E5E7EB]"></div>
           </div>
+          <div className="flex flex-col gap-2">
+            {/* Google */}
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
+              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />
+                <path d="M13.46 15.13c-.83.63-1.96 1.09-3.46 1.09-2.64 0-4.84-1.74-5.62-4.04H2.18v2.54c1.52 3.02 4.64 5.07 8.28 5.07 2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853" />
+                <path d="M3.99 10c0-.69.12-1.35.32-1.97V5.49H2.18C1.43 6.93 1 8.43 1 10s.43 3.07 1.18 4.51l2.85-2.22c-.2-.62-.32-1.28-.32-1.97z" fill="#FBBC05" />
+                <path d="M10 3.88c2.11 0 3.54.75 4.37 1.53l3.27-3.27C14.96.87 12.7 0 10 0 6.36 0 3.24 2.04 1.18 5.49l2.85 2.22c.78-2.3 2.98-4.04 5.62-4.04z" fill="#EA4335" />
+              </svg>
+              Continue with Google
+            </button>
 
-          {/* Google */}
-          <button
-            type="button"
-            onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
-            className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4"/>
-              <path d="M13.46 15.13c-.83.63-1.96 1.09-3.46 1.09-2.64 0-4.84-1.74-5.62-4.04H2.18v2.54c1.52 3.02 4.64 5.07 8.28 5.07 2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853"/>
-              <path d="M3.99 10c0-.69.12-1.35.32-1.97V5.49H2.18C1.43 6.93 1 8.43 1 10s.43 3.07 1.18 4.51l2.85-2.22c-.2-.62-.32-1.28-.32-1.97z" fill="#FBBC05"/>
-              <path d="M10 3.88c2.11 0 3.54.75 4.37 1.53l3.27-3.27C14.96.87 12.7 0 10 0 6.36 0 3.24 2.04 1.18 5.49l2.85 2.22c.78-2.3 2.98-4.04 5.62-4.04z" fill="#EA4335"/>
-            </svg>
-            Continue with Google
-          </button>
-
-          {/* Facebook */}
-          <button
-            type="button"
-            onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard" })}
-            className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
-            </svg>
-            Continue with Facebook
-          </button>
-
+            {/* Facebook */}
+            <button
+              type="button"
+              onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard", redirect: true, })}
+              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2" />
+              </svg>
+              Continue with Facebook
+            </button>
+          </div>
           {/* Sign up link */}
           <div className="flex items-center justify-center gap-2">
             <span className="font-inter text-[13px] font-medium text-[#555968]/70">

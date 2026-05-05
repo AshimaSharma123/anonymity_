@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { scrollToError } from "@/lib/function";
 
 type objectType = {
   [key: string]: any
@@ -17,6 +18,15 @@ type FormState = {
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
+
+const validatePassword = (password: string) => {
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+  if (!passwordRegex.test(password)) {
+    return "Password must be 8-16 chars, include uppercase, lowercase, number & special character";
+  }
+  return null;
+};
 
 /* ─── Validation ─────────────────────────────────── */
 
@@ -33,6 +43,11 @@ function validateForm(state: FormState): FormErrors {
 
   if (!state.password.trim()) {
     errors.password = "Password is required";
+  } else {
+    const error = validatePassword(state.password);
+    if (error) {
+      errors.password = error;
+    }
   }
 
   if (!state.confirm_password.trim()) {
@@ -45,16 +60,7 @@ function validateForm(state: FormState): FormErrors {
   return errors;
 }
 
-const scrollToError = (errors: Record<string, string>) => {
-  const firstErrorKey = Object.keys(errors)[0];
-  if (!firstErrorKey) return;
 
-  const el = document.getElementById(firstErrorKey);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-    el.focus();
-  }
-};
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,7 +79,7 @@ export default function SignUpPage() {
       return;
     }
 
-     const res = await fetch("/api/users/signup", {
+    const res = await fetch("/api/users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -82,14 +88,16 @@ export default function SignUpPage() {
     });
 
     const data = await res.json();
-    
-     if (!res.ok) {
-        setErrors({...errors,["error"]:data.error})
-      } else {
-        console.log("Saved successfully");
-      }
+
+    if (!res.ok) {
+      setErrors({ ...errors, ["error"]: data.error })
+    } else {
+      console.log("Saved successfully");
+    }
 
   };
+
+
 
   return (
     <main className="min-h-screen bg-[#F3F4F7] flex flex-col items-center justify-center px-4 py-12">
@@ -214,10 +222,14 @@ export default function SignUpPage() {
                 name="password"
                 id="password"
                 onChange={(e) => {
-                  const { name, value } = e.target;
+                  let value = e.target.value;
+
+                  // remove all spaces
+                  value = value.replace(/\s/g, "");
+
                   setFormValues((prev) => ({
                     ...prev,
-                    [name]: value,
+                    password: value,
                   }));
                 }}
                 value={formValues.password}
@@ -250,9 +262,10 @@ export default function SignUpPage() {
                 id="confirm_password"
                 onChange={(e) => {
                   const { name, value } = e.target;
+
                   setFormValues((prev) => ({
                     ...prev,
-                    [name]: value,
+                    [name]: value.replace(/\s/g, ""),
                   }));
                 }}
                 value={formValues.confirm_password}
@@ -272,9 +285,9 @@ export default function SignUpPage() {
               <p className="text-red-500 text-xs">{errors.confirm_password}</p>
             )}
           </div>
-           {errors.error && (
-              <p className="text-red-500 text-xs">{errors.error}</p>
-            )}    
+          {errors.error && (
+            <p className="text-red-500 text-xs">{errors.error}</p>
+          )}
           {/* Sign Up Button */}
           <button
             type="submit"
@@ -291,33 +304,34 @@ export default function SignUpPage() {
             <div className="flex-1 h-px bg-[#E5E7EB]"></div>
           </div>
 
-          {/* Google */}
-          <button
-            type="button"
-            onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
-            className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4"/>
-              <path d="M13.46 15.13c-.83.63-1.96 1.09-3.46 1.09-2.64 0-4.84-1.74-5.62-4.04H2.18v2.54c1.52 3.02 4.64 5.07 8.28 5.07 2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853"/>
-              <path d="M3.99 10c0-.69.12-1.35.32-1.97V5.49H2.18C1.43 6.93 1 8.43 1 10s.43 3.07 1.18 4.51l2.85-2.22c-.2-.62-.32-1.28-.32-1.97z" fill="#FBBC05"/>
-              <path d="M10 3.88c2.11 0 3.54.75 4.37 1.53l3.27-3.27C14.96.87 12.7 0 10 0 6.36 0 3.24 2.04 1.18 5.49l2.85 2.22c.78-2.3 2.98-4.04 5.62-4.04z" fill="#EA4335"/>
-            </svg>
-            Continue with Google
-          </button>
+          <div className="flex flex-col gap-2">
+            {/* Google */}
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
+              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />
+                <path d="M13.46 15.13c-.83.63-1.96 1.09-3.46 1.09-2.64 0-4.84-1.74-5.62-4.04H2.18v2.54c1.52 3.02 4.64 5.07 8.28 5.07 2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853" />
+                <path d="M3.99 10c0-.69.12-1.35.32-1.97V5.49H2.18C1.43 6.93 1 8.43 1 10s.43 3.07 1.18 4.51l2.85-2.22c-.2-.62-.32-1.28-.32-1.97z" fill="#FBBC05" />
+                <path d="M10 3.88c2.11 0 3.54.75 4.37 1.53l3.27-3.27C14.96.87 12.7 0 10 0 6.36 0 3.24 2.04 1.18 5.49l2.85 2.22c.78-2.3 2.98-4.04 5.62-4.04z" fill="#EA4335" />
+              </svg>
+              Continue with Google
+            </button>
 
-          {/* Facebook */}
-          <button
-            type="button"
-            onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard" })}
-            className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
-            </svg>
-            Continue with Facebook
-          </button>
-
+            {/* Facebook */}
+            <button
+              type="button"
+              onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard" })}
+              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2" />
+              </svg>
+              Continue with Facebook
+            </button>
+          </div>
           {/* Terms */}
           <p className="font-inter text-xs text-[#7D8190] text-center leading-[21px]">
             By signing up you agree to our Terms of Service. Your{" "}
