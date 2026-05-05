@@ -18,15 +18,15 @@ export async function POST(req: Request) {
       teacherComment,
       postAs,
     } = body;
-    // const db = getConnection();
+    
 try {
   const db = getConnection();
-  const [rows] = await db.query("SELECT 1");
+  // const [rows] = await db.query("SELECT 1");
   console.log("DB connected");
 } catch (err) {
   console.error("DB ERROR:", err);
   throw err;
-}
+}const db = getConnection();
     const query = `
       INSERT INTO reports (
         school_name,
