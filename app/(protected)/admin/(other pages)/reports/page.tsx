@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
 
@@ -131,9 +131,9 @@ interface Report {
   returnForTeacher: { answer: string; comment: string };
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
+// ─── Default Mock Data (Fallback) ────────────────────────────────────────────
 
-const allReports: Report[] = [
+const defaultReports: Report[] = [
   {
     id: "RPT-249", school: "Lincoln High School", grade: "10th Grade", teacher: "--", submittedBy: "Anonymous", date: "Mar 16, 2026",
     sentiment: "Positive", status: "Pending", reviewer: "Albert Chambers", score: 88,
@@ -519,6 +519,9 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ReportsPage() {
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sentimentFilter, setSentimentFilter] = useState<"All" | Sentiment>("All");
   const [statusFilter, setStatusFilter] = useState<"All" | Status>("All");
@@ -526,7 +529,34 @@ export default function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const itemsPerPage = 10;
 
-  const filtered = allReports.filter((r) => {
+  // Fetch reports on mount
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch("/api/reports");
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch reports: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setReports(data || []);
+      } catch (err) {
+        console.error("Error fetching reports:", err);
+        setError(err instanceof Error ? err.message : "Failed to fetch reports");
+        // Fallback to default reports on error
+        setReports(defaultReports);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const filtered = reports.filter((r) => {
     const matchSearch =
       search === "" ||
       r.id.toLowerCase().includes(search.toLowerCase()) ||
@@ -543,9 +573,32 @@ export default function ReportsPage() {
   const handleSentimentChange = (val: "All" | Sentiment) => { setSentimentFilter(val); setCurrentPage(1); };
   const handleStatusChange = (val: "All" | Status) => { setStatusFilter(val); setCurrentPage(1); };
 
+  if (loading) {
+    return (
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#0171F9] rounded-full animate-spin" />
+          <p className="font-inter text-[#6B7280]">Loading reports...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative">
       <h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5 mb-6 ">Reports</h1>
+
+      {error && (
+        <div className="mb-6 px-4 py-3 rounded-lg bg-[#FEE2E2] border border-[#FECACA] flex items-start gap-3">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-0.5">
+            <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S14.33 6 13.5 6 12 6.67 12 7.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S7.33 6 6.5 6 5 6.67 5 7.5 5.67 9 6.5 9zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H4.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#DC2626" />
+          </svg>
+          <div>
+            <p className="font-inter font-semibold text-sm text-[#991B1B]">{error}</p>
+            <p className="font-inter text-sm text-[#DC2626] mt-1">Using default reports data</p>
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-lg overflow-hidden">
         {/* Search + Filters */}
