@@ -347,7 +347,7 @@ function StarRating({ count = 0 }: { count?: number }) {
 
 // ─── Report Detail Sidebar ────────────────────────────────────────────────────
 
-function ReportSidebar({ report, onClose }: { report: Report; onClose: () => void }) {
+function ReportSidebar({ report, onClose, onSuccess }: { report: Report; onClose: () => void; onSuccess: () => void }) {
   const [approveLoading, setApproveLoading] = useState(false);
   const [rejectLoading, setRejectLoading] = useState(false);
 
@@ -356,6 +356,7 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
     try {
       const response = await fetch(`/api/reports/${report.id}/approve`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to approve report");
+      onSuccess();
       onClose();
     } catch (err) {
       console.error("Error approving report:", err);
@@ -370,6 +371,7 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
     try {
       const response = await fetch(`/api/reports/${report.id}/reject`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to reject report");
+      onSuccess();
       onClose();
     } catch (err) {
       console.error("Error rejecting report:", err);
@@ -817,7 +819,19 @@ export default function ReportsPage() {
         className={`fixed top-0 right-0 h-full w-full sm:max-w-[556px] bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${selectedReport ? "translate-x-0" : "translate-x-full"}`}
       >
         {selectedReport && (
-          <ReportSidebar report={selectedReport} onClose={() => setSelectedReport(null)} />
+          <ReportSidebar
+            report={selectedReport}
+            onClose={() => setSelectedReport(null)}
+            onSuccess={() => {
+              setReports((prev) =>
+                prev.map((r) =>
+                  r.id === selectedReport.id
+                    ? { ...r, status: r.status === 1 ? 2 : 3 }
+                    : r
+                )
+              );
+            }}
+          />
         )}
       </div>
     </main>
