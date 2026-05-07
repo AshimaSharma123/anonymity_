@@ -16,17 +16,10 @@ export async function POST(req: Request) {
       returnToTeacher,
       schoolComment,
       teacherComment,
-      postAs,
+      postAs, yourName
     } = body;
     
-try {
-  const db = getConnection();
-  // const [rows] = await db.query("SELECT 1");
-  console.log("DB connected");
-} catch (err) {
-  console.error("DB ERROR:", err);
-  throw err;
-}const db = getConnection();
+    const db = getConnection();
     const query = `
       INSERT INTO reports (
         school_name,
@@ -44,7 +37,8 @@ try {
         return_to_teacher,
         school_comment,
         teacher_comment,
-        post_as
+        post_as,
+        your_name
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
@@ -70,6 +64,7 @@ try {
       teacherComment,
 
       postAs === "anonymous" ? 1 : 2,
+      postAs !== "anonymous" ? yourName : ""
     ]);
 
     return NextResponse.json({ success: true });

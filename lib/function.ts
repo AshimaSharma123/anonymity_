@@ -10,3 +10,11 @@ export const scrollToError = (errors: Record<string, string>) => {
     }, 300);
   }
 };
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};

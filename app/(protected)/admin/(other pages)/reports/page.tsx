@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDate } from "@/lib/function";
 import { useState, useEffect } from "react";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
@@ -111,180 +112,64 @@ const RejectIcon = () => (
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Sentiment = "Positive" | "Negative" | "Neutral";
-type Status = "Pending" | "Approved";
 
 interface Report {
   id: string;
-  school: string;
-  grade: string;
-  teacher: string;
-  submittedBy: string;
-  date: string;
+  school_name: string;
+  grade_level: string;
+  teacher_name: string;
+  post_as: number;
+  created_at: string;
   sentiment: Sentiment;
-  status: Status;
+  status: number;
   reviewer: string;
   score: number;
   ratings: { label: string; value: number; max: number }[];
   reviewText: string;
   tags: string[];
-  returnToSchool: { answer: string; comment: string };
-  returnForTeacher: { answer: string; comment: string };
+  return_to_school: { answer: string; comment: string };
+  return_to_teacher: { answer: string; comment: string };
+  your_name: string;
 }
 
 // ─── Default Mock Data (Fallback) ────────────────────────────────────────────
 
-const defaultReports: Report[] = [
-  {
-    id: "RPT-249", school: "Lincoln High School", grade: "10th Grade", teacher: "--", submittedBy: "Anonymous", date: "Mar 16, 2026",
-    sentiment: "Positive", status: "Pending", reviewer: "Albert Chambers", score: 88,
-    ratings: [
-      { label: "Classroom Behavior", value: 5, max: 5 },
-      { label: "Lesson Preparedness", value: 5, max: 5 },
-      { label: "Staff Friendliness", value: 4, max: 5 },
-      { label: "School Cleanliness", value: 4, max: 5 },
-      { label: "Support Level", value: 5, max: 5 },
-    ],
-    reviewText: "\"The administration was incredibly supportive. I arrived early and received a detailed folder with lesson plans, emergency procedures, and classroom expectations. Students were respectful and stayed on task throughout the session.\"",
-    tags: ["Supportive Staff", "Lesson Plans Provided", "Good Behavior"],
-    returnToSchool: { answer: "Yes", comment: "\"Absolutely one of the best schools I've covered. The office staff checked in on me twice during the day.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Lesson plans were detailed and easy to follow. Clear expectations were set for the class.\"" },
-  },
-  {
-    id: "RPT-237", school: "Riverside Academy", grade: "8th Grade", teacher: "--", submittedBy: "Anonymous", date: "Mar 13, 2026",
-    sentiment: "Positive", status: "Pending", reviewer: "Sarah Mitchell", score: 82,
-    ratings: [
-      { label: "Classroom Behavior", value: 4, max: 5 },
-      { label: "Lesson Preparedness", value: 5, max: 5 },
-      { label: "Staff Friendliness", value: 4, max: 5 },
-      { label: "School Cleanliness", value: 5, max: 5 },
-      { label: "Support Level", value: 4, max: 5 },
-    ],
-    reviewText: "\"Great experience overall. Students were engaged and the lesson plans were well prepared. Staff was welcoming and helpful throughout my visit.\"",
-    tags: ["Well Organized", "Engaged Students"],
-    returnToSchool: { answer: "Yes", comment: "\"Would definitely return. The school has a great atmosphere.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Excellent lesson plans provided in advance.\"" },
-  },
-  {
-    id: "RPT-218", school: "Oakwood Primary", grade: "3rd Grade", teacher: "James Morton", submittedBy: "Anonymous", date: "Mar 15, 2026",
-    sentiment: "Positive", status: "Pending", reviewer: "David Lee", score: 90,
-    ratings: [
-      { label: "Classroom Behavior", value: 5, max: 5 },
-      { label: "Lesson Preparedness", value: 5, max: 5 },
-      { label: "Staff Friendliness", value: 5, max: 5 },
-      { label: "School Cleanliness", value: 4, max: 5 },
-      { label: "Support Level", value: 5, max: 5 },
-    ],
-    reviewText: "\"Wonderful primary school with amazing young students. James Morton had left very thorough notes and the day ran smoothly from start to finish.\"",
-    tags: ["Thorough Notes", "Supportive Staff", "Good Behavior"],
-    returnToSchool: { answer: "Yes", comment: "\"One of my favourite schools to cover. Kids are a delight.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"James Morton's preparation made the day very easy.\"" },
-  },
-  {
-    id: "RPT-189", school: "Cedar Valley Institute", grade: "11th Grade", teacher: "--", submittedBy: "Anonymous", date: "Mar 14, 2026",
-    sentiment: "Negative", status: "Pending", reviewer: "Emily Turner", score: 42,
-    ratings: [
-      { label: "Classroom Behavior", value: 2, max: 5 },
-      { label: "Lesson Preparedness", value: 1, max: 5 },
-      { label: "Staff Friendliness", value: 3, max: 5 },
-      { label: "School Cleanliness", value: 2, max: 5 },
-      { label: "Support Level", value: 2, max: 5 },
-    ],
-    reviewText: "\"Unfortunately, no lesson plans were left and students were difficult to manage. Very little support from administration during the day.\"",
-    tags: ["No Lesson Plans", "Difficult Behavior", "Poor Support"],
-    returnToSchool: { answer: "No", comment: "\"Would not return without significant improvements in organization.\"" },
-    returnForTeacher: { answer: "No", comment: "\"No materials or instructions were provided.\"" },
-  },
-  {
-    id: "RPT-176", school: "Pinehill Preparatory", grade: "9th Grade", teacher: "Liam Gallagher", submittedBy: "James", date: "Mar 11, 2026",
-    sentiment: "Positive", status: "Pending", reviewer: "James Porter", score: 79,
-    ratings: [
-      { label: "Classroom Behavior", value: 4, max: 5 },
-      { label: "Lesson Preparedness", value: 4, max: 5 },
-      { label: "Staff Friendliness", value: 4, max: 5 },
-      { label: "School Cleanliness", value: 4, max: 5 },
-      { label: "Support Level", value: 3, max: 5 },
-    ],
-    reviewText: "\"A good day overall. Liam Gallagher had left clear notes and students were generally well-behaved. A few minor disruptions but nothing major.\"",
-    tags: ["Clear Notes", "Good Behavior"],
-    returnToSchool: { answer: "Yes", comment: "\"Would return to this school.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Good preparation from Liam.\"" },
-  },
-  {
-    id: "RPT-165", school: "Sunset Charter School", grade: "7th Grade", teacher: "Isabella Martinez", submittedBy: "Anonymous", date: "Mar 10, 2026",
-    sentiment: "Neutral", status: "Approved", reviewer: "Chloe Adams", score: 65,
-    ratings: [
-      { label: "Classroom Behavior", value: 3, max: 5 },
-      { label: "Lesson Preparedness", value: 4, max: 5 },
-      { label: "Staff Friendliness", value: 3, max: 5 },
-      { label: "School Cleanliness", value: 3, max: 5 },
-      { label: "Support Level", value: 3, max: 5 },
-    ],
-    reviewText: "\"An average experience. The lesson plan was provided but students were somewhat restless. Staff were polite but not particularly proactive.\"",
-    tags: ["Average Experience"],
-    returnToSchool: { answer: "Maybe", comment: "\"Would consider returning but not a priority.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Isabella's lesson plan was adequate.\"" },
-  },
-  {
-    id: "RPT-141", school: "Hillside Technical High", grade: "12th Grade", teacher: "--", submittedBy: "Anonymous", date: "Mar 09, 2026",
-    sentiment: "Positive", status: "Approved", reviewer: "Michael Ross", score: 85,
-    ratings: [
-      { label: "Classroom Behavior", value: 5, max: 5 },
-      { label: "Lesson Preparedness", value: 4, max: 5 },
-      { label: "Staff Friendliness", value: 5, max: 5 },
-      { label: "School Cleanliness", value: 4, max: 5 },
-      { label: "Support Level", value: 4, max: 5 },
-    ],
-    reviewText: "\"Technical students were mature and focused. Great school environment and very supportive admin team throughout the day.\"",
-    tags: ["Mature Students", "Supportive Admin"],
-    returnToSchool: { answer: "Yes", comment: "\"Great school, would return anytime.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Class ran perfectly.\"" },
-  },
-  {
-    id: "RPT-130", school: "Brookside International", grade: "6th Grade", teacher: "Mia Chen", submittedBy: "Anonymous", date: "Mar 08, 2026",
-    sentiment: "Negative", status: "Pending", reviewer: "Lisa Park", score: 38,
-    ratings: [
-      { label: "Classroom Behavior", value: 1, max: 5 },
-      { label: "Lesson Preparedness", value: 2, max: 5 },
-      { label: "Staff Friendliness", value: 2, max: 5 },
-      { label: "School Cleanliness", value: 3, max: 5 },
-      { label: "Support Level", value: 1, max: 5 },
-    ],
-    reviewText: "\"Very challenging day. Students were unmanageable and administration provided no support. Lesson plan was incomplete and difficult to follow.\"",
-    tags: ["Challenging Behavior", "Incomplete Plans", "No Support"],
-    returnToSchool: { answer: "No", comment: "\"Would not return to this school.\"" },
-    returnForTeacher: { answer: "No", comment: "\"Plans were insufficient.\"" },
-  },
-  {
-    id: "RPT-117", school: "Willow Creek Academy", grade: "5th Grade", teacher: "Noah Thompson", submittedBy: "Anonymous", date: "Mar 06, 2026",
-    sentiment: "Neutral", status: "Pending", reviewer: "Anna White", score: 60,
-    ratings: [
-      { label: "Classroom Behavior", value: 3, max: 5 },
-      { label: "Lesson Preparedness", value: 3, max: 5 },
-      { label: "Staff Friendliness", value: 3, max: 5 },
-      { label: "School Cleanliness", value: 4, max: 5 },
-      { label: "Support Level", value: 2, max: 5 },
-    ],
-    reviewText: "\"A fairly average day. Noah Thompson left basic lesson plans. Students were mostly cooperative but there were some behavioral issues in the afternoon.\"",
-    tags: ["Average Day", "Minor Issues"],
-    returnToSchool: { answer: "Maybe", comment: "\"Would consider returning.\"" },
-    returnForTeacher: { answer: "Maybe", comment: "\"Plans could be more detailed.\"" },
-  },
-  {
-    id: "RPT-092", school: "Evergreen STEM School", grade: "10th Grade", teacher: "Ava Robinson", submittedBy: "Anonymous", date: "Mar 05, 2026",
-    sentiment: "Positive", status: "Approved", reviewer: "Tom Harris", score: 93,
-    ratings: [
-      { label: "Classroom Behavior", value: 5, max: 5 },
-      { label: "Lesson Preparedness", value: 5, max: 5 },
-      { label: "Staff Friendliness", value: 5, max: 5 },
-      { label: "School Cleanliness", value: 5, max: 5 },
-      { label: "Support Level", value: 4, max: 5 },
-    ],
-    reviewText: "\"Outstanding experience at Evergreen STEM. Ava Robinson's lesson was incredibly detailed, students were enthusiastic and the school is immaculate.\"",
-    tags: ["Outstanding", "Detailed Plans", "Enthusiastic Students"],
-    returnToSchool: { answer: "Yes", comment: "\"One of the best schools I have ever covered.\"" },
-    returnForTeacher: { answer: "Yes", comment: "\"Ava's preparation was exceptional.\"" },
-  },
-];
+const getSentiment = (report: any) => {
+  const ratings = [
+    report.classroom_behavior,
+    report.lesson_preparedness,
+    report.staff_friendliness,
+    report.school_cleanliness,
+    report.support_level,
+  ];
+
+  const avg =
+    ratings.reduce((sum, val) => sum + Number(val || 0), 0) /
+    ratings.length;
+
+  if (avg >= 4) {
+    return {
+      label: "Positive",
+      bg: "bg-green-100",
+      text: "text-green-700",
+    };
+  }
+
+  if (avg < 3) {
+    return {
+      label: "Negative",
+      bg: "bg-red-100",
+      text: "text-red-700",
+    };
+  }
+
+  return {
+    label: "Neutral",
+    bg: "bg-yellow-100",
+    text: "text-yellow-700",
+  };
+};
+
 
 const sentimentConfig: Record<Sentiment, { bg: string; text: string }> = {
   Positive: { bg: "bg-[#CDFFEE]", text: "text-[#059669]" },
@@ -356,12 +241,15 @@ function ReturnCard({
           {icon}
           <span className="font-outfit text-sm font-medium text-[#0171F9]">{question}</span>
         </div>
+        {answer && 
         <span className={`px-4 py-0.5 rounded-full font-inter text-xs font-semibold ${answerColor}`}>{answer}</span>
+        }
       </div>
+      {comment && 
       <div className="flex items-center gap-2.5 px-5 py-4">
         <div className={`w-0.5 self-stretch rounded-full ${barColor}`} />
         <p className="font-inter text-sm italic font-normal text-[#464555] leading-[22px]">{comment}</p>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -387,9 +275,10 @@ function StarRating({ count = 5 }: { count?: number }) {
 // ─── Report Detail Sidebar ────────────────────────────────────────────────────
 
 function ReportSidebar({ report, onClose }: { report: Report; onClose: () => void }) {
-  const sentimentBadge = report.sentiment === "Positive"
+  const sc = getSentiment(report);
+  const sentimentBadge = sc.label == "Positive"
     ? "bg-[#BBFBE6] text-[#2D7D65]"
-    : report.sentiment === "Negative"
+    : sc.label == "Negative"
     ? "bg-[#FEE2E2] text-[#991B1B]"
     : "bg-[#FFF3DC] text-[#D97706]";
 
@@ -401,17 +290,17 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
       <div className="px-4 sm:px-6 lg:px-7 pt-4 sm:pt-6 lg:pt-8 pb-3 sm:pb-6 border-b border-black/10 flex-shrink-0">
         <div className="flex items-start justify-between mb-1">
           <div className="flex items-end gap-3 flex-wrap">
-            <h2 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">{report.id}</h2>
+            <h2 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">{`RPT-${report.id}`}</h2>
             <div className="flex items-center gap-2 pb-0.5">
               <div className="flex items-center gap-1.5">
                 <AnonymousIcon />
-                <span className="font-inter font-medium text-xs text-[#121212] opacity-70">{report.submittedBy}</span>
+                <span className="font-inter font-medium text-xs text-[#121212] opacity-70">{report.post_as == 1 ? "Anonymous" : report.your_name ? report.your_name  : "NA"}</span>
               </div>
               <span className={`px-2.5 py-1 rounded-md font-inter font-semibold text-xs ${sentimentBadge}`}>
-                {report.sentiment}
+                {sc.label}
               </span>
               <span className="px-2.5 py-1 rounded-md font-inter font-semibold text-xs text-[#F8A202] bg-[#FFEECE] ">
-                {report.status}
+                {report.status == 1 ? "Pending" : report.status == 2 ? "Approved" : "Rejected"}
               </span>
             </div>
           </div>
@@ -423,14 +312,14 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
         <div className="flex flex-col gap-3 mt-4">
           <div className="flex items-center gap-2">
             <SchoolIcon />
-            <span className="font-inter font-medium text-[13px] text-[#030711] opacity-80">{report.school}</span>
+            <span className="font-inter font-medium text-[13px] text-[#030711] opacity-80">{report.school_name}</span>
             <span className="w-1 h-1 rounded-full bg-[#676767]" />
-            <span className="font-inter font-medium text-xs text-[#121212] opacity-64">{report.grade}</span>
+            <span className="font-inter font-medium text-xs text-[#121212] opacity-64">{report.grade_level}</span>
             
-            {report.teacher !== "--" && (
+            {report.teacher_name !== "--" && (
               <>
                 <span className="w-1 h-1 rounded-full bg-[#676767]" />
-                <span className="font-inter font-medium text-xs text-[#121212] opacity-64">{report.teacher}</span>
+                <span className="font-inter font-medium text-xs text-[#121212] opacity-64">{report.teacher_name}</span>
               </>
             )}
           </div>
@@ -451,9 +340,9 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
           <span className="font-outfit text-xs text-[#6B7280] -mt-1">Overall</span>
         </div>
         <div className="flex flex-col gap-[10px] flex-1">
-          {report.ratings.map((r) => (
+          {/* {report.ratings.map((r) => (
             <RatingBar key={r.label} {...r} />
-          ))}
+          ))} */}
         </div>
       </div>
 
@@ -467,7 +356,7 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
           </div>
           <div className="rounded-lg border border-[#E8EDF5] bg-[#F8F9FD] px-5 py-6">
             <p className="font-inter text-sm italic font-normal text-[#1E1E1E] opacity-[0.72] leading-[26px]">
-              {report.reviewText}
+              {report.feedback}
             </p>
           </div>
         </div>
@@ -486,18 +375,20 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
 
         {/* Return cards */}
         <div className="flex flex-col gap-6">
+          {(report?.return_to_school?.answer || report?.return_to_school?.comment) ?
           <ReturnCard
             icon={<BuildingIcon />}
             question="Would you return to this school?"
-            answer={report.returnToSchool.answer}
-            comment={report.returnToSchool.comment}
-          />
+            answer={report?.return_to_school?.answer}
+            comment={report?.return_to_school?.comment}
+          /> : ""}
+          {(report?.return_to_teacher?.answer || report?.return_to_teacher?.comment) ?
           <ReturnCard
             icon={<UserIcon />}
             question="Would you return for this teacher or class?"
-            answer={report.returnForTeacher.answer}
-            comment={report.returnForTeacher.comment}
-          />
+            answer={report?.return_to_teacher?.answer}
+            comment={report?.return_to_teacher?.comment}
+          /> : ""}
         </div>
       </div>
 
@@ -524,7 +415,7 @@ export default function ReportsPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sentimentFilter, setSentimentFilter] = useState<"All" | Sentiment>("All");
-  const [statusFilter, setStatusFilter] = useState<"All" | Status>("All");
+  const [statusFilter, setStatusFilter] = useState<"All" | any>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const itemsPerPage = 10;
@@ -533,6 +424,7 @@ export default function ReportsPage() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
+        
         setLoading(true);
         setError(null);
         const response = await fetch("/api/reports");
@@ -542,12 +434,13 @@ export default function ReportsPage() {
         }
 
         const data = await response.json();
+        console.log("test2", data);
         setReports(data || []);
       } catch (err) {
         console.error("Error fetching reports:", err);
         setError(err instanceof Error ? err.message : "Failed to fetch reports");
         // Fallback to default reports on error
-        setReports(defaultReports);
+        setReports([]);
       } finally {
         setLoading(false);
       }
@@ -560,8 +453,8 @@ export default function ReportsPage() {
     const matchSearch =
       search === "" ||
       r.id.toLowerCase().includes(search.toLowerCase()) ||
-      r.school.toLowerCase().includes(search.toLowerCase()) ||
-      r.teacher.toLowerCase().includes(search.toLowerCase());
+      r.school_name.toLowerCase().includes(search.toLowerCase()) ||
+      r.teacher_name.toLowerCase().includes(search.toLowerCase());
     const matchSentiment = sentimentFilter === "All" || r.sentiment === sentimentFilter;
     const matchStatus = statusFilter === "All" || r.status === statusFilter;
     return matchSearch && matchSentiment && matchStatus;
@@ -571,7 +464,7 @@ export default function ReportsPage() {
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleSentimentChange = (val: "All" | Sentiment) => { setSentimentFilter(val); setCurrentPage(1); };
-  const handleStatusChange = (val: "All" | Status) => { setStatusFilter(val); setCurrentPage(1); };
+  const handleStatusChange = (val: "All" | any) => { setStatusFilter(val); setCurrentPage(1); };
 
   if (loading) {
     return (
@@ -633,7 +526,7 @@ export default function ReportsPage() {
             <div className="relative flex-1 sm:flex-none">
               <select
                 value={statusFilter}
-                onChange={(e) => handleStatusChange(e.target.value as "All" | Status)}
+                onChange={(e) => handleStatusChange(e.target.value as "All" | any)}
                 className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
                 <option value="All">Status: All</option>
@@ -654,9 +547,9 @@ export default function ReportsPage() {
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">ID</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">School</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Teacher</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Sentiment Analysis</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submitted By</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Date</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Submission Date</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Status</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-xs text-[#6F6C70] uppercase whitespace-nowrap">Actions</th>
               </tr>
@@ -668,7 +561,7 @@ export default function ReportsPage() {
                 </tr>
               ) : (
                 paginated.map((report) => {
-                  const sc = sentimentConfig[report.sentiment];
+                  const sc = getSentiment(report);
                   const isSelected = selectedReport?.id === report.id;
                   return (
                     <tr
@@ -677,28 +570,28 @@ export default function ReportsPage() {
                       className={`border-b border-[#F2F4F7] cursor-pointer transition-colors hover:bg-[#F8FAFF] ${isSelected ? "bg-[#EFF6FF]" : ""}`}
                     >
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-medium text-[12px] sm:text-[13px] lg:text-sm text-[#0B77F9] opacity-80">{report.id}</span>
+                        <span className="font-inter font-medium text-[12px] sm:text-[13px] lg:text-sm text-[#0B77F9] opacity-80">{`RPT-${report.id}`}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.school}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report?.school_name}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.teacher}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.teacher_name}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className={`inline-flex items-center px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md ${sc.bg} font-inter font-medium text-[10px] sm:text-xs ${sc.text}`}>
-                          {report.sentiment}
+                          {sc.label}
                         </span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.submittedBy}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.post_as == 1 ? "Anonymous" : report.your_name ? report.your_name  : "NA"}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{report.date}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[13px] lg:text-sm text-[#030711]">{formatDate(report.created_at)}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[12px] sm:text-sm text-[#030711]">
-                          {report.status}
+                          {report.status == 1 ? "Pending" : report.status == 2 ? "Approved" : "Rejected"}
                         </span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap" onClick={(e) => e.stopPropagation()}>

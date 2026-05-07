@@ -16,6 +16,7 @@ type RatingKeys =
   | "supportLevel";
 
 type FormState = {
+  yourName:string,
   schoolName: string,
   teacherName: string,
   date: string,
@@ -41,6 +42,7 @@ type Action =
 /* ─── Initial State ───────────────────────────────── */
 
 const initialState: FormState = {
+  yourName: "",
   schoolName: "",
   teacherName: "",
   date: "",
@@ -651,10 +653,18 @@ export default function SubmitReportPage() {
                         Show Name
                       </span>
                     </button>
+
                     {errors.postAs && (
                       <p className="text-red-500 text-xs mt-1">{errors.postAs}</p>
                     )}
-                  </div>
+                    
+                  </div>{state?.postAs === "show" && <input
+                      type="text"
+                      className={`${inputBase} w-full py-[10px]`}
+                      placeholder="Your Name"
+                      value={state.postAs == "show" ? state.yourName : ""}
+                      onChange={(e) => updateField("yourName", state.postAs === "anonymous" ? e.target.value : "")}
+                    />}
                 </div>
               </section>
 
