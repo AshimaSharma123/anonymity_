@@ -348,6 +348,37 @@ function StarRating({ count = 0 }: { count?: number }) {
 // ─── Report Detail Sidebar ────────────────────────────────────────────────────
 
 function ReportSidebar({ report, onClose }: { report: Report; onClose: () => void }) {
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [rejectLoading, setRejectLoading] = useState(false);
+
+  const handleApprove = async () => {
+    setApproveLoading(true);
+    try {
+      const response = await fetch(`/api/reports/${report.id}/approve`, { method: "POST" });
+      if (!response.ok) throw new Error("Failed to approve report");
+      onClose();
+    } catch (err) {
+      console.error("Error approving report:", err);
+      alert("Failed to approve report");
+    } finally {
+      setApproveLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    setRejectLoading(true);
+    try {
+      const response = await fetch(`/api/reports/${report.id}/reject`, { method: "POST" });
+      if (!response.ok) throw new Error("Failed to reject report");
+      onClose();
+    } catch (err) {
+      console.error("Error rejecting report:", err);
+      alert("Failed to reject report");
+    } finally {
+      setRejectLoading(false);
+    }
+  };
+
   const sc = getSentiment(report);
   const sentimentBadge = sc.label == "Positive"
     ? "bg-[#BBFBE6] text-[#2D7D65]"
@@ -496,13 +527,33 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
 
       {/* Footer actions */}
       <div className="px-5 py-[17px] border-t border-[#F0F0F0] bg-white flex items-center gap-3">
-        <button className="cursor-pointer flex-1 flex items-center justify-center gap-2.5 py-3.5 rounded-lg border border-[#BDF7D3] bg-[#DDFCE9] hover:opacity-90 transition-opacity">
-          <ApproveIcon />
-          <span className="font-inter font-medium text-sm text-[#32A85B] leading-5">Approve</span>
+        <button
+          onClick={handleApprove}
+          disabled={approveLoading || rejectLoading}
+          className="cursor-pointer flex-1 flex items-center justify-center gap-2.5 py-3.5 rounded-lg border border-[#BDF7D3] bg-[#DDFCE9] hover:opacity-90 disabled:opacity-60 transition-opacity"
+        >
+          {approveLoading ? (
+            <div className="w-4 h-4 border-2 border-[#32A85B] border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <ApproveIcon />
+          )}
+          <span className="font-inter font-medium text-sm text-[#32A85B] leading-5">
+            {approveLoading ? "Approving..." : "Approve"}
+          </span>
         </button>
-        <button className="cursor-pointer flex-1 flex items-center justify-center gap-2.5 py-3.5 rounded-lg border border-[#FDCACA] bg-[#FDE2E2] hover:opacity-90 transition-opacity">
-          <RejectIcon />
-          <span className="font-inter font-medium text-sm text-[#DD393D] leading-5">Reject</span>
+        <button
+          onClick={handleReject}
+          disabled={approveLoading || rejectLoading}
+          className="cursor-pointer flex-1 flex items-center justify-center gap-2.5 py-3.5 rounded-lg border border-[#FDCACA] bg-[#FDE2E2] hover:opacity-90 disabled:opacity-60 transition-opacity"
+        >
+          {rejectLoading ? (
+            <div className="w-4 h-4 border-2 border-[#DD393D] border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <RejectIcon />
+          )}
+          <span className="font-inter font-medium text-sm text-[#DD393D] leading-5">
+            {rejectLoading ? "Rejecting..." : "Reject"}
+          </span>
         </button>
       </div>
     </div>
