@@ -469,6 +469,7 @@ export default function SubmitReportPage() {
                 {/* School Name */}
                 <div className="flex flex-col gap-2 relative">
                   <label className={fieldLabel}>School Name</label>
+                  <div className="relative">
                   <div className={`${inputBase} py-[14px]`}>
                     <SearchIcon />
                     <input
@@ -480,6 +481,10 @@ export default function SubmitReportPage() {
                         updateField("schoolName", e.target.value);
                         fetchSchools(e.target.value);
                         setShowSchoolSuggestions(true);
+                        setErrors((prev) => ({
+                        ...prev,
+                        schoolName: "",
+                      }));
                       }}
                       onFocus={() => setShowSchoolSuggestions(true)}
                       onBlur={() => setTimeout(() => setShowSchoolSuggestions(false), 200)}
@@ -491,7 +496,7 @@ export default function SubmitReportPage() {
 
                   {/* School suggestions dropdown */}
                   {showSchoolSuggestions && (state.schoolName.trim() || schoolSuggestions.length > 0) && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                   <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
                       {schoolSearchLoading && (
                         <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
                       )}
@@ -516,9 +521,9 @@ export default function SubmitReportPage() {
                       )}
                     </div>
                   )}
-
+                </div>
                   {errors.schoolName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.schoolName}</p>
+                    <p className="text-red-500 text-xs">{errors.schoolName}</p>
                   )}
                 </div>
 
@@ -526,6 +531,7 @@ export default function SubmitReportPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2 relative">
                     <label className={fieldLabel}>Teacher Name</label>
+                    <div className="relative">
                     <div className={`${inputBase} py-[14px]`}>
                       <SearchIcon />
                       <input
@@ -537,6 +543,10 @@ export default function SubmitReportPage() {
                           updateField("teacherName", e.target.value);
                           fetchTeachers(e.target.value);
                           setShowTeacherSuggestions(true);
+                          setErrors((prev) => ({
+                            ...prev,
+                            teacherName: "",
+                          }));
                         }}
                         onFocus={() => setShowTeacherSuggestions(true)}
                         onBlur={() => setTimeout(() => setShowTeacherSuggestions(false), 200)}
@@ -572,9 +582,9 @@ export default function SubmitReportPage() {
                         )}
                       </div>
                     )}
-
+                    </div>
                     {errors.teacherName && (
-                      <p className="text-red-500 text-xs mt-1">{errors.teacherName}</p>
+                      <p className="text-red-500 text-xs">{errors.teacherName}</p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
@@ -585,7 +595,12 @@ export default function SubmitReportPage() {
                         type="date"
                         id="date"
                         value={state.date}
-                        onChange={(e) => updateField("date", e.target.value)}
+                        onChange={(e) => {updateField("date", e.target.value)
+                          setErrors((prev) => ({
+                            ...prev,
+                            date: "",
+                          }));
+                        }}
                         className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] appearance-none"
                       />
                       <div
@@ -595,7 +610,7 @@ export default function SubmitReportPage() {
                       </div>
                     </div>
                     {errors.date && (
-                      <p className="text-red-500 text-xs mt-1">{errors.date}</p>
+                      <p className="text-red-500 text-xs">{errors.date}</p>
                     )}
                   </div>
                 </div>
@@ -638,7 +653,7 @@ export default function SubmitReportPage() {
                     </div>
                   ))}
                   {errors.ratings && (
-                    <p className="text-red-500 text-xs mt-1">{errors.ratings}</p>
+                    <p className="text-red-500 text-xs">{errors.ratings}</p>
                   )}
                 </div>
               </section>
@@ -657,11 +672,16 @@ export default function SubmitReportPage() {
                     className="h-[102px] px-4 pt-[13px] pb-[14px] rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder-[#6B7280] resize-none outline-none"
                     placeholder="Enter your feedback here"
                     value={state.feedback}
-                    onChange={(e) => updateField("feedback", e.target.value)}
+                    onChange={(e) => {updateField("feedback", e.target.value)
+                      setErrors((prev) => ({
+                            ...prev,
+                            feedback: "",
+                          }));
+                    }}
                   />
 
                   {errors.feedback && (
-                    <p className="text-red-500 text-xs mt-1">{errors.feedback}</p>
+                    <p className="text-red-500 text-xs">{errors.feedback}</p>
                   )}
                 </div>
 
@@ -693,7 +713,7 @@ export default function SubmitReportPage() {
                       );
                     })}
                     {errors.selectedTags && (
-                      <p className="text-red-500 text-xs mt-1">{errors.selectedTags}</p>
+                      <p className="text-red-500 text-xs ">{errors.selectedTags}</p>
                     )}
                   </div>
                 </div>
@@ -734,7 +754,7 @@ export default function SubmitReportPage() {
                       onChange={(e) => updateField("teacherComment", e.target.value)}
                     />
                     {errors.returnToTeacher && (
-                      <p className="text-red-500 text-xs mt-1">{errors.returnToTeacher}</p>
+                      <p className="text-red-500 text-xs">{errors.returnToTeacher}</p>
                     )}
                     
                   </div>
@@ -787,7 +807,7 @@ export default function SubmitReportPage() {
                     </button>
 
                     {errors.postAs && (
-                      <p className="text-red-500 text-xs mt-1">{errors.postAs}</p>
+                      <p className="text-red-500 text-xs ">{errors.postAs}</p>
                     )}
                     
                   </div>{state?.postAs === "show" && <input

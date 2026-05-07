@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       returnToTeacher,
       schoolComment,
       teacherComment,
-      postAs, yourName
+      postAs, yourName, schoolAssociation
     } = body;
     
     const db = getConnection();
@@ -38,8 +38,9 @@ export async function POST(req: Request) {
         school_comment,
         teacher_comment,
         post_as,
-        your_name
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        your_name,
+        school_association
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     await db.execute(query, [
@@ -64,7 +65,8 @@ export async function POST(req: Request) {
       teacherComment,
 
       postAs === "anonymous" ? 1 : 2,
-      postAs != "anonymous" ? yourName : ""
+      postAs != "anonymous" ? yourName : "",
+      schoolAssociation
     ]);
 
     return NextResponse.json({ success: true });
