@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useReducer, useCallback } from "react";
+import { useRef, useState, useReducer, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -324,12 +324,68 @@ export default function SubmitReportPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const dateRef = useRef<HTMLInputElement>(null);
 
+  // Schools search state
+  const [schoolSuggestions, setSchoolSuggestions] = useState<string[]>([]);
+  const [schoolSearchLoading, setSchoolSearchLoading] = useState(false);
+  const [showSchoolSuggestions, setShowSchoolSuggestions] = useState(false);
+
+  // Teachers search state
+  const [teacherSuggestions, setTeacherSuggestions] = useState<string[]>([]);
+  const [teacherSearchLoading, setTeacherSearchLoading] = useState(false);
+  const [showTeacherSuggestions, setShowTeacherSuggestions] = useState(false);
+
   const updateField = useCallback(
     (field: keyof FormState, value: any) => {
       dispatch({ type: "SET_FIELD", field, value });
     },
     []
   );
+
+  // Fetch schools by search query
+  const fetchSchools = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setSchoolSuggestions([]);
+      return;
+    }
+
+    try {
+      setSchoolSearchLoading(true);
+      const response = await fetch(`/api/schools?search=${encodeURIComponent(query)}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setSchoolSuggestions(Array.isArray(data) ? data : data.schools || []);
+      }
+    } catch (error) {
+      console.error("Error fetching schools:", error);
+      setSchoolSuggestions([]);
+    } finally {
+      setSchoolSearchLoading(false);
+    }
+  }, []);
+
+  // Fetch teachers by search query
+  const fetchTeachers = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setTeacherSuggestions([]);
+      return;
+    }
+
+    try {
+      setTeacherSearchLoading(true);
+      const response = await fetch(`/api/teachers?search=${encodeURIComponent(query)}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setTeacherSuggestions(Array.isArray(data) ? data : data.teachers || []);
+      }
+    } catch (error) {
+      console.error("Error fetching teachers:", error);
+      setTeacherSuggestions([]);
+    } finally {
+      setTeacherSearchLoading(false);
+    }
+  }, []);
 
   const setRating = useCallback(
     (key: RatingKeys, value: number) => {
@@ -404,7 +460,7 @@ export default function SubmitReportPage() {
                 <h2 className={sectionHeading}>Assignment Details</h2>
 
                 {/* School Name */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 relative">
                   <label className={fieldLabel}>School Name</label>
                   <div className={`${inputBase} py-[14px]`}>
                     <SearchIcon />
@@ -413,12 +469,46 @@ export default function SubmitReportPage() {
                       id="schoolName"
                       placeholder="Search for institution..."
                       value={state.schoolName}
-                      onChange={(e) => updateField("schoolName", e.target.value)}
-
+                      onChange={(e) => {
+                        updateField("schoolName", e.target.value);
+                        fetchSchools(e.target.value);
+                        setShowSchoolSuggestions(true);
+                      }}
+                      onFocus={() => setShowSchoolSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowSchoolSuggestions(false), 200)}
                       className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
+                      autoComplete="off"
                     />
 
                   </div>
+
+                  {/* School suggestions dropdown */}
+                  {showSchoolSuggestions && (state.schoolName.trim() || schoolSuggestions.length > 0) && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                      {schoolSearchLoading && (
+                        <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
+                      )}
+                      {!schoolSearchLoading && schoolSuggestions.length > 0 && (
+                        schoolSuggestions.map((school, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              updateField("schoolName", school);
+                              setShowSchoolSuggestions(false);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
+                          >
+                            {school}
+                          </button>
+                        ))
+                      )}
+                      {!schoolSearchLoading && schoolSuggestions.length === 0 && state.schoolName.trim() && (
+                        <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No schools found</div>
+                      )}
+                    </div>
+                  )}
+
                   {errors.schoolName && (
                     <p className="text-red-500 text-xs mt-1">{errors.schoolName}</p>
                   )}
@@ -426,7 +516,7 @@ export default function SubmitReportPage() {
 
                 {/* Teacher + Date row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 relative">
                     <label className={fieldLabel}>Teacher Name</label>
                     <div className={`${inputBase} py-[14px]`}>
                       <SearchIcon />
@@ -435,12 +525,46 @@ export default function SubmitReportPage() {
                         id="teacherName"
                         placeholder="Search for Teacher..."
                         value={state.teacherName}
-                        onChange={(e) => updateField("teacherName", e.target.value)}
-
+                        onChange={(e) => {
+                          updateField("teacherName", e.target.value);
+                          fetchTeachers(e.target.value);
+                          setShowTeacherSuggestions(true);
+                        }}
+                        onFocus={() => setShowTeacherSuggestions(true)}
+                        onBlur={() => setTimeout(() => setShowTeacherSuggestions(false), 200)}
                         className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
+                        autoComplete="off"
                       />
 
                     </div>
+
+                    {/* Teacher suggestions dropdown */}
+                    {showTeacherSuggestions && (state.teacherName.trim() || teacherSuggestions.length > 0) && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                        {teacherSearchLoading && (
+                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
+                        )}
+                        {!teacherSearchLoading && teacherSuggestions.length > 0 && (
+                          teacherSuggestions.map((teacher, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => {
+                                updateField("teacherName", teacher);
+                                setShowTeacherSuggestions(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
+                            >
+                              {teacher}
+                            </button>
+                          ))
+                        )}
+                        {!teacherSearchLoading && teacherSuggestions.length === 0 && state.teacherName.trim() && (
+                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No teachers found</div>
+                        )}
+                      </div>
+                    )}
+
                     {errors.teacherName && (
                       <p className="text-red-500 text-xs mt-1">{errors.teacherName}</p>
                     )}
