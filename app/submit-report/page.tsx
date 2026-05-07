@@ -336,6 +336,9 @@ export default function SubmitReportPage() {
   const [teacherSearchLoading, setTeacherSearchLoading] = useState(false);
   const [showTeacherSuggestions, setShowTeacherSuggestions] = useState(false);
 
+  // Form submission loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const updateField = useCallback(
     (field: keyof FormState, value: any) => {
       dispatch({ type: "SET_FIELD", field, value });
@@ -403,14 +406,15 @@ export default function SubmitReportPage() {
 
     const validationErrors = validateForm(state);
     setErrors(validationErrors);
-   
+
     if (Object.keys(validationErrors).length > 0) {
       scrollToError(validationErrors);
       return;
     }
 
-     try {
- 
+    try {
+      setIsSubmitting(true);
+
       const response = await fetch("/api/submit-report", {
         method: "POST",
         headers: {
@@ -428,6 +432,7 @@ export default function SubmitReportPage() {
 
   } catch (error) {
     console.error("Error submitting report:", error);
+    setIsSubmitting(false);
   }
   };
 
@@ -814,10 +819,24 @@ export default function SubmitReportPage() {
                     </button>
                     <button
                       type="submit"
-                      className="flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl bg-[#0171F9] font-inter text-sm sm:text-base font-semibold text-white cursor-pointer hover:bg-blue-700 transition-colors"
+                      disabled={isSubmitting}
+                      className={`flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl font-inter text-sm sm:text-base font-semibold text-white transition-colors ${
+                        isSubmitting
+                          ? "bg-[#0171F9]/70 cursor-not-allowed opacity-75"
+                          : "bg-[#0171F9] cursor-pointer hover:bg-blue-700"
+                      }`}
                     >
-                      Submit Report
-                      <SendIcon />
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          Submit Report
+                          <SendIcon />
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
