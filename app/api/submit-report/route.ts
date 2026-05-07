@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         teacher_comment,
         post_as,
         your_name
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     await db.execute(query, [
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       teacherComment,
 
       postAs === "anonymous" ? 1 : 2,
-      postAs !== "anonymous" ? yourName : ""
+      postAs != "anonymous" ? yourName : ""
     ]);
 
     return NextResponse.json({ success: true });

@@ -122,14 +122,22 @@ interface Report {
   created_at: string;
   sentiment: Sentiment;
   status: number;
-  reviewer: string;
+  school_association: string;
   score: number;
   ratings: { label: string; value: number; max: number }[];
   reviewText: string;
   tags: string[];
-  return_to_school: { answer: string; comment: string };
-  return_to_teacher: { answer: string; comment: string };
   your_name: string;
+  feedback: string;
+  classroom_behavior: number;
+  lesson_preparedness: number;
+  staff_friendliness: number;
+  school_cleanliness: number;
+  support_level: number;
+  return_to_school: number;
+  school_comment: string;
+  return_to_teacher: number;
+  teacher_comment: string;
 }
 
 // ─── Default Mock Data (Fallback) ────────────────────────────────────────────
@@ -182,23 +190,58 @@ const sentimentConfig: Record<Sentiment, { bg: string; text: string }> = {
 function ScoreCircle({ score }: { score: number }) {
   const radius = 31;
   const circumference = 2 * Math.PI * radius;
-  const progress = (score / 100) * circumference;
-  const scoreColor = score >= 70 ? "#34C567" : score >= 50 ? "#F8A202" : "#EF4444";
+
+  // ⭐ convert 5-scale to percentage
+  const percentage = (score / 5) * 100;
+
+  const progress = (percentage / 100) * circumference;
+
+  const scoreColor =
+    score >= 4
+      ? "#34C567"
+      : score >= 3
+      ? "#F8A202"
+      : "#EF4444";
 
   return (
     <div className="relative w-[70px] h-[70px]">
-      <svg width="70" height="70" viewBox="0 0 70 70" className="rotate-[-90deg]">
-        <circle cx="35" cy="35" r={radius} fill="none" stroke="#F1F5F9" strokeWidth="6" />
+      <svg
+        width="70"
+        height="70"
+        viewBox="0 0 70 70"
+        className="rotate-[-90deg]"
+      >
+        {/* Background */}
         <circle
-          cx="35" cy="35" r={radius} fill="none"
-          stroke={scoreColor} strokeWidth="6"
+          cx="35"
+          cy="35"
+          r={radius}
+          fill="none"
+          stroke="#F1F5F9"
+          strokeWidth="6"
+        />
+
+        {/* Progress */}
+        <circle
+          cx="35"
+          cy="35"
+          r={radius}
+          fill="none"
+          stroke={scoreColor}
+          strokeWidth="6"
           strokeDasharray={`${progress} ${circumference}`}
           strokeLinecap="round"
         />
       </svg>
+
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-outfit font-semibold text-lg text-black leading-none">{score}</span>
-        <span className="font-outfit text-[10px] text-[#6B7280] leading-none mt-0.5">Score</span>
+        <span className="font-outfit font-semibold text-lg text-black leading-none">
+          {score}
+        </span>
+
+        <span className="font-outfit text-[10px] text-[#6B7280] leading-none mt-0.5">
+          Score
+        </span>
       </div>
     </div>
   );
@@ -256,16 +299,46 @@ function ReturnCard({
 
 // ─── Stars ────────────────────────────────────────────────────────────────────
 
-function StarRating({ count = 5 }: { count?: number }) {
+function StarRating({ count = 0 }: { count?: number }) {
   return (
-    <svg width="79" height="12" viewBox="0 0 79 12" fill="none">
+    <svg width="90" height="16" viewBox="0 0 90 16" fill="none">
       {[0, 1, 2, 3, 4].map((i) => {
-        const x = i * 16.45;
+        const x = i * 18;
+
+        // ⭐ Determine fill percentage for this star
+        const fillPercent = Math.max(
+          0,
+          Math.min(1, count - i)
+        );
+
         return (
-          <path key={i} transform={`translate(${x}, 0)`}
-            d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
-            fill={i < count ? "#0171F9" : "#E2E8F0"} stroke={i < count ? "#0171F9" : "#E2E8F0"} strokeWidth="0.92"
-          />
+          <g key={i} transform={`translate(${x}, 0)`}>
+            {/* Empty star */}
+            <path
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#E2E8F0"
+              stroke="#E2E8F0"
+              strokeWidth="0.92"
+            />
+
+            {/* Partial filled star */}
+            <clipPath id={`clip-${i}`}>
+              <rect
+                x="0"
+                y="0"
+                width={13 * fillPercent}
+                height="13"
+              />
+            </clipPath>
+
+            <path
+              clipPath={`url(#clip-${i})`}
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#0171F9"
+              stroke="#0171F9"
+              strokeWidth="0.92"
+            />
+          </g>
         );
       })}
     </svg>
@@ -282,7 +355,35 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
     ? "bg-[#FEE2E2] text-[#991B1B]"
     : "bg-[#FFF3DC] text-[#D97706]";
 
-  const starCount = Math.round((report.score / 100) * 5);
+
+  const ratings = [
+  {
+    label: "Classroom Behavior",
+    value: report.classroom_behavior,
+    max:5
+  },
+  {
+    label: "Lesson Preparedness",
+    value: report.lesson_preparedness,
+    max:5
+  },
+  {
+    label: "Staff Friendliness",
+    value: report.staff_friendliness,
+    max:5
+  },
+  {
+    label: "School Cleanliness",
+    value: report.school_cleanliness,
+    max:5
+  },
+  {
+    label: "Support Level",
+    value: report.support_level,
+    max:5
+  },
+];
+  const starCount = (ratings.reduce((sum, rating) => sum + rating.value, 0) / ratings.length);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -290,12 +391,13 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
       <div className="px-4 sm:px-6 lg:px-7 pt-4 sm:pt-6 lg:pt-8 pb-3 sm:pb-6 border-b border-black/10 flex-shrink-0">
         <div className="flex items-start justify-between mb-1">
           <div className="flex items-end gap-3 flex-wrap">
-            <h2 className="font-outfit font-semibold text-[28px] text-[#121212] leading-5">{`RPT-${report.id}`}</h2>
-            <div className="flex items-center gap-2 pb-0.5">
-              <div className="flex items-center gap-1.5">
-                <AnonymousIcon />
+            <h2 className="font-outfit font-semibold text-[32px] text-[#121212] leading-5">{`RPT-${report.id}`}</h2>
+             <div className="flex items-center gap-1.5">
+                {report.post_as == 1 ? <AnonymousIcon /> : <UserIcon/>}
                 <span className="font-inter font-medium text-xs text-[#121212] opacity-70">{report.post_as == 1 ? "Anonymous" : report.your_name ? report.your_name  : "NA"}</span>
               </div>
+            <div className="flex items-center gap-2 pb-0.5">
+             
               <span className={`px-2.5 py-1 rounded-md font-inter font-semibold text-xs ${sentimentBadge}`}>
                 {sc.label}
               </span>
@@ -327,7 +429,7 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
            
 <svg width="17" height="17" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M7.39539 7.41538C7.5097 7.45906 7.60199 7.54635 7.65195 7.65806C7.70192 7.76976 7.70548 7.89674 7.66185 8.01107C7.26862 9.03999 6.67047 9.60738 5.94431 9.89168C5.27231 10.1538 4.5277 10.1538 3.88585 10.1538H3.84585C3.15662 10.1538 2.57816 10.16 2.08339 10.3532C1.62862 10.5305 1.20462 10.8861 0.892625 11.7034C0.848884 11.8177 0.761519 11.91 0.649747 11.9599C0.537976 12.0098 0.410954 12.0133 0.296625 11.9695C0.182297 11.9258 0.0900263 11.8384 0.0401128 11.7267C-0.00980069 11.6149 -0.0132688 11.4879 0.0304715 11.3735C0.423087 10.3446 1.02124 9.77722 1.74739 9.49292C2.42001 9.23076 3.16462 9.23076 3.80585 9.23076H3.84585C4.53508 9.23076 5.11354 9.22461 5.60831 9.03138C6.0637 8.85415 6.4877 8.49845 6.7997 7.68122C6.84338 7.56691 6.93067 7.47463 7.04237 7.42466C7.15408 7.37469 7.28106 7.37175 7.39539 7.41538ZM7.19847 0H9.72585C10.4231 0 10.9929 3.35276e-08 11.4428 0.0603077C11.9129 0.123692 12.3203 0.260307 12.6458 0.585846C12.9708 0.911384 13.1074 1.31815 13.1708 1.78892C13.2311 2.23815 13.2311 2.808 13.2311 3.50584V4.80246C13.2311 5.49969 13.2311 6.06892 13.1708 6.51938C13.108 6.98892 12.9708 7.3963 12.6458 7.72184C12.3209 8.04738 11.9129 8.18399 11.4428 8.24738C10.9929 8.30769 10.4231 8.30769 9.72585 8.30769H8.76893C8.64652 8.30769 8.52912 8.25906 8.44257 8.1725C8.35601 8.08595 8.30739 7.96856 8.30739 7.84615C8.30739 7.72374 8.35601 7.60635 8.44257 7.51979C8.52912 7.43324 8.64652 7.38461 8.76893 7.38461H9.69262C10.4311 7.38461 10.9388 7.38338 11.3197 7.3323C11.6871 7.28307 11.8674 7.19446 11.9929 7.06892C12.1185 6.94399 12.2065 6.76369 12.2563 6.39569C12.3074 6.01476 12.3086 5.50769 12.3086 4.76923V3.53846C12.3086 2.8 12.3074 2.29292 12.2563 1.912C12.2071 1.544 12.1185 1.36431 11.9929 1.23877C11.8674 1.11323 11.6871 1.02461 11.3197 0.975384C10.9382 0.924307 10.4311 0.923076 9.69323 0.923076H7.2317C6.49324 0.923076 5.98554 0.924307 5.60462 0.975384C5.23724 1.02461 5.05693 1.11323 4.93139 1.23877C4.82431 1.34585 4.74554 1.49169 4.69385 1.75569C4.6397 2.03261 4.62185 2.4 4.61754 2.92677C4.61706 2.98738 4.60464 3.0473 4.581 3.10311C4.55736 3.15892 4.52295 3.20953 4.47975 3.25204C4.43655 3.29456 4.3854 3.32815 4.32922 3.35089C4.27304 3.37364 4.21292 3.3851 4.15231 3.38461C4.0917 3.38413 4.03178 3.37171 3.97597 3.34807C3.92016 3.32442 3.86955 3.29002 3.82704 3.24682C3.78452 3.20362 3.75093 3.15247 3.72819 3.09629C3.70544 3.0401 3.69398 2.97999 3.69447 2.91938C3.69878 2.39569 3.71539 1.94892 3.78801 1.57784C3.86308 1.19446 4.00401 0.860307 4.27847 0.585846C4.60462 0.260307 5.01139 0.123692 5.48154 0.0603077C5.93139 3.35276e-08 6.50124 0 7.19847 0Z" fill="#121212"></path><path fillRule="evenodd" clipRule="evenodd" d="M3.84564 5.23126C3.56002 5.23126 3.2861 5.34473 3.08414 5.54669C2.88218 5.74865 2.76872 6.02257 2.76872 6.30819C2.76872 6.5938 2.88218 6.86772 3.08414 7.06969C3.2861 7.27165 3.56002 7.38511 3.84564 7.38511C4.13126 7.38511 4.40518 7.27165 4.60714 7.06969C4.8091 6.86772 4.92256 6.5938 4.92256 6.30819C4.92256 6.02257 4.8091 5.74865 4.60714 5.54669C4.40518 5.34473 4.13126 5.23126 3.84564 5.23126ZM1.84564 6.30819C1.84564 5.77775 2.05636 5.26905 2.43143 4.89397C2.8065 4.5189 3.31521 4.30819 3.84564 4.30819C4.37607 4.30819 4.88478 4.5189 5.25985 4.89397C5.63492 5.26905 5.84564 5.77775 5.84564 6.30819C5.84564 6.83862 5.63492 7.34733 5.25985 7.7224C4.88478 8.09747 4.37607 8.30818 3.84564 8.30818C3.31521 8.30818 2.8065 8.09747 2.43143 7.7224C2.05636 7.34733 1.84564 6.83862 1.84564 6.30819ZM6.15333 2.92357C6.15333 2.80117 6.20196 2.68377 6.28851 2.59722C6.37507 2.51066 6.49246 2.46204 6.61487 2.46204H10.3072C10.4296 2.46204 10.547 2.51066 10.6335 2.59722C10.7201 2.68377 10.7687 2.80117 10.7687 2.92357C10.7687 3.04598 10.7201 3.16338 10.6335 3.24993C10.547 3.33649 10.4296 3.38511 10.3072 3.38511H6.61487C6.49246 3.38511 6.37507 3.33649 6.28851 3.24993C6.20196 3.16338 6.15333 3.04598 6.15333 2.92357ZM7.99948 5.38511C7.99948 5.2627 8.04811 5.14531 8.13466 5.05875C8.22122 4.9722 8.33861 4.92357 8.46102 4.92357H10.3072C10.4296 4.92357 10.547 4.9722 10.6335 5.05875C10.7201 5.14531 10.7687 5.2627 10.7687 5.38511C10.7687 5.50752 10.7201 5.62491 10.6335 5.71147C10.547 5.79802 10.4296 5.84665 10.3072 5.84665H8.46102C8.33861 5.84665 8.22122 5.79802 8.13466 5.71147C8.04811 5.62491 7.99948 5.50752 7.99948 5.38511Z" fill="#121212"></path></svg>
 
-            <span className="font-inter font-medium text-[13px] text-[#030711] opacity-80">{report.reviewer}</span>
+            <span className="font-inter font-medium text-[13px] text-[#030711] opacity-80">{report?.school_association}</span>
           </div>
         </div>
       </div>
@@ -335,14 +437,14 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
       {/* Score + Ratings */}
       <div className="px-7 py-6 flex items-start gap-8">
         <div className="flex flex-col items-center gap-3 flex-shrink-0">
-          <ScoreCircle score={report.score} />
+          <ScoreCircle score={ratings.reduce((sum, rating) => sum + rating.value, 0) / ratings.length} />
           <StarRating count={starCount} />
           <span className="font-outfit text-xs text-[#6B7280] -mt-1">Overall</span>
         </div>
         <div className="flex flex-col gap-[10px] flex-1">
-          {/* {report.ratings.map((r) => (
+          {ratings.map((r) => (
             <RatingBar key={r.label} {...r} />
-          ))} */}
+          ))}
         </div>
       </div>
 
@@ -375,19 +477,19 @@ function ReportSidebar({ report, onClose }: { report: Report; onClose: () => voi
 
         {/* Return cards */}
         <div className="flex flex-col gap-6">
-          {(report?.return_to_school?.answer || report?.return_to_school?.comment) ?
+          {(report?.return_to_school || report?.school_comment) ?
           <ReturnCard
             icon={<BuildingIcon />}
             question="Would you return to this school?"
-            answer={report?.return_to_school?.answer}
-            comment={report?.return_to_school?.comment}
+            answer={report?.return_to_school == 1 ? "Yes" : report?.return_to_school ==2 ? "No" : "May be"}
+            comment={report?.school_comment}
           /> : ""}
-          {(report?.return_to_teacher?.answer || report?.return_to_teacher?.comment) ?
+          {(report?.return_to_teacher || report?.teacher_comment) ?
           <ReturnCard
             icon={<UserIcon />}
             question="Would you return for this teacher or class?"
-            answer={report?.return_to_teacher?.answer}
-            comment={report?.return_to_teacher?.comment}
+            answer={report?.return_to_teacher == 1 ? "Yes" : report?.return_to_teacher ==2 ? "No" : "May be"}
+            comment={report?.teacher_comment}
           /> : ""}
         </div>
       </div>
@@ -604,7 +706,7 @@ export default function ReportsPage() {
                           </button>
                           <button
                             onClick={() => setSelectedReport(report)}
-                            className="flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[12px] sm:text-[14px] text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity"
+                            className="cursor-pointer flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[12px] sm:text-[14px] text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity"
                           >
                             View
                           </button>

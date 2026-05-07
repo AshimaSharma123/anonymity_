@@ -19,6 +19,7 @@ type FormState = {
   yourName:string,
   schoolName: string,
   teacherName: string,
+  schoolAssociation: string,
   date: string,
   gradeLevel: string;
   ratings: Record<RatingKeys, number>;
@@ -44,6 +45,7 @@ type Action =
 const initialState: FormState = {
   yourName: "",
   schoolName: "",
+  schoolAssociation: "",
   teacherName: "",
   date: "",
   gradeLevel: "Elementary",
@@ -489,17 +491,18 @@ export default function SubmitReportPage() {
                         <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
                       )}
                       {!schoolSearchLoading && schoolSuggestions.length > 0 && (
-                        schoolSuggestions.map((school, idx) => (
+                        schoolSuggestions.map((school: any, idx: number) => (
                           <button
                             key={idx}
                             type="button"
                             onClick={() => {
-                              updateField("schoolName", school);
+                              updateField("schoolName", school.school_name);
+                              updateField("schoolAssociation", school.school_association == "School District" ? school.school_district_name : school.school_association);
                               setShowSchoolSuggestions(false);
                             }}
                             className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
                           >
-                            {school}
+                            {school.school_name}
                           </button>
                         ))
                       )}
@@ -545,17 +548,17 @@ export default function SubmitReportPage() {
                           <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
                         )}
                         {!teacherSearchLoading && teacherSuggestions.length > 0 && (
-                          teacherSuggestions.map((teacher, idx) => (
+                          teacherSuggestions.map((teacher: any, idx1: number) => (
                             <button
-                              key={idx}
+                              key={idx1}
                               type="button"
                               onClick={() => {
-                                updateField("teacherName", teacher);
+                                updateField("teacherName", teacher.name);
                                 setShowTeacherSuggestions(false);
                               }}
                               className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
                             >
-                              {teacher}
+                              {teacher.name}
                             </button>
                           ))
                         )}
@@ -787,7 +790,7 @@ export default function SubmitReportPage() {
                       className={`${inputBase} w-full py-[10px]`}
                       placeholder="Your Name"
                       value={state.postAs == "show" ? state.yourName : ""}
-                      onChange={(e) => updateField("yourName", state.postAs === "anonymous" ? e.target.value : "")}
+                      onChange={(e) => updateField("yourName", state.postAs != "anonymous" ? e.target.value : "")}
                     />}
                 </div>
               </section>
