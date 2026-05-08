@@ -2,21 +2,29 @@ import { getConnection } from "@/lib/db";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const db = getConnection();
-  
+
   try {
-    const id = params.id;
-    
+    //  await params
+    const { id } = await params;
+
     const query = `UPDATE reports SET status = 3 WHERE id = ?`;
+
     await db.query(query, [id]);
 
-    return Response.json({ success: true, message: "Report rejected" });
+    return Response.json({
+      success: true,
+      message: "Report rejected",
+    });
   } catch (error) {
-    console.error("Reject report error:", error);
+    console.error("reject report error:", error);
+
     return Response.json(
-      { error: "Failed to reject report" },
+      {
+        error: "Failed to reject report",
+      },
       { status: 500 }
     );
   }
