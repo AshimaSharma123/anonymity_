@@ -566,7 +566,7 @@ function ReportSidebar({ report, onClose, onApprove, onReject }: { report: Repor
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ReportsPage() {
-  const [reports, setReports] = useState<Report[]>([]);
+  const [paginated, setPaginated] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -574,57 +574,47 @@ export default function ReportsPage() {
   const [statusFilter, setStatusFilter] = useState<"All" | any>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const itemsPerPage = 10;
 
-  // Fetch reports on mount
   useEffect(() => {
     const fetchReports = async () => {
       try {
-
         setLoading(true);
         setError(null);
-        const response = await fetch("/api/reports");
+
+        const params = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: itemsPerPage.toString(),
+          search,
+          sentiment: sentimentFilter,
+          status: statusFilter,
+        });
+
+        const response = await fetch(`/api/reports?${params}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch reports: ${response.statusText}`);
         }
 
         const data = await response.json();
-        console.log("test2", data);
-        setReports(data || []);
+        setPaginated(data.data || []);
+        setTotalPages(data.totalPages || 1);
+        setTotal(data.total || 0);
       } catch (err) {
         console.error("Error fetching reports:", err);
         setError(err instanceof Error ? err.message : "Failed to fetch reports");
-        // Fallback to default reports on error
-        setReports([]);
+        setPaginated([]);
+        setTotalPages(1);
+        setTotal(0);
       } finally {
         setLoading(false);
       }
     };
 
     fetchReports();
-  }, []);
-
- const filtered = reports.filter((r) => {
-  const matchSearch =
-    search === "" ||
-    String(r.id).includes(search) ||
-    r.school_name?.toLowerCase().includes(search.toLowerCase()) ||
-    r.teacher_name?.toLowerCase().includes(search.toLowerCase());
-
-  const matchSentiment =
-    sentimentFilter === "All" ||
-    r.sentiment === sentimentFilter;
-
-  const matchStatus =
-    statusFilter === "All" ||
-    r.status === statusFilter;
-
-  return matchSearch && matchSentiment && matchStatus;
-});
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-  const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [currentPage, search, sentimentFilter, statusFilter]);
 
   const handleSentimentChange = (val: "All" | Sentiment) => { setSentimentFilter(val); setCurrentPage(1); };
   const handleStatusChange = (val: "All" | any) => { setStatusFilter(val); setCurrentPage(1); };
@@ -689,12 +679,13 @@ export default function ReportsPage() {
             <div className="relative flex-1 sm:flex-none">
               <select
                 value={statusFilter}
-                onChange={(e) => handleStatusChange(e.target.value as "All" | any)}
+                onChange={(e) => handleStatusChange(e.target.value)}
                 className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
                 <option value="All">Status: All</option>
                 <option value="Pending">Status: Pending</option>
                 <option value="Approved">Status: Approved</option>
+                <option value="Rejected">Status: Rejected</option>
               </select>
               <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><FilterIcon /></span>
               <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
@@ -784,7 +775,7 @@ export default function ReportsPage() {
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80 order-2 sm:order-1">
-            Show {filtered.length === 0 ? "0" : `${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, filtered.length)}`} of {filtered.length.toLocaleString()}
+            Show {total === 0 ? "0" : `${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, total)}`} of {total.toLocaleString()}
           </span>
           <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
             <button
