@@ -624,12 +624,12 @@ export default function SchoolDetailPage() {
       {/* Page top bar */}
       <div className="flex flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/schools" className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer">
+          <Link href="/admin/schools" className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer">
             <BackArrowIcon />
           </Link>
           <h1 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-[28px] text-[#121212] leading-5">School</h1>
         </div>
-        <Link href={"/schools"} className="flex items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap text-sm sm:text-base">
+        <Link href={"/admin/schools"} className="flex items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap text-sm sm:text-base">
           <EditIcon />
           <span className="font-inter font-semibold text-[#333]">Edit</span>
         </Link>
