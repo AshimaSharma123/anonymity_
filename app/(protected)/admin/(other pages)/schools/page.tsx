@@ -344,44 +344,20 @@ type SchoolStatus = "Active" | "Inactive";
 
 interface School {
   id: number;
-  name: string;
-  association: Association;
-  schoolYear: string;
+  school_name: string;
+  association_type: Association;
+  school_year: string;
   location: string;
-  teachers: number;
-  risk: RiskLevel;
-  reports: number;
+  city: string;
+  teacher_count: number;
+  risk_level: RiskLevel;
+  report_count: number;
   status: SchoolStatus;
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const allSchools: School[] = [
-  { id: 1, name: "Lincoln High School", association: "School District", schoolYear: "2025-2026", location: "New York, NY", teachers: 28, risk: "Medium", reports: 35, status: "Active" },
-  { id: 2, name: "Riverside Academy", association: "Private", schoolYear: "2027-2028", location: "Los Angeles, CA", teachers: 24, risk: "High", reports: 29, status: "Active" },
-  { id: 3, name: "Oakwood Primary", association: "School District", schoolYear: "2026-2027", location: "Chicago, IL", teachers: 30, risk: "Low", reports: 42, status: "Active" },
-  { id: 4, name: "Cedar Valley Institute", association: "Charter", schoolYear: "2028-2029", location: "Houston, TX", teachers: 22, risk: "Medium", reports: 31, status: "Active" },
-  { id: 5, name: "Pinehill Preparatory", association: "School District", schoolYear: "2027-2028", location: "Phoenix, AZ", teachers: 26, risk: "High", reports: 27, status: "Active" },
-  { id: 6, name: "Sunset Charter School", association: "School District", schoolYear: "2025-2026", location: "Philadelphia, PA", teachers: 32, risk: "High", reports: 39, status: "Active" },
-  { id: 7, name: "Hillside Technical High", association: "Private", schoolYear: "2027-2028", location: "San Antonio, TX", teachers: 20, risk: "Low", reports: 33, status: "Active" },
-  { id: 8, name: "Brookside International", association: "Charter", schoolYear: "2025-2026", location: "San Diego, CA", teachers: 34, risk: "Medium", reports: 26, status: "Active" },
-  { id: 9, name: "Willow Creek Academy", association: "School District", schoolYear: "2027-2028", location: "Dallas, TX", teachers: 18, risk: "Low", reports: 44, status: "Active" },
-  { id: 10, name: "Evergreen STEM School", association: "Charter", schoolYear: "2026-2027", location: "San Jose, CA", teachers: 36, risk: "Low", reports: 35, status: "Active" },
-  { id: 11, name: "Maplewood Academy", association: "Private", schoolYear: "2026-2027", location: "Austin, TX", teachers: 21, risk: "Medium", reports: 18, status: "Inactive" },
-  { id: 12, name: "Harborview High School", association: "School District", schoolYear: "2025-2026", location: "Seattle, WA", teachers: 29, risk: "Low", reports: 51, status: "Active" },
-  { id: 13, name: "Northgate Elementary", association: "Charter", schoolYear: "2027-2028", location: "Denver, CO", teachers: 15, risk: "High", reports: 12, status: "Active" },
-];
-
-const TOTAL_COUNT = 13928;
 const ITEMS_PER_PAGE = 10;
 
 // ─── Config Maps ──────────────────────────────────────────────────────────────
-
-const associationStyles: Record<Association, string> = {
-  "School District": "text-[#0171F9]",
-  "Private": "text-[#7C3AED]",
-  "Charter": "text-[#0891B2]",
-};
 
 const riskStyles: Record<RiskLevel, { bg: string; text: string }> = {
   High: { bg: "bg-[#FFECEC]", text: "text-[#E53E3E]" },
@@ -391,39 +367,62 @@ const riskStyles: Record<RiskLevel, { bg: string; text: string }> = {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+interface ApiResponse {
+  success: boolean;
+  schools: School[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
 export default function SchoolsPage() {
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
-  const [locationFilter, setLocationFilter] = useState("All");
   const [riskFilter, setRiskFilter] = useState<"All" | RiskLevel>("All");
   const [statusFilter, setStatusFilter] = useState<"All" | SchoolStatus>("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<ApiResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSchools = async (page: number = 1) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: ITEMS_PER_PAGE.toString(),
+        ...(search && { search }),
+        ...(riskFilter !== "All" && { risk: riskFilter }),
+        ...(statusFilter !== "All" && { status: statusFilter }),
+      });
+
+      const response = await fetch(`/api/schools?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch schools");
+
+      const result = await response.json();
+      setData(result);
+      setCurrentPage(page);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchools(1);
+  }, [search, riskFilter, statusFilter]);
 
   if (showForm) {
     return <SchoolCreateForm onCancel={() => setShowForm(false)} />;
   }
 
-  const filtered = allSchools.filter((s) => {
-    const matchSearch =
-      search === "" ||
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.location.toLowerCase().includes(search.toLowerCase());
-    const matchRisk = riskFilter === "All" || s.risk === riskFilter;
-    const matchStatus = statusFilter === "All" || s.status === statusFilter;
-    return matchSearch && matchRisk && matchStatus;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const paginated = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
-
-  const handleFilterChange = (setter: (v: any) => void) => (val: any) => {
-    setter(val);
-    setCurrentPage(1);
-  };
-
-  const displayTotal = search || riskFilter !== "All" || statusFilter !== "All" ? filtered.length : TOTAL_COUNT;
-  const startItem = filtered.length === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
-  const endItem = Math.min(currentPage * ITEMS_PER_PAGE, filtered.length);
+  const paginated = data?.schools || [];
+  const totalPages = data?.totalPages || 1;
+  const total = data?.total || 0;
+  const startItem = total === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const endItem = Math.min(currentPage * ITEMS_PER_PAGE, total);
 
   return (
     <main className="flex-1 overflow-y-auto p-6 lg:p-8">
@@ -451,7 +450,7 @@ export default function SchoolsPage() {
                 type="text"
                 placeholder="Search"
                 value={search}
-                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                onChange={(e) => setSearch(e.target.value)}
                 className="flex-1 bg-transparent outline-none font-inter font-medium text-sm sm:text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
               />
             </div>
@@ -459,27 +458,11 @@ export default function SchoolsPage() {
 
           {/* Filter dropdowns */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
-            {/* Location */}
-            <div className="relative flex-1 sm:flex-none">
-              <select
-                value={locationFilter}
-                onChange={(e) => handleFilterChange(setLocationFilter)(e.target.value)}
-                className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
-              >
-                <option value="All">Location: All</option>
-                <option value="NY">New York</option>
-                <option value="CA">California</option>
-                <option value="TX">Texas</option>
-              </select>
-              <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
-              <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
-            </div>
-
             {/* Risk */}
             <div className="relative flex-1 sm:flex-none">
               <select
                 value={riskFilter}
-                onChange={(e) => handleFilterChange(setRiskFilter)(e.target.value as "All" | RiskLevel)}
+                onChange={(e) => setRiskFilter(e.target.value as "All" | RiskLevel)}
                 className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
                 <option value="All">Risk: All</option>
@@ -495,7 +478,7 @@ export default function SchoolsPage() {
             <div className="relative flex-1 sm:flex-none">
               <select
                 value={statusFilter}
-                onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | SchoolStatus)}
+                onChange={(e) => setStatusFilter(e.target.value as "All" | SchoolStatus)}
                 className="w-full appearance-none pl-9 sm:pl-10 pr-7 sm:pr-8 py-2.5 sm:py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
                 <option value="All">Status: All</option>
@@ -514,8 +497,7 @@ export default function SchoolsPage() {
             <thead>
               <tr className="border-y border-[#E5E7EB] bg-white">
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Name</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Association</th>
-                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">School Year</th>
+                <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Type</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Location</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Teachers</th>
                 <th className="text-left px-2 sm:px-4 lg:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[11px] sm:text-xs text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">Risk</th>
@@ -525,40 +507,48 @@ export default function SchoolsPage() {
               </tr>
             </thead>
             <tbody>
-              {paginated.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td colSpan={9} className="px-4 sm:px-6 lg:px-8 py-8 text-center font-inter text-sm text-[#6F6C70]">
+                  <td colSpan={8} className="px-4 sm:px-6 lg:px-8 py-8 text-center font-inter text-sm text-[#6F6C70]">
+                    Loading schools...
+                  </td>
+                </tr>
+              ) : error ? (
+                <tr>
+                  <td colSpan={8} className="px-4 sm:px-6 lg:px-8 py-8 text-center font-inter text-sm text-red-600">
+                    {error}
+                  </td>
+                </tr>
+              ) : paginated.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-4 sm:px-6 lg:px-8 py-8 text-center font-inter text-sm text-[#6F6C70]">
                     No schools found.
                   </td>
                 </tr>
               ) : (
                 paginated.map((school) => {
-                  const risk = riskStyles[school.risk];
-                  const assocClass = associationStyles[school.association];
+                  const risk = riskStyles[school.risk_level];
                   return (
                     <tr key={school.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.name}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.school_name}</span>
                       </td>
                       <td className="px-3 sm:px-4 lg:px-5 py-3 sm:py-[15px] whitespace-nowrap">
-                        <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] bg-[#DBECFF66] text-[#0171F9]`}>{school.association}</span>
+                        <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] bg-[#DBECFF66] text-[#0171F9]`}>{school.association_type}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.schoolYear}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.city}, {school.location}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.location}</span>
-                      </td>
-                      <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.teachers}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.teacher_count}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] ${risk.bg} ${risk.text}`}>
-                          {school.risk}
+                          {school.risk_level}
                         </span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.reports}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.report_count}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[10px] sm:text-sm text-[#030711]">
@@ -581,22 +571,22 @@ export default function SchoolsPage() {
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80 order-2 sm:order-1">
-            {filtered.length === 0
+            {total === 0
               ? "Show 0 results"
-              : `Show ${startItem}-${endItem} of ${displayTotal.toLocaleString()}`}
+              : `Show ${startItem}-${endItem} of ${total.toLocaleString()}`}
           </span>
           <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
             <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onClick={() => fetchSchools(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
               className="w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
               <ChevronLeftIcon />
             </button>
-            {Array.from({ length: Math.min(4, totalPages) }, (_, i) => i + 1).map((page) => (
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => fetchSchools(page)}
                 className={`w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-[13px] sm:text-[15px] transition-colors ${
                   currentPage === page
                     ? "bg-[#0171F9] text-white font-semibold"
@@ -607,7 +597,7 @@ export default function SchoolsPage() {
               </button>
             ))}
             <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => fetchSchools(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
               className="w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors"
             >
