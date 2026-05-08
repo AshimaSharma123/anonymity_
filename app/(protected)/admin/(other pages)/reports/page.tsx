@@ -567,7 +567,7 @@ function ReportSidebar({ report, onClose, onApprove, onReject }: { report: Repor
 
 export default function ReportsPage() {
   const [paginated, setPaginated] = useState<Report[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sentimentFilter, setSentimentFilter] = useState<"All" | Sentiment>("All");
@@ -581,9 +581,6 @@ export default function ReportsPage() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        setLoading(true);
-        setError(null);
-
         const params = new URLSearchParams({
           page: currentPage.toString(),
           limit: itemsPerPage.toString(),
@@ -602,24 +599,27 @@ export default function ReportsPage() {
         setPaginated(data.data || []);
         setTotalPages(data.totalPages || 1);
         setTotal(data.total || 0);
+        setError(null);
       } catch (err) {
         console.error("Error fetching reports:", err);
-        setError(err instanceof Error ? err.message : "Failed to fetch reports");
-        setPaginated([]);
-        setTotalPages(1);
-        setTotal(0);
+        if (initialLoading) {
+          setError(err instanceof Error ? err.message : "Failed to fetch reports");
+          setPaginated([]);
+          setTotalPages(1);
+          setTotal(0);
+        }
       } finally {
-        setLoading(false);
+        if (initialLoading) setInitialLoading(false);
       }
     };
 
     fetchReports();
-  }, [currentPage, search, sentimentFilter, statusFilter]);
+  }, [currentPage, search, sentimentFilter, statusFilter, initialLoading]);
 
   const handleSentimentChange = (val: "All" | Sentiment) => { setSentimentFilter(val); setCurrentPage(1); };
   const handleStatusChange = (val: "All" | any) => { setStatusFilter(val); setCurrentPage(1); };
 
-  if (loading) {
+  if (initialLoading) {
     return (
       <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
