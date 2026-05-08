@@ -576,38 +576,38 @@ export default function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [loadingActionId, setLoadingActionId] = useState<number | null>(null);
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const itemsPerPage = 10;
 
   const handleApproveReport = async (reportId: number, e: React.MouseEvent) => {
     e.stopPropagation();
-    setLoadingActionId(reportId);
+    setLoadingAction(`approve-${reportId}`);
     try {
       const response = await fetch(`/api/reports/${reportId}/approve`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to approve report");
       setPaginated((prev) =>
-        prev.map((r) => (r.id === reportId ? { ...r, status: 2 } : r))
+        prev.map((r:any) => (r.id === reportId ? { ...r, status: 2 } : r))
       );
     } catch (err) {
       console.error("Error approving report:", err);
     } finally {
-      setLoadingActionId(null);
+      setLoadingAction(null);
     }
   };
 
   const handleRejectReport = async (reportId: number, e: React.MouseEvent) => {
     e.stopPropagation();
-    setLoadingActionId(reportId);
+    setLoadingAction(`reject-${reportId}`);
     try {
       const response = await fetch(`/api/reports/${reportId}/reject`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to reject report");
       setPaginated((prev) =>
-        prev.map((r) => (r.id === reportId ? { ...r, status: 3 } : r))
+        prev.map((r:any) => (r.id === reportId ? { ...r, status: 3 } : r))
       );
     } catch (err) {
       console.error("Error rejecting report:", err);
     } finally {
-      setLoadingActionId(null);
+      setLoadingAction(null);
     }
   };
 
@@ -787,11 +787,11 @@ export default function ReportsPage() {
                             <>
                               <button
                                 onClick={(e) => handleApproveReport(report.id, e)}
-                                disabled={loadingActionId === report.id}
+                                disabled={loadingAction === `approve-${report.id}`}
                                 className="p-1 sm:p-2 rounded-md bg-[#D1FAE5] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center"
                                 aria-label="Approve"
                               >
-                                {loadingActionId === report.id ? (
+                                {loadingAction === `approve-${report.id}` ? (
                                   <div className="w-4 h-4 border-2 border-[#32A85B] border-t-transparent rounded-full animate-spin" />
                                 ) : (
                                   <CheckIcon />
@@ -799,11 +799,11 @@ export default function ReportsPage() {
                               </button>
                               <button
                                 onClick={(e) => handleRejectReport(report.id, e)}
-                                disabled={loadingActionId === report.id}
+                                disabled={loadingAction === `reject-${report.id}`}
                                 className="p-1 sm:p-2 rounded-md bg-[#FEE2E2] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center"
                                 aria-label="Reject"
                               >
-                                {loadingActionId === report.id ? (
+                                {loadingAction === `reject-${report.id}` ? (
                                   <div className="w-4 h-4 border-2 border-[#DD393D] border-t-transparent rounded-full animate-spin" />
                                 ) : (
                                   <CloseIcon />
