@@ -617,7 +617,7 @@ export default function ReportsPage() {
         const params = new URLSearchParams({
           page: currentPage.toString(),
           limit: itemsPerPage.toString(),
-          search,
+          search: search.trim(),
           sentiment: sentimentFilter,
           status: statusFilter,
         });
@@ -840,16 +840,26 @@ export default function ReportsPage() {
             >
               <ChevronLeftIcon />
             </button>
-            {Array.from({ length: Math.min(4, totalPages) }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-[13px] sm:text-[15px] transition-colors ${currentPage === page ? "bg-[#0171F9] text-white font-semibold" : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
-                  }`}
-              >
-                {page}
-              </button>
-            ))}
+            {(() => {
+              const pageWindow = 4;
+              const startPage = Math.max(1, currentPage - Math.floor(pageWindow / 2));
+              const endPage = Math.min(totalPages, startPage + pageWindow - 1);
+              const adjustedStart = Math.max(1, endPage - pageWindow + 1);
+
+              return Array.from(
+                { length: Math.min(pageWindow, totalPages) },
+                (_, i) => adjustedStart + i
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-[13px] sm:text-[15px] transition-colors ${currentPage === page ? "bg-[#0171F9] text-white font-semibold" : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
+                    }`}
+                >
+                  {page}
+                </button>
+              ));
+            })()}
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
