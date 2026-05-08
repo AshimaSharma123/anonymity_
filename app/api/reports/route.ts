@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     }
 
     if (sentiment !== "All") {
-      whereConditions.push(`sentiment = ?`);
+      whereConditions.push(`sentiments = ?`);
       params.push(sentiment);
     }
 

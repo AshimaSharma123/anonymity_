@@ -30,6 +30,7 @@ type FormState = {
   feedback: string;
   schoolComment: string;
   teacherComment: string;
+  sentiments:string;
 };
 
 type FormErrors = Partial<Record<keyof FormState | "ratings", string>>;
@@ -63,6 +64,7 @@ const initialState: FormState = {
   feedback: "",
   schoolComment: "",
   teacherComment: "",
+  sentiments:"",
 };
 
 /* ─── Reducer ─────────────────────────────────────── */
@@ -403,6 +405,28 @@ export default function SubmitReportPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+  const ratings = [
+    state.ratings.classroomBehavior,
+    state.ratings.lessonPreparedness,
+      state.ratings.staffFriendliness,
+      state.ratings.schoolCleanliness,
+      state.ratings.supportLevel,
+    ];
+
+    const avg =
+      ratings.reduce((sum, val) => sum + Number(val || 0), 0) /
+      ratings.length;
+
+    // add new param
+
+    state.sentiments =
+      avg >= 4
+        ? "Positive"
+        : avg >= 3
+          ? "Neutral"
+          : "Negative";
+
 
     const validationErrors = validateForm(state);
     setErrors(validationErrors);
