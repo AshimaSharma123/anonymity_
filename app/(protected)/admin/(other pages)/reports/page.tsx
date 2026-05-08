@@ -576,7 +576,40 @@ export default function ReportsPage() {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [loadingActionId, setLoadingActionId] = useState<number | null>(null);
   const itemsPerPage = 10;
+
+  const handleApproveReport = async (reportId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLoadingActionId(reportId);
+    try {
+      const response = await fetch(`/api/reports/${reportId}/approve`, { method: "POST" });
+      if (!response.ok) throw new Error("Failed to approve report");
+      setPaginated((prev) =>
+        prev.map((r) => (r.id === reportId ? { ...r, status: 2 } : r))
+      );
+    } catch (err) {
+      console.error("Error approving report:", err);
+    } finally {
+      setLoadingActionId(null);
+    }
+  };
+
+  const handleRejectReport = async (reportId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLoadingActionId(reportId);
+    try {
+      const response = await fetch(`/api/reports/${reportId}/reject`, { method: "POST" });
+      if (!response.ok) throw new Error("Failed to reject report");
+      setPaginated((prev) =>
+        prev.map((r) => (r.id === reportId ? { ...r, status: 3 } : r))
+      );
+    } catch (err) {
+      console.error("Error rejecting report:", err);
+    } finally {
+      setLoadingActionId(null);
+    }
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -750,12 +783,34 @@ export default function ReportsPage() {
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center gap-1 sm:gap-3">
-                          <button className="p-1 sm:p-2 rounded-md bg-[#D1FAE5] hover:opacity-80 transition-opacity" aria-label="Approve">
-                            <CheckIcon />
-                          </button>
-                          <button className="p-1 sm:p-2 rounded-md bg-[#FEE2E2] hover:opacity-80 transition-opacity" aria-label="Reject">
-                            <CloseIcon />
-                          </button>
+                          {report.status === 1 && (
+                            <>
+                              <button
+                                onClick={(e) => handleApproveReport(report.id, e)}
+                                disabled={loadingActionId === report.id}
+                                className="p-1 sm:p-2 rounded-md bg-[#D1FAE5] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center"
+                                aria-label="Approve"
+                              >
+                                {loadingActionId === report.id ? (
+                                  <div className="w-4 h-4 border-2 border-[#32A85B] border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <CheckIcon />
+                                )}
+                              </button>
+                              <button
+                                onClick={(e) => handleRejectReport(report.id, e)}
+                                disabled={loadingActionId === report.id}
+                                className="p-1 sm:p-2 rounded-md bg-[#FEE2E2] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center"
+                                aria-label="Reject"
+                              >
+                                {loadingActionId === report.id ? (
+                                  <div className="w-4 h-4 border-2 border-[#DD393D] border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <CloseIcon />
+                                )}
+                              </button>
+                            </>
+                          )}
                           <button
                             onClick={() => setSelectedReport(report)}
                             className="cursor-pointer flex items-center justify-center h-8 sm:h-9 px-2 sm:px-3.5 rounded-md border border-[#EFF0F2] bg-white font-inter font-normal text-[12px] sm:text-[14px] text-black opacity-80 tracking-[-0.2px] hover:opacity-100 transition-opacity"
