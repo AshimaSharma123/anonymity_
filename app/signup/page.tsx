@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { scrollToError } from "@/lib/function";
+import { useRouter } from "next/navigation";
 
 type objectType = {
   [key: string]: any
@@ -67,6 +68,8 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formValues, setFormValues] = useState<FormState>({ full_name: "", email: "", password: "", confirm_password: "" });
   const [errors, setErrors] = useState<objectType>({});
+  const [loader, setLoader] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +81,7 @@ export default function SignUpPage() {
       scrollToError(validationErrors);
       return;
     }
+    setLoader(true);
 
     const res = await fetch("/api/users/signup", {
       method: "POST",
@@ -90,9 +94,12 @@ export default function SignUpPage() {
     const data = await res.json();
 
     if (!res.ok) {
-      setErrors({ ...errors, ["error"]: data.error })
+      setLoader(false);
+      setErrors({ ["error"]: data.error })
     } else {
+      setLoader(false);
       console.log("Saved successfully");
+      router.push("/login");
     }
 
   };
@@ -292,9 +299,10 @@ export default function SignUpPage() {
           <button
             type="submit"
             onClick={handleSubmit}
+            disabled={loader}
             className="cursor-pointer w-full py-3 rounded-lg bg-[#0171F9] text-white font-inter text-base font-semibold leading-6 text-center hover:bg-blue-600 active:bg-blue-700 transition-colors mt-1"
           >
-            Sign Up
+           {loader ? "Please wait..." : "Sign Up"} 
           </button>
 
           {/* Divider */}
@@ -309,7 +317,7 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
-              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+              className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />

@@ -8,53 +8,172 @@ export async function GET(req: NextRequest) {
     const search = req.nextUrl.searchParams.get("search") || "";
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
     const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10");
+
     const risk = req.nextUrl.searchParams.get("risk");
-    const status = req.nextUrl.searchParams.get("status");
+    const state = req.nextUrl.searchParams.get("state");
 
     const offset = (page - 1) * limit;
 
-    let query = "SELECT * FROM schools WHERE 1=1";
-    let countQuery = "SELECT COUNT(*) as total FROM schools WHERE 1=1";
-    let values: any[] = [];
+    let whereConditions: string[] = [];
+    let havingConditions: string[] = [];
 
-    // Search by school name or location
+    let whereValues: any[] = [];
+    let havingValues: any[] = [];
+
+    // SEARCH
     if (search.trim()) {
-      query += ` AND (school_name LIKE ? OR city LIKE ? OR location LIKE ?)`;
-      countQuery += ` AND (school_name LIKE ? OR city LIKE ? OR location LIKE ?)`;
-      const searchTerm = `%${search}%`;
-      values.push(searchTerm, searchTerm, searchTerm);
+      whereConditions.push(`
+        (
+          schools.school_name LIKE ?
+          OR schools.city LIKE ?
+          OR schools.state LIKE ?
+        )
+      `);
+
+      const searchTerm = `%${search.trim()}%`;
+
+      whereValues.push(searchTerm, searchTerm, searchTerm);
     }
 
-    // Filter by risk level
+    // STATE FILTER
+    if (state && state !== "All") {
+      whereConditions.push(`schools.state = ?`);
+      whereValues.push(state);
+    }
+
+    // RISK FILTER
     if (risk && risk !== "All") {
-      query += ` AND risk_level = ?`;
-      countQuery += ` AND risk_level = ?`;
-      values.push(risk);
+      havingConditions.push(`calculated_risk = ?`);
+      havingValues.push(risk);
     }
 
-    // Filter by status
-    if (status && status !== "All") {
-      query += ` AND status = ?`;
-      countQuery += ` AND status = ?`;
-      values.push(status);
+    // MAIN QUERY
+    let query = `
+      SELECT 
+        schools.*,
+
+        COUNT(DISTINCT teachers.id) AS teacher_count,
+
+        COUNT(DISTINCT reports.id) AS report_count,
+
+        ROUND(
+          AVG(
+            (
+              COALESCE(reports.classroom_behavior, 0) +
+              COALESCE(reports.lesson_preparedness, 0) +
+              COALESCE(reports.staff_friendliness, 0) +
+              COALESCE(reports.school_cleanliness, 0) +
+              COALESCE(reports.support_level, 0)
+            ) / 5
+          ),
+          1
+        ) AS avg_rating,
+
+        CASE
+          WHEN AVG(
+            (
+              COALESCE(reports.classroom_behavior, 0) +
+              COALESCE(reports.lesson_preparedness, 0) +
+              COALESCE(reports.staff_friendliness, 0) +
+              COALESCE(reports.school_cleanliness, 0) +
+              COALESCE(reports.support_level, 0)
+            ) / 5
+          ) >= 4 THEN 'Low'
+
+          WHEN AVG(
+            (
+              COALESCE(reports.classroom_behavior, 0) +
+              COALESCE(reports.lesson_preparedness, 0) +
+              COALESCE(reports.staff_friendliness, 0) +
+              COALESCE(reports.school_cleanliness, 0) +
+              COALESCE(reports.support_level, 0)
+            ) / 5
+          ) >= 2.5 THEN 'Medium'
+
+          ELSE 'High'
+        END AS calculated_risk
+
+      FROM schools
+
+      LEFT JOIN teachers
+        ON teachers.school_id = schools.id
+
+      LEFT JOIN reports
+        ON reports.school_id = schools.id
+    `;
+
+    // COUNT QUERY
+    let countQuery = `
+      SELECT COUNT(DISTINCT schools.id) as total
+
+      FROM schools
+
+      LEFT JOIN teachers
+        ON teachers.school_id = schools.id
+
+      LEFT JOIN reports
+        ON reports.school_id = schools.id
+    `;
+
+    // WHERE CONDITIONS
+    if (whereConditions.length > 0) {
+      const whereClause = ` WHERE ${whereConditions.join(" AND ")}`;
+
+      query += whereClause;
+      countQuery += whereClause;
     }
 
-    // Get total count
-    const [countResult]: any = await db.query(countQuery, values);
+    // GROUP BY
+    query += ` GROUP BY schools.id `;
+
+    // HAVING CONDITIONS
+    if (havingConditions.length > 0) {
+      query += ` HAVING ${havingConditions.join(" AND ")}`;
+    }
+
+    // ORDER + PAGINATION
+    query += `
+      ORDER BY schools.created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+    // TOTAL COUNT
+    const [countResult]: any = await db.query(
+      countQuery,
+      whereValues
+    );
+
     const total = countResult[0].total;
 
-    // Get paginated results
-    query += ` ORDER BY created_at DESC LIMIT ? OFFSET ?`;
-    const [rows]: any = await db.query(query, [...values, limit, offset]);
+    // FINAL QUERY
+    const [rows]: any = await db.query(query, [
+      ...whereValues,
+      ...havingValues,
+      limit,
+      offset,
+    ]);
+
+    // GET ALL STATES
+    const [stateRows]: any = await db.query(`
+      SELECT DISTINCT state
+      FROM schools
+      WHERE state IS NOT NULL
+        AND state != ''
+      ORDER BY state ASC
+    `);
+
+    const states = stateRows.map((row: any) => row.state);
 
     return NextResponse.json({
       success: true,
       schools: rows,
+      states,
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit),
     });
+
   } catch (error) {
     console.error("Error fetching schools:", error);
 
@@ -62,6 +181,7 @@ export async function GET(req: NextRequest) {
       {
         success: false,
         message: "Failed to fetch schools",
+        error,
       },
       { status: 500 }
     );

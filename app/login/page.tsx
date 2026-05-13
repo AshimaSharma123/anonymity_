@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { scrollToError } from "@/lib/function";
 
 type objectType = {
   [key: string]: any
@@ -20,7 +21,7 @@ function validateForm(state: objectType) {
   if (!state.password.trim()) {
     errors.password = "Password is required";
   }
-
+console.log(errors);
   return errors;
 }
 
@@ -28,17 +29,20 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState<objectType>({ email: "", password: "" });
   const [errors, setErrors] = useState<objectType>({});
+  const [loader, setLoader] = useState<boolean>(false);
   const router = useRouter();
 
   const handleLogin = async () => {
 
     const validationErrors = validateForm(formValues);
     setErrors(validationErrors);
+    
 
     if (Object.keys(validationErrors).length > 0) {
+      scrollToError(validationErrors);
       return;
     }
-
+    setLoader(true);
     const res = await signIn("credentials", {
       email: formValues.email,
       password: formValues.password,
@@ -46,9 +50,11 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      setErrors({ ...errors, ["error"]: res.error }); // show in UI
+      setLoader(false);
+      setErrors({["error"]: res.error }); // show in UI
     } else {
       router.push("/admin/dashboard");
+      setLoader(false);
     }
   };
 
@@ -181,9 +187,10 @@ export default function LoginPage() {
           <button
             type="submit"
             onClick={async () => { handleLogin() }}
+            disabled={loader}
             className="cursor-pointer w-full py-3 rounded-lg bg-[#0171F9] text-white font-inter text-base font-semibold leading-6 text-center hover:bg-blue-600 active:bg-blue-700 transition-colors mt-1"
           >
-            Login
+           {loader ? "Please wait..." : "Login"} 
           </button>
 
           {/* Divider */}
@@ -197,7 +204,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
-              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+              className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.6 10.23c0-.82-.14-1.42-.35-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />

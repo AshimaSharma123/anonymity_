@@ -82,6 +82,8 @@ const handler = NextAuth({
         account?.provider === "google" ||
         account?.provider === "facebook"
       ) {
+        console.log("USER:", user)
+      console.log("ACCOUNT:", account)
         const [existing]: any = await db.query(
           "SELECT * FROM users WHERE email = ?",
           [user.email]
@@ -89,8 +91,8 @@ const handler = NextAuth({
 
         if (!existing.length) {
           await db.query(
-            "INSERT INTO users (full_name, email) VALUES (?, ?)",
-            [user.name, user.email]
+            "INSERT INTO users (full_name, email, provider, providerAccountId) VALUES (?, ?, ?, ?)",
+            [user.name, user.email, account?.provider, account?.providerAccountId]
           );
         }
       }

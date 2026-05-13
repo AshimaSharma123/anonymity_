@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
@@ -140,44 +141,11 @@ interface Teacher {
   status: TeacherStatus;
 }
 
-const allTeachers: Teacher[] = [
-  { id: 1, name: "Albert Chambers", reports: 35, avgRating: 3.2, risk: "Medium", status: "Active" },
-  { id: 2, name: "Methew", reports: 29, avgRating: 2.2, risk: "High", status: "Active" },
-  { id: 3, name: "James Morton", reports: 42, avgRating: 4.7, risk: "Low", status: "Active" },
-  { id: 4, name: "Sophia Reynolds", reports: 31, avgRating: 3.2, risk: "Medium", status: "Active" },
-  { id: 5, name: "Liam Gallagher", reports: 27, avgRating: 1.2, risk: "High", status: "Active" },
-  { id: 6, name: "Maya Patel", reports: 39, avgRating: 2.1, risk: "High", status: "Active" },
-  { id: 7, name: "Ethan Brooks", reports: 33, avgRating: 4.1, risk: "Low", status: "Active" },
-  { id: 8, name: "Isabella Cruz", reports: 26, avgRating: 3.0, risk: "Medium", status: "Active" },
-  { id: 9, name: "Noah Bennett", reports: 44, avgRating: 4.9, risk: "Low", status: "Active" },
-  { id: 10, name: "Olivia Martinez", reports: 35, avgRating: 4.3, risk: "Low", status: "Active" },
-  { id: 11, name: "Carlos Rivera", reports: 22, avgRating: 2.8, risk: "Medium", status: "Inactive" },
-  { id: 12, name: "Emma Johnson", reports: 38, avgRating: 4.5, risk: "Low", status: "Active" },
-  { id: 13, name: "Daniel Kim", reports: 18, avgRating: 1.8, risk: "High", status: "Active" },
-  { id: 14, name: "Priya Singh", reports: 30, avgRating: 3.6, risk: "Medium", status: "Active" },
-  { id: 15, name: "Ryan Thompson", reports: 25, avgRating: 3.9, risk: "Low", status: "Active" },
-  { id: 16, name: "Aisha Williams", reports: 41, avgRating: 4.6, risk: "Low", status: "Active" },
-  { id: 17, name: "Marcus Lee", reports: 20, avgRating: 2.0, risk: "High", status: "Active" },
-  { id: 18, name: "Sophie Anderson", reports: 37, avgRating: 3.4, risk: "Medium", status: "Active" },
-  { id: 19, name: "Jacob Harris", reports: 29, avgRating: 4.1, risk: "Low", status: "Active" },
-  { id: 20, name: "Natalia Flores", reports: 33, avgRating: 2.6, risk: "High", status: "Inactive" },
-  { id: 21, name: "Owen Clark", reports: 45, avgRating: 4.8, risk: "Low", status: "Active" },
-  { id: 22, name: "Zara Ahmed", reports: 28, avgRating: 3.1, risk: "Medium", status: "Active" },
-  { id: 23, name: "Lucas White", reports: 36, avgRating: 2.4, risk: "High", status: "Active" },
-  { id: 24, name: "Hannah Moore", reports: 31, avgRating: 4.0, risk: "Low", status: "Active" },
-  { id: 25, name: "Eli Patel", reports: 24, avgRating: 3.7, risk: "Medium", status: "Active" },
-  { id: 26, name: "Chloe Davis", reports: 40, avgRating: 4.4, risk: "Low", status: "Active" },
-  { id: 27, name: "Tyler Brown", reports: 19, avgRating: 1.5, risk: "High", status: "Active" },
-  { id: 28, name: "Leila Nguyen", reports: 32, avgRating: 3.8, risk: "Medium", status: "Active" },
-];
-
 const teacherRiskStyles: Record<TeacherRisk, { bg: string; text: string }> = {
   High:   { bg: "bg-[#FFECEC]", text: "text-[#E53E3E]" },
   Medium: { bg: "bg-[#FFF4E0]", text: "text-[#FFA600]" },
   Low:    { bg: "bg-[#E6FBF0]", text: "text-[#22A45D]" },
 };
-
-const TEACHERS_PER_PAGE = 10;
 
 // ─── Add Teacher Sidebar ──────────────────────────────────────────────────────
 
@@ -201,18 +169,57 @@ const ChevronDownIcon = () => (
 interface AddTeacherSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  schoolId: string;
+  onTeacherAdded: () => void;
 }
 
-function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
+function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTeacherSidebarProps) {
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSave = () => {
-    // TODO: persist teacher
-    onClose();
-    setName("");
-    setStatus("");
+  const handleSave = async () => {
+    if (!name.trim() || !status) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/teachers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          status,
+          school_id: schoolId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to add teacher");
+      }
+
+      onTeacherAdded();
+      onClose();
+      setName("");
+      setStatus("");
+    } catch (err) {
+      console.error("Error adding teacher:", err);
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
+
+ 
 
   return (
     <>
@@ -255,7 +262,8 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter Name"
-              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition"
+              disabled={loading}
+              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -266,7 +274,8 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer"
+                disabled={loading}
+                className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>Select</option>
                 <option value="Active">Active</option>
@@ -278,12 +287,20 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
             </div>
           </div>
 
+          {/* Error message */}
+          {error && (
+            <div className="px-3 py-2 rounded-lg bg-[#FEEFEF] font-inter text-sm text-[#E02C2C]">
+              {error}
+            </div>
+          )}
+
           {/* Save button */}
           <button
             onClick={handleSave}
-            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer"
+            disabled={loading}
+            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -293,35 +310,104 @@ function AddTeacherSidebar({ isOpen, onClose }: AddTeacherSidebarProps) {
 
 // ─── Teachers Tab Component ───────────────────────────────────────────────────
 
-function TeachersTab() {
+function TeachersTab({ schoolId }: { schoolId: string }) {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [riskFilter, setRiskFilter] = useState<"All" | TeacherRisk>("All");
   const [statusFilter, setStatusFilter] = useState<"All" | TeacherStatus>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const TEACHERS_PER_PAGE = 10;
 
-  const filtered = allTeachers.filter((t) => {
-    const matchRisk = riskFilter === "All" || t.risk === riskFilter;
-    const matchStatus = statusFilter === "All" || t.status === statusFilter;
-    return matchRisk && matchStatus;
-  });
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          school_id: schoolId,
+          page: currentPage.toString(),
+          limit: TEACHERS_PER_PAGE.toString(),
+          risk: riskFilter === "All" ? "" : riskFilter,
+          status: statusFilter === "All" ? "" : statusFilter,
+        });
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / TEACHERS_PER_PAGE));
-  const paginated = filtered.slice(
-    (currentPage - 1) * TEACHERS_PER_PAGE,
-    currentPage * TEACHERS_PER_PAGE
-  );
+        const response = await fetch(`/api/teachers?${params}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch teachers");
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.message || "Failed to fetch teachers");
+        }
+
+        setTeachers(data.teachers);
+        setTotalPages(data.pagination.totalPages);
+        setTotalTeachers(data.pagination.total);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching teachers:", err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (schoolId) {
+      fetchTeachers();
+    }
+  }, [schoolId, currentPage, riskFilter, statusFilter, refreshTrigger]);
 
   const handleFilterChange = <T,>(setter: (v: T) => void) => (val: T) => {
     setter(val);
     setCurrentPage(1);
   };
 
-  const startItem = filtered.length === 0 ? 0 : (currentPage - 1) * TEACHERS_PER_PAGE + 1;
-  const endItem = Math.min(currentPage * TEACHERS_PER_PAGE, filtered.length);
+  const startItem = totalTeachers === 0 ? 0 : (currentPage - 1) * TEACHERS_PER_PAGE + 1;
+  const endItem = Math.min(currentPage * TEACHERS_PER_PAGE, totalTeachers);
+
+  const handleTeacherAdded = () => {
+    setCurrentPage(1);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
+  const handleDeleteTeacher = async (teacherId: number) => {
+    if (!confirm("Are you sure you want to delete this teacher?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/teachers/${teacherId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to delete teacher");
+      }
+
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      console.error("Error deleting teacher:", err);
+      alert(err instanceof Error ? err.message : "Failed to delete teacher");
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg overflow-hidden">
-      <AddTeacherSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AddTeacherSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        schoolId={schoolId}
+        onTeacherAdded={handleTeacherAdded}
+      />
 
       {/* Tab header */}
       <div className="flex flex-row items-center justify-between gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-0">
@@ -335,6 +421,16 @@ function TeachersTab() {
         </button>
       </div>
 
+      {loading ? (
+        <div className="px-4 sm:px-6 py-8 text-center text-[#6F6C70]">
+          Loading teachers...
+        </div>
+      ) : error ? (
+        <div className="px-4 sm:px-6 py-8 text-center text-[#E02C2C]">
+          {error}
+        </div>
+      ) : (
+        <>
       {/* Filters */}
       <div className="flex flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3 flex-wrap">
         {/* Risk filter */}
@@ -392,14 +488,14 @@ function TeachersTab() {
             </tr>
           </thead>
           <tbody>
-            {paginated.length === 0 ? (
+            {teachers.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 sm:px-5 py-8 sm:py-10 text-center font-inter text-[12px] sm:text-sm text-[#6F6C70]">
                   No teachers found.
                 </td>
               </tr>
             ) : (
-              paginated.map((teacher) => {
+              teachers.map((teacher) => {
                 const risk = teacherRiskStyles[teacher.risk];
                 return (
                   <tr key={teacher.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
@@ -418,7 +514,7 @@ function TeachersTab() {
                     {/* Avg Rating */}
                     <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
                       <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711]">
-                        {teacher.avgRating.toFixed(1)}
+                        {Number(teacher.avgRating)}
                         <span className="text-[#9CA3AF]">/5</span>
                       </span>
                     </td>
@@ -436,7 +532,10 @@ function TeachersTab() {
                     </td>
                     {/* Actions */}
                     <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <button className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer">
+                      <button
+                        onClick={() => handleDeleteTeacher(teacher.id)}
+                        className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer"
+                      >
                         <TrashIcon />
                       </button>
                     </td>
@@ -451,9 +550,9 @@ function TeachersTab() {
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-8 py-4 sm:py-5">
         <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80">
-          {filtered.length === 0
+          {totalTeachers === 0
             ? "Show 0 results"
-            : `Show ${startItem}-${endItem} of ${filtered.length}`}
+            : `Show ${startItem}-${endItem} of ${totalTeachers}`}
         </span>
         <div className="flex items-center gap-1 sm:gap-2">
           <button
@@ -463,7 +562,24 @@ function TeachersTab() {
           >
             <PaginationChevronLeftIcon />
           </button>
-          {Array.from({ length: Math.min(3, totalPages) }, (_, i) => i + 1).map((page) => (
+          {Array.from(
+            {
+              length: Math.min(4, totalPages),
+            },
+            (_, i) => {
+              let startPage: number;
+              if (totalPages <= 4) {
+                startPage = 1;
+              } else if (currentPage <= 2) {
+                startPage = 1;
+              } else if (currentPage > totalPages - 2) {
+                startPage = totalPages - 3;
+              } else {
+                startPage = currentPage - 1;
+              }
+              return startPage + i;
+            }
+          ).map((page) => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
@@ -485,6 +601,8 @@ function TeachersTab() {
           </button>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }
@@ -492,7 +610,7 @@ function TeachersTab() {
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type ReportSentiment = "Positive" | "Negative" | "Neutral";
-type ReportStatus = "Pending" | "Approved";
+type ReportStatus = "Pending" | "Approved" | "Rejected";
 type ReturnAnswer = "Yes" | "No" | "Maybe";
 
 interface SchoolReport {
@@ -507,43 +625,6 @@ interface SchoolReport {
   teacherReturn: ReturnAnswer;
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const schoolReports: SchoolReport[] = [
-  {
-    id: "RPT - 249",
-    grade: "10th Grade",
-    teacher: "Maria",
-    date: "Mar 16,2026",
-    sentiment: "Positive",
-    status: "Pending",
-    quote: '"Great Classroom environment. Lesson plans were clear"',
-    schoolReturn: "Yes",
-    teacherReturn: "Yes",
-  },
-  {
-    id: "RPT - 177",
-    grade: "9th Grade",
-    teacher: "Jeff",
-    date: "Mar 10,2026",
-    sentiment: "Negative",
-    status: "Pending",
-    quote: '"Extremely difficult day. No materials, unruly students"',
-    schoolReturn: "No",
-    teacherReturn: "No",
-  },
-  {
-    id: "RPT - 155",
-    grade: "11th Grade",
-    teacher: "N.A",
-    date: "Mar 4,2026",
-    sentiment: "Negative",
-    status: "Approved",
-    quote: '""No lesson plans. Students were very disruptive all day."',
-    schoolReturn: "No",
-    teacherReturn: "No",
-  },
-];
 
 // ─── Helper Styles ────────────────────────────────────────────────────────────
 
@@ -558,6 +639,7 @@ function getSentimentStyle(sentiment: ReportSentiment) {
 function getStatusStyle(status: ReportStatus) {
   switch (status) {
     case "Approved": return "bg-[#BBFBE6] text-[#2D7D65]";
+    case "Rejected": return "bg-[#FEEFEF] text-[#E02C2C]";
     default: return "bg-[#FFF4E0] text-[#FFA600]";
   }
 }
@@ -616,8 +698,153 @@ function ReportCard({ report, isLast }: { report: SchoolReport; isLast: boolean 
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+interface SchoolData {
+  id: number;
+  school_name: string;
+  school_district_name: string;
+  school_association: string;
+  city: string;
+  state: string;
+  avg_rating: number;
+  calculated_risk: string;
+  teacher_count: number;
+  report_count: number;
+  school_year: string;
+}
+
 export default function SchoolDetailPage() {
+  const params = useParams();
+  const schoolId = params.id as string;
+
   const [activeTab, setActiveTab] = useState<"Reports" | "Teachers">("Reports");
+  const [schoolData, setSchoolData] = useState<SchoolData | null>(null);
+  const [reports, setReports] = useState<SchoolReport[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalReports, setTotalReports] = useState(0);
+  const REPORTS_PER_PAGE = 10;
+
+   function StarRating({ count = 0 }: { count?: number }) {
+  const STAR_SIZE = 20; // increase size
+  const GAP = 1;
+
+  return (
+    <svg
+      width={(STAR_SIZE + GAP) * 5}
+      height={STAR_SIZE}
+      viewBox={`0 0 ${(STAR_SIZE + GAP) * 5} ${STAR_SIZE}`}
+      fill="none"
+    >
+      {[0, 1, 2, 3, 4].map((i) => {
+        const x = i * (STAR_SIZE + GAP);
+
+        const fillPercent = Math.max(0, Math.min(1, count - i));
+
+        return (
+          <g
+            key={i}
+            transform={`translate(${x}, 0) scale(${STAR_SIZE / 13})`}
+          >
+            {/* Empty star */}
+            <path
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#E2E8F0"
+              stroke="#E2E8F0"
+              strokeWidth="0.92"
+            />
+
+            {/* Partial filled star */}
+            <clipPath id={`clip-${i}`}>
+              <rect
+                x="0"
+                y="0"
+                width={13 * fillPercent}
+                height="13"
+              />
+            </clipPath>
+
+            <path
+              clipPath={`url(#clip-${i})`}
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#0171F9"
+              stroke="#0171F9"
+              strokeWidth="0.92"
+            />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `/api/schools/${schoolId}?page=${currentPage}&limit=${REPORTS_PER_PAGE}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch school details");
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.message || "Failed to fetch school details");
+        }
+
+        setSchoolData(data.school);
+
+        // Transform reports to match SchoolReport type
+        const transformedReports: SchoolReport[] = data.reports.map((report: any) => ({
+          id: `RPT - ${report.id}`,
+          grade: report.grade_level || "N/A",
+          teacher: report.teacher_name || "N.A",
+          date: report.date_of_assignment
+            ? new Date(report.date_of_assignment).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "N/A",
+          sentiment: report.sentiments,
+          status: report.status == 1 ? "Pending" : report.status == 2 ? "Approved" : "Rejected",
+          quote: report.feedback || "No Feedback",
+          schoolReturn: report.return_to_school == 1 ? "Yes" : report.return_to_school == 2 ? "No" : "Maybe",
+          teacherReturn: report.return_to_teacher == 1 ? "Yes" : report.return_to_teacher == 2 ? "No" : "Maybe"
+        }));
+
+        setReports(transformedReports);
+        setTotalPages(data.pagination.totalPages);
+        setTotalReports(data.pagination.total);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching school data:", err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (schoolId) {
+      fetchData();
+    }
+  }, [schoolId, currentPage]);
+
+  if(loading){
+     return (
+      <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#0171F9] rounded-full animate-spin" />
+          <p className="font-inter text-[#6B7280]">Loading School...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-[#F3F4F7]">
@@ -629,7 +856,7 @@ export default function SchoolDetailPage() {
           </Link>
           <h1 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-[28px] text-[#121212] leading-5">School</h1>
         </div>
-        <Link href={"/admin/schools"} className="flex items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap text-sm sm:text-base">
+        <Link href={`/admin/schools/edit/${schoolData?.id}`} className="flex items-center gap-1.5 px-3 sm:px-[17px] py-2 sm:py-3 rounded-lg border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer whitespace-nowrap text-sm sm:text-base">
           <EditIcon />
           <span className="font-inter font-semibold text-[#333]">Edit</span>
         </Link>
@@ -643,46 +870,72 @@ export default function SchoolDetailPage() {
           <div className="flex flex-col gap-3 flex-1">
             {/* Name row */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5 flex-wrap pt-2">
-              <h2 className="font-inter font-bold text-lg sm:text-xl lg:text-2xl text-[#030711] leading-5">Lincoln High School</h2>
+              <h2 className="font-inter font-bold text-lg sm:text-xl lg:text-2xl text-[#030711] leading-5">
+                {schoolData?.school_name}
+              </h2>
               <div className="flex gap-2 flex-wrap">
                 <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(11,119,249,0.40)] bg-[#EFF6FF]">
-                  <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9]">School District</span>
+                  <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9]">{schoolData?.school_association}</span>
                 </span>
-                <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(224,44,44,0.40)] bg-[#FEEFEF]">
-                  <span className="font-inter font-medium text-xs sm:text-sm text-[#E02C2C]">High Risk</span>
-                </span>
+                {schoolData && (
+                  <span
+                    className={`flex items-center px-3 sm:px-4 py-1 rounded-full font-inter font-medium text-xs sm:text-sm ${
+                      schoolData.calculated_risk === "Low"
+                        ? "border border-[rgba(34,164,93,0.40)] bg-[#E6FBF0] text-[#22A45D]"
+                        : schoolData.calculated_risk === "Medium"
+                          ? "border border-[rgba(255,166,0,0.40)] bg-[#FFF4E0] text-[#FFA600]"
+                          : "border border-[rgba(224,44,44,0.40)] bg-[#FEEFEF] text-[#E02C2C]"
+                    }`}
+                  >
+                    {schoolData.calculated_risk} Risk
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Location row */}
-            <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
-              <div className="flex items-center gap-1.5">
-              <LocationPinIcon />
-              <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">Portland, OR</span>
+            {schoolData && (
+              <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
+                <div className="flex items-center gap-1.5">
+                  <LocationPinIcon />
+                  <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">
+                    {schoolData.city}, {schoolData.state}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <BuildingIcon />
+                  <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">
+                    {schoolData.school_association == "School District" ? schoolData.school_district_name : schoolData.school_association}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <BuildingIcon />
-                <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">Los Angeles Unified School District</span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Right: rating */}
-          <div className="flex items-start gap-2 flex-shrink-0 pt-2 w-full sm:w-auto sm:justify-end">
-
-            <div className="flex flex-col items-start sm:items-end pt-2">
-
-              <div className="flex items-center gap-2">
-                <div><span className="font-outfit font-bold text-2xl sm:text-[30px] text-[#191C1D] leading-[40px]">4.2</span></div>
-
-                <div className="flex items-center"><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarHalfIcon /></div>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:gap-1.5">
-                <span className="font-inter font-normal text-xs text-[#9CA3AF] leading-[16.5px]">142 reviews</span>
-                <span className="font-inter font-normal text-xs text-[#9CA3AF] leading-[16.5px]">2025-2026</span>
+          {schoolData && (
+            <div className="flex items-start gap-2 flex-shrink-0 pt-2 w-full sm:w-auto sm:justify-end">
+              <div className="flex flex-col items-start sm:items-end pt-2 gap-[5px]">
+                <div className="flex items-center gap-2">
+                  <div>
+                    <span className="font-outfit font-bold text-2xl sm:text-4xl text-[#191C1D] leading-[40px]">
+                      {schoolData.avg_rating || "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <StarRating count={schoolData.avg_rating}/>
+                    
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-1.5">
+                  <span className="font-inter font-normal text-md text-[#9CA3AF] leading-[16.5px]">
+                    {schoolData.report_count} reviews
+                  </span>
+                  <span className="font-inter font-normal text-md text-[#9CA3AF] leading-[16.5px]">{schoolData.school_year}</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Divider */}
@@ -767,24 +1020,108 @@ export default function SchoolDetailPage() {
           {/* Section header */}
           <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
             <span className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Reports</span>
-
           </div>
+
+          {/* Loading state */}
+          {loading && (
+            <div className="px-4 sm:px-6 py-8 text-center text-[#6F6C70]">
+              Loading reports...
+            </div>
+          )}
+
+          {/* Error state */}
+          {error && !loading && (
+            <div className="px-4 sm:px-6 py-8 text-center text-[#E02C2C]">
+              {error}
+            </div>
+          )}
 
           {/* Report cards */}
-          <div>
-            {schoolReports.map((report, index) => (
-              <ReportCard
-                key={report.id}
-                report={report}
-                isLast={index === schoolReports.length - 1}
-              />
-            ))}
-          </div>
+          {!loading && !error && (
+            <>
+              <div>
+                {reports.length === 0 ? (
+                  <div className="px-4 sm:px-6 py-8 text-center text-[#6F6C70]">
+                    No reports found for this school.
+                  </div>
+                ) : (
+                  reports.map((report, index) => (
+                    <ReportCard
+                      key={report.id}
+                      report={report}
+                      isLast={index === reports.length - 1}
+                    />
+                  ))
+                )}
+              </div>
+
+              {/* Pagination */}
+              {totalReports > 0 && (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-8 py-4 sm:py-5 border-t border-[#EFEFEF]">
+                  <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80">
+                    Show {(currentPage - 1) * REPORTS_PER_PAGE + 1}-
+                    {Math.min(currentPage * REPORTS_PER_PAGE, totalReports)} of{" "}
+                    {totalReports}
+                  </span>
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((p) => Math.max(1, p - 1))
+                      }
+                      disabled={currentPage === 1}
+                      className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <PaginationChevronLeftIcon />
+                    </button>
+                    {Array.from(
+                      {
+                        length: Math.min(4, totalPages),
+                      },
+                      (_, i) => {
+                        let startPage: number;
+                        if (totalPages <= 4) {
+                          startPage = 1;
+                        } else if (currentPage <= 2) {
+                          startPage = 1;
+                        } else if (currentPage > totalPages - 2) {
+                          startPage = totalPages - 3;
+                        } else {
+                          startPage = currentPage - 1;
+                        }
+                        return startPage + i;
+                      }
+                    ).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${
+                          currentPage === page
+                            ? "bg-[#0171F9] text-white font-semibold"
+                            : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      disabled={currentPage === totalPages}
+                      className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <PaginationChevronRightIcon />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 
       {/* Teachers Tab */}
-      {activeTab === "Teachers" && <TeachersTab />}
+      {activeTab === "Teachers" && <TeachersTab schoolId={schoolId} />}
     </main>
   );
 }

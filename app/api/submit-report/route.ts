@@ -6,6 +6,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       schoolName,
+      schoolId,
+      teacherId,
       teacherName,
       date,
       gradeLevel,
@@ -23,6 +25,8 @@ export async function POST(req: Request) {
     const query = `
       INSERT INTO reports (
         school_name,
+        school_id,
+        teacher_id,
         teacher_name,
         date_of_assignment,
         grade_level,
@@ -41,11 +45,13 @@ export async function POST(req: Request) {
         your_name,
         school_association,
         sentiments
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     await db.execute(query, [
       schoolName,
+      schoolId,
+      teacherId,
       teacherName,
       date,
       gradeLevel,
@@ -60,7 +66,7 @@ export async function POST(req: Request) {
       JSON.stringify(selectedTags),
 
       returnToSchool === "yes" ? 1 : returnToSchool === "no" ? 2 : 3,
-      returnToTeacher === "yes" ? 1 : returnToSchool === "no" ? 2 : 3,
+      returnToTeacher === "yes" ? 1 : returnToTeacher === "no" ? 2 : 3,
 
       schoolComment,
       teacherComment,

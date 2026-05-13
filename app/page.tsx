@@ -5,8 +5,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <> 
-      <Header/>
+    <>
+      <Header />
 
       <main>
         {/* Hero Section */}
@@ -27,69 +27,69 @@ export default function Home() {
               <div className="flex items-center gap-[15px] flex-wrap justify-center">
                 <Link href="/submit-report" className="flex items-center justify-center gap-2  px-8 py-4 rounded-xl bg-blue-600 text-white font-inter text-base font-bold leading-6 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/6">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.16667 15.7416H5.345L13.1067 7.97994L11.9283 6.80161L4.16667 14.5633V15.7416ZM17.5 17.4083H2.5V13.8724L13.6958 2.67661C13.8521 2.52038 14.064 2.43262 14.285 2.43262C14.506 2.43262 14.7179 2.52038 14.8742 2.67661L17.2317 5.03411C17.3879 5.19038 17.4757 5.4023 17.4757 5.62327C17.4757 5.84424 17.3879 6.05617 17.2317 6.21244L7.7025 15.7416H17.5V17.4083ZM13.1067 5.62327L14.285 6.80161L15.4633 5.62327L14.285 4.44494L13.1067 5.62327Z" fill="white"/>
+                    <path d="M4.16667 15.7416H5.345L13.1067 7.97994L11.9283 6.80161L4.16667 14.5633V15.7416ZM17.5 17.4083H2.5V13.8724L13.6958 2.67661C13.8521 2.52038 14.064 2.43262 14.285 2.43262C14.506 2.43262 14.7179 2.52038 14.8742 2.67661L17.2317 5.03411C17.3879 5.19038 17.4757 5.4023 17.4757 5.62327C17.4757 5.84424 17.3879 6.05617 17.2317 6.21244L7.7025 15.7416H17.5V17.4083ZM13.1067 5.62327L14.285 6.80161L15.4633 5.62327L14.285 4.44494L13.1067 5.62327Z" fill="white" />
                   </svg>
                   Submit a Report
                 </Link>
                 <Link href="/browse-school" className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-black/20 bg-white text-gray-800 font-inter text-base font-bold leading-6 hover:border-black/40 transition-colors">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.91667 13.3333C6.40278 13.3333 5.12167 12.8089 4.07333 11.76C3.025 10.7111 2.50056 9.43 2.5 7.91667C2.49944 6.40333 3.02389 5.12222 4.07333 4.07333C5.12278 3.02444 6.40389 2.5 7.91667 2.5C9.42945 2.5 10.7108 3.02444 11.7608 4.07333C12.8108 5.12222 13.335 6.40333 13.3333 7.91667C13.3333 8.52778 13.2361 9.10417 13.0417 9.64583C12.8472 10.1875 12.5833 10.6667 12.25 11.0833L16.9167 15.75C17.0694 15.9028 17.1458 16.0972 17.1458 16.3333C17.1458 16.5694 17.0694 16.7639 16.9167 16.9167C16.7639 17.0694 16.5694 17.1458 16.3333 17.1458C16.0972 17.1458 15.9028 17.0694 15.75 16.9167L11.0833 12.25C10.6667 12.5833 10.1875 12.8472 9.64583 13.0417C9.10417 13.2361 8.52778 13.3333 7.91667 13.3333ZM7.91667 11.6667C8.95833 11.6667 9.84389 11.3022 10.5733 10.5733C11.3028 9.84445 11.6672 8.95889 11.6667 7.91667C11.6661 6.87444 11.3017 5.98917 10.5733 5.26083C9.845 4.5325 8.95945 4.16778 7.91667 4.16667C6.87389 4.16556 5.98861 4.53028 5.26083 5.26083C4.53306 5.99139 4.16833 6.87667 4.16667 7.91667C4.165 8.95667 4.52972 9.84222 5.26083 10.5733C5.99195 11.3044 6.87722 11.6689 7.91667 11.6667Z" fill="#2C3031"/>
+                    <path d="M7.91667 13.3333C6.40278 13.3333 5.12167 12.8089 4.07333 11.76C3.025 10.7111 2.50056 9.43 2.5 7.91667C2.49944 6.40333 3.02389 5.12222 4.07333 4.07333C5.12278 3.02444 6.40389 2.5 7.91667 2.5C9.42945 2.5 10.7108 3.02444 11.7608 4.07333C12.8108 5.12222 13.335 6.40333 13.3333 7.91667C13.3333 8.52778 13.2361 9.10417 13.0417 9.64583C12.8472 10.1875 12.5833 10.6667 12.25 11.0833L16.9167 15.75C17.0694 15.9028 17.1458 16.0972 17.1458 16.3333C17.1458 16.5694 17.0694 16.7639 16.9167 16.9167C16.7639 17.0694 16.5694 17.1458 16.3333 17.1458C16.0972 17.1458 15.9028 17.0694 15.75 16.9167L11.0833 12.25C10.6667 12.5833 10.1875 12.8472 9.64583 13.0417C9.10417 13.2361 8.52778 13.3333 7.91667 13.3333ZM7.91667 11.6667C8.95833 11.6667 9.84389 11.3022 10.5733 10.5733C11.3028 9.84445 11.6672 8.95889 11.6667 7.91667C11.6661 6.87444 11.3017 5.98917 10.5733 5.26083C9.845 4.5325 8.95945 4.16778 7.91667 4.16667C6.87389 4.16556 5.98861 4.53028 5.26083 5.26083C4.53306 5.99139 4.16833 6.87667 4.16667 7.91667C4.165 8.95667 4.52972 9.84222 5.26083 10.5733C5.99195 11.3044 6.87722 11.6689 7.91667 11.6667Z" fill="#2C3031" />
                   </svg>
                   Search School
                 </Link>
               </div>
             </div>
 
-            <img src="/homebanner.png" className="mt-[40px] md:hidden z-2" alt="Image"/>
+            <img src="/homebanner.png" className="mt-[40px] md:hidden z-2" alt="Image" />
 
-           
+
+            {/* Phone mockup */}
+            <div className="hero-mockup-area sm:flex hidden">
+              <div className="hero-ring hero-ring--outer" />
+              <div className="hero-ring hero-ring--mid" />
+              <div className="hero-ring hero-ring--inner" />
+              <div className="hero-circle-fill" />
+
               {/* Phone mockup */}
-                        <div className="hero-mockup-area sm:flex hidden">
-                          <div className="hero-ring hero-ring--outer" />
-                          <div className="hero-ring hero-ring--mid" />
-                          <div className="hero-ring hero-ring--inner" />
-                          <div className="hero-circle-fill" />
-              
-                          {/* Phone mockup */}
-                          <Image src="/Artboard.svg" height={500} width={500} className="w-[400px] h-[410px] z-2" alt="Image"/>
-              
-                          {/* Anonymous Report floating card */}
-                          <div className="anon-report-card">
-                            <span className="anon-report-card__label">Anonymous Report</span>
-                            <div className="anon-report-card__badge">
-                              <span className="anon-report-card__badge-text">Enabled</span>
-                              <div className="anon-report-card__toggle" />
-                            </div>
-                          </div>
-              
-                          {/* Floating review card */}
-                          <div className="review-card">
-                            <div className="review-card__header">
-                              <div className="review-card__school-info">
-                                <span className="review-card__school-name">Oakridge Academy</span>
-                                <span className="review-card__school-type">Public High School</span>
-                              </div>
-                              <div className="review-card__rating-badge">4.8 Rating</div>
-                            </div>
-                            <div className="review-card__body">
-                              <div className="review-card__skeleton-wrapper">
-                                <div className="review-card__skeleton-line review-card__skeleton-line--full" />
-                                <div className="review-card__skeleton-line review-card__skeleton-line--short" />
-                              </div>
-                              <div className="review-card__footer">
-                                <div className="review-card__verified">
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
-                                  </svg>
-                                  <span>Verified User</span>
-                                </div>
-                                <span className="review-card__timestamp">2 days ago</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+              <Image src="/Artboard.svg" height={500} width={500} className="w-[400px] h-[410px] z-2" alt="Image" />
+
+              {/* Anonymous Report floating card */}
+              <div className="anon-report-card">
+                <span className="anon-report-card__label">Anonymous Report</span>
+                <div className="anon-report-card__badge">
+                  <span className="anon-report-card__badge-text">Enabled</span>
+                  <div className="anon-report-card__toggle" />
+                </div>
+              </div>
+
+              {/* Floating review card */}
+              <div className="review-card">
+                <div className="review-card__header">
+                  <div className="review-card__school-info">
+                    <span className="review-card__school-name">Oakridge Academy</span>
+                    <span className="review-card__school-type">Public High School</span>
+                  </div>
+                  <div className="review-card__rating-badge">4.8 Rating</div>
+                </div>
+                <div className="review-card__body">
+                  <div className="review-card__skeleton-wrapper">
+                    <div className="review-card__skeleton-line review-card__skeleton-line--full" />
+                    <div className="review-card__skeleton-line review-card__skeleton-line--short" />
+                  </div>
+                  <div className="review-card__footer">
+                    <div className="review-card__verified">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
+                      </svg>
+                      <span>Verified User</span>
+                    </div>
+                    <span className="review-card__timestamp">2 days ago</span>
+                  </div>
+                </div>
+              </div>
             </div>
-     
+          </div>
+
         </section>
 
         {/* Why Guest-Teacher Report Section */}
@@ -102,49 +102,49 @@ export default function Home() {
           <div className="flex sm:flex-row flex-col sm:items-start items-center justify-center w-full max-w-[1200px] gap-[40px] sm:gap-0">
             {/* Step 1 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
-              <Image src="/anonymous.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
+              <Image src="/anonymous.svg" height={100} width={100} className="w-[70px] h-[70px]" alt="Icon" />
               <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Stay Anonymous</h3>
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Share classroom experiences without revealing your identity.</p>
             </div>
 
-          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
+            <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
             {/* Step 2 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
               <div className="relative w-20 h-[70px] flex items-center justify-center">
-                <Image src="/reports.svg" height={100} width={100}  className="w-[60px] h-[60px]" alt="Icon"/>
+                <Image src="/reports.svg" height={100} width={100} className="w-[60px] h-[60px]" alt="Icon" />
               </div>
               <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Structured Reports</h3>
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Access clear, experience-based insights from other educators.</p>
             </div>
 
-          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
+            <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
 
             {/* Step 3 */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
               <div className="relative w-20 h-[70px]">
-                <Image src="/betterDecisions.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
+                <Image src="/betterDecisions.svg" height={100} width={100} className="w-[70px] h-[70px]" alt="Icon" />
               </div>
               <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Make Better Decisions</h3>
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Use real data to choose the right teaching assignments.</p>
             </div>
           </div>
- <div className="sm:hidden w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
+          <div className="sm:hidden w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
           {/* Row 2 – two columns centered */}
           <div className="flex sm:flex-row flex-col sm:items-start items-center justify-center w-full max-w-[1200px] gap-[40px] sm:gap-0">
             {/* Smart Search & Filters */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
-                              <Image src="/Frame.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
+              <Image src="/Frame.svg" height={100} width={100} className="w-[70px] h-[70px]" alt="Icon" />
 
               <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">Smart Search &amp; Filters</h3>
               <p className="text-gray-800 text-center font-inter text-base font-normal leading-[26px] px-12">Quickly find regular teacher or schools using powerful filters.</p>
             </div>
 
-          <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
+            <div className="w-[250px] h-px md:w-px md:h-auto md:min-h-[173px] bg-gray-300 opacity-70 flex-shrink-0" />
 
             {/* AI-Powered Insights */}
             <div className="flex flex-col items-center gap-2 flex-1 px-4 min-w-0">
               <div className="relative w-20 h-[70px] flex items-center justify-center">
-                                              <Image src="/ai.svg" height={100} width={100}  className="w-[70px] h-[70px]" alt="Icon"/>
+                <Image src="/ai.svg" height={100} width={100} className="w-[70px] h-[70px]" alt="Icon" />
 
               </div>
               <h3 className="text-gray-800 text-center font-[Outfit] text-2xl font-semibold leading-8">AI-Powered Insights</h3>
@@ -156,7 +156,7 @@ export default function Home() {
         {/* Understand Every Classroom Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
           <div className="max-w-[1176px] mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-          {/* <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/> */}
+            {/* <img src="/homeimagetest1.svg" alt="Image" className="sm:hidden w-full h-full"/> */}
 
             {/* Left: Profile visual panel */}
             <div className="sm:order-1 order-2 relative flex w-full lg:max-w-[534px] lg:flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden lg:aspect-[534/396] aspect-auto min-h-[400px] lg:min-h-auto">
@@ -254,7 +254,7 @@ export default function Home() {
 
         {/* Find the Right Opportunities / AI-Powered Insights Section */}
         <section className="bg-white px-6 sm:pb-[72px] pb-0 pt-[72px]">
-          
+
           <div className="flex  max-w-[1176px] mx-auto flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
             {/* Left: Text content */}
@@ -266,7 +266,7 @@ export default function Home() {
                 Search regular teachers or schools, filter reports instantly, and uncover trends through intelligent sentiment analysis helping you make faster and more informed decisions.
               </p>
             </div>
-<img  src="/homeImage3.svg"  alt="Image" className="sm:hidden w-full h-auto"/>
+            <img src="/homeImage3.svg" alt="Image" className="sm:hidden w-full h-auto" />
             {/* Right: Search & filter UI mockup */}
             <div className="relative sm:block hidden w-full max-w-[534px] flex-shrink-0 rounded-[32px] bg-[#F8F9FD] overflow-hidden aspect-[534/396]">
 
@@ -286,18 +286,18 @@ export default function Home() {
                 style={{ left: '9.4%', top: '12.6%', width: '77.3%', height: '10.1%', padding: '12px 20px' }}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
-                  <path d="M13.0667 14L8.86667 9.8C8.53333 10.0667 8.15 10.2778 7.71667 10.4333C7.28333 10.5889 6.82222 10.6667 6.33333 10.6667C5.12222 10.6667 4.09733 10.2471 3.25867 9.408C2.42 8.56889 2.00044 7.544 2 6.33333C1.99956 5.12267 2.41911 4.09778 3.25867 3.25867C4.09822 2.41956 5.12311 2 6.33333 2C7.54356 2 8.56867 2.41956 9.40867 3.25867C10.2487 4.09778 10.668 5.12267 10.6667 6.33333C10.6667 6.82222 10.5889 7.28333 10.4333 7.71667C10.2778 8.15 10.0667 8.53333 9.8 8.86667L14 13.0667L13.0667 14ZM6.33333 9.33333C7.16667 9.33333 7.87511 9.04178 8.45867 8.45867C9.04222 7.87556 9.33378 7.16711 9.33333 6.33333C9.33289 5.49956 9.04133 4.79133 8.45867 4.20867C7.876 3.626 7.16756 3.33422 6.33333 3.33333C5.49911 3.33244 4.79089 3.62422 4.20867 4.20867C3.62644 4.79311 3.33467 5.50133 3.33333 6.33333C3.332 7.16533 3.62378 7.87378 4.20867 8.45867C4.79356 9.04356 5.50178 9.33511 6.33333 9.33333Z" fill="#737786"/>
+                  <path d="M13.0667 14L8.86667 9.8C8.53333 10.0667 8.15 10.2778 7.71667 10.4333C7.28333 10.5889 6.82222 10.6667 6.33333 10.6667C5.12222 10.6667 4.09733 10.2471 3.25867 9.408C2.42 8.56889 2.00044 7.544 2 6.33333C1.99956 5.12267 2.41911 4.09778 3.25867 3.25867C4.09822 2.41956 5.12311 2 6.33333 2C7.54356 2 8.56867 2.41956 9.40867 3.25867C10.2487 4.09778 10.668 5.12267 10.6667 6.33333C10.6667 6.82222 10.5889 7.28333 10.4333 7.71667C10.2778 8.15 10.0667 8.53333 9.8 8.86667L14 13.0667L13.0667 14ZM6.33333 9.33333C7.16667 9.33333 7.87511 9.04178 8.45867 8.45867C9.04222 7.87556 9.33378 7.16711 9.33333 6.33333C9.33289 5.49956 9.04133 4.79133 8.45867 4.20867C7.876 3.626 7.16756 3.33422 6.33333 3.33333C5.49911 3.33244 4.79089 3.62422 4.20867 4.20867C3.62644 4.79311 3.33467 5.50133 3.33333 6.33333C3.332 7.16533 3.62378 7.87378 4.20867 8.45867C4.79356 9.04356 5.50178 9.33511 6.33333 9.33333Z" fill="#737786" />
                 </svg>
                 <span className="font-inter text-sm text-[rgba(115,119,134,0.6)]">Search...</span>
               </div>
 
               {/* Skeleton lines block */}
-             <div className="absolute  top-[17.9%] h-[47%] bg-[#F8F9FD] rounded-2xl" style={{ left: '9.4%', top: '27.8%', width: '77.3%', height: '36.4%' }}>
-              <div className="absolute left-3.5 top-3.5 h-[13px] w-[80%] rounded-[10px] bg-[#E6E6E6]"></div>
-              <div className="absolute left-3.5 top-[39px] h-[13px] w-[90%] rounded-[10px] bg-[#E6E6E6]"></div>
-              <div className="absolute left-3.5 top-16 h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]"></div>
-              <div className="absolute left-3.5 top-[89px] h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]"></div>
-              <div className="absolute left-3.5 top-[114px] h-[13px] w-[67%] rounded-[10px] bg-[#E6E6E6]"></div>
+              <div className="absolute  top-[17.9%] h-[47%] bg-[#F8F9FD] rounded-2xl" style={{ left: '9.4%', top: '27.8%', width: '77.3%', height: '36.4%' }}>
+                <div className="absolute left-3.5 top-3.5 h-[13px] w-[80%] rounded-[10px] bg-[#E6E6E6]"></div>
+                <div className="absolute left-3.5 top-[39px] h-[13px] w-[90%] rounded-[10px] bg-[#E6E6E6]"></div>
+                <div className="absolute left-3.5 top-16 h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]"></div>
+                <div className="absolute left-3.5 top-[89px] h-[13px] w-[64%] rounded-[10px] bg-[#E6E6E6]"></div>
+                <div className="absolute left-3.5 top-[114px] h-[13px] w-[67%] rounded-[10px] bg-[#E6E6E6]"></div>
               </div>
 
               {/* Bottom gray placeholder block */}
@@ -327,14 +327,14 @@ export default function Home() {
                   {/* Positive badge */}
                   <div className="flex items-center gap-1.5 rounded-[10px] bg-[rgba(47,175,0,0.20)] px-2 py-1.5">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12.0007 14.0001H5.33398V5.33342L10.0007 0.666748L10.834 1.50008C10.9118 1.57786 10.9758 1.68341 11.026 1.81675C11.0762 1.95008 11.1011 2.07786 11.1007 2.20008V2.43341L10.3673 5.33342H14.0007C14.3562 5.33342 14.6673 5.46675 14.934 5.73342C15.2007 6.00008 15.334 6.31119 15.334 6.66675V8.00008C15.334 8.07786 15.3258 8.16119 15.3093 8.25008C15.2929 8.33897 15.2678 8.4223 15.234 8.50008L13.234 13.2001C13.134 13.4223 12.9673 13.6112 12.734 13.7667C12.5007 13.9223 12.2562 14.0001 12.0007 14.0001ZM4.00065 5.33342V14.0001H1.33398V5.33342H4.00065Z" fill="#2FAF00"/>
+                      <path d="M12.0007 14.0001H5.33398V5.33342L10.0007 0.666748L10.834 1.50008C10.9118 1.57786 10.9758 1.68341 11.026 1.81675C11.0762 1.95008 11.1011 2.07786 11.1007 2.20008V2.43341L10.3673 5.33342H14.0007C14.3562 5.33342 14.6673 5.46675 14.934 5.73342C15.2007 6.00008 15.334 6.31119 15.334 6.66675V8.00008C15.334 8.07786 15.3258 8.16119 15.3093 8.25008C15.2929 8.33897 15.2678 8.4223 15.234 8.50008L13.234 13.2001C13.134 13.4223 12.9673 13.6112 12.734 13.7667C12.5007 13.9223 12.2562 14.0001 12.0007 14.0001ZM4.00065 5.33342V14.0001H1.33398V5.33342H4.00065Z" fill="#2FAF00" />
                     </svg>
                     <span className="font-inter font-medium text-[#2FAF00]" style={{ fontSize: '14px', lineHeight: '18px' }}>Positive</span>
                   </div>
                   {/* Negative badge */}
                   <div className="flex items-center gap-1.5 rounded-[10px] bg-[rgba(255,0,0,0.20)] px-2 py-1.5">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12.0007 1.99992H5.33398V10.6666L10.0007 15.3333L10.834 14.4999C10.9118 14.4221 10.9758 14.3166 11.026 14.1833C11.0762 14.0499 11.1011 13.9221 11.1007 13.7999V13.5666L10.3673 10.6666H14.0007C14.3562 10.6666 14.6673 10.5333 14.934 10.2666C15.2007 9.99992 15.334 9.68881 15.334 9.33325V7.99992C15.334 7.92214 15.3258 7.83881 15.3093 7.74992C15.2929 7.66103 15.2678 7.5777 15.234 7.49992L13.234 2.79992C13.134 2.5777 12.9673 2.38881 12.734 2.23325C12.5007 2.0777 12.2562 1.99992 12.0007 1.99992ZM4.00065 10.6666V1.99992H1.33398V10.6666H4.00065Z" fill="#F32121"/>
+                      <path d="M12.0007 1.99992H5.33398V10.6666L10.0007 15.3333L10.834 14.4999C10.9118 14.4221 10.9758 14.3166 11.026 14.1833C11.0762 14.0499 11.1011 13.9221 11.1007 13.7999V13.5666L10.3673 10.6666H14.0007C14.3562 10.6666 14.6673 10.5333 14.934 10.2666C15.2007 9.99992 15.334 9.68881 15.334 9.33325V7.99992C15.334 7.92214 15.3258 7.83881 15.3093 7.74992C15.2929 7.66103 15.2678 7.5777 15.234 7.49992L13.234 2.79992C13.134 2.5777 12.9673 2.38881 12.734 2.23325C12.5007 2.0777 12.2562 1.99992 12.0007 1.99992ZM4.00065 10.6666V1.99992H1.33398V10.6666H4.00065Z" fill="#F32121" />
                     </svg>
                     <span className="font-inter font-medium text-[#F32121]" style={{ fontSize: '14px', lineHeight: '18px' }}>Negative</span>
                   </div>
@@ -354,16 +354,16 @@ export default function Home() {
               >
                 <div className="relative w-9 h-9 flex-shrink-0">
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="18" cy="18" r="18" fill="url(#filter-grad)"/>
+                    <circle cx="18" cy="18" r="18" fill="url(#filter-grad)" />
                     <defs>
                       <linearGradient id="filter-grad" x1="2.17462" y1="-21.1457" x2="57.8353" y2="6.78517" gradientUnits="userSpaceOnUse">
-                        <stop offset="0.184" stopColor="#29ABE2"/>
-                        <stop offset="0.821" stopColor="#0171F9"/>
+                        <stop offset="0.184" stopColor="#29ABE2" />
+                        <stop offset="0.821" stopColor="#0171F9" />
                       </linearGradient>
                     </defs>
                   </svg>
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-2 top-2">
-                    <path d="M11.6667 14.1667C11.8791 14.1669 12.0834 14.2483 12.2378 14.3941C12.3923 14.5399 12.4852 14.7391 12.4976 14.9512C12.5101 15.1632 12.4411 15.372 12.3048 15.5349C12.1685 15.6978 11.9751 15.8024 11.7642 15.8275L11.6667 15.8334H8.33333C8.12093 15.8331 7.91664 15.7518 7.76219 15.606C7.60775 15.4602 7.5148 15.2609 7.50236 15.0489C7.48991 14.8368 7.5589 14.628 7.69522 14.4652C7.83155 14.3023 8.02492 14.1976 8.23583 14.1725L8.33333 14.1667H11.6667ZM14.1667 9.16669C14.3877 9.16669 14.5996 9.25448 14.7559 9.41076C14.9122 9.56705 15 9.77901 15 10C15 10.221 14.9122 10.433 14.7559 10.5893C14.5996 10.7456 14.3877 10.8334 14.1667 10.8334H5.83333C5.61232 10.8334 5.40036 10.7456 5.24408 10.5893C5.0878 10.433 5 10.221 5 10C5 9.77901 5.0878 9.56705 5.24408 9.41076C5.40036 9.25448 5.61232 9.16669 5.83333 9.16669H14.1667ZM16.6667 4.16669C16.8877 4.16669 17.0996 4.25448 17.2559 4.41076C17.4122 4.56705 17.5 4.77901 17.5 5.00002C17.5 5.22103 17.4122 5.433 17.2559 5.58928C17.0996 5.74556 16.8877 5.83335 16.6667 5.83335H3.33333C3.11232 5.83335 2.90036 5.74556 2.74408 5.58928C2.5878 5.433 2.5 5.22103 2.5 5.00002C2.5 4.77901 2.5878 4.56705 2.74408 4.41076C2.90036 4.25448 3.11232 4.16669 3.33333 4.16669H16.6667Z" fill="white"/>
+                    <path d="M11.6667 14.1667C11.8791 14.1669 12.0834 14.2483 12.2378 14.3941C12.3923 14.5399 12.4852 14.7391 12.4976 14.9512C12.5101 15.1632 12.4411 15.372 12.3048 15.5349C12.1685 15.6978 11.9751 15.8024 11.7642 15.8275L11.6667 15.8334H8.33333C8.12093 15.8331 7.91664 15.7518 7.76219 15.606C7.60775 15.4602 7.5148 15.2609 7.50236 15.0489C7.48991 14.8368 7.5589 14.628 7.69522 14.4652C7.83155 14.3023 8.02492 14.1976 8.23583 14.1725L8.33333 14.1667H11.6667ZM14.1667 9.16669C14.3877 9.16669 14.5996 9.25448 14.7559 9.41076C14.9122 9.56705 15 9.77901 15 10C15 10.221 14.9122 10.433 14.7559 10.5893C14.5996 10.7456 14.3877 10.8334 14.1667 10.8334H5.83333C5.61232 10.8334 5.40036 10.7456 5.24408 10.5893C5.0878 10.433 5 10.221 5 10C5 9.77901 5.0878 9.56705 5.24408 9.41076C5.40036 9.25448 5.61232 9.16669 5.83333 9.16669H14.1667ZM16.6667 4.16669C16.8877 4.16669 17.0996 4.25448 17.2559 4.41076C17.4122 4.56705 17.5 4.77901 17.5 5.00002C17.5 5.22103 17.4122 5.433 17.2559 5.58928C17.0996 5.74556 16.8877 5.83335 16.6667 5.83335H3.33333C3.11232 5.83335 2.90036 5.74556 2.74408 5.58928C2.5878 5.433 2.5 5.22103 2.5 5.00002C2.5 4.77901 2.5878 4.56705 2.74408 4.41076C2.90036 4.25448 3.11232 4.16669 3.33333 4.16669H16.6667Z" fill="white" />
                   </svg>
                 </div>
                 <span className="font-inter font-medium text-[#191C1D] whitespace-nowrap" style={{ fontSize: '14px', lineHeight: '18px' }}>Filter results</span>
@@ -387,7 +387,7 @@ export default function Home() {
 
               {/* Step 1 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0 items-center">
-                                              <Image src="/one.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
+                <Image src="/one.svg" height={100} width={100} className="w-[50px] h-[50px]" alt="Icon" />
 
                 <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   Submit Your Experience
@@ -403,7 +403,7 @@ export default function Home() {
 
               {/* Step 2 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0 items-center">
-                <Image src="/two.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
+                <Image src="/two.svg" height={100} width={100} className="w-[50px] h-[50px]" alt="Icon" />
                 <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   AI Analyzes &amp; Structures
                 </h3>
@@ -418,7 +418,7 @@ export default function Home() {
 
               {/* Step 3 */}
               <div className="flex flex-col gap-5 flex-1 px-6 py-2 md:py-0  items-center">
-                <Image src="/three.svg" height={100} width={100}  className="w-[50px] h-[50px]" alt="Icon"/>
+                <Image src="/three.svg" height={100} width={100} className="w-[50px] h-[50px]" alt="Icon" />
                 <h3 className="font-[Outfit] sm:text-[22px] text-[18px] font-bold text-gray-950 leading-[1.3]">
                   Explore &amp; Decide
                 </h3>
@@ -470,8 +470,8 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-1 opacity-64">
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
                       </svg>
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Austin, Texas, USA</span>
                     </div>
@@ -487,7 +487,7 @@ export default function Home() {
                   <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
                       </svg>
                       <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
                     </div>
@@ -506,8 +506,8 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-1 opacity-64">
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
                       </svg>
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Chicago, Illinois, USA</span>
                     </div>
@@ -523,7 +523,7 @@ export default function Home() {
                   <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
                       </svg>
                       <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
                     </div>
@@ -542,8 +542,8 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-1 opacity-64">
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212"/>
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212"/>
+                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
+                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
                       </svg>
                       <span className="font-inter text-xs text-[#121212] leading-[26px]">Denver, Colorado, USA</span>
                     </div>
@@ -559,7 +559,7 @@ export default function Home() {
                   <div className="flex sm:items-center items-start justify-between">
                     <div className="flex items-center gap-1">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9"/>
+                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
                       </svg>
                       <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
                     </div>
@@ -574,7 +574,7 @@ export default function Home() {
 
       </main>
 
-     <Footer/>
+      <Footer />
 
     </>
   );

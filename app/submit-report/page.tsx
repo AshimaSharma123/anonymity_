@@ -16,8 +16,10 @@ type RatingKeys =
   | "supportLevel";
 
 type FormState = {
-  yourName:string,
+  yourName: string,
   schoolName: string,
+  schoolId: number,
+  teacherId: number,
   teacherName: string,
   schoolAssociation: string,
   date: string,
@@ -30,7 +32,7 @@ type FormState = {
   feedback: string;
   schoolComment: string;
   teacherComment: string;
-  sentiments:string;
+  sentiments: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState | "ratings", string>>;
@@ -46,6 +48,8 @@ type Action =
 const initialState: FormState = {
   yourName: "",
   schoolName: "",
+  schoolId: 0,
+  teacherId: 0,
   schoolAssociation: "",
   teacherName: "",
   date: "",
@@ -64,7 +68,7 @@ const initialState: FormState = {
   feedback: "",
   schoolComment: "",
   teacherComment: "",
-  sentiments:"",
+  sentiments: "",
 };
 
 /* ─── Reducer ─────────────────────────────────────── */
@@ -357,7 +361,7 @@ export default function SubmitReportPage() {
 
     try {
       setSchoolSearchLoading(true);
-      const response = await fetch(`/api/schools?search=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/schoolSearch?search=${encodeURIComponent(query)}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -372,7 +376,7 @@ export default function SubmitReportPage() {
   }, []);
 
   // Fetch teachers by search query
-  const fetchTeachers = useCallback(async (query: string) => {
+  const fetchTeachers = useCallback(async (query: string, schoolId: number) => {
     if (!query.trim()) {
       setTeacherSuggestions([]);
       return;
@@ -380,7 +384,7 @@ export default function SubmitReportPage() {
 
     try {
       setTeacherSearchLoading(true);
-      const response = await fetch(`/api/teachers?search=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/teachers?search=${encodeURIComponent(query)}&school_id=${schoolId}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -401,14 +405,14 @@ export default function SubmitReportPage() {
     []
   );
 
-  
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-  const ratings = [
-    state.ratings.classroomBehavior,
-    state.ratings.lessonPreparedness,
+    const ratings = [
+      state.ratings.classroomBehavior,
+      state.ratings.lessonPreparedness,
       state.ratings.staffFriendliness,
       state.ratings.schoolCleanliness,
       state.ratings.supportLevel,
@@ -438,7 +442,6 @@ export default function SubmitReportPage() {
 
     try {
       setIsSubmitting(true);
-
       const response = await fetch("/api/submit-report", {
         method: "POST",
         headers: {
@@ -454,10 +457,10 @@ export default function SubmitReportPage() {
       dispatch({ type: "RESET" });
       router.push(`/submit-report/success${state.postAs === "anonymous" ? `?anonymous=true` : ""}`);
 
-  } catch (error) {
-    console.error("Error submitting report:", error);
-    setIsSubmitting(false);
-  }
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      setIsSubmitting(false);
+    }
   };
 
   /* shared input style */
@@ -494,58 +497,72 @@ export default function SubmitReportPage() {
                 <div className="flex flex-col gap-2 relative">
                   <label className={fieldLabel}>School Name</label>
                   <div className="relative">
-                  <div className={`${inputBase} py-[14px]`}>
-                    <SearchIcon />
-                    <input
-                      type="text"
-                      id="schoolName"
-                      placeholder="Search for institution..."
-                      value={state.schoolName}
-                      onChange={(e) => {
-                        updateField("schoolName", e.target.value);
-                        fetchSchools(e.target.value);
-                        setShowSchoolSuggestions(true);
-                        setErrors((prev) => ({
-                        ...prev,
-                        schoolName: "",
-                      }));
-                      }}
-                      onFocus={() => setShowSchoolSuggestions(true)}
-                      onBlur={() => setTimeout(() => setShowSchoolSuggestions(false), 200)}
-                      className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
-                      autoComplete="off"
-                    />
+                    <div className={`${inputBase} py-[14px]`}>
+                      <SearchIcon />
+                      <input
+                        type="text"
+                        id="schoolName"
+                        placeholder="Search for institution..."
+                        value={state.schoolName}
+                        onChange={(e) => {
+                          if (!e.target.value) {
+                            updateField("teacherName", "");
+                            setTeacherSuggestions([]);
+                          } else {
+                            setErrors({ ...errors, ["teacherName"]: "" });
+                          }
+                          updateField("schoolName", e.target.value);
+                          fetchSchools(e.target.value);
+                          setShowSchoolSuggestions(true);
+                          setErrors((prev) => ({
+                            ...prev,
+                            schoolName: "",
+                          }));
+                        }}
+                        onFocus={() => setShowSchoolSuggestions(true)}
+                        onBlur={() => setTimeout(() => setShowSchoolSuggestions(false), 200)}
+                        className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
+                        autoComplete="off"
+                      />
 
-                  </div>
-
-                  {/* School suggestions dropdown */}
-                  {showSchoolSuggestions && (state.schoolName.trim() || schoolSuggestions.length > 0) && (
-                   <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
-                      {schoolSearchLoading && (
-                        <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
-                      )}
-                      {!schoolSearchLoading && schoolSuggestions.length > 0 && (
-                        schoolSuggestions.map((school: any, idx: number) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => {
-                              updateField("schoolName", school.school_name);
-                              updateField("schoolAssociation", school.school_association == "School District" ? school.school_district_name : school.school_association);
-                              setShowSchoolSuggestions(false);
-                            }}
-                            className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
-                          >
-                            {school.school_name}
-                          </button>
-                        ))
-                      )}
-                      {!schoolSearchLoading && schoolSuggestions.length === 0 && state.schoolName.trim() && (
-                        <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No schools found</div>
-                      )}
                     </div>
-                  )}
-                </div>
+
+                    {/* School suggestions dropdown */}
+                    {showSchoolSuggestions && (state.schoolName.trim() || schoolSuggestions.length > 0) && (
+                      <div className="absolute  top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+                        {schoolSearchLoading && (
+                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
+                        )}
+                        {!schoolSearchLoading && schoolSuggestions.length > 0 && (
+                          schoolSuggestions.map((school: any, idx: number) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                updateField("schoolName", school.school_name);
+                                updateField("schoolId", school.id);
+                                updateField(
+                                  "schoolAssociation",
+                                  school.school_association === "School District"
+                                    ? school.school_district_name
+                                    : school.school_association
+                                );
+
+                                setShowSchoolSuggestions(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
+                            >
+                              {school.school_name}
+                            </button>
+                          ))
+                        )}
+                        {!schoolSearchLoading && schoolSuggestions.length === 0 && state.schoolName.trim() && (
+                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No schools found</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                   {errors.schoolName && (
                     <p className="text-red-500 text-xs">{errors.schoolName}</p>
                   )}
@@ -556,57 +573,67 @@ export default function SubmitReportPage() {
                   <div className="flex flex-col gap-2 relative">
                     <label className={fieldLabel}>Teacher Name</label>
                     <div className="relative">
-                    <div className={`${inputBase} py-[14px]`}>
-                      <SearchIcon />
-                      <input
-                        type="text"
-                        id="teacherName"
-                        placeholder="Search for Teacher..."
-                        value={state.teacherName}
-                        onChange={(e) => {
-                          updateField("teacherName", e.target.value);
-                          fetchTeachers(e.target.value);
-                          setShowTeacherSuggestions(true);
-                          setErrors((prev) => ({
-                            ...prev,
-                            teacherName: "",
-                          }));
-                        }}
-                        onFocus={() => setShowTeacherSuggestions(true)}
-                        onBlur={() => setTimeout(() => setShowTeacherSuggestions(false), 200)}
-                        className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
-                        autoComplete="off"
-                      />
+                      <div className={`${inputBase} py-[14px]`}>
+                        <SearchIcon />
+                        <input
+                          type="text"
+                          id="teacherName"
+                          placeholder="Search for Teacher..."
+                          value={state.teacherName}
+                          // disabled={!state.schoolId || !state.schoolName}
+                          onChange={(e) => {
+                            if (!state.schoolId || !state.schoolName) {
+                              setErrors({ ...errors, ["teacherName"]: "Please first select school" });
+                              return;
+                            } else {
+                              setErrors({ ...errors, ["teacherName"]: "" });
+                            }
+                            updateField("teacherName", e.target.value);
 
-                    </div>
+                            fetchTeachers(e.target.value, state.schoolId);
+                            setShowTeacherSuggestions(true);
+                            setErrors((prev) => ({
+                              ...prev,
+                              teacherName: "",
+                            }));
+                          }}
+                          onFocus={() => setShowTeacherSuggestions(true)}
+                          onBlur={() => setTimeout(() => setShowTeacherSuggestions(false), 200)}
+                          className="bg-transparent outline-none w-full font-inter text-sm text-[#121212] placeholder-[#6B7280]"
+                          autoComplete="off"
+                        />
 
-                    {/* Teacher suggestions dropdown */}
-                    {showTeacherSuggestions && (state.teacherName.trim() || teacherSuggestions.length > 0) && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
-                        {teacherSearchLoading && (
-                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
-                        )}
-                        {!teacherSearchLoading && teacherSuggestions.length > 0 && (
-                          teacherSuggestions.map((teacher: any, idx1: number) => (
-                            <button
-                              key={idx1}
-                              type="button"
-                              onClick={() => {
-                                updateField("teacherName", teacher.name);
-                                setShowTeacherSuggestions(false);
-                              }}
-                              className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
-                            >
-                              {teacher.name}
-                            </button>
-                          ))
-                        )}
-                        {!teacherSearchLoading && teacherSuggestions.length === 0 && state.teacherName.trim() && (
-                          <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No teachers found</div>
-                        )}
                       </div>
-                    )}
+
+                      {/* Teacher suggestions dropdown */}
+                      {showTeacherSuggestions && (state.teacherName.trim() || teacherSuggestions.length > 0) && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E2] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                          {teacherSearchLoading && (
+                            <div className="px-4 py-3 text-center text-sm text-[#6B7280]">Searching...</div>
+                          )}
+                          {!teacherSearchLoading && teacherSuggestions.length > 0 && (
+                            teacherSuggestions.map((teacher: any, idx1: number) => (
+                              <button
+                                key={idx1}
+                                type="button"
+                                onMouseDown={() => {
+                                  updateField("teacherName", teacher.name);
+                                  updateField("teacherId", teacher.id);
+                                  setShowTeacherSuggestions(false);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-[#F3F4F5] font-inter text-sm text-[#121212] border-b border-[#E0E0E2] last:border-b-0 transition-colors"
+                              >
+                                {teacher.name}
+                              </button>
+                            ))
+                          )}
+                          {!teacherSearchLoading && teacherSuggestions.length === 0 && state.teacherName.trim() && (
+                            <div className="px-4 py-3 text-center text-sm text-[#6B7280]">No teachers found</div>
+                          )}
+                        </div>
+                      )}
                     </div>
+
                     {errors.teacherName && (
                       <p className="text-red-500 text-xs">{errors.teacherName}</p>
                     )}
@@ -619,7 +646,8 @@ export default function SubmitReportPage() {
                         type="date"
                         id="date"
                         value={state.date}
-                        onChange={(e) => {updateField("date", e.target.value)
+                        onChange={(e) => {
+                          updateField("date", e.target.value)
                           setErrors((prev) => ({
                             ...prev,
                             date: "",
@@ -673,7 +701,7 @@ export default function SubmitReportPage() {
                   {RATING_CATEGORIES.map(({ label, key }) => (
                     <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0">
                       <span className="flex-1 font-outfit text-sm sm:text-base font-medium text-[#121212] leading-6">{label}</span>
-                      <StarRating  value={state.ratings[key]} onChange={(val) => setRating(key as RatingKeys, val)} />
+                      <StarRating value={state.ratings[key]} onChange={(val) => setRating(key as RatingKeys, val)} />
                     </div>
                   ))}
                   {errors.ratings && (
@@ -692,15 +720,16 @@ export default function SubmitReportPage() {
                 <div className="flex flex-col gap-2">
                   <label className={fieldLabel}>Write Feedback</label>
                   <textarea
-                  id="feedback"
+                    id="feedback"
                     className="h-[102px] px-4 pt-[13px] pb-[14px] rounded-lg bg-[#F3F4F5] font-inter text-sm text-[#6B7280] placeholder-[#6B7280] resize-none outline-none"
                     placeholder="Enter your feedback here"
                     value={state.feedback}
-                    onChange={(e) => {updateField("feedback", e.target.value)
+                    onChange={(e) => {
+                      updateField("feedback", e.target.value)
                       setErrors((prev) => ({
-                            ...prev,
-                            feedback: "",
-                          }));
+                        ...prev,
+                        feedback: "",
+                      }));
                     }}
                   />
 
@@ -765,7 +794,7 @@ export default function SubmitReportPage() {
                     {errors.returnToSchool && (
                       <p className="text-red-500 text-xs mt-1">{errors.returnToSchool}</p>
                     )}
-                    
+
                   </div>
                   <div className="flex flex-col gap-2" id="returnToTeacher">
                     <label className={fieldLabel}>Would you return for this teacher or class</label>
@@ -780,7 +809,7 @@ export default function SubmitReportPage() {
                     {errors.returnToTeacher && (
                       <p className="text-red-500 text-xs">{errors.returnToTeacher}</p>
                     )}
-                    
+
                   </div>
                 </div>
 
@@ -833,14 +862,14 @@ export default function SubmitReportPage() {
                     {errors.postAs && (
                       <p className="text-red-500 text-xs ">{errors.postAs}</p>
                     )}
-                    
+
                   </div>{state?.postAs === "show" && <input
-                      type="text"
-                      className={`${inputBase} w-full py-[10px]`}
-                      placeholder="Your Name"
-                      value={state.postAs == "show" ? state.yourName : ""}
-                      onChange={(e) => updateField("yourName", state.postAs != "anonymous" ? e.target.value : "")}
-                    />}
+                    type="text"
+                    className={`${inputBase} w-full py-[10px]`}
+                    placeholder="Your Name"
+                    value={state.postAs == "show" ? state.yourName : ""}
+                    onChange={(e) => updateField("yourName", state.postAs != "anonymous" ? e.target.value : "")}
+                  />}
                 </div>
               </section>
 
@@ -864,11 +893,10 @@ export default function SubmitReportPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl font-inter text-sm sm:text-base font-semibold text-white transition-colors ${
-                        isSubmitting
-                          ? "bg-[#0171F9]/70 cursor-not-allowed opacity-75"
-                          : "bg-[#0171F9] cursor-pointer hover:bg-blue-700"
-                      }`}
+                      className={`flex h-[48px] sm:h-[52px] px-6 sm:px-8 items-center justify-center gap-2 rounded-xl font-inter text-sm sm:text-base font-semibold text-white transition-colors ${isSubmitting
+                        ? "bg-[#0171F9]/70 cursor-not-allowed opacity-75"
+                        : "bg-[#0171F9] cursor-pointer hover:bg-blue-700"
+                        }`}
                     >
                       {isSubmitting ? (
                         <>
