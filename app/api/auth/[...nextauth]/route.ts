@@ -78,24 +78,24 @@ const handler = NextAuth({
       const db = getConnection();
 
       //  Handle Google & Facebook users
-      if (
-        account?.provider === "google" ||
-        account?.provider === "facebook"
-      ) {
-        console.log("USER:", user)
-      console.log("ACCOUNT:", account)
-        const [existing]: any = await db.query(
-          "SELECT * FROM users WHERE email = ?",
-          [user.email]
-        );
+      // if (
+      //   account?.provider === "google" ||
+      //   account?.provider === "facebook"
+      // ) {
+      //   console.log("USER:", user)
+      // console.log("ACCOUNT:", account)
+      //   const [existing]: any = await db.query(
+      //     "SELECT * FROM users WHERE email = ?",
+      //     [user.email]
+      //   );
 
-        if (!existing.length) {
-          await db.query(
-            "INSERT INTO users (full_name, email, provider, providerAccountId) VALUES (?, ?, ?, ?)",
-            [user.name, user.email, account?.provider, account?.providerAccountId]
-          );
-        }
-      }
+      //   if (!existing.length) {
+      //     await db.query(
+      //       "INSERT INTO users (full_name, email, provider, providerAccountId) VALUES (?, ?, ?, ?)",
+      //       [user.name, user.email, account?.provider, account?.providerAccountId]
+      //     );
+      //   }
+      // }
 
       return true;
     },
