@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -83,25 +83,40 @@ const BuildingIcon = () => (
   </svg>
 
 );
+const TrendUpIcon = () => (
+  <svg
+    width="10"
+    height="14"
+    viewBox="0 0 10 14"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_443_2781)">
+      <path
+        d="M6.69618 1.4715C6.73275 1.41306 6.78047 1.36239 6.83662 1.32239C6.89278 1.28239 6.95626 1.25384 7.02344 1.23837C7.09063 1.2229 7.16021 1.22082 7.2282 1.23224C7.29619 1.24366 7.36127 1.26836 7.41971 1.30493C7.47816 1.3415 7.52883 1.38922 7.56883 1.44538C7.60883 1.50153 7.63738 1.56501 7.65285 1.63219C7.66832 1.69938 7.6704 1.76896 7.65898 1.83695C7.64756 1.90494 7.62286 1.97002 7.58629 2.02846L6.69618 1.4715ZM6.72181 2.42063L6.27657 2.14242L6.27675 2.14213L6.72181 2.42063ZM5.30564 5.67806C5.23186 5.79615 5.1142 5.88009 4.97853 5.91142C4.84286 5.94275 4.7003 5.9189 4.58222 5.84512C4.46413 5.77134 4.38019 5.65368 4.34886 5.51801C4.31753 5.38234 4.34138 5.23978 4.41516 5.1217L5.30564 5.67806ZM4.41173 5.12719C4.48551 5.0091 4.60317 4.92516 4.73884 4.89383C4.87451 4.8625 5.01707 4.88635 5.13515 4.96013C5.25324 5.03391 5.33718 5.15157 5.36851 5.28724C5.39984 5.42291 5.37599 5.56547 5.30221 5.68355L4.41173 5.12719ZM3.29309 8.89923C3.21931 9.01732 3.10164 9.10126 2.96598 9.13259C2.83031 9.16392 2.68775 9.14007 2.56966 9.06629C2.45158 8.99251 2.36764 8.87485 2.33631 8.73918C2.30498 8.60351 2.32883 8.46095 2.40261 8.34287L3.29309 8.89923ZM7.58629 2.02846L7.57933 2.03957L6.68913 1.48277L6.69618 1.4715L7.58629 2.02846ZM7.57933 2.03957L7.49681 2.17167L6.60679 1.61464L6.68913 1.48277L7.57933 2.03957ZM7.49681 2.17167L7.41447 2.30348L6.52435 1.74645L6.60679 1.61464L7.49681 2.17167ZM7.41447 2.30348L7.33179 2.43549L6.44177 1.87844L6.52435 1.74645L7.41447 2.30348ZM7.33179 2.43549L7.2493 2.56717L6.35919 2.01015L6.44177 1.87844L7.33179 2.43549ZM7.2493 2.56717L7.16686 2.69909L6.27675 2.14213L6.35919 2.01015L7.2493 2.56717ZM7.16705 2.6988L5.30564 5.67806L4.41516 5.1217L6.27657 2.14242L7.16705 2.6988ZM5.30221 5.68355L3.29309 8.89923L2.40261 8.34287L4.41173 5.12719L5.30221 5.68355Z"
+        fill="#16A34A"
+      />
+      <path
+        d="M1.46753 2.62246L6.57409 1.44338C6.69165 1.41623 6.81341 1.41249 6.93242 1.43241C7.05143 1.45234 7.16535 1.49554 7.26767 1.5594C7.37 1.62326 7.45874 1.7068 7.52881 1.80504C7.59888 1.90328 7.64891 2.01427 7.67606 2.13183L8.85518 7.23839"
+        stroke="#16A34A"
+        strokeWidth="1.05"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
 
-const StarIcon = () => (
-  <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.22105 16L4.58947 10.0842L0 6.10526L6.06316 5.57895L8.42105 0L10.7789 5.57895L16.8421 6.10526L12.2526 10.0842L13.6211 16L8.42105 12.8632L3.22105 16Z" fill="#0171F9" />
-  </svg>
-);
-
-const StarHalfIcon = () => (
-  <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.22105 16L4.58947 10.0842L0 6.10526L6.06316 5.57895L8.42105 0L10.7789 5.57895L16.8421 6.10526L12.2526 10.0842L13.6211 16L8.42105 12.8632L3.22105 16Z" fill="url(#halfGrad)" />
     <defs>
-      <linearGradient id="halfGrad" x1="7.63" y1="8" x2="9.13" y2="8" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#0171F9" />
-        <stop offset="1" stopColor="#0171F9" stopOpacity="0" />
-      </linearGradient>
+      <clipPath id="clip0_443_2781">
+        <rect
+          width="10"
+          height="14"
+          fill="white"
+          transform="matrix(1 0 0 -1 0 14)"
+        />
+      </clipPath>
     </defs>
   </svg>
 );
-
 const TrendDownIcon = () => (
 
   <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1012,6 +1027,14 @@ function ReportCard({ report, isLast }: { report: SchoolReport; isLast: boolean 
 interface SchoolData {
   id: number;
   school_name: string;
+  reports_this_month: number;
+  reports_last_month: number;
+  return_to_school_maybe_percentage: string,
+  return_to_school_no_percentage: string,
+  return_to_school_yes_percentage: string,
+  return_to_teacher_maybe_percentage: string,
+  return_to_teacher_no_percentage: string,
+  return_to_teacher_yes_percentage: string,
   school_district_name: string;
   school_association: string;
   city: string;
@@ -1103,7 +1126,7 @@ export default function SchoolDetailPage() {
         }
 
         const data = await response.json();
-
+        console.log("data",data);
         if (!data.success) {
           throw new Error(data.message || "Failed to fetch school details");
         }
@@ -1257,9 +1280,12 @@ export default function SchoolDetailPage() {
           <div className="flex flex-col">
             <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">This Month vs Last</span>
             <div className="flex items-baseline gap-2 flex-wrap">
-              <TrendDownIcon />
-              <span className="font-outfit font-semibold text-base sm:text-lg text-[#000]">8</span>
-              <span className="font-outfit font-medium text-xs sm:text-[12px] text-[#AFAFB2]">vs 14 last Month</span>
+              {(Number(schoolData?.reports_this_month) > Number(schoolData?.reports_last_month)) ? <TrendUpIcon/> : <TrendDownIcon />}
+              
+              <span className="font-outfit font-semibold text-base sm:text-lg text-[#000]">{schoolData?.reports_this_month
+}</span>
+              <span className="font-outfit font-medium text-xs sm:text-[12px] text-[#AFAFB2]">vs {schoolData?.reports_last_month
+} last Month</span>
             </div>
           </div>
 
@@ -1267,18 +1293,18 @@ export default function SchoolDetailPage() {
 
           {/* Would Return to School (current period) */}
           <div className="flex flex-col ">
-            <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">Would Return to School</span>
+            <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">Would Return to Teacher</span>
             <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">85%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">{schoolData?.return_to_teacher_yes_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">Yes</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">5%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">{schoolData?.return_to_teacher_maybe_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">Maybe</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">10%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">{schoolData?.return_to_teacher_no_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">No</span>
               </div>
             </div>
@@ -1291,15 +1317,15 @@ export default function SchoolDetailPage() {
             <span className="font-outfit font-medium text-sm sm:text-md text-[#AFAFB2] leading-7">Would Return to School</span>
             <div className="flex flex-row sm:items-center gap-3 sm:gap-5 flex-wrap">
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">25%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">{schoolData?.return_to_school_yes_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#10B981]">Yes</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">30%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">{schoolData?.return_to_school_maybe_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#E8A411]">Maybe</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">45%</span>
+                <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">{schoolData?.return_to_school_no_percentage || 0}%</span>
                 <span className="font-outfit font-semibold text-base sm:text-lg text-[#E02C2C]">No</span>
               </div>
             </div>

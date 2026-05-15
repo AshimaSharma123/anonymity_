@@ -25,7 +25,6 @@ interface SchoolFormData {
 }
 
 const GRADE_LEVELS: GradeLevel[] = ["Pre-K", "Elementary", "Middle School", "High School", "Special Ed"];
-const SCHOOL_YEARS: SchoolYear[] = ["2025-2026", "2026-2027", "2027-2028", "2028-2029"];
 const ASSOCIATIONS: Association[] = ["School District", "Private", "Charter"];
 
 
@@ -36,6 +35,12 @@ export default function SchoolEditForm() {
     const params = useParams();
     const schoolId = params.id as string;
     const router = useRouter();
+    const currentYear = new Date().getFullYear();
+
+    const SCHOOL_YEARS: SchoolYear[] = Array.from({ length: 5 }, (_, i) => {
+    const startYear = currentYear - 5 + i;
+    return `${startYear}-${startYear + 1}`;
+    }) as SchoolYear[];
     const [form, setForm] = useState<SchoolFormData>({
         name: "",
         association: "",
