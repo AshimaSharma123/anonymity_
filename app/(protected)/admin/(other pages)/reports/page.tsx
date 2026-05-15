@@ -2,6 +2,7 @@
 
 import { formatDate } from "@/lib/function";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
 
@@ -425,6 +426,7 @@ export default function ReportsPage() {
     } catch (err) {
       console.error("Error approving report:", err);
     } finally {
+      toast.success("Report request Approved!");
       setLoadingAction(null);
       setSelectedReport(null);
     }
@@ -442,6 +444,7 @@ export default function ReportsPage() {
     } catch (err) {
       console.error("Error rejecting report:", err);
     } finally {
+      toast.error("Report request Rejected!");
       setLoadingAction(null);
       setSelectedReport(null);
     }
@@ -523,7 +526,7 @@ export default function ReportsPage() {
             <div className="flex items-center gap-2 sm:gap-2.5 h-10 sm:h-11 px-3 sm:px-4 rounded-[14px] border border-[#EBEBF0] bg-[#FBFBFC]">
               <span className="opacity-70 flex-shrink-0"><SearchIcon /></span>
               <input
-                type="text" placeholder="Search" value={search}
+                type="text" placeholder="Search by School, Teacher, Submitted by name" value={search}
                 onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
                 className="flex-1 bg-transparent outline-none font-inter font-medium text-sm sm:text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
               />
@@ -807,14 +810,14 @@ export default function ReportsPage() {
                   <ReturnCard
                     icon={<BuildingIcon />}
                     question="Would you return to this school?"
-                    answer={selectedReport?.return_to_school == 1 ? "Yes" : selectedReport?.return_to_school == 2 ? "No" : "May be"}
+                    answer={selectedReport?.return_to_school == 1 ? "Yes" : selectedReport?.return_to_school == 2 ? "No" : "Maybe"}
                     comment={selectedReport?.school_comment}
                   /> : ""}
                 {(selectedReport?.return_to_teacher || selectedReport?.teacher_comment) ?
                   <ReturnCard
                     icon={<UserIcon />}
                     question="Would you return for this teacher or class?"
-                    answer={selectedReport?.return_to_teacher == 1 ? "Yes" : selectedReport?.return_to_teacher == 2 ? "No" : "May be"}
+                    answer={selectedReport?.return_to_teacher == 1 ? "Yes" : selectedReport?.return_to_teacher == 2 ? "No" : "Maybe"}
                     comment={selectedReport?.teacher_comment}
                   /> : ""}
               </div>

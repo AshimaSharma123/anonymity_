@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { scrollToError } from "@/lib/function";
+import toast from "react-hot-toast";
 
 type objectType = {
   [key: string]: any
@@ -18,10 +19,10 @@ function validateForm(state: objectType) {
     errors.email = "Email is required";
   }
 
-  if (!state.password.trim()) {
+  if (!state.password.trim()) { 
     errors.password = "Password is required";
   }
-console.log(errors);
+
   return errors;
 }
 
@@ -30,6 +31,7 @@ export default function LoginPage() {
   const [formValues, setFormValues] = useState<objectType>({ email: "", password: "" });
   const [errors, setErrors] = useState<objectType>({});
   const [loader, setLoader] = useState<boolean>(false);
+  const [ButtonMsg, setButtonMsg] = useState<string>("Login");
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -51,10 +53,18 @@ export default function LoginPage() {
 
     if (res?.error) {
       setLoader(false);
-      setErrors({["error"]: res.error }); // show in UI
+      toast.error(`Error: ${res.error}` || "Something went wrong! Please try again."); // show in UI
     } else {
-      router.push("/admin/dashboard");
-      setLoader(false);
+      
+       setTimeout(() => {
+        setButtonMsg("Redirecting to dashboard...");
+        setLoader(false);
+      }, 3000);
+      
+      setTimeout(() => {
+        router.push("/admin/dashboard");
+      }, 5000);
+      
     }
   };
 
@@ -180,9 +190,7 @@ export default function LoginPage() {
               <p className="text-red-500 text-xs">{errors.password}</p>
             )}
           </div>
-          {errors.error && (
-            <p className="text-red-500 text-xs">{errors.error}</p>
-          )}
+          
           {/* Login Button */}
           <button
             type="submit"
@@ -190,7 +198,7 @@ export default function LoginPage() {
             disabled={loader}
             className="cursor-pointer w-full py-3 rounded-lg bg-[#0171F9] text-white font-inter text-base font-semibold leading-6 text-center hover:bg-blue-600 active:bg-blue-700 transition-colors mt-1"
           >
-           {loader ? "Please wait..." : "Login"} 
+           {loader ? "Processing..." : ButtonMsg} 
           </button>
 
           {/* Divider */}
@@ -219,7 +227,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard", redirect: true, })}
-              className="w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
+              className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2" />

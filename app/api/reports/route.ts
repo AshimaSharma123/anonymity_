@@ -17,9 +17,9 @@ export async function GET(request: Request) {
 
     if (search) {
       whereConditions.push(
-        `(id LIKE ? OR school_name LIKE ? OR teacher_name LIKE ?)`
+        `(id LIKE ? OR school_name LIKE ? OR teacher_name LIKE ? OR your_name LIKE ?)`
       );
-      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
     }
 
     if (sentiment !== "All") {

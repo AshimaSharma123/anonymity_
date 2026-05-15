@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
         CASE
           WHEN r.return_to_teacher = 1 THEN 5
           WHEN r.return_to_teacher = 3 THEN 3
-          WHEN r.return_to_teacher = 2 THEN 1
+          WHEN r.return_to_teacher = 2 THEN 0
           ELSE NULL
         END
       ),
@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     ) AS avgRating,
 
     CASE
-      WHEN COUNT(r.id) = 0 THEN 'Medium'
+      WHEN COUNT(r.id) = 0 THEN 'N/A'
       WHEN SUM(CASE WHEN r.return_to_teacher = 2 THEN 1 ELSE 0 END) > COUNT(r.id) * 0.5 THEN 'High'
       WHEN SUM(CASE WHEN r.return_to_teacher = 1 THEN 1 ELSE 0 END) > COUNT(r.id) * 0.6 THEN 'Low'
       ELSE 'Medium'

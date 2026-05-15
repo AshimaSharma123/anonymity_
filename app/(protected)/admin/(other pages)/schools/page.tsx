@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 
@@ -32,11 +33,7 @@ const SentimentIcon = () => (
   </svg>
 );
 
-const FilterIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M13.9849 3.19692C13.9849 2.778 13.9849 2.56854 13.9026 2.40845C13.8311 2.26781 13.7169 2.15339 13.5765 2.08154C13.4164 2 13.2069 2 12.788 2H3.21266C2.79374 2 2.58428 2 2.42419 2.08154C2.28344 2.15326 2.16901 2.2677 2.09729 2.40845C2.01575 2.56854 2.01575 2.778 2.01575 3.19692V3.74825C2.01575 3.93152 2.01575 4.02279 2.03669 4.10882C2.05501 4.18541 2.08531 4.25862 2.12646 4.32576C2.17209 4.40057 2.23718 4.46565 2.36585 4.59507L6.15334 8.38181C6.28276 8.51123 6.34784 8.57631 6.39347 8.65112C6.43486 8.71894 6.46479 8.79126 6.48324 8.86806C6.50419 8.95334 6.50419 9.04386 6.50419 9.22265V12.7805C6.50419 13.4216 6.50419 13.7425 6.63884 13.9355C6.69726 14.019 6.77211 14.0896 6.85882 14.1432C6.94552 14.1967 7.04224 14.2319 7.14304 14.2467C7.37569 14.2811 7.66295 14.1382 8.23597 13.851L8.83443 13.5517C9.07531 13.4321 9.195 13.3722 9.28253 13.2824C9.36017 13.2031 9.4192 13.1076 9.45533 13.0027C9.49648 12.8845 9.49648 12.7498 9.49648 12.4813V9.22863C9.49648 9.04535 9.49648 8.95409 9.51742 8.86806C9.53574 8.79147 9.56604 8.71826 9.60719 8.65112C9.65208 8.57631 9.71716 8.51198 9.84433 8.3848L9.84732 8.38181L13.6348 4.59507C13.7635 4.46565 13.8278 4.40057 13.8742 4.32576C13.9156 4.25793 13.9455 4.18562 13.964 4.10882C13.9849 4.02429 13.9849 3.93302 13.9849 3.75423V3.19692Z" stroke="#191919" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+
 
 const ChevronDownIcon = () => (
   <svg width="9" height="6" viewBox="0 0 9 6" fill="none">
@@ -67,18 +64,6 @@ const PlusIcon = () => (
 type RiskLevel = "High" | "Medium" | "Low";
 type SchoolStatus = "Active" | "Inactive";
 
-interface School {
-  id: number;
-  name: string;
-  association: Association;
-  schoolYear: string;
-  location: string;
-  teachers: number;
-  risk: RiskLevel;
-  reports: number;
-  status: SchoolStatus;
-}
-
 
 
 const riskStyles: any = {
@@ -90,21 +75,17 @@ const riskStyles: any = {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function SchoolsPage() {
-  const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("All");
   const [riskFilter, setRiskFilter] = useState<"All" | RiskLevel>("All");
-  const [statusFilter, setStatusFilter] = useState<"All" | SchoolStatus>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [paginated, setPaginated] = useState<Report[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [states, setStates] = useState<string[]>([]);
-
+  const router = useRouter();
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -146,10 +127,7 @@ export default function SchoolsPage() {
     fetchReports();
   }, [currentPage, search, initialLoading, locationFilter, riskFilter]);
 
-  // if (showForm) {
-  //   return <SchoolCreateForm onCancel={() => setShowForm(false)} />;
-  // }
-
+ 
   if (initialLoading) {
     return (
       <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex items-center justify-center">
@@ -191,7 +169,7 @@ export default function SchoolsPage() {
               <span className="opacity-70 flex-shrink-0"><SearchIcon /></span>
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search by School name and Location"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
                 className="flex-1 bg-transparent outline-none font-inter font-medium text-sm sm:text-[15px] text-[#323152] placeholder:text-[#323152] placeholder:opacity-50 leading-[150%]"
@@ -282,7 +260,7 @@ export default function SchoolsPage() {
                 paginated.map((school: any) => {
                   const risk = riskStyles[school.calculated_risk];
                   return (
-                    <tr key={school.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
+                    <tr key={school.id} onClick={()=>router.push(`/admin/schools/${school.id}`)} className="cursor-pointer border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.school_name}</span>
                       </td>
@@ -304,8 +282,8 @@ export default function SchoolsPage() {
                         {school.report_count > 0 ? <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] ${risk.bg} ${risk.text}`}>
                           {school.calculated_risk}
                         </span> : 
-                          <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px]`}>
-                          N/A
+                          <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] bg-[#F6F6F6] text-[#030711]`}>
+                          Not sure
                         </span>
                         }
                       </td>

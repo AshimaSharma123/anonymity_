@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
 
@@ -67,19 +68,19 @@ const EditIcon = () => (
 );
 
 const LocationPinIcon = () => (
-  
-<svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8.39603 5.60426C8.39603 4.05804 7.14366 2.80566 5.59743 2.80566C4.0512 2.80566 2.79883 4.05804 2.79883 5.60426C2.79883 7.15049 4.0512 8.40287 5.59743 8.40287C7.14366 8.40287 8.39603 7.15049 8.39603 5.60426ZM4.19813 5.60426C4.19813 4.83465 4.82781 4.20496 5.59743 4.20496C6.36704 4.20496 6.99673 4.83465 6.99673 5.60426C6.99673 6.37388 6.36704 7.00356 5.59743 7.00356C4.82781 7.00356 4.19813 6.37388 4.19813 5.60426Z" fill="#414141"/>
-<path d="M5.19147 13.8671C5.31041 13.951 5.45734 14 5.59727 14C5.7372 14 5.88412 13.958 6.00306 13.8671C6.21296 13.7131 11.2155 10.1099 11.1945 5.5972C11.1945 2.51174 8.68272 0 5.59727 0C2.51181 0 6.58647e-05 2.51174 6.58647e-05 5.5972C-0.0209236 10.1029 4.98158 13.7131 5.19147 13.8671ZM5.59727 1.4063C7.91311 1.4063 9.79517 3.28836 9.79517 5.6042C9.80916 8.71064 6.7237 11.5022 5.59727 12.4188C4.47083 11.5022 1.38537 8.71764 1.39937 5.6042C1.39937 3.28836 3.28143 1.4063 5.59727 1.4063Z" fill="#414141"/>
-</svg>
+
+  <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.39603 5.60426C8.39603 4.05804 7.14366 2.80566 5.59743 2.80566C4.0512 2.80566 2.79883 4.05804 2.79883 5.60426C2.79883 7.15049 4.0512 8.40287 5.59743 8.40287C7.14366 8.40287 8.39603 7.15049 8.39603 5.60426ZM4.19813 5.60426C4.19813 4.83465 4.82781 4.20496 5.59743 4.20496C6.36704 4.20496 6.99673 4.83465 6.99673 5.60426C6.99673 6.37388 6.36704 7.00356 5.59743 7.00356C4.82781 7.00356 4.19813 6.37388 4.19813 5.60426Z" fill="#414141" />
+    <path d="M5.19147 13.8671C5.31041 13.951 5.45734 14 5.59727 14C5.7372 14 5.88412 13.958 6.00306 13.8671C6.21296 13.7131 11.2155 10.1099 11.1945 5.5972C11.1945 2.51174 8.68272 0 5.59727 0C2.51181 0 6.58647e-05 2.51174 6.58647e-05 5.5972C-0.0209236 10.1029 4.98158 13.7131 5.19147 13.8671ZM5.59727 1.4063C7.91311 1.4063 9.79517 3.28836 9.79517 5.6042C9.80916 8.71064 6.7237 11.5022 5.59727 12.4188C4.47083 11.5022 1.38537 8.71764 1.39937 5.6042C1.39937 3.28836 3.28143 1.4063 5.59727 1.4063Z" fill="#414141" />
+  </svg>
 
 );
 
 const BuildingIcon = () => (
-  
-<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3.5625 12.5625V5.8125L0.5625 6.65625V12.5625H3.5625ZM3.5625 12.5625H9.5625M3.5625 12.5625V2.56275M9.5625 12.5625V5.8125L12.5625 6.65625V12.5625H9.5625ZM9.5625 12.5625V2.56275M11.0625 3.5625L6.5625 0.5625L2.0625 3.5625M5.8125 4.3125H7.3125M5.8125 6.5625H7.3125" stroke="#414141" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
+
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3.5625 12.5625V5.8125L0.5625 6.65625V12.5625H3.5625ZM3.5625 12.5625H9.5625M3.5625 12.5625V2.56275M9.5625 12.5625V5.8125L12.5625 6.65625V12.5625H9.5625ZM9.5625 12.5625V2.56275M11.0625 3.5625L6.5625 0.5625L2.0625 3.5625M5.8125 4.3125H7.3125M5.8125 6.5625H7.3125" stroke="#414141" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
 
 );
 
@@ -102,18 +103,18 @@ const StarHalfIcon = () => (
 );
 
 const TrendDownIcon = () => (
-  
-<svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clipPath="url(#clip0_443_2781)">
-<path d="M6.69618 12.5285C6.73275 12.5869 6.78047 12.6376 6.83662 12.6776C6.89278 12.7176 6.95626 12.7462 7.02344 12.7616C7.09063 12.7771 7.16021 12.7792 7.2282 12.7678C7.29619 12.7564 7.36127 12.7317 7.41971 12.6951C7.47816 12.6585 7.52883 12.6108 7.56883 12.5546C7.60883 12.4985 7.63738 12.435 7.65285 12.3678C7.66832 12.3006 7.6704 12.2311 7.65898 12.1631C7.64756 12.0951 7.62286 12.03 7.58629 11.9715L6.69618 12.5285ZM6.72181 11.5794L6.27657 11.8576L6.27675 11.8579L6.72181 11.5794ZM5.30564 8.32194C5.23186 8.20385 5.1142 8.11991 4.97853 8.08858C4.84286 8.05725 4.7003 8.0811 4.58222 8.15488C4.46413 8.22866 4.38019 8.34632 4.34886 8.48199C4.31753 8.61766 4.34138 8.76022 4.41516 8.8783L5.30564 8.32194ZM4.41173 8.87281C4.48551 8.9909 4.60317 9.07484 4.73884 9.10617C4.87451 9.1375 5.01707 9.11365 5.13515 9.03987C5.25324 8.96609 5.33718 8.84843 5.36851 8.71276C5.39984 8.57709 5.37599 8.43453 5.30221 8.31645L4.41173 8.87281ZM3.29309 5.10077C3.21931 4.98268 3.10164 4.89874 2.96598 4.86741C2.83031 4.83608 2.68775 4.85993 2.56966 4.93371C2.45158 5.00749 2.36764 5.12515 2.33631 5.26082C2.30498 5.39649 2.32883 5.53905 2.40261 5.65713L3.29309 5.10077ZM7.58629 11.9715L7.57933 11.9604L6.68913 12.5172L6.69618 12.5285L7.58629 11.9715ZM7.57933 11.9604L7.49681 11.8283L6.60679 12.3854L6.68913 12.5172L7.57933 11.9604ZM7.49681 11.8283L7.41447 11.6965L6.52435 12.2535L6.60679 12.3854L7.49681 11.8283ZM7.41447 11.6965L7.33179 11.5645L6.44177 12.1216L6.52435 12.2535L7.41447 11.6965ZM7.33179 11.5645L7.2493 11.4328L6.35919 11.9898L6.44177 12.1216L7.33179 11.5645ZM7.2493 11.4328L7.16686 11.3009L6.27675 11.8579L6.35919 11.9898L7.2493 11.4328ZM7.16705 11.3012L5.30564 8.32194L4.41516 8.8783L6.27657 11.8576L7.16705 11.3012ZM5.30221 8.31645L3.29309 5.10077L2.40261 5.65713L4.41173 8.87281L5.30221 8.31645Z" fill="#E02C2C"/>
-<path d="M1.46753 11.3775L6.57409 12.5566C6.69165 12.5838 6.81341 12.5875 6.93242 12.5676C7.05143 12.5477 7.16535 12.5045 7.26767 12.4406C7.37 12.3767 7.45874 12.2932 7.52881 12.195C7.59888 12.0967 7.64891 11.9857 7.67606 11.8681L8.85518 6.76155" stroke="#E02C2C" strokeWidth="1.05" strokeLinecap="round" strokeLinejoin="round"/>
-</g>
-<defs>
-<clipPath id="clip0_443_2781">
-<rect width="10" height="14" fill="white" transform="matrix(1 0 0 -1 0 14)"/>
-</clipPath>
-</defs>
-</svg>
+
+  <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_443_2781)">
+      <path d="M6.69618 12.5285C6.73275 12.5869 6.78047 12.6376 6.83662 12.6776C6.89278 12.7176 6.95626 12.7462 7.02344 12.7616C7.09063 12.7771 7.16021 12.7792 7.2282 12.7678C7.29619 12.7564 7.36127 12.7317 7.41971 12.6951C7.47816 12.6585 7.52883 12.6108 7.56883 12.5546C7.60883 12.4985 7.63738 12.435 7.65285 12.3678C7.66832 12.3006 7.6704 12.2311 7.65898 12.1631C7.64756 12.0951 7.62286 12.03 7.58629 11.9715L6.69618 12.5285ZM6.72181 11.5794L6.27657 11.8576L6.27675 11.8579L6.72181 11.5794ZM5.30564 8.32194C5.23186 8.20385 5.1142 8.11991 4.97853 8.08858C4.84286 8.05725 4.7003 8.0811 4.58222 8.15488C4.46413 8.22866 4.38019 8.34632 4.34886 8.48199C4.31753 8.61766 4.34138 8.76022 4.41516 8.8783L5.30564 8.32194ZM4.41173 8.87281C4.48551 8.9909 4.60317 9.07484 4.73884 9.10617C4.87451 9.1375 5.01707 9.11365 5.13515 9.03987C5.25324 8.96609 5.33718 8.84843 5.36851 8.71276C5.39984 8.57709 5.37599 8.43453 5.30221 8.31645L4.41173 8.87281ZM3.29309 5.10077C3.21931 4.98268 3.10164 4.89874 2.96598 4.86741C2.83031 4.83608 2.68775 4.85993 2.56966 4.93371C2.45158 5.00749 2.36764 5.12515 2.33631 5.26082C2.30498 5.39649 2.32883 5.53905 2.40261 5.65713L3.29309 5.10077ZM7.58629 11.9715L7.57933 11.9604L6.68913 12.5172L6.69618 12.5285L7.58629 11.9715ZM7.57933 11.9604L7.49681 11.8283L6.60679 12.3854L6.68913 12.5172L7.57933 11.9604ZM7.49681 11.8283L7.41447 11.6965L6.52435 12.2535L6.60679 12.3854L7.49681 11.8283ZM7.41447 11.6965L7.33179 11.5645L6.44177 12.1216L6.52435 12.2535L7.41447 11.6965ZM7.33179 11.5645L7.2493 11.4328L6.35919 11.9898L6.44177 12.1216L7.33179 11.5645ZM7.2493 11.4328L7.16686 11.3009L6.27675 11.8579L6.35919 11.9898L7.2493 11.4328ZM7.16705 11.3012L5.30564 8.32194L4.41516 8.8783L6.27657 11.8576L7.16705 11.3012ZM5.30221 8.31645L3.29309 5.10077L2.40261 5.65713L4.41173 8.87281L5.30221 8.31645Z" fill="#E02C2C" />
+      <path d="M1.46753 11.3775L6.57409 12.5566C6.69165 12.5838 6.81341 12.5875 6.93242 12.5676C7.05143 12.5477 7.16535 12.5045 7.26767 12.4406C7.37 12.3767 7.45874 12.2932 7.52881 12.195C7.59888 12.0967 7.64891 11.9857 7.67606 11.8681L8.85518 6.76155" stroke="#E02C2C" strokeWidth="1.05" strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+    <defs>
+      <clipPath id="clip0_443_2781">
+        <rect width="10" height="14" fill="white" transform="matrix(1 0 0 -1 0 14)" />
+      </clipPath>
+    </defs>
+  </svg>
 
 );
 
@@ -142,9 +143,9 @@ interface Teacher {
 }
 
 const teacherRiskStyles: Record<TeacherRisk, { bg: string; text: string }> = {
-  High:   { bg: "bg-[#FFECEC]", text: "text-[#E53E3E]" },
+  High: { bg: "bg-[#FFECEC]", text: "text-[#E53E3E]" },
   Medium: { bg: "bg-[#FFF4E0]", text: "text-[#FFA600]" },
-  Low:    { bg: "bg-[#E6FBF0]", text: "text-[#22A45D]" },
+  Low: { bg: "bg-[#E6FBF0]", text: "text-[#22A45D]" },
 };
 
 // ─── Add Teacher Sidebar ──────────────────────────────────────────────────────
@@ -171,6 +172,13 @@ interface AddTeacherSidebarProps {
   onClose: () => void;
   schoolId: string;
   onTeacherAdded: () => void;
+}
+
+interface EditTeacherSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+  teacher: Teacher | null;
+  onTeacherUpdated: () => void;
 }
 
 function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTeacherSidebarProps) {
@@ -219,23 +227,21 @@ function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTea
     }
   };
 
- 
+
 
   return (
     <>
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
       />
 
       {/* Sidebar panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-full max-w-[524px] bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 h-full w-full max-w-[524px] bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 pt-6 pb-6 sm:pb-6">
@@ -289,7 +295,7 @@ function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTea
 
           {/* Error message */}
           {error && (
-            <div className="px-3 py-2 rounded-lg bg-[#FEEFEF] font-inter text-sm text-[#E02C2C]">
+            <div className="rounded-lg font-inter text-sm text-[#E02C2C]">
               {error}
             </div>
           )}
@@ -298,10 +304,246 @@ function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTea
           <button
             onClick={handleSave}
             disabled={loading}
-            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? "Saving..." : "Save"}
           </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Edit Teacher Sidebar ──────────────────────────────────────────────────────
+
+function EditTeacherSidebar({ isOpen, onClose, teacher, onTeacherUpdated }: EditTeacherSidebarProps) {
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (teacher) {
+      setName(teacher.name);
+      setStatus(teacher.status);
+    }
+  }, [teacher]);
+
+  const handleSave = async () => {
+    if (!name.trim() || !status) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    if (!teacher) {
+      setError("Teacher data is missing");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`/api/teachers/${teacher.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to update teacher");
+      }
+
+      onTeacherUpdated();
+      onClose();
+    } catch (err) {
+      console.error("Error updating teacher:", err);
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+      />
+
+      {/* Sidebar panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-full max-w-[524px] bg-white z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 sm:px-6 pt-6 pb-6 sm:pb-6">
+          <h2 className="font-inter font-semibold text-xl sm:text-[25px] text-[#212121] leading-6">Edit Teacher</h2>
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer flex-shrink-0"
+            aria-label="Close sidebar"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-black/10 mx-0" />
+
+        {/* Form */}
+        <div className="flex flex-col gap-3 sm:gap-4 px-4 sm:px-6 pt-6 sm:pt-8">
+          {/* Name field */}
+          <div className="flex flex-col gap-0.5">
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Name"
+              disabled={loading}
+              className="h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          {/* Status field */}
+          <div className="flex flex-col gap-0.5">
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">Status</label>
+            <div className="relative">
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                disabled={loading}
+                className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="" disabled>Select</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <span className="pointer-events-none absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
+                <ChevronDownIcon />
+              </span>
+            </div>
+          </div>
+
+          {/* Error message */}
+          {error && (
+            <div className="rounded-lg font-inter text-sm text-[#E02C2C]">
+              {error}
+            </div>
+          )}
+
+          {/* Save button */}
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Delete Confirmation Modal ────────────────────────────────────────────────
+
+const DeleteWarningIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="24" cy="24" r="20" fill="#FEEFEF" stroke="#E02C2C" strokeWidth="2" />
+    <path d="M24 16V28M24 32C24.5523 32 25 31.5523 25 31C25 30.4477 24.5523 30 24 30C23.4477 30 23 30.4477 23 31C23 31.5523 23.4477 32 24 32Z" stroke="#E02C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+interface DeleteConfirmationModalProps {
+  isOpen: boolean;
+  title: string;
+  confirmText?: string;
+  cancelText?: string;
+  isLoading?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function DeleteConfirmationModal({
+  isOpen,
+  title,
+  confirmText = "Delete",
+  cancelText = "Cancel",
+  isLoading = false,
+  onConfirm,
+  onCancel,
+}: DeleteConfirmationModalProps) {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onCancel}
+        className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+      />
+
+      {/* Modal */}
+      <div
+        className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+      >
+        <div className="bg-white rounded-xl shadow-2xl w-auto overflow-hidden transform transition-transform duration-300">
+          {/* Content */}
+          <div className="px-8 py-8 flex flex-col items-center gap-4">
+            {/* Icon */}
+            <div className="flex items-center justify-center">
+              <DeleteWarningIcon />
+            </div>
+
+            {/* Title */}
+            <h2 className="font-inter font-bold text-2xl text-[#121212] text-center leading-7">
+              {title}
+            </h2>
+
+            {/* Message */}
+            <p className="font-inter font-normal text-[15px] text-[#666F77] text-center leading-6">
+              Are you sure you want to delete this teacher? This action cannot be undone.
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[#E5E7EB]" />
+
+          {/* Actions */}
+          <div className="flex gap-3 px-6 py-4 sm:px-8 sm:py-5 bg-[#F9FAFB]">
+            <button
+              onClick={onCancel}
+              disabled={isLoading}
+              className="flex-1 px-4 py-3 rounded-lg border border-[#D1D5DB] bg-white font-inter font-semibold text-sm text-[#374151] hover:bg-[#F3F4F6] active:bg-[#E5E7EB] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {cancelText}
+            </button>
+            <button
+              onClick={onConfirm}
+              disabled={isLoading}
+              className="flex-1 px-4 py-3 rounded-lg bg-[#E02C2C] font-inter font-semibold text-sm hover:bg-[#CC2424] active:bg-[#B81D1D] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Deleting...
+                </span>
+              ) : (
+                confirmText
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </>
@@ -316,12 +558,17 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
   const [statusFilter, setStatusFilter] = useState<"All" | TeacherStatus>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editSidebarOpen, setEditSidebarOpen] = useState(false);
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(1);
   const [totalTeachers, setTotalTeachers] = useState(0);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const TEACHERS_PER_PAGE = 10;
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [teacherToDelete, setTeacherToDelete] = useState<number | null>(null);
+  const [deletingTeacherId, setDeletingTeacherId] = useState<number | null>(null);
+  const TEACHERS_PER_PAGE = 5;
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -346,10 +593,10 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
         if (!data.success) {
           throw new Error(data.message || "Failed to fetch teachers");
         }
-
         setTeachers(data.teachers);
         setTotalPages(data.pagination.totalPages);
         setTotalTeachers(data.pagination.total);
+
         setError(null);
       } catch (err) {
         console.error("Error fetching teachers:", err);
@@ -373,31 +620,65 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
   const endItem = Math.min(currentPage * TEACHERS_PER_PAGE, totalTeachers);
 
   const handleTeacherAdded = () => {
-    setCurrentPage(1);
+    toast.success("Teacher created successfully");
     setRefreshTrigger((prev) => prev + 1);
   };
 
-  const handleDeleteTeacher = async (teacherId: number) => {
-    if (!confirm("Are you sure you want to delete this teacher?")) {
+  const handleEditTeacher = (teacher: Teacher) => {
+    setSelectedTeacher(teacher);
+    setEditSidebarOpen(true);
+  };
+
+  const handleTeacherUpdated = () => {
+    toast.success("Teacher updated successfully");
+    setEditSidebarOpen(false);
+    setSelectedTeacher(null);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
+
+
+  const handleDeleteClick = (teacherId: number) => {
+    setTeacherToDelete(teacherId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (teacherToDelete === null) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/teachers/${teacherId}`, {
+      setDeletingTeacherId(teacherToDelete);
+      const response = await fetch(`/api/teachers/${teacherToDelete}`, {
         method: "DELETE",
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
+        toast.error(data.message || "Failed to delete teacher");
         throw new Error(data.message || "Failed to delete teacher");
       }
+      toast.success("Teacher deleted successfully");
 
+      if (endItem == startItem && currentPage != 1) {
+        setCurrentPage((prev) => prev - 1);
+      }
       setRefreshTrigger((prev) => prev + 1);
+      setDeleteModalOpen(false);
+      setTeacherToDelete(null);
     } catch (err) {
       console.error("Error deleting teacher:", err);
-      alert(err instanceof Error ? err.message : "Failed to delete teacher");
+      toast.error(err instanceof Error ? err.message : "Failed to delete teacher");
+    } finally {
+      setDeletingTeacherId(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModalOpen(false);
+    setTeacherToDelete(null);
   };
 
   return (
@@ -407,6 +688,25 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
         onClose={() => setSidebarOpen(false)}
         schoolId={schoolId}
         onTeacherAdded={handleTeacherAdded}
+      />
+      <EditTeacherSidebar
+        isOpen={editSidebarOpen}
+        onClose={() => {
+          setEditSidebarOpen(false);
+          setSelectedTeacher(null);
+        }}
+        teacher={selectedTeacher}
+        onTeacherUpdated={handleTeacherUpdated}
+      />
+      <DeleteConfirmationModal
+        isOpen={deleteModalOpen}
+        title="Delete Teacher"
+       
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={deletingTeacherId !== null}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
       />
 
       {/* Tab header */}
@@ -431,176 +731,187 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
         </div>
       ) : (
         <>
-      {/* Filters */}
-      <div className="flex flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3 flex-wrap">
-        {/* Risk filter */}
-        <div className="relative">
-          
-          <select
-            value={riskFilter}
-            onChange={(e) => handleFilterChange(setRiskFilter)(e.target.value as "All" | TeacherRisk)}
-            className="appearance-none flex items-center gap-2.5 pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
-          >
-            <option value="All">Risk: All</option>
-            <option value="High">Risk: High</option>
-            <option value="Medium">Risk: Medium</option>
-            <option value="Low">Risk: Low</option>
-          </select>
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-            <SentimentSmileIcon />
-          </span>
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-            <ChevronDownSmallIcon />
-          </span>
-        </div>
+          {/* Filters */}
+          <div className="flex flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3 flex-wrap">
+            {/* Risk filter */}
+            <div className="relative">
 
-        {/* Status filter */}
-        <div className="relative">
-          <select
-            value={statusFilter}
-            onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | TeacherStatus)}
-            className="appearance-none flex items-center gap-2.5 pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
-          >
-            <option value="All">Status: All</option>
-            <option value="Active">Status: Active</option>
-            <option value="Inactive">Status: Inactive</option>
-          </select>
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
-            <FilterFunnelIcon />
-          </span>
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-            <ChevronDownSmallIcon />
-          </span>
-        </div>
-      </div>
+              <select
+                value={riskFilter}
+                onChange={(e) => handleFilterChange(setRiskFilter)(e.target.value as "All" | TeacherRisk)}
+                className="appearance-none flex items-center gap-2.5 pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
+              >
+                <option value="All">Risk: All</option>
+                <option value="High">Risk: High</option>
+                <option value="Medium">Risk: Medium</option>
+                <option value="Low">Risk: Low</option>
+              </select>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
+                <SentimentSmileIcon />
+              </span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                <ChevronDownSmallIcon />
+              </span>
+            </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-max">
-          <thead>
-            <tr className="border-y border-[#E5E7EB] bg-white">
-              <th className="text-left px-2 sm:px-3 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Teacher</th>
-              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Reports</th>
-              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Avg Rating</th>
-              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Risk</th>
-              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Status</th>
-              <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teachers.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-4 sm:px-5 py-8 sm:py-10 text-center font-inter text-[12px] sm:text-sm text-[#6F6C70]">
-                  No teachers found.
-                </td>
-              </tr>
-            ) : (
-              teachers.map((teacher) => {
-                const risk = teacherRiskStyles[teacher.risk];
-                return (
-                  <tr key={teacher.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
-                    {/* Name */}
-                    <td className="px-2 sm:px-3 py-3 sm:py-[17.5px]">
-                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] leading-5">
-                        {teacher.name}
-                      </span>
-                    </td>
-                    {/* Reports */}
-                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] ">
-                        {teacher.reports}
-                      </span>
-                    </td>
-                    {/* Avg Rating */}
-                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711]">
-                        {Number(teacher.avgRating)}
-                        <span className="text-[#9CA3AF]">/5</span>
-                      </span>
-                    </td>
-                    {/* Risk badge */}
-                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs ${risk.bg} ${risk.text}`}>
-                        {teacher.risk}
-                      </span>
-                    </td>
-                    {/* Status */}
-                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <span className="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[11px] sm:text-xs text-[#030711]">
-                        {teacher.status}
-                      </span>
-                    </td>
-                    {/* Actions */}
-                    <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                      <button
-                        onClick={() => handleDeleteTeacher(teacher.id)}
-                        className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer"
-                      >
-                        <TrashIcon />
-                      </button>
+            {/* Status filter */}
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | TeacherStatus)}
+                className="appearance-none flex items-center gap-2.5 pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
+              >
+                <option value="All">Status: All</option>
+                <option value="Active">Status: Active</option>
+                <option value="Inactive">Status: Inactive</option>
+              </select>
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
+                <FilterFunnelIcon />
+              </span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                <ChevronDownSmallIcon />
+              </span>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-max">
+              <thead>
+                <tr className="border-y border-[#E5E7EB] bg-white">
+                  <th className="text-left px-2 sm:px-3 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Teacher</th>
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Reports</th>
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Avg Rating</th>
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Risk</th>
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Status</th>
+                  <th className="text-left px-2 sm:px-5 py-2.5 sm:py-3.5 font-inter font-medium text-[12px] sm:text-sm text-[#6F6C70] uppercase tracking-wide">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teachers.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 sm:px-5 py-8 sm:py-10 text-center font-inter text-[12px] sm:text-sm text-[#6F6C70]">
+                      No teachers found.
                     </td>
                   </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+                ) : (
+                  teachers.map((teacher) => {
+                    const risk = teacherRiskStyles[teacher.risk];
+                    return (
+                      <tr key={teacher.id} className="border-b border-[#F2F4F7] hover:bg-[#F8FAFF] transition-colors">
+                        {/* Name */}
+                        <td className="px-2 sm:px-3 py-3 sm:py-[17.5px]">
+                          <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] leading-5">
+                            {teacher.name}
+                          </span>
+                        </td>
+                        {/* Reports */}
+                        <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] ">
+                            {teacher.reports}
+                          </span>
+                        </td>
+                        {/* Avg Rating */}
+                        <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711]">
+                            {teacher.reports > 0 ? <>{Number(teacher.avgRating)}<span className="text-[#9CA3AF]">/5</span></> : "N/A"}
+                          </span>
+                        </td>
+                        {/* Risk badge */}
+                        {teacher.reports > 0 ? <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs ${risk.bg} ${risk.text}`}>
+                            {teacher.risk}
+                          </span>
+                        </td>
+                          :
+                          <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                            <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs bg-[#F6F6F6] text-[#030711]`}>
+                              Not sure
+                            </span>
+                          </td>
+                        }
+                        {/* Status */}
+                        <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <span className="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[11px] sm:text-xs text-[#030711]">
+                            {teacher.status}
+                          </span>
+                        </td>
+                        {/* Actions */}
+                        <td className="flex gap-2 px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <button
+                            onClick={() => handleEditTeacher(teacher)}
+                            className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer" title="Edit"
+                          >
+                            <EditIcon />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(teacher.id)}
+                            className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-md border border-[#EFF0F2] bg-white hover:bg-gray-50 transition-colors cursor-pointer" title="Delete"
+                          >
+                            <TrashIcon />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
 
-      {/* Pagination */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-8 py-4 sm:py-5">
-        <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80">
-          {totalTeachers === 0
-            ? "Show 0 results"
-            : `Show ${startItem}-${endItem} of ${totalTeachers}`}
-        </span>
-        <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
-          >
-            <PaginationChevronLeftIcon />
-          </button>
-          {Array.from(
-            {
-              length: Math.min(4, totalPages),
-            },
-            (_, i) => {
-              let startPage: number;
-              if (totalPages <= 4) {
-                startPage = 1;
-              } else if (currentPage <= 2) {
-                startPage = 1;
-              } else if (currentPage > totalPages - 2) {
-                startPage = totalPages - 3;
-              } else {
-                startPage = currentPage - 1;
-              }
-              return startPage + i;
-            }
-          ).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${
-                currentPage === page
-                  ? "bg-[#0171F9] text-white font-semibold"
-                  : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
-          >
-            <PaginationChevronRightIcon />
-          </button>
-        </div>
-      </div>
+          {/* Pagination */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 px-4 sm:px-8 py-4 sm:py-5">
+            <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80">
+              {totalTeachers === 0
+                ? "Show 0 results"
+                : `Show ${startItem}-${endItem} of ${totalTeachers}`}
+            </span>
+            <div className="flex items-center gap-1 sm:gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                <PaginationChevronLeftIcon />
+              </button>
+              {Array.from(
+                {
+                  length: Math.min(4, totalPages),
+                },
+                (_, i) => {
+                  let startPage: number;
+                  if (totalPages <= 4) {
+                    startPage = 1;
+                  } else if (currentPage <= 2) {
+                    startPage = 1;
+                  } else if (currentPage > totalPages - 2) {
+                    startPage = totalPages - 3;
+                  } else {
+                    startPage = currentPage - 1;
+                  }
+                  return startPage + i;
+                }
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${currentPage === page
+                      ? "bg-[#0171F9] text-white font-semibold"
+                      : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
+                    }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                <PaginationChevronRightIcon />
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>
@@ -724,60 +1035,60 @@ export default function SchoolDetailPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalReports, setTotalReports] = useState(0);
-  const REPORTS_PER_PAGE = 10;
+  const REPORTS_PER_PAGE = 5;
 
-   function StarRating({ count = 0 }: { count?: number }) {
-  const STAR_SIZE = 20; // increase size
-  const GAP = 1;
+  function StarRating({ count = 0 }: { count?: number }) {
+    const STAR_SIZE = 20; // increase size
+    const GAP = 1;
 
-  return (
-    <svg
-      width={(STAR_SIZE + GAP) * 5}
-      height={STAR_SIZE}
-      viewBox={`0 0 ${(STAR_SIZE + GAP) * 5} ${STAR_SIZE}`}
-      fill="none"
-    >
-      {[0, 1, 2, 3, 4].map((i) => {
-        const x = i * (STAR_SIZE + GAP);
+    return (
+      <svg
+        width={(STAR_SIZE + GAP) * 5}
+        height={STAR_SIZE}
+        viewBox={`0 0 ${(STAR_SIZE + GAP) * 5} ${STAR_SIZE}`}
+        fill="none"
+      >
+        {[0, 1, 2, 3, 4].map((i) => {
+          const x = i * (STAR_SIZE + GAP);
 
-        const fillPercent = Math.max(0, Math.min(1, count - i));
+          const fillPercent = Math.max(0, Math.min(1, count - i));
 
-        return (
-          <g
-            key={i}
-            transform={`translate(${x}, 0) scale(${STAR_SIZE / 13})`}
-          >
-            {/* Empty star */}
-            <path
-              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
-              fill="#E2E8F0"
-              stroke="#E2E8F0"
-              strokeWidth="0.92"
-            />
-
-            {/* Partial filled star */}
-            <clipPath id={`clip-${i}`}>
-              <rect
-                x="0"
-                y="0"
-                width={13 * fillPercent}
-                height="13"
+          return (
+            <g
+              key={i}
+              transform={`translate(${x}, 0) scale(${STAR_SIZE / 13})`}
+            >
+              {/* Empty star */}
+              <path
+                d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+                fill="#E2E8F0"
+                stroke="#E2E8F0"
+                strokeWidth="0.92"
               />
-            </clipPath>
 
-            <path
-              clipPath={`url(#clip-${i})`}
-              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
-              fill="#0171F9"
-              stroke="#0171F9"
-              strokeWidth="0.92"
-            />
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
+              {/* Partial filled star */}
+              <clipPath id={`clip-${i}`}>
+                <rect
+                  x="0"
+                  y="0"
+                  width={13 * fillPercent}
+                  height="13"
+                />
+              </clipPath>
+
+              <path
+                clipPath={`url(#clip-${i})`}
+                d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+                fill="#0171F9"
+                stroke="#0171F9"
+                strokeWidth="0.92"
+              />
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -806,10 +1117,10 @@ export default function SchoolDetailPage() {
           teacher: report.teacher_name || "N.A",
           date: report.date_of_assignment
             ? new Date(report.date_of_assignment).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })
             : "N/A",
           sentiment: report.sentiments,
           status: report.status == 1 ? "Pending" : report.status == 2 ? "Approved" : "Rejected",
@@ -835,8 +1146,8 @@ export default function SchoolDetailPage() {
     }
   }, [schoolId, currentPage]);
 
-  if(loading){
-     return (
+  if (loading) {
+    return (
       <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#0171F9] rounded-full animate-spin" />
@@ -877,15 +1188,14 @@ export default function SchoolDetailPage() {
                 <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(11,119,249,0.40)] bg-[#EFF6FF]">
                   <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9]">{schoolData?.school_association}</span>
                 </span>
-                {schoolData && (
+                {schoolData && schoolData?.report_count > 0 && (
                   <span
-                    className={`flex items-center px-3 sm:px-4 py-1 rounded-full font-inter font-medium text-xs sm:text-sm ${
-                      schoolData.calculated_risk === "Low"
+                    className={`flex items-center px-3 sm:px-4 py-1 rounded-full font-inter font-medium text-xs sm:text-sm ${schoolData.calculated_risk === "Low"
                         ? "border border-[rgba(34,164,93,0.40)] bg-[#E6FBF0] text-[#22A45D]"
                         : schoolData.calculated_risk === "Medium"
                           ? "border border-[rgba(255,166,0,0.40)] bg-[#FFF4E0] text-[#FFA600]"
                           : "border border-[rgba(224,44,44,0.40)] bg-[#FEEFEF] text-[#E02C2C]"
-                    }`}
+                      }`}
                   >
                     {schoolData.calculated_risk} Risk
                   </span>
@@ -923,8 +1233,8 @@ export default function SchoolDetailPage() {
                     </span>
                   </div>
                   <div className="flex items-center">
-                    <StarRating count={schoolData.avg_rating}/>
-                    
+                    <StarRating count={schoolData.avg_rating} />
+
                   </div>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:gap-1.5">
@@ -1002,11 +1312,10 @@ export default function SchoolDetailPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 sm:px-4 py-2.5 sm:py-3.5 font-inter font-medium text-sm sm:text-md leading-5 transition-colors cursor-pointer border-b-2 ${
-                activeTab === tab
+              className={`px-3 sm:px-4 py-2.5 sm:py-3.5 font-inter font-medium text-sm sm:text-md leading-5 transition-colors cursor-pointer border-b-2 ${activeTab === tab
                   ? "text-[#0171F9] border-[#0171F9]"
                   : "text-[#121212] border-transparent hover:text-[#0171F9]"
-              }`}
+                }`}
             >
               {tab}
             </button>
@@ -1094,11 +1403,10 @@ export default function SchoolDetailPage() {
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${
-                          currentPage === page
+                        className={`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-xs sm:text-[15px] transition-colors cursor-pointer ${currentPage === page
                             ? "bg-[#0171F9] text-white font-semibold"
                             : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>

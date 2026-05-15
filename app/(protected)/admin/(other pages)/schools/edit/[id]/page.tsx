@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 type Association = "School District" | "Private" | "Charter";
@@ -33,6 +35,7 @@ export default function SchoolEditForm() {
     const [pageLoading, setPageLoading] = useState(true);
     const params = useParams();
     const schoolId = params.id as string;
+    const router = useRouter();
     const [form, setForm] = useState<SchoolFormData>({
         name: "",
         association: "",
@@ -68,7 +71,7 @@ export default function SchoolEditForm() {
                 }
             } catch (error) {
                 console.error("Error fetching school data:", error);
-                alert("Failed to load school data");
+                toast.error("Failed to load school data");
             } finally {
                 setPageLoading(false);
             }
@@ -144,17 +147,17 @@ export default function SchoolEditForm() {
             const data = await response.json();
            
             if (!response.ok) {
-                alert(data.message || "Failed to edit school");
+                toast.error(data.message || "Failed to edit school");
                 return;
             }
 
-            alert("School edited successfully");
+            toast.success("School edited successfully");
 
-            window.location.href = `/admin/schools/${schoolId}`;
+            router.push(`/admin/schools/${schoolId}`);
 
         } catch (error) {
             console.error(error);
-            alert("Something went wrong");
+            toast.error("Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -410,14 +413,14 @@ export default function SchoolEditForm() {
                                         }}
                                         className="flex-1 bg-transparent font-inter text-sm text-[#6B7280] placeholder:text-[#6B7280] outline-none"
                                     />
-                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="opacity-60 flex-shrink-0 sm:w-4 sm:h-4">
+                                    {/* <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="opacity-60 flex-shrink-0 sm:w-4 sm:h-4">
                                         <g clipPath="url(#clip_chevron_down)">
                                             <path fillRule="evenodd" clipRule="evenodd" d="M8.47136 10.4712C8.34634 10.5962 8.1768 10.6664 8.00003 10.6664C7.82325 10.6664 7.65371 10.5962 7.52869 10.4712L3.75736 6.6999C3.63244 6.57488 3.5625 6.40534 3.5625 6.22857C3.5625 6.0518 3.63244 5.88226 3.75736 5.75724C3.88238 5.63232 4.05192 5.56238 4.22869 5.56238C4.40546 5.56238 4.575 5.63232 4.70003 5.75724L8.00003 9.05724L11.3 5.75724C11.4258 5.6358 11.5942 5.5686 11.769 5.57012C11.9438 5.57164 12.111 5.64175 12.2346 5.76536C12.3582 5.88896 12.4283 6.05617 12.4298 6.23097C12.4313 6.40577 12.3641 6.57417 12.2427 6.6999L8.47136 10.4712Z" fill="#1E1E1E" />
                                         </g>
                                         <defs>
                                             <clipPath id="clip_chevron_down"><rect width="16" height="16" fill="white" /></clipPath>
                                         </defs>
-                                    </svg>
+                                    </svg> */}
                                 </div>
                                 {errors.streetAddress && (
                                     <p className="text-red-500 text-xs">

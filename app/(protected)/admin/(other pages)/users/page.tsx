@@ -212,7 +212,7 @@ export default function UsersRolesPage() {
           </div>
 
           {/* Create Role button */}
-          <button className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 sm:py-4 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer">
+          <button className="flex items-center justify-center mt-6 sm:mt-8 px-4 sm:px-5 py-3 rounded-lg bg-[#0171F9] font-inter font-semibold text-sm sm:text-md text-white leading-6 hover:bg-[#0161dd] transition-colors cursor-pointer">
             Create Role
           </button>
         </div>

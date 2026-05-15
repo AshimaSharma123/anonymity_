@@ -72,7 +72,7 @@ export async function POST(req: Request) {
       teacherComment,
 
       postAs === "anonymous" ? 1 : 2,
-      postAs != "anonymous" ? yourName : "",
+      postAs != "anonymous" ? yourName : "anonymous",
       schoolAssociation,
       sentiments
     ]);

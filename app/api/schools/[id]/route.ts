@@ -49,8 +49,17 @@ export async function GET(
               COALESCE(reports.school_cleanliness, 0) +
               COALESCE(reports.support_level, 0)
             ) / 5
-          ) >= 2.5 THEN 'Medium'
-          ELSE 'High'
+          ) > 2.5 THEN 'Medium'
+            WHEN AVG(
+            (
+              COALESCE(reports.classroom_behavior, 0) +
+              COALESCE(reports.lesson_preparedness, 0) +
+              COALESCE(reports.staff_friendliness, 0) +
+              COALESCE(reports.school_cleanliness, 0) +
+              COALESCE(reports.support_level, 0)
+            ) / 5
+          ) >= 1 THEN 'High'
+          ELSE 'N/A'
         END AS calculated_risk
       FROM schools
       LEFT JOIN teachers ON teachers.school_id = schools.id

@@ -1,6 +1,7 @@
 "use client";
 
 import Sidebar from "@/app/components/Sidebar";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -11,7 +12,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+  const { data: session, status } = useSession();
+
   return (
      <div className="flex h-screen bg-[#F3F4F7]">
 
@@ -50,7 +52,7 @@ export default function AdminLayout({
           {/* User info */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="hidden sm:flex flex-col items-end">
-              <span className="font-inter font-semibold text-xs sm:text-sm text-[#191C1E] leading-5">Marcus</span>
+              <span className="font-inter font-semibold text-xs sm:text-sm text-[#191C1E] leading-5">{session?.user?.name}</span>
               <span className="font-inter font-normal text-[10px] sm:text-[11px] text-[#737786] leading-[16.5px] tracking-[0.55px] uppercase">Super Admin</span>
             </div>
             <div className="relative w-8 sm:w-10 h-8 sm:h-10 sm:block hidden">

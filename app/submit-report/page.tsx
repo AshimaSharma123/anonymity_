@@ -24,6 +24,7 @@ type FormState = {
   schoolAssociation: string,
   date: string,
   gradeLevel: string;
+  schoolGrades: string[];
   ratings: Record<RatingKeys, number>;
   selectedTags: string[];
   returnToSchool: ReturnChoice;
@@ -50,6 +51,7 @@ const initialState: FormState = {
   schoolName: "",
   schoolId: 0,
   teacherId: 0,
+  schoolGrades:[],
   schoolAssociation: "",
   teacherName: "",
   date: "",
@@ -365,6 +367,7 @@ export default function SubmitReportPage() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("data",data);
         setSchoolSuggestions(Array.isArray(data) ? data : data.schools || []);
       }
     } catch (error) {
@@ -508,6 +511,7 @@ export default function SubmitReportPage() {
                           if (!e.target.value) {
                             updateField("teacherName", "");
                             setTeacherSuggestions([]);
+                            updateField("schoolGrades", []);
                           } else {
                             setErrors({ ...errors, ["teacherName"]: "" });
                           }
@@ -541,6 +545,7 @@ export default function SubmitReportPage() {
                               onMouseDown={(e) => {
                                 e.preventDefault();
                                 updateField("schoolName", school.school_name);
+                                updateField("schoolGrades", school.grade_level);
                                 updateField("schoolId", school.id);
                                 updateField(
                                   "schoolAssociation",
@@ -584,12 +589,13 @@ export default function SubmitReportPage() {
                           onChange={(e) => {
                             if (!state.schoolId || !state.schoolName) {
                               setErrors({ ...errors, ["teacherName"]: "Please first select school" });
+                              
                               return;
                             } else {
                               setErrors({ ...errors, ["teacherName"]: "" });
                             }
                             updateField("teacherName", e.target.value);
-
+                            
                             fetchTeachers(e.target.value, state.schoolId);
                             setShowTeacherSuggestions(true);
                             setErrors((prev) => ({
@@ -671,7 +677,20 @@ export default function SubmitReportPage() {
                 <div className="flex flex-col gap-2">
                   <label className={fieldLabel}>Grade Level</label>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
-                    {GRADE_LEVELS.map((level) => (
+                    {state?.schoolGrades?.length > 0 ? state?.schoolGrades?.map((level) => (
+                      <button
+                        key={level}
+                        type="button"
+                        id="gradeLevel"
+                        onClick={() => updateField("gradeLevel", level)}
+                        className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${state.gradeLevel === level
+                          ? "bg-[#0B77F9] text-white font-medium"
+                          : "bg-[#FCFDFE] text-[#121212] font-medium border-[#B2B2B2]"
+                          }`}
+                      >
+                        {level}
+                      </button>
+                    )) : GRADE_LEVELS.map((level) => (
                       <button
                         key={level}
                         type="button"
