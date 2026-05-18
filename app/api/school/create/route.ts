@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getConnection } from "@/lib/db";
+import { NextRequest } from "next/server";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
-    const db = getConnection();
 
     const {
       name,
@@ -19,33 +17,43 @@ export async function POST(req: NextRequest) {
       zip,
     } = body;
 
-    await db.query(
-      `
-      INSERT INTO schools (
-        school_name,
-        school_association,
-        school_district_name,
-        school_year,
-        grade_level,
-        street_address,
-        city,
-        state,
-        zipcode
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
-      [
-        name,
-        association,
-        districtName,
-        schoolYear,
-        JSON.stringify(gradeLevels),
-        streetAddress,
-        city,
-        state,
-        zip,
-      ]
-    );
+    
+
+    const { error } = await supabase
+      .from("schools")
+      .insert([
+        {
+          school_name: name,
+          school_association: association,
+          school_district_name: districtName,
+          school_year: schoolYear,
+
+          // JSONB field
+          grade_level: gradeLevels || [],
+
+          street_address: streetAddress,
+          city,
+          state,
+          zipcode: zip,
+        },
+      ]);
+
+    if (error) {
+      console.error(
+        "Supabase Insert Error:",
+        error
+      );
+
+      return Response.json(
+        {
+          success: false,
+          message: error.message,
+        },
+        {
+          status: 500,
+        }
+      );
+    }
 
     return Response.json({
       success: true,
@@ -53,14 +61,19 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Create school error:",
+      error
+    );
 
     return Response.json(
       {
         success: false,
         message: "Failed to create school",
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }

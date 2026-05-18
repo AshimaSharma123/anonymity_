@@ -1252,7 +1252,7 @@ export default function SchoolDetailPage() {
                 <div className="flex items-center gap-2">
                   <div>
                     <span className="font-outfit font-bold text-2xl sm:text-4xl text-[#191C1D] leading-[40px]">
-                      {schoolData.avg_rating || "N/A"}
+                      {schoolData.avg_rating || "0"}
                     </span>
                   </div>
                   <div className="flex items-center">

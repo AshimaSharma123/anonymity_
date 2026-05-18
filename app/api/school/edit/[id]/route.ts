@@ -1,16 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getConnection } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: schoolId } = await params;
+    const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Missing school id",
+        },
+        { status: 400 }
+      );
+    }
 
     const body = await req.json();
 
-    const db = getConnection();
+    console.log("UPDATE REQUEST BODY:", body);
+    console.log("SCHOOL ID:", id);
 
     const {
       name,
@@ -24,42 +35,51 @@ export async function POST(
       zip,
     } = body;
 
-    await db.query(
-      `
-      UPDATE schools
-      SET
-        school_name = ?,
-        school_association = ?,
-        school_district_name = ?,
-        school_year = ?,
-        grade_level = ?,
-        street_address = ?,
-        city = ?,
-        state = ?,
-        zipcode = ?
-      WHERE id = ?
-      `,
-      [
-        name,
-        association,
-        districtName,
-        schoolYear,
-        JSON.stringify(gradeLevels),
-        streetAddress,
-        city,
-        state,
-        zip,
-        schoolId,
-      ]
-    );
+    // =========================
+    // SAFE CLEANING FUNCTION
+    // =========================
+    const safe = (value: any) =>
+      value === undefined || value === "" ? null : value;
+
+    const updatePayload = {
+      school_name: safe(name),
+      school_association: safe(association),
+      school_district_name: safe(districtName),
+      school_year: safe(schoolYear),
+      grade_level: safe(gradeLevels),
+      street_address: safe(streetAddress),
+      city: safe(city),
+      state: safe(state),
+      zipcode: safe(zip),
+      updated_at: new Date().toISOString(),
+    };
+
+    console.log("FINAL PAYLOAD:", updatePayload);
+
+    const { error } = await supabase
+      .from("schools")
+      .update(updatePayload)
+      .eq("id", id);
+
+    if (error) {
+      console.error("Supabase update error:", error);
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message,
+          debug: error,
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
       message: "School updated successfully",
     });
-
   } catch (error) {
-    console.error(error);
+    console.error("API ERROR:", error);
 
     return NextResponse.json(
       {

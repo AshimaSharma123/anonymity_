@@ -508,13 +508,12 @@ export default function SubmitReportPage() {
                         placeholder="Search for institution..."
                         value={state.schoolName}
                         onChange={(e) => {
-                          if (!e.target.value) {
-                            updateField("teacherName", "");
+                          if (e.target.value) {
+                             setErrors({ ...errors, ["teacherName"]: "" });
+                          }
+                           updateField("teacherName", "");
                             setTeacherSuggestions([]);
                             updateField("schoolGrades", []);
-                          } else {
-                            setErrors({ ...errors, ["teacherName"]: "" });
-                          }
                           updateField("schoolName", e.target.value);
                           fetchSchools(e.target.value);
                           setShowSchoolSuggestions(true);
@@ -544,6 +543,9 @@ export default function SubmitReportPage() {
                               type="button"
                               onMouseDown={(e) => {
                                 e.preventDefault();
+                                 updateField("teacherName", "");
+                                  setTeacherSuggestions([]);
+                                  updateField("schoolGrades", []);
                                 updateField("schoolName", school.school_name);
                                 updateField("schoolGrades", school.grade_level);
                                 updateField("schoolId", school.id);

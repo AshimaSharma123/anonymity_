@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { scrollToError } from "@/lib/function";
 
 
 type Association = "School District" | "Private" | "Charter";
@@ -132,11 +133,18 @@ export default function SchoolEditForm() {
 
         setErrors(newErrors);
 
-        return Object.keys(newErrors).length === 0;
+        return newErrors;
     };
 
     const handleSubmit = async () => {
-        if (!validateForm()) return;
+        const validationErrors = validateForm();
+                setErrors(validationErrors);
+        
+                console.log("validationErrors", validationErrors);
+                if (Object.keys(validationErrors).length > 0) {
+                    scrollToError(validationErrors);
+                    return;
+                }
 
         try {
             setLoading(true);
@@ -251,6 +259,7 @@ export default function SchoolEditForm() {
                                     type="text"
                                     placeholder="Enter School Name"
                                     value={form.name}
+                                    id="name"
                                     onChange={(e) => {
 
                                         setForm({ ...form, name: e.target.value })
@@ -269,7 +278,7 @@ export default function SchoolEditForm() {
                             </div>
 
                             {/* School District / Association */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="association">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">School Disctrict/Association</label>
                                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                     {ASSOCIATIONS.map((assoc) => (
@@ -300,6 +309,7 @@ export default function SchoolEditForm() {
                                 {form.association === "School District" && (
                                     <input
                                         type="text"
+                                        id="districtName"
                                         placeholder="Enter School Disctrict Name"
                                         value={form.districtName}
                                         onChange={(e) => {
@@ -320,7 +330,7 @@ export default function SchoolEditForm() {
                             </div>
 
                             {/* School Year */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="schoolYear">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">School Year</label>
                                 <p className="font-inter text-xs sm:text-sm text-[#6B7280] -mt-1">
                                     Each school year creates a new record. Regular teachers often transfer between years, changing a school's dynamics.
@@ -353,7 +363,7 @@ export default function SchoolEditForm() {
                             </div>
 
                             {/* Grade Level */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="gradeLevels">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">Grade Level supported</label>
                                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                     {GRADE_LEVELS.map((grade) => {
@@ -407,6 +417,7 @@ export default function SchoolEditForm() {
                                 <div className="flex items-center justify-between h-10 sm:h-[43px] px-3 sm:px-4 rounded-lg bg-[#F3F4F5] overflow-hidden">
                                     <input
                                         type="text"
+                                        id="streetAddress"
                                         placeholder="Enter Street Address"
                                         value={form.streetAddress}
                                         onChange={(e) => {
@@ -441,6 +452,7 @@ export default function SchoolEditForm() {
                                     <input
                                         type="text"
                                         placeholder="Enter City Name"
+                                        id="city"
                                         value={form.city}
                                         onChange={(e) => {
                                             setForm({ ...form, city: e.target.value })
@@ -462,6 +474,7 @@ export default function SchoolEditForm() {
                                     <input
                                         type="text"
                                         placeholder="Enter State"
+                                        id="state"
                                         value={form.state}
                                         onChange={(e) => {
                                             setForm({ ...form, state: e.target.value })
@@ -482,6 +495,7 @@ export default function SchoolEditForm() {
                                     <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">Zip Code</label>
                                     <input
                                         type="text"
+                                        id="zip"
                                         placeholder="Enter ZIP Code"
                                         value={form.zip}
                                         onChange={(e) => {

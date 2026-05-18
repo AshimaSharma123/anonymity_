@@ -139,12 +139,17 @@ export default function LoginPage() {
             <input
               type="email"
               name="email"
+              id="email"
               onChange={(e) => {
                 const { name, value } = e.target;
                 setFormValues((prev) => ({
                   ...prev,
                   [name]: value,
                 }));
+                setErrors((prev) => ({
+                    ...prev,
+                    email: "",
+                  }));
               }}
               value={formValues?.email}
               placeholder="Enter Email Address"
@@ -164,11 +169,16 @@ export default function LoginPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
+                id="password"
                 onChange={(e) => {
                   const { name, value } = e.target;
                   setFormValues((prev) => ({
                     ...prev,
                     [name]: value,
+                  }));
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: "",
                   }));
                 }}
                 value={formValues?.password}

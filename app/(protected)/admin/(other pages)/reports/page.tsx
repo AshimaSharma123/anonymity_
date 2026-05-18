@@ -628,7 +628,7 @@ export default function ReportsPage() {
                               <button
                                 onClick={(e) => handleApproveReport(report.id, e)}
                                 disabled={loadingAction === `approve-${report.id}`}
-                                className={`loadingAction === approve-${report.id} ? "" : "cursor-pointer"} p-1 sm:p-2 rounded-md bg-[#D1FAE5] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center`}
+                                className={`${loadingAction === `approve-${report.id}` ? "" : "cursor-pointer"} p-1 sm:p-2 rounded-md bg-[#D1FAE5] hover:opacity-80 disabled:opacity-60 transition-opacity flex items-center justify-center`}
                                 aria-label="Approve"
                               >
                                 {loadingAction === `approve-${report.id}` ? (

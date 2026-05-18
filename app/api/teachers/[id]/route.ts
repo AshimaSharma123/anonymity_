@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getConnection } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
+
+// =========================
+// DELETE TEACHER
+// =========================
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const db = getConnection();
     const { id } = await params;
 
     if (!id) {
@@ -16,45 +19,58 @@ export async function DELETE(
       );
     }
 
-    const deleteQuery = `DELETE FROM teachers WHERE id = ?`;
-    await db.query(deleteQuery, [id]);
+    const { error } = await supabase
+      .from("teachers")
+      .delete()
+      .eq("id", id);
 
-    return NextResponse.json(
-      { success: true, message: "Teacher deleted successfully" },
-      { status: 200 }
-    );
+    if (error) {
+      console.error("Supabase delete error:", error);
+
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Teacher deleted successfully",
+    });
   } catch (error) {
     console.error("Error deleting teacher:", error);
+
     return NextResponse.json(
-      { success: false, message: "Failed to delete teacher", error },
+      {
+        success: false,
+        message: "Failed to delete teacher",
+      },
       { status: 500 }
     );
   }
 }
 
 
+// =========================
+// UPDATE TEACHER
+// =========================
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const db = getConnection();
-
     const { id } = await params;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "Teacher ID is required" },
+        { status: 400 }
+      );
+    }
 
     const body = await req.json();
 
     const { name, status } = body;
-
-    if (!id) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Teacher ID is required",
-        },
-        { status: 400 }
-      );
-    }
 
     if (!name || !status) {
       return NextResponse.json(
@@ -66,29 +82,34 @@ export async function PUT(
       );
     }
 
-    const statusValue =
-      status === "Active" ? 1 : 0;
+    // convert status
+    const statusValue = status === "Active" ? 1 : 0;
 
-    const updateQuery = `
-      UPDATE teachers
-      SET name = ?, status = ?
-      WHERE id = ?
-    `;
+    const { error } = await supabase
+      .from("teachers")
+      .update({
+        name,
+        status: statusValue,
+        updated_at: new Date().toISOString(), // optional but recommended
+      })
+      .eq("id", id);
 
-    await db.query(updateQuery, [
-      name,
-      statusValue,
-      id,
-    ]);
+    if (error) {
+      console.error("Supabase update error:", error);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Teacher updated successfully",
-      },
-      { status: 200 }
-    );
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message,
+        },
+        { status: 500 }
+      );
+    }
 
+    return NextResponse.json({
+      success: true,
+      message: "Teacher updated successfully",
+    });
   } catch (error) {
     console.error("Error updating teacher:", error);
 

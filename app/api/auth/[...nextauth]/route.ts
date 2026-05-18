@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getConnection } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 
 const handler = NextAuth({
   providers: [
@@ -34,18 +34,22 @@ const handler = NextAuth({
           throw new Error("Email and password are required");
         }
 
-        const db = getConnection();
+        // Find user
+        const { data: users, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", credentials.email)
+          .limit(1);
 
-        const [rows]: any = await db.query(
-          "SELECT * FROM users WHERE email = ?",
-          [credentials.email]
-        );
+        if (error) {
+          throw new Error(error.message);
+        }
 
-        if (!rows.length) {
+        if (!users || users.length === 0) {
           throw new Error("User not found");
         }
 
-        const user = rows[0];
+        const user = users[0];
 
         const isMatch = await bcrypt.compare(
           credentials.password,
@@ -75,27 +79,36 @@ const handler = NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
-      const db = getConnection();
+      if (
+        account?.provider === "google" ||
+        account?.provider === "facebook"
+      ) {
+        // Check existing user
+        const { data: existingUsers } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", user.email)
+          .limit(1);
 
-      //  Handle Google & Facebook users
-      // if (
-      //   account?.provider === "google" ||
-      //   account?.provider === "facebook"
-      // ) {
-      //   console.log("USER:", user)
-      // console.log("ACCOUNT:", account)
-      //   const [existing]: any = await db.query(
-      //     "SELECT * FROM users WHERE email = ?",
-      //     [user.email]
-      //   );
+        // Create user if not exists
+        if (!existingUsers || existingUsers.length === 0) {
+          const { error } = await supabase
+            .from("users")
+            .insert([
+              {
+                full_name: user.name,
+                email: user.email,
+                provider: account.provider,
+                provider_account_id: account.providerAccountId,
+              },
+            ]);
 
-      //   if (!existing.length) {
-      //     await db.query(
-      //       "INSERT INTO users (full_name, email, provider, providerAccountId) VALUES (?, ?, ?, ?)",
-      //       [user.name, user.email, account?.provider, account?.providerAccountId]
-      //     );
-      //   }
-      // }
+          if (error) {
+            console.log(error);
+            return false;
+          }
+        }
+      }
 
       return true;
     },

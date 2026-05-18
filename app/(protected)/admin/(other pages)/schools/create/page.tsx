@@ -1,5 +1,6 @@
 "use client";
 
+import { scrollToError } from "@/lib/function";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,8 +45,8 @@ export default function SchoolCreateForm() {
     const currentYear = new Date().getFullYear();
 
     const SCHOOL_YEARS: SchoolYear[] = Array.from({ length: 5 }, (_, i) => {
-    const startYear = currentYear - 5 + i;
-    return `${startYear}-${startYear + 1}`;
+        const startYear = currentYear - 5 + i;
+        return `${startYear}-${startYear + 1}`;
     }) as SchoolYear[];
 
     const validateForm = () => {
@@ -91,13 +92,20 @@ export default function SchoolCreateForm() {
             newErrors.zip = "ZIP code is required";
         }
 
-        setErrors(newErrors);
 
-        return Object.keys(newErrors).length === 0;
+        return newErrors;
     };
 
     const handleSubmit = async () => {
-        if (!validateForm()) return;
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+
+        console.log("validationErrors", validationErrors);
+        if (Object.keys(validationErrors).length > 0) {
+            scrollToError(validationErrors);
+            return;
+        }
+        // if (!validateForm()) return;
 
         try {
             setLoading(true);
@@ -111,7 +119,7 @@ export default function SchoolCreateForm() {
             });
 
             const data = await response.json();
-           
+
             if (!response.ok) {
                 toast.error(data.message || "Failed to create school");
                 return;
@@ -166,22 +174,22 @@ export default function SchoolCreateForm() {
                         <span className="hidden sm:inline font-inter font-medium text-sm sm:text-base text-[#333]">Cancel</span>
                     </Link>
 
-                     <button
-                            type="button"
-                            onClick={handleSubmit}
-                            disabled={loading}
-                            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#0171F9] cursor-pointer hover:bg-[#0161d9] transition-colors disabled:opacity-50"
-                        >
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="sm:w-5 sm:h-5 flex-shrink-0">
+                    <button
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 sm:py-3 rounded-lg bg-[#0171F9] cursor-pointer hover:bg-[#0161d9] transition-colors disabled:opacity-50"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="sm:w-5 sm:h-5 flex-shrink-0">
                             <path d="M2.5 4.16667C2.5 3.72464 2.67559 3.30072 2.98816 2.98816C3.30072 2.67559 3.72464 2.5 4.16667 2.5H13.8217C14.2637 2.50009 14.6875 2.67575 15 2.98833L17.2558 5.24417C17.4121 5.40041 17.5 5.61234 17.5 5.83333V15.8333C17.5 16.2754 17.3244 16.6993 17.0118 17.0118C16.6993 17.3244 16.2754 17.5 15.8333 17.5H4.16667C3.72464 17.5 3.30072 17.3244 2.98816 17.0118C2.67559 16.6993 2.5 16.2754 2.5 15.8333V4.16667ZM7.5 15.8333H12.5V10.8333H7.5V15.8333ZM14.1667 15.8333H15.8333V6.17833L14.1667 4.51167V5.83333C14.1667 6.27536 13.9911 6.69928 13.6785 7.01184C13.3659 7.3244 12.942 7.5 12.5 7.5H7.5C7.05797 7.5 6.63405 7.3244 6.32149 7.01184C6.00893 6.69928 5.83333 6.27536 5.83333 5.83333V4.16667H4.16667V15.8333H5.83333V10.8333C5.83333 10.3913 6.00893 9.96738 6.32149 9.65482C6.63405 9.34226 7.05797 9.16667 7.5 9.16667H12.5C12.942 9.16667 13.3659 9.34226 13.6785 9.65482C13.9911 9.96738 14.1667 10.3913 14.1667 10.8333V15.8333ZM7.5 4.16667V5.83333H12.5V4.16667H7.5Z" fill="white" />
                         </svg>
 
-                            <span className="hidden sm:inline font-inter font-semibold text-sm sm:text-base text-white">
-                                {loading ? "Saving..." : "Save"}
-                            </span>
-                        </button>
+                        <span className="hidden sm:inline font-inter font-semibold text-sm sm:text-base text-white">
+                            {loading ? "Saving..." : "Save"}
+                        </span>
+                    </button>
 
-                   
+
                 </div>
             </div>
 
@@ -195,12 +203,13 @@ export default function SchoolCreateForm() {
 
                         <div className="flex flex-col gap-3 sm:gap-4">
                             {/* School Name */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" >
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">School Name</label>
                                 <input
                                     type="text"
                                     placeholder="Enter School Name"
                                     value={form.name}
+                                    id="name"
                                     onChange={(e) => {
 
                                         setForm({ ...form, name: e.target.value })
@@ -219,18 +228,19 @@ export default function SchoolCreateForm() {
                             </div>
 
                             {/* School District / Association */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="association">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">School Disctrict/Association</label>
                                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                     {ASSOCIATIONS.map((assoc) => (
                                         <button
                                             key={assoc}
-                                            onClick={() => {setForm({ ...form, association: assoc })
-                                            setErrors((prev) => ({
+                                            onClick={() => {
+                                                setForm({ ...form, association: assoc })
+                                                setErrors((prev) => ({
                                                     ...prev,
                                                     association: "",
                                                 }));
-                                        }}
+                                            }}
                                             className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-lg border font-inter text-xs sm:text-sm font-medium transition-all cursor-pointer ${form.association === assoc
                                                 ? "border-[#0B77F9] bg-[#DBECFF] text-[#0B77F9]"
                                                 : "border-[#B2B2B2] bg-[#FCFDFE] text-[#121212]"
@@ -240,15 +250,16 @@ export default function SchoolCreateForm() {
                                         </button>
 
                                     ))}
-                                    
+
                                 </div>
                                 {errors.association && (
-                                        <p className="text-red-500 text-xs">
-                                            {errors.association}
-                                        </p>
-                                    )}
+                                    <p className="text-red-500 text-xs">
+                                        {errors.association}
+                                    </p>
+                                )}
                                 {form.association === "School District" && (
                                     <input
+                                    id="districtName"
                                         type="text"
                                         placeholder="Enter School Disctrict Name"
                                         value={form.districtName}
@@ -270,7 +281,7 @@ export default function SchoolCreateForm() {
                             </div>
 
                             {/* School Year */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="schoolYear">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">School Year</label>
                                 <p className="font-inter text-xs sm:text-sm text-[#6B7280] -mt-1">
                                     Each school year creates a new record. Regular teachers often transfer between years, changing a school's dynamics.
@@ -294,16 +305,17 @@ export default function SchoolCreateForm() {
                                             {year}
                                         </button>
                                     ))}
-                                    {errors.schoolYear && (
-                                        <p className="text-red-500 text-xs ">
-                                            {errors.schoolYear}
-                                        </p>
-                                    )}
+
                                 </div>
+                                {errors.schoolYear && (
+                                    <p className="text-red-500 text-xs ">
+                                        {errors.schoolYear}
+                                    </p>
+                                )}
                             </div>
 
                             {/* Grade Level */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" id="gradeLevels">
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">Grade Level supported</label>
                                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                                     {GRADE_LEVELS.map((grade) => {
@@ -347,15 +359,16 @@ export default function SchoolCreateForm() {
                     <div className="h-px bg-black opacity-10" />
 
                     {/* ── School Address ── */}
-                    <div className="flex flex-col gap-4 sm:gap-6">
+                    <div className="flex flex-col gap-4 sm:gap-6" >
                         <h2 className="font-outfit font-semibold text-xl sm:text-2xl lg:text-2xl text-[#0171F9]">School Address</h2>
 
                         <div className="flex flex-col gap-3 sm:gap-4">
                             {/* Street Address */}
-                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                            <div className="flex flex-col gap-2 sm:gap-2.5" >
                                 <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">Street Address</label>
                                 <div className="flex items-center justify-between h-10 sm:h-[43px] px-3 sm:px-4 rounded-lg bg-[#F3F4F5] overflow-hidden">
                                     <input
+                                        id="streetAddress"
                                         type="text"
                                         placeholder="Enter Street Address"
                                         value={form.streetAddress}
@@ -386,9 +399,10 @@ export default function SchoolCreateForm() {
 
                             {/* City / State / Zip */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                                <div className="flex flex-col gap-2 sm:gap-2.5">
+                                <div className="flex flex-col gap-2 sm:gap-2.5" >
                                     <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">City</label>
                                     <input
+                                        id="city"
                                         type="text"
                                         placeholder="Enter City Name"
                                         value={form.city}
@@ -407,10 +421,11 @@ export default function SchoolCreateForm() {
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex flex-col gap-2 sm:gap-2.5">
+                                <div className="flex flex-col gap-2 sm:gap-2.5"  >
                                     <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">State</label>
                                     <input
                                         type="text"
+                                        id="state"
                                         placeholder="Enter State"
                                         value={form.state}
                                         onChange={(e) => {
@@ -428,9 +443,10 @@ export default function SchoolCreateForm() {
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex flex-col gap-2 sm:gap-2.5">
+                                <div className="flex flex-col gap-2 sm:gap-2.5" id="zip">
                                     <label className="font-outfit font-medium text-sm sm:text-base text-[#121212] leading-6">Zip Code</label>
                                     <input
+                                        id="zip"
                                         type="text"
                                         placeholder="Enter ZIP Code"
                                         value={form.zip}

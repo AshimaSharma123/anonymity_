@@ -191,6 +191,10 @@ export default function SignUpPage() {
                   ...prev,
                   [name]: value,
                 }));
+                 setErrors((prev) => ({
+                    ...prev,
+                    full_name: "",
+                  }));
               }}
               value={formValues.full_name}
               placeholder="Enter Full Name"
@@ -216,6 +220,10 @@ export default function SignUpPage() {
                   ...prev,
                   [name]: value,
                 }));
+                setErrors((prev) => ({
+                    ...prev,
+                    email: "",
+                  }));
               }}
               value={formValues.email}
               placeholder="Enter Email Address"
@@ -245,6 +253,10 @@ export default function SignUpPage() {
                   setFormValues((prev) => ({
                     ...prev,
                     password: value,
+                  }));
+                  setErrors((prev) => ({
+                    ...prev,
+                    password: "",
                   }));
                 }}
                 value={formValues.password}
@@ -281,6 +293,10 @@ export default function SignUpPage() {
                   setFormValues((prev) => ({
                     ...prev,
                     [name]: value.replace(/\s/g, ""),
+                  }));
+                  setErrors((prev) => ({
+                    ...prev,
+                    confirm_password: "",
                   }));
                 }}
                 value={formValues.confirm_password}
