@@ -17,7 +17,7 @@ export async function GET(
     // 1. SCHOOL DETAILS
     // =========================
     const { data: school, error: schoolError } = await supabase
-      .from("schools")
+      .from("schools_analytics")
       .select("*")
       .eq("id", id)
       .single();
