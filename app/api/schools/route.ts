@@ -22,14 +22,16 @@ export async function GET(req: NextRequest) {
 
     const offset = (page - 1) * limit;
 
-    // Base query
+    // =========================
+    // BASE QUERY (VIEW)
+    // =========================
     let query = supabase
-      .from("schools")
-      .select("*", {
-        count: "exact",
-      });
+      .from("schools_analytics") // 🔥 IMPORTANT CHANGE
+      .select("*", { count: "exact" });
 
-    // Search filter
+    // =========================
+    // SEARCH FILTER
+    // =========================
     if (search.trim()) {
       query = query.or(
         [
@@ -40,93 +42,74 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // State filter
+    // =========================
+    // STATE FILTER
+    // =========================
     if (state && state !== "All") {
       query = query.eq("state", state);
     }
 
-    // Risk filter
+    // =========================
+    // RISK FILTER (NOW WORKS)
+    // =========================
     if (risk && risk !== "All") {
-      query = query.eq(
-        "calculated_risk",
-        risk
-      );
+      query = query.eq("calculated_risk", risk);
     }
 
-    // Pagination + Order
+    // =========================
+    // SORT + PAGINATION
+    // =========================
     query = query
-  .order("created_at", { ascending: false })
-  .order("id", { ascending: false }) // tie-breaker
-  .range(offset, offset + limit - 1);
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false }) // stability
+      .range(offset, offset + limit - 1);
 
-    const {
-      data: schools,
-      error,
-      count,
-    } = await query;
+    const { data: schools, error, count } = await query;
 
     if (error) {
-      console.error(
-        "Supabase Error:",
-        error
-      );
+      console.error("Supabase Error:", error);
 
       return NextResponse.json(
         {
           success: false,
           message: error.message,
         },
-        {
-          status: 500,
-        }
+        { status: 500 }
       );
     }
 
-    // Fetch all states
-    const { data: statesData } =
-      await supabase
-        .from("schools")
-        .select("state");
+    // =========================
+    // STATES LIST (still from base table)
+    // =========================
+    // const { data: statesData } = await supabase
+    //   .from("schools")
+    //   .select("state");
 
-    const states = [
-      ...new Set(
-        (statesData || [])
-          .map((s: any) => s.state)
-          .filter(Boolean)
-      ),
-    ].sort();
+    // const states = [
+    //   ...new Set(
+    //     (statesData || [])
+    //       .map((s: any) => s.state)
+    //       .filter(Boolean)
+    //   ),
+    // ].sort();
 
     return NextResponse.json({
       success: true,
-
-      schools,
-
-      states,
-
+      schools, // now includes analytics fields
       total: count || 0,
-
       page,
-
       limit,
-
-      totalPages: Math.ceil(
-        (count || 0) / limit
-      ),
+      totalPages: Math.ceil((count || 0) / limit),
     });
   } catch (error) {
-    console.error(
-      "Error fetching schools:",
-      error
-    );
+    console.error("Error fetching schools:", error);
 
     return NextResponse.json(
       {
         success: false,
         message: "Failed to fetch schools",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

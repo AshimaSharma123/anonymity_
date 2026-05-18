@@ -106,7 +106,7 @@ export default function SchoolsPage() {
         }
 
         const data = await response.json();
-        setStates(data.states || []);
+        // setStates(data.states || []);
         setPaginated(data?.schools || []);
         setTotalPages(data.totalPages || 1);
         setTotal(data.total || 0);
@@ -181,7 +181,7 @@ export default function SchoolsPage() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
             {/* Location */}
             <div className="relative flex-1 sm:flex-none">
-              <select
+              {/* <select
                   value={locationFilter}
                   onChange={(e) =>
                     handleFilterChange(setLocationFilter)(e.target.value)
@@ -195,7 +195,7 @@ export default function SchoolsPage() {
                       Location: {state}
                     </option>
                   ))}
-                </select>
+                </select> */}
               <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
               <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
             </div>
