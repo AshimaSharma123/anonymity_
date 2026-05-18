@@ -78,40 +78,26 @@ const handler = NextAuth({
   },
 
   callbacks: {
-    async signIn({ user, account }) {
-      if (
-        account?.provider === "google" ||
-        account?.provider === "facebook"
-      ) {
-        // Check existing user
-        const { data: existingUsers } = await supabase
-          .from("users")
-          .select("*")
-          .eq("email", user.email)
-          .limit(1);
+   async signIn({ user, account }) {
+  if (account?.provider === "google" || account?.provider === "facebook") {
 
-        // Create user if not exists
-        if (!existingUsers || existingUsers.length === 0) {
-          const { error } = await supabase
-            .from("users")
-            .insert([
-              {
-                full_name: user.name,
-                email: user.email,
-                provider: account.provider,
-                provider_account_id: account.providerAccountId,
-              },
-            ]);
-
-          if (error) {
-            console.log(error);
-            return false;
-          }
+    await supabase
+      .from("users")
+      .upsert(
+        {
+          full_name: user.name,
+          email: user.email,
+          provider: account.provider,
+          provider_account_id: account.providerAccountId,
+        },
+        {
+          onConflict: "email",
         }
-      }
+      );
+  }
 
-      return true;
-    },
+  return true;
+},
   },
 
   secret: process.env.NEXTAUTH_SECRET,
