@@ -81,19 +81,19 @@ const handler = NextAuth({
    async signIn({ user, account }) {
   if (account?.provider === "google" || account?.provider === "facebook") {
 
-    await supabase
-      .from("users")
-      .upsert(
-        {
-          full_name: user.name,
-          email: user.email,
-          provider: account.provider,
-          provider_account_id: account.providerAccountId,
-        },
-        {
-          onConflict: "email",
-        }
-      );
+  await supabase
+  .from("users")
+  .upsert(
+    {
+      full_name: user.name,
+      email: user.email,
+      provider: account.provider,
+      providerAccountId: account.providerAccountId,
+    },
+    { onConflict: "email" }
+  );
+
+
   }
 
   return true;
