@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 // =========================
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+{ params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -56,7 +56,7 @@ export async function DELETE(
 // =========================
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
