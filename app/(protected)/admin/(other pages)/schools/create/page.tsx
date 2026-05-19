@@ -151,18 +151,18 @@ export default function SchoolCreateForm() {
         <div className="flex-1 overflow-y-auto">
             {/* Page-level top bar */}
             <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 sm:py-[26px]">
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                    <Link
-                        href="/admin/schools"
+                <Link
+                        href="/admin/schools" className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                    <div
                         className="flex items-center justify-center cursor-pointer flex-shrink-0"
                         aria-label="Go back"
                     >
                         <svg width="20" height="14" viewBox="0 0 24 16" fill="none" className="sm:w-6 sm:h-4">
                             <path d="M3.49202 9.04802L8.52603 14.2183C8.7315 14.4294 8.83013 14.6756 8.82191 14.9569C8.81369 15.2383 8.7065 15.4845 8.50035 15.6955C8.29488 15.889 8.05516 15.9903 7.7812 15.9994C7.50724 16.0086 7.26753 15.9073 7.06206 15.6955L0.281557 8.73147C0.178822 8.62596 0.10588 8.51165 0.0627314 8.38854C0.0195827 8.26544 -0.00130658 8.13355 6.32218e-05 7.99286C0.00143302 7.85217 0.0230071 7.72027 0.0647859 7.59717C0.106565 7.47407 0.179165 7.35976 0.282584 7.25424L7.06309 0.290169C7.25143 0.0967228 7.48704 0 7.7699 0C8.05277 0 8.29659 0.0967228 8.50138 0.290169C8.70685 0.501202 8.80958 0.751979 8.80958 1.0425C8.80958 1.33302 8.70685 1.58345 8.50138 1.79378L3.49202 6.9377H22.9726C23.2637 6.9377 23.5079 7.03899 23.7051 7.24158C23.9024 7.44417 24.0007 7.6946 24 7.99286C23.9993 8.29112 23.9007 8.54189 23.7041 8.74519C23.5076 8.94848 23.2637 9.04943 22.9726 9.04802H3.49202Z" fill="#1E1E1E" />
                         </svg>
-                    </Link>
+                    </div>
                     <h1 className="font-outfit font-semibold text-lg sm:text-2xl lg:text-3xl text-[#121212] leading-tight truncate">School</h1>
-                </div>
+                </Link>
                 <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                     <Link
                         href="/admin/schools"
