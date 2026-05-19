@@ -547,7 +547,7 @@ function DeleteConfirmationModal({
             <button
               onClick={onConfirm}
               disabled={isLoading}
-              className="flex-1 px-4 py-3 rounded-lg bg-[#E02C2C] font-inter font-semibold text-sm hover:bg-[#CC2424] active:bg-[#B81D1D] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+              className="text-[#fff] flex-1 px-4 py-3 rounded-lg bg-[#E02C2C] font-inter font-semibold text-sm hover:bg-[#CC2424] active:bg-[#B81D1D] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -583,12 +583,16 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState<number | null>(null);
   const [deletingTeacherId, setDeletingTeacherId] = useState<number | null>(null);
+  const [isFirstLoadT, setIsFirstLoadT] = useState<boolean>(true);
+
   const TEACHERS_PER_PAGE = 5;
 
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        setLoading(true);
+        if(isFirstLoadT){
+          setLoading(true);
+        }
         const params = new URLSearchParams({
           school_id: schoolId,
           page: currentPage.toString(),
@@ -618,6 +622,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
+        setIsFirstLoadT(false);
       }
     };
 
@@ -1058,6 +1063,8 @@ export default function SchoolDetailPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalReports, setTotalReports] = useState(0);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
   const REPORTS_PER_PAGE = 5;
 
   function StarRating({ count = 0 }: { count?: number }) {
@@ -1116,7 +1123,11 @@ export default function SchoolDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        if(isFirstLoad){
+          setLoading(true);
+        }
+        
+        
         const response = await fetch(
           `/api/schools/${schoolId}?page=${currentPage}&limit=${REPORTS_PER_PAGE}`
         );
@@ -1126,7 +1137,7 @@ export default function SchoolDetailPage() {
         }
 
         const data = await response.json();
-        console.log("data",data);
+       
         if (!data.success) {
           throw new Error(data.message || "Failed to fetch school details");
         }
@@ -1161,6 +1172,7 @@ export default function SchoolDetailPage() {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
+        setIsFirstLoad(false);
       }
     };
 
