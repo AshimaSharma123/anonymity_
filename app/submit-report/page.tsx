@@ -55,17 +55,17 @@ const initialState: FormState = {
   schoolAssociation: "",
   teacherName: "",
   date: "",
-  gradeLevel: "Elementary",
+  gradeLevel: "",
   ratings: {
-    classroomBehavior: 2,
+    classroomBehavior: 0,
     lessonPreparedness: 0,
     staffFriendliness: 0,
-    schoolCleanliness: 5,
+    schoolCleanliness: 0,
     supportLevel: 0,
   },
-  selectedTags: ["Friendly Teachers", "Unfriendly Students"],
-  returnToSchool: "yes",
-  returnToTeacher: "yes",
+  selectedTags: [],
+  returnToSchool: null,
+  returnToTeacher: null,
   postAs: "anonymous",
   feedback: "",
   schoolComment: "",
@@ -144,10 +144,10 @@ function validateForm(state: FormState): FormErrors {
     errors.returnToTeacher = "Required";
   }
 
-  // ratings validation
+  // // ratings validation
   const hasAnyRating = Object.values(state.ratings).some((v) => v > 0);
   if (!hasAnyRating) {
-    errors.ratings = "At least one rating must be given";
+    errors.ratings = "Please give ratings";
   }
 
   return errors;
@@ -367,7 +367,6 @@ export default function SubmitReportPage() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("data",data);
         setSchoolSuggestions(Array.isArray(data) ? data : data.schools || []);
       }
     } catch (error) {
@@ -684,7 +683,12 @@ export default function SubmitReportPage() {
                         key={level}
                         type="button"
                         id="gradeLevel"
-                        onClick={() => updateField("gradeLevel", level)}
+                        onClick={() => {updateField("gradeLevel", level)
+                          setErrors((prev) => ({
+                            ...prev,
+                            gradeLevel: "",
+                          }));
+                        }}
                         className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${state.gradeLevel === level
                           ? "bg-[#0B77F9] text-white font-medium"
                           : "bg-[#FCFDFE] text-[#121212] font-medium border-[#B2B2B2]"
@@ -697,7 +701,13 @@ export default function SubmitReportPage() {
                         key={level}
                         type="button"
                         id="gradeLevel"
-                        onClick={() => updateField("gradeLevel", level)}
+                        onClick={() => {
+                          updateField("gradeLevel", level)
+                        setErrors((prev) => ({
+                            ...prev,
+                            gradeLevel: "",
+                          }));
+                        }}
                         className={`flex items-center justify-center border px-3 py-2 sm:py-[10px] rounded-lg font-inter text-xs sm:text-sm cursor-pointer transition-all ${state.gradeLevel === level
                           ? "bg-[#0B77F9] text-white font-medium"
                           : "bg-[#FCFDFE] text-[#121212] font-medium border-[#B2B2B2]"
@@ -706,10 +716,11 @@ export default function SubmitReportPage() {
                         {level}
                       </button>
                     ))}
-                    {errors.gradeLevel && (
+                    
+                  </div>
+                  {errors.gradeLevel && (
                       <p className="text-red-500 text-xs mt-1">{errors.gradeLevel}</p>
                     )}
-                  </div>
                 </div>
               </section>
 
@@ -774,7 +785,12 @@ export default function SubmitReportPage() {
                         <button
                           key={tag}
                           type="button"
-                          onClick={() => dispatch({ type: "TOGGLE_TAG", tag })}
+                          onClick={() => {dispatch({ type: "TOGGLE_TAG", tag })
+                        setErrors((prev) => ({
+                        ...prev,
+                        selectedTags: "",
+                      }));
+                        }}
                           className={`flex items-center justify-center px-3 sm:px-[19px] py-2 sm:py-[9px] rounded-xl font-inter text-xs sm:text-sm cursor-pointer transition-all ${isSelected && !isNeg
                             ? "border border-[#0171F9] bg-[#EFF6FF] text-[#0171F9]"
                             : isSelected && isNeg
@@ -804,7 +820,12 @@ export default function SubmitReportPage() {
                   <div className="flex flex-col gap-2">
                     <label className={fieldLabel}>Would you return to this school</label>
                     <ReturnChoiceGroup value={state.returnToSchool}
-                      onChange={(val) => updateField("returnToSchool", val)} />
+                      onChange={(val) => {updateField("returnToSchool", val)
+                        setErrors((prev) => ({
+                        ...prev,
+                        returnToSchool: "",
+                      }));
+                      }} />
                     <input
                       type="text"
                       className={`${inputBase} w-full py-[10px]`}
@@ -819,7 +840,13 @@ export default function SubmitReportPage() {
                   </div>
                   <div className="flex flex-col gap-2" id="returnToTeacher">
                     <label className={fieldLabel}>Would you return for this teacher or class</label>
-                    <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => updateField("returnToTeacher", val)} />
+                    <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => {updateField("returnToTeacher", val)
+
+                      setErrors((prev) => ({
+                        ...prev,
+                        returnToTeacher: "",
+                      }));
+                    }} />
                     <input
                       type="text"
                       className={`${inputBase} w-full py-[10px]`}

@@ -140,7 +140,6 @@ export default function SchoolEditForm() {
         const validationErrors = validateForm();
                 setErrors(validationErrors);
         
-                console.log("validationErrors", validationErrors);
                 if (Object.keys(validationErrors).length > 0) {
                     scrollToError(validationErrors);
                     return;

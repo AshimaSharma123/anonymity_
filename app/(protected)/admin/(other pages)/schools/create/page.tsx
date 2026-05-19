@@ -100,7 +100,6 @@ export default function SchoolCreateForm() {
         const validationErrors = validateForm();
         setErrors(validationErrors);
 
-        console.log("validationErrors", validationErrors);
         if (Object.keys(validationErrors).length > 0) {
             scrollToError(validationErrors);
             return;
