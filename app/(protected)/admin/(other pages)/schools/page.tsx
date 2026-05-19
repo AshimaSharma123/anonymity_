@@ -180,8 +180,8 @@ export default function SchoolsPage() {
           {/* Filter dropdowns */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 pb-3 sm:pb-4">
             {/* Location */}
-            <div className="relative flex-1 sm:flex-none">
-              {/* <select
+            {/* <div className="relative flex-1 sm:flex-none">
+              <select
                   value={locationFilter}
                   onChange={(e) =>
                     handleFilterChange(setLocationFilter)(e.target.value)
@@ -195,10 +195,10 @@ export default function SchoolsPage() {
                       Location: {state}
                     </option>
                   ))}
-                </select> */}
+                </select>
               <span className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2"><LocationIcon /></span>
               <span className="pointer-events-none absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2"><ChevronDownIcon /></span>
-            </div>
+            </div> */}
 
             {/* Risk */}
             <div className="relative flex-1 sm:flex-none">
