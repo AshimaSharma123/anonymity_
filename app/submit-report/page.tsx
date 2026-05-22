@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { scrollToError } from "@/lib/function";
+import toast from "react-hot-toast";
 
 /* ─── Types ───────────────────────────────────────── */
 
@@ -17,6 +18,9 @@ type RatingKeys =
 
 type FormState = {
   yourName: string,
+  yourIdentity: string,
+  newIdentity: string,
+  existingIdentity: string,
   schoolName: string,
   schoolId: number,
   teacherId: number,
@@ -34,6 +38,7 @@ type FormState = {
   schoolComment: string;
   teacherComment: string;
   sentiments: string;
+  error: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState | "ratings", string>>;
@@ -49,9 +54,12 @@ type Action =
 const initialState: FormState = {
   yourName: "",
   schoolName: "",
+  yourIdentity:"",
+  newIdentity: "",
+  existingIdentity: "",
   schoolId: 0,
   teacherId: 0,
-  schoolGrades:[],
+  schoolGrades: [],
   schoolAssociation: "",
   teacherName: "",
   date: "",
@@ -71,6 +79,7 @@ const initialState: FormState = {
   schoolComment: "",
   teacherComment: "",
   sentiments: "",
+  error:""
 };
 
 /* ─── Reducer ─────────────────────────────────────── */
@@ -142,6 +151,12 @@ function validateForm(state: FormState): FormErrors {
 
   if (!state.returnToTeacher) {
     errors.returnToTeacher = "Required";
+  }
+  if (!state.newIdentity && !state.existingIdentity) {
+    errors.yourIdentity = "Please create a new code or enter an existing code";
+  }
+  if (state.newIdentity && state.existingIdentity) {
+    errors.yourIdentity = "Fill either New Code or Existing Code, not both";
   }
 
   // // ratings validation
@@ -451,14 +466,23 @@ export default function SubmitReportPage() {
         },
         body: JSON.stringify(state),
       });
-
+     
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to submit report");
+        setIsSubmitting(false);
+        console.log("data",data);
+        setErrors({["yourIdentity"]: data.message})
+        toast.error(data.message || "Failed to submit report", {
+            duration: 6000,
+          });
+        // throw new Error("Failed to submit report");
+      } else {
+        dispatch({ type: "RESET" });
+        router.push(`/submit-report/success${state.postAs === "anonymous" ? `?anonymous=true` : ""}`);
+
       }
 
-      dispatch({ type: "RESET" });
-      router.push(`/submit-report/success${state.postAs === "anonymous" ? `?anonymous=true` : ""}`);
-
+     
     } catch (error) {
       console.error("Error submitting report:", error);
       setIsSubmitting(false);
@@ -495,6 +519,8 @@ export default function SubmitReportPage() {
               <section className="flex flex-col gap-5 sm:gap-8">
                 <h2 className={sectionHeading}>Assignment Details</h2>
 
+                
+
                 {/* School Name */}
                 <div className="flex flex-col gap-2 relative">
                   <label className={fieldLabel}>School Name</label>
@@ -508,11 +534,11 @@ export default function SubmitReportPage() {
                         value={state.schoolName}
                         onChange={(e) => {
                           if (e.target.value) {
-                             setErrors({ ...errors, ["teacherName"]: "" });
+                            setErrors({ ...errors, ["teacherName"]: "" });
                           }
-                           updateField("teacherName", "");
-                            setTeacherSuggestions([]);
-                            updateField("schoolGrades", []);
+                          updateField("teacherName", "");
+                          setTeacherSuggestions([]);
+                          updateField("schoolGrades", []);
                           updateField("schoolName", e.target.value);
                           fetchSchools(e.target.value);
                           setShowSchoolSuggestions(true);
@@ -542,9 +568,9 @@ export default function SubmitReportPage() {
                               type="button"
                               onMouseDown={(e) => {
                                 e.preventDefault();
-                                 updateField("teacherName", "");
-                                  setTeacherSuggestions([]);
-                                  updateField("schoolGrades", []);
+                                updateField("teacherName", "");
+                                setTeacherSuggestions([]);
+                                updateField("schoolGrades", []);
                                 updateField("schoolName", school.school_name);
                                 updateField("schoolGrades", school.grade_level);
                                 updateField("schoolId", school.id);
@@ -590,13 +616,13 @@ export default function SubmitReportPage() {
                           onChange={(e) => {
                             if (!state.schoolId || !state.schoolName) {
                               setErrors({ ...errors, ["teacherName"]: "Please first select school" });
-                              
+
                               return;
                             } else {
                               setErrors({ ...errors, ["teacherName"]: "" });
                             }
                             updateField("teacherName", e.target.value);
-                            
+
                             fetchTeachers(e.target.value, state.schoolId);
                             setShowTeacherSuggestions(true);
                             setErrors((prev) => ({
@@ -683,7 +709,8 @@ export default function SubmitReportPage() {
                         key={level}
                         type="button"
                         id="gradeLevel"
-                        onClick={() => {updateField("gradeLevel", level)
+                        onClick={() => {
+                          updateField("gradeLevel", level)
                           setErrors((prev) => ({
                             ...prev,
                             gradeLevel: "",
@@ -703,7 +730,7 @@ export default function SubmitReportPage() {
                         id="gradeLevel"
                         onClick={() => {
                           updateField("gradeLevel", level)
-                        setErrors((prev) => ({
+                          setErrors((prev) => ({
                             ...prev,
                             gradeLevel: "",
                           }));
@@ -716,11 +743,11 @@ export default function SubmitReportPage() {
                         {level}
                       </button>
                     ))}
-                    
+
                   </div>
                   {errors.gradeLevel && (
-                      <p className="text-red-500 text-xs mt-1">{errors.gradeLevel}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">{errors.gradeLevel}</p>
+                  )}
                 </div>
               </section>
 
@@ -785,12 +812,13 @@ export default function SubmitReportPage() {
                         <button
                           key={tag}
                           type="button"
-                          onClick={() => {dispatch({ type: "TOGGLE_TAG", tag })
-                        setErrors((prev) => ({
-                        ...prev,
-                        selectedTags: "",
-                      }));
-                        }}
+                          onClick={() => {
+                            dispatch({ type: "TOGGLE_TAG", tag })
+                            setErrors((prev) => ({
+                              ...prev,
+                              selectedTags: "",
+                            }));
+                          }}
                           className={`flex items-center justify-center px-3 sm:px-[19px] py-2 sm:py-[9px] rounded-xl font-inter text-xs sm:text-sm cursor-pointer transition-all ${isSelected && !isNeg
                             ? "border border-[#0171F9] bg-[#EFF6FF] text-[#0171F9]"
                             : isSelected && isNeg
@@ -820,11 +848,12 @@ export default function SubmitReportPage() {
                   <div className="flex flex-col gap-2">
                     <label className={fieldLabel}>Would you return to this school</label>
                     <ReturnChoiceGroup value={state.returnToSchool}
-                      onChange={(val) => {updateField("returnToSchool", val)
+                      onChange={(val) => {
+                        updateField("returnToSchool", val)
                         setErrors((prev) => ({
-                        ...prev,
-                        returnToSchool: "",
-                      }));
+                          ...prev,
+                          returnToSchool: "",
+                        }));
                       }} />
                     <input
                       type="text"
@@ -840,7 +869,8 @@ export default function SubmitReportPage() {
                   </div>
                   <div className="flex flex-col gap-2" id="returnToTeacher">
                     <label className={fieldLabel}>Would you return for this teacher or class</label>
-                    <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => {updateField("returnToTeacher", val)
+                    <ReturnChoiceGroup value={state.returnToTeacher} onChange={(val) => {
+                      updateField("returnToTeacher", val)
 
                       setErrors((prev) => ({
                         ...prev,
@@ -861,7 +891,7 @@ export default function SubmitReportPage() {
                   </div>
                 </div>
 
-                {/* Post As */}
+                {/* postAs */}
                 <div className="flex flex-col gap-2" id="postAs">
                   <label className={fieldLabel}>Post As</label>
                   <div className="flex p-[6px] gap-[10px] rounded-lg bg-[#F3F4F5] w-fit overflow-x-auto">
@@ -918,6 +948,33 @@ export default function SubmitReportPage() {
                     value={state.postAs == "show" ? state.yourName : ""}
                     onChange={(e) => updateField("yourName", state.postAs != "anonymous" ? e.target.value : "")}
                   />}
+                </div>
+
+                    {/* yourIdentity */}
+                <div className="flex flex-col gap-2" id="yourIdentity">
+                  <label className={fieldLabel}>Your Identity</label>
+                  <div className="flex flex-row gap-5">
+                    <input
+                      type="text"
+                      className={`${inputBase} py-[10px] w-[40%]`}
+                      placeholder="Enter New Code"
+                      value={state.newIdentity ? state.newIdentity : ""}
+                      onChange={(e) => updateField("newIdentity", e.target.value)}
+                    />
+                    <span className="text-sm min-h-[30px] text-center flex justify-start items-center font-outfit font-medium text-[#121212]">Or</span>
+                    <input
+                      type="text"
+                      className={`${inputBase} py-[10px]  w-[40%]`}
+                      placeholder="Enter Existing Code"
+                      value={state.existingIdentity ? state.existingIdentity : ""}
+                      onChange={(e) => updateField("existingIdentity", e.target.value)}
+                    /></div>
+                  {errors.yourIdentity && (
+                    <p className="text-red-500 text-sm">{errors.yourIdentity}</p>
+                  )}
+                  <span className="text-sm text-[#ef4444] mt-1">
+                    <b>Important Note:</b> Use the same Identity Code for future report submissions and to view all your submitted reports together. This code remains private.
+                  </span>
                 </div>
               </section>
 

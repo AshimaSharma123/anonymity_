@@ -59,11 +59,11 @@ export default function LoginPage() {
        setTimeout(() => {
         setButtonMsg("Redirecting to dashboard...");
         setLoader(false);
-      }, 3000);
+      }, 1000);
       
       setTimeout(() => {
         router.push("/admin/dashboard");
-      }, 5000);
+      }, 3000);
       
     }
   };

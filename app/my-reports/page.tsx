@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Rating {
@@ -14,14 +15,25 @@ interface Rating {
 
 interface Report {
   id: number;
-  school: string;
-  location: string;
-  teacher: string;
-  grade: string;
-  date: string;
-  stars: number;
-  status: "Pending" | "Approved";
-  sentiment: "Positive" | "Negative" | "Neutral";
+  school_name: string;
+  return_to_teacher: number;
+  return_to_school: number;
+  teacher_comment: string;
+  school_comment: string;
+  feedback: string;
+  city: string;
+  state: string;
+  teacher_name: string;
+  grade_level: string;
+  created_at: string;
+  staff_friendliness: number;
+  lesson_preparedness: number;
+  classroom_behavior: number;
+  school_cleanliness: number;
+  support_level: number;
+  schools: ObjectType;
+  status: number;
+  sentiments: "Positive" | "Negative" | "Neutral";
   body: string;
   tags: string[];
   returnToSchool: "Yes" | "No";
@@ -31,113 +43,7 @@ interface Report {
   ratings: Rating[];
 }
 
-/* ─── Static data ─────────────────────────────────────────── */
-const reports: Report[] = [
-  {
-    id: 1,
-    school: "Oakridge Elementary",
-    location: "Austin, TX",
-    teacher: "Maria",
-    grade: "9th Grade",
-    date: "Mar 28, 2026",
-    stars: 4,
-    status: "Pending",
-    sentiment: "Positive",
-    body: "The administration was incredibly supportive. I arrived early and received a detailed folder with lesson plans, emergency procedures, and classroom expectations. Students were respectful and stayed on task throughout the session.",
-    tags: ["Supportive Staff", "Lesson Plans Provided", "Good Behavior"],
-    returnToSchool: "Yes",
-    returnToSchoolQuote:
-      '"Absolutely one of the best schools I\'ve covered. The office staff checked in on me twice during the day. I never felt like I was on my own."',
-    returnToTeacher: "Yes",
-    returnToTeacherQuote:
-      '"Lesson plans were detailed and easy to follow. Clear expectations were set for the class. I\'d take this assignment again without hesitation."',
-    ratings: [
-      { label: "Classroom Behavior", score: 5, max: 5 },
-      { label: "Lesson Preparedness", score: 5, max: 5 },
-      { label: "Staff Friendliness", score: 5, max: 5 },
-      { label: "School Cleanliness", score: 4, max: 5 },
-      { label: "Support Level", score: 5, max: 5 },
-    ],
-  },
-  {
-    id: 2,
-    school: "Riverside Academy",
-    location: "Los Angeles, CA",
-    teacher: "Eran",
-    grade: "10th Grade",
-    date: "Mar 14, 2025",
-    stars: 2,
-    status: "Approved",
-    sentiment: "Negative",
-    body: "The day was quite difficult. Students were disruptive and classroom management was a challenge. Lesson plans were unclear and incomplete, making it hard to follow the schedule properly. Had to request support multiple times.",
-    tags: ["Poor Behavior", "Incomplete Lesson Plans", "Would Not Return"],
-    returnToSchool: "No",
-    returnToSchoolQuote:
-      '"Limited support made it difficult to manage the classroom effectively, so I would be hesitant to return."',
-    returnToTeacher: "No",
-    returnToTeacherQuote:
-      '"Due to incomplete lesson planning, it was difficult to maintain a productive learning environment. I would not prefer to take this assignment again."',
-    ratings: [
-      { label: "Classroom Behavior", score: 1, max: 5 },
-      { label: "Lesson Preparedness", score: 2, max: 5 },
-      { label: "Staff Friendliness", score: 2, max: 5 },
-      { label: "School Cleanliness", score: 3, max: 5 },
-      { label: "Support Level", score: 1, max: 5 },
-    ],
-  },
-  {
-    id: 3,
-    school: "Cedar Valley Institute",
-    location: "Houston, TX",
-    teacher: "--",
-    grade: "9th Grade",
-    date: "Dec 14, 2024",
-    stars: 3,
-    status: "Approved",
-    sentiment: "Neutral",
-    body: "The front office staff was helpful, but the classroom setup lacked clear instructions. Students were manageable but required constant attention. The experience was okay overall but could be improved with better planning.",
-    tags: ["Average Experience", "Some Support", "Needs Better Planning"],
-    returnToSchool: "Yes",
-    returnToSchoolQuote:
-      '"Absolutely one of the best schools I\'ve covered. The office staff checked in on me twice during the day. I never felt like I was on my own."',
-    returnToTeacher: "Yes",
-    returnToTeacherQuote:
-      '"Lesson plans were detailed and easy to follow. Clear expectations were set for the class. I\'d take this assignment again without hesitation."',
-    ratings: [
-      { label: "Classroom Behavior", score: 3, max: 5 },
-      { label: "Lesson Preparedness", score: 2, max: 5 },
-      { label: "Staff Friendliness", score: 4, max: 5 },
-      { label: "School Cleanliness", score: 3, max: 5 },
-      { label: "Support Level", score: 3, max: 5 },
-    ],
-  },
-  {
-    id: 4,
-    school: "Hillside Technical High",
-    location: "San Antonio, TX",
-    teacher: "Jeff",
-    grade: "10th Grade",
-    date: "Mar 28, 2022",
-    stars: 4,
-    status: "Approved",
-    sentiment: "Positive",
-    body: "Great experience overall. Lesson plans were structured and easy to follow. Students were cooperative, and nearby regular teachers were helpful when needed. Would definitely consider returning.",
-    tags: ["Structured Lessons", "Cooperative Students", "Would Return"],
-    returnToSchool: "Yes",
-    returnToSchoolQuote:
-      '"Absolutely one of the best schools I\'ve covered. The office staff checked in on me twice during the day. I never felt like I was on my own."',
-    returnToTeacher: "Yes",
-    returnToTeacherQuote:
-      '"Lesson plans were detailed and easy to follow. Clear expectations were set for the class. I\'d take this assignment again without hesitation."',
-    ratings: [
-      { label: "Classroom Behavior", score: 4, max: 5 },
-      { label: "Lesson Preparedness", score: 5, max: 5 },
-      { label: "Staff Friendliness", score: 4, max: 5 },
-      { label: "School Cleanliness", score: 4, max: 5 },
-      { label: "Support Level", score: 4, max: 5 },
-    ],
-  },
-];
+
 
 /* ─── Shared SVG icons ────────────────────────────────────── */
 const LocationIcon = () => (
@@ -180,38 +86,75 @@ const ChatIcon = () => (
 );
 
 
+function StarRating({
+  count = 0,
+}: {
+  count?: number;
+}) {
+  const STAR_SIZE = 15;
+  const GAP = 2;
 
-/* ─── Star rating renderer ────────────────────────────────── */
-const StarPath = "M9.60071 6.0918L9.72668 6.38574L10.045 6.41309L14.1515 6.76367L11.0509 9.41797L10.8038 9.62988L10.8781 9.94531L11.8038 13.8984L8.27258 11.7969L8.00012 11.6348L7.72766 11.7969L4.19446 13.8994L5.12219 9.94531L5.19641 9.62988L4.94934 9.41797L1.84778 6.76367L5.9552 6.41309L6.27356 6.38574L6.39954 6.0918L8.00012 2.35449L9.60071 6.0918Z";
+  const starPath =
+    "M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z";
 
-function StarRating({ count, max = 5 }: { count: number; max?: number }) {
   return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: max }).map((_, i) => (
-        <svg key={i} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d={StarPath}
-            fill={i < count ? "#0171F9" : "#D1D5DB"}
-            stroke={i < count ? "#0171F9" : "#D1D5DB"}
-            strokeWidth="1.06667"
-          />
-        </svg>
-      ))}
-    </div>
+    <svg
+      width={(STAR_SIZE + GAP) * 5}
+      height={STAR_SIZE}
+      viewBox={`0 0 ${(STAR_SIZE + GAP) * 5} ${STAR_SIZE}`}
+      fill="none"
+    >
+      {[0, 1, 2, 3, 4].map((i) => {
+        const x = i * (STAR_SIZE + GAP);
+
+        // 0 → 1
+        const fillPercent = Math.max(
+          0,
+          Math.min(1, count - i)
+        );
+
+        return (
+          <g
+            key={i}
+            transform={`translate(${x}, 0) scale(${STAR_SIZE / 13})`}
+          >
+            {/* Empty Star */}
+            <path
+              d={starPath}
+              fill="none"
+              stroke="#0171F9"
+              strokeWidth="0.92"
+            />
+
+            {/* Partial Fill */}
+            <clipPath id={`clip-${i}-${count}`}>
+              <rect
+                x="0"
+                y="0"
+                width={13 * fillPercent}
+                height="13"
+              />
+            </clipPath>
+
+            <path
+              clipPath={`url(#clip-${i}-${count})`}
+              d={starPath}
+              fill="#0171F9"
+              stroke="#0171F9"
+              strokeWidth="0.92"
+            />
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
-function StarDisplay({ count, max = 5 }: { count: number; max?: number }) {
-  return (
-    <div className="flex items-center gap-2">
-      <StarRating count={count} max={max} />
-      <span className="font-[Outfit] text-sm text-black">{count}/{max}</span>
-    </div>
-  );
-}
+
+
 
 /* ─── Outline star for header area ───────────────────────── */
-function OutlineStars({ count }: { count: number }) {
+function OutlineStars({ count }: { count: any }) {
   return (
     <div className="flex items-center gap-0.5">
       {Array.from({ length: Math.ceil(count) }).map((_, index) => {
@@ -259,11 +202,18 @@ function OutlineStars({ count }: { count: number }) {
 }
 
 /* ─── Status badge ────────────────────────────────────────── */
-function StatusBadge({ status }: { status: "Pending" | "Approved" }) {
+function StatusBadge({ status }: { status: "Pending" | "Approved" | "Rejected" }) {
   if (status === "Pending") {
     return (
       <span className="px-2 py-1 rounded text-xs font-semibold font-inter bg-[rgba(232,164,17,0.10)] text-[#E8A411]">
         Pending
+      </span>
+    );
+  }
+  if (status === "Rejected") {
+    return (
+      <span className="px-2 py-1 rounded text-xs font-semibold font-inter bg-[#FFE0E0] text-[#E02C2C]">
+        Rejected
       </span>
     );
   }
@@ -291,18 +241,25 @@ function SentimentBadge({ sentiment }: { sentiment: "Positive" | "Negative" | "N
     );
   }
   return (
-    <span className="px-2.5 py-1 rounded-md text-xs font-semibold font-inter bg-[#FFEABD] text-[#E8A411]">
+    <span className="px-2.5 py-1 rounded-md text-xs font-semibold font-inter bg-[rgba(232,164,17,0.10)] text-[#E8A411]">
       Neutral
     </span>
   );
 }
 
 /* ─── Return answer pill ──────────────────────────────────── */
-function ReturnPill({ answer }: { answer: "Yes" | "No" }) {
+function ReturnPill({ answer }: { answer: "Yes" | "No" | "Maybe" }) {
   if (answer === "Yes") {
     return (
       <span className="px-[18px] py-1 rounded-full text-xs font-semibold font-inter bg-[#BBFBE6] text-[#2D7D65]">
         Yes
+      </span>
+    );
+  }
+  if (answer === "Maybe") {
+    return (
+      <span className="px-[18px] py-1 rounded-full text-xs font-semibold font-inter bg-[#FFF4E0] text-[#FFA600]">
+        Maybe
       </span>
     );
   }
@@ -331,12 +288,19 @@ function FinalThoughts({ report }: { report: Report }) {
             <SchoolIcon />
             <span className="text-[#0F1724] font-[Outfit] text-sm sm:text-base font-medium leading-5">Would you return to this school?</span>
           </div>
-          <ReturnPill answer={report.returnToSchool} />
-        </div>
-        <div className="flex items-center gap-2.5 pl-5">
+          <ReturnPill
+            answer={
+              report.return_to_school == 3
+                ? "Maybe"
+                : report.return_to_school == 2
+                  ? "No"
+                  : "Yes"
+            }
+          />        </div>
+        {report.school_comment && <div className="flex items-center gap-2.5 pl-5">
           <div className="min-h-[30px] w-[3px] self-stretch bg-[#22C55E] flex-shrink-0 rounded-full" />
-          <p className="text-[#464555] font-inter sm:text-[15px] text-sm italic font-normal leading-5">{report.returnToSchoolQuote}</p>
-        </div>
+          <p className="text-[#464555] font-inter sm:text-[15px] text-sm italic font-normal leading-5">{report.school_comment}</p>
+        </div>}
       </div>
 
       {/* Horizontal divider */}
@@ -349,82 +313,93 @@ function FinalThoughts({ report }: { report: Report }) {
             <UserIcon />
             <span className="text-[#0F1724] font-[Outfit] text-sm sm:text-base font-medium leading-5">Would you return for this teacher or class?</span>
           </div>
-          <ReturnPill answer={report.returnToTeacher} />
+          <ReturnPill answer={
+            report.return_to_teacher == 3
+              ? "Maybe"
+              : report.return_to_teacher == 2
+                ? "No"
+                : "Yes"
+          } />
         </div>
-        <div className="flex items-center gap-2.5 pl-5">
+        {report.teacher_comment && <div className="flex items-center gap-2.5 pl-5">
           <div className="min-h-[30px] w-[3px] self-stretch bg-[#22C55E] flex-shrink-0 rounded-full" />
-          <p className="text-[#464555] font-inter sm:text-[15px] text-sm italic font-normal leading-5">{report.returnToTeacherQuote}</p>
-        </div>
+          <p className="text-[#464555] font-inter sm:text-[15px] text-sm italic font-normal leading-5">{report.teacher_comment}</p>
+        </div>}
       </div>
     </div>
   );
 }
 
-/* ─── Rating row ──────────────────────────────────────────── */
-function RatingRow({ label, score, max }: Rating) {
-  return (
-    <div className="flex items-center w-full max-w-xs">
-      <span className="flex-1 font-[Outfit] text-base font-normal text-[#6B7280]">{label}</span>
-      <StarDisplay count={score} max={max} />
-    </div>
-  );
-}
 
 /* ─── Single Report Card ──────────────────────────────────── */
 function ReportCard({ report, defaultExpanded = false }: { report: Report; defaultExpanded?: boolean }) {
   const [showRatings, setShowRatings] = useState(defaultExpanded);
 
   return (
-   
+
     <div className={`bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] ${showRatings ? "p-4 sm:p-6 lg:p-7" : "px-4 sm:px-6 lg:px-7 pt-4 sm:pt-6 lg:pt-7"} flex flex-col gap-4 sm:gap-5 lg:gap-6`}>
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-3">
         {/* Left: school info */}
         <div className="flex flex-col gap-3 flex-1">
-          <h2 className="font-inter text-[20px]  font-bold text-[#121212]">{report.school}</h2>
+          <h2 className="font-inter text-[20px]  font-bold text-[#121212]">{report.school_name}</h2>
 
           <div className="flex flex-col gap-3">
             {/* Location · Teacher · Grade */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-1.5 opacity-80">
                 <LocationIcon />
-                <span className="font-[Outfit] text-sm text-[#414141]">{report.location}</span>
+                <span className="font-[Outfit] text-sm text-[#414141]">{`${report?.schools?.
+                  city}, ${report?.schools?.state
+                  }`}</span>
               </div>
 
               <span className="w-[3px] h-[3px] rounded-full bg-[#676767] opacity-64" />
 
               <div className="flex items-center gap-1.5">
                 <TeacherIcon />
-                <span className="font-inter text-sm font-medium text-[#121212] opacity-70">{report.teacher}</span>
+                <span className="font-inter text-sm font-medium text-[#121212] opacity-70">{report.teacher_name}</span>
               </div>
 
               <span className="w-[3px] h-[3px] rounded-full bg-[#676767] opacity-64" />
 
               <span className="px-2 py-1 rounded text-sm font-semibold font-inter bg-[#DFEEFF] text-[#0171F9]">
-                {report.grade}
+                {report.grade_level}
               </span>
             </div>
 
             {/* Date */}
             <div className="flex items-center gap-1.5 opacity-80">
               <CalendarIcon />
-              <span className="font-[Outfit] text-sm text-[#414141]">{report.date}</span>
+              <span className="font-[Outfit] text-sm text-[#414141]">{formatDate(report.created_at)}</span>
             </div>
           </div>
         </div>
 
         {/* Right: stars + badges */}
         <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap sm:justify-end">
-          <OutlineStars count={report.stars} />
+          <OutlineStars count={AvgRatings({
+            classroom_behavior: report.classroom_behavior,
+            lesson_preparedness: report.lesson_preparedness, school_cleanliness: report.school_cleanliness,
+            staff_friendliness: report.staff_friendliness,
+            support_level: report.support_level,
+          })} />
           <div className="flex items-center gap-2.5">
-            <StatusBadge status={report.status} />
-            <SentimentBadge sentiment={report.sentiment} />
+<StatusBadge
+  status={
+    report.status == 1
+      ? "Pending"
+      : report.status == 2
+      ? "Approved"
+      : "Rejected"
+  }
+/>            <SentimentBadge sentiment={report.sentiments} />
           </div>
         </div>
       </div>
 
       {/* Body text */}
-      <p className="text-black font-inter text-sm sm:text-base font-normal leading-6 sm:leading-7 opacity-70">{report.body}</p>
+      <p className="text-black font-inter text-sm sm:text-base font-normal leading-6 sm:leading-7 opacity-70">{report.feedback}</p>
 
       {/* Tags */}
       <div className="flex flex-wrap items-center gap-3">
@@ -467,11 +442,23 @@ function ReportCard({ report, defaultExpanded = false }: { report: Report; defau
         <div className="overflow-hidden">
           <div className="space-y-2.5 sm:space-y-3 lg:space-y-3.5 pb-1">
             {[
-              { label: "Classroom Behavior", score: 5 },
-              { label: "Lesson Preparedness", score: 5 },
-              { label: "Staff Friendliness", score: 5 },
-              { label: "School Cleanliness", score: 4 },
-              { label: "Support Level", score: 5 },
+              { label: "Classroom Behavior", score: Number(report.classroom_behavior) },
+              {
+                label: "Lesson Preparedness",
+                score: report.lesson_preparedness,
+              },
+              {
+                label: "Staff Friendliness",
+                score: report.staff_friendliness,
+              },
+              {
+                label: "School Cleanliness",
+                score: report.school_cleanliness,
+              },
+              {
+                label: "Support Level",
+                score: report.support_level,
+              },
             ].map(({ label, score }) => (
               <div
                 key={label}
@@ -482,64 +469,7 @@ function ReportCard({ report, defaultExpanded = false }: { report: Report; defau
                 </span>
 
                 <div className="flex items-center gap-1.5 sm:gap-2">
-                  <div className="flex items-center gap-0.5 min-w-[70px] sm:min-w-[88px]">
-                    {Array.from({ length: 5 }).map((_, index) => {
-                      const i = index + 1;
-                      const full = i <= Math.floor(score);
-                      const half =
-                        i === Math.floor(score) + 1 && score % 1 >= 0.5;
-
-                      const starPath =
-                        "M9.60071 6.0918L9.72668 6.38574L10.045 6.41309L14.1515 6.76367L11.0509 9.41797L10.8038 9.62988L10.8781 9.94531L11.8038 13.8984L8.27258 11.7969L8.00012 11.6348L7.72766 11.7969L4.19446 13.8994L5.12219 9.94531L5.19641 9.62988L4.94934 9.41797L1.84778 6.76367L5.9552 6.41309L6.27356 6.38574L6.39954 6.0918L8.00012 2.35449L9.60071 6.0918Z";
-
-                      return (
-                        <svg
-                          key={i}
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                        >
-                          <defs>
-                            <clipPath id={`half-${label}-${i}`}>
-                              <rect x="0" y="0" width="8" height="16" />
-                            </clipPath>
-                          </defs>
-
-                          {full && (
-                            <path
-                              d={starPath}
-                              fill="#0171F9"
-                              stroke="#0171F9"
-                              strokeWidth="1.06667"
-                            />
-                          )}
-
-                          {half && (
-                            <>
-                              <path
-                                d={starPath}
-                                fill="none"
-                                stroke="#0171F9"
-                                strokeWidth="1.06667"
-                              />
-                              <path
-                                d={starPath}
-                                fill="#0171F9"
-                                stroke="#0171F9"
-                                strokeWidth="1.06667"
-                                clipPath={`url(#half-${label}-${i})`}
-                              />
-                            </>
-                          )}
-
-                          {!full && !half && (
-                            <svg width="16" height="16" />
-                          )}
-                        </svg>
-                      );
-                    })}
-                  </div>
+                  <StarRating count={Number(score)} />
 
                   <span className="text-sm font-normal text-black font-outfit w-10 text-right">
                     {score}/5
@@ -555,16 +485,50 @@ function ReportCard({ report, defaultExpanded = false }: { report: Report; defau
 }
 
 /* ─── Pagination ──────────────────────────────────────────── */
-function Pagination() {
-  const [current, setCurrent] = useState(1);
-  const pages = [1, 2, 3];
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  const getPageNumbers = () => {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= maxPagesToShow; i++) {
+          pages.push(i);
+        }
+      } else if (currentPage >= totalPages - 2) {
+        for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+          pages.push(i);
+        }
+      }
+    }
+    return pages;
+  };
+
+  const pages = getPageNumbers();
 
   return (
     <div className="flex items-center justify-center gap-2 pt-4">
       {/* Prev */}
       <button
-        onClick={() => setCurrent((p) => Math.max(1, p - 1))}
-        className="w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors"
+        onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        disabled={currentPage === 1}
+        className="cursor-pointer w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Previous page"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -576,8 +540,8 @@ function Pagination() {
       {pages.map((p) => (
         <button
           key={p}
-          onClick={() => setCurrent(p)}
-          className={`w-9 h-9 flex items-center justify-center rounded-md text-sm font-medium font-inter transition-colors ${current === p
+          onClick={() => onPageChange(p)}
+          className={`cursor-pointer w-9 h-9 flex items-center justify-center rounded-md text-sm font-medium font-inter transition-colors ${currentPage === p
               ? "bg-[#0171F9] border border-[#0171F9] text-white"
               : "border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] hover:bg-blue-50"
             }`}
@@ -588,8 +552,9 @@ function Pagination() {
 
       {/* Next */}
       <button
-        onClick={() => setCurrent((p) => Math.min(pages.length, p + 1))}
-        className="w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors"
+        onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+        disabled={currentPage === totalPages}
+        className="cursor-pointer w-9 h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Next page"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -599,9 +564,64 @@ function Pagination() {
     </div>
   );
 }
-
 /* ─── Page ────────────────────────────────────────────────── */
 export default function MyReportsPage() {
+  const [identityCode, setIdentityCode] = useState<string | null>(null);
+  const [fetchedReports, setFetchedReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+
+  const loadReports = async (page: number, query: string = "") => {
+      try {
+        const code = localStorage.getItem("identityCode");
+
+        if (!code) {
+          setError("No identity code found. Please enter your identity code to view reports.");
+          setLoading(false);
+          return;
+        }
+
+        setIdentityCode(code);
+
+         let url = `/api/reports/search?code=${encodeURIComponent(code)}&page=${page}&limit=1`;
+      if (query.trim()) {
+        url += `&search=${encodeURIComponent(query.trim())}`;
+      }
+
+      const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch reports");
+        }
+
+        const result = await response.json();
+        setFetchedReports(result?.data || []);
+		    setTotalPages(result.totalPages || 0);
+        setTotal(result.total || 0);
+        setCurrentPage(page);
+	  
+        if (result?.data?.length === 0) {
+          setError("No reports found for your identity code.");
+        }else{
+          setError("");
+        }
+      } catch (err) {
+        console.error("Error loading reports:", err);
+        setError("Failed to load reports. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+  useEffect(() => {
+    loadReports(1);
+  }, []);
+
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFE]">
       <Header />
@@ -614,6 +634,7 @@ export default function MyReportsPage() {
             <h1 className="text-[#121212] font-[Inter] text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold leading-[1.2]">My Reports</h1>
             <p className="text-[#121212] font-[Inter] text-sm sm:text-base lg:text-lg font-normal leading-[1.5] sm:leading-[26px] tracking-[0.2px] opacity-[0.88] mt-2">
               Your experiences shared with the guest teacher community.
+              {identityCode && <span className="block text-sm mt-2 opacity-70">Showing reports for: <strong>{identityCode}</strong></span>}
             </p>
           </div>
 
@@ -625,12 +646,18 @@ export default function MyReportsPage() {
               </svg>
               <input
                 type="text"
-                placeholder="Search your review..."
+                onChange={(e)=>setSearchInput(e.target.value)}
+                placeholder="Search your review by school name and feedback..."
                 className="flex-1 font-inter text-base text-[#737685] placeholder:text-[#737685] outline-none bg-transparent"
               />
             </div>
 
-            <button className="sm:block hidden flex-shrink-0 h-[54px] px-11 bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
+            <button onClick={(e)=>{
+                  e.preventDefault();
+                  setCurrentPage(1);
+                  loadReports(1, searchInput);
+                }} 
+                className="sm:block hidden flex-shrink-0 h-[54px] px-11 bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
               Search
             </button>
             <button className="sm:hidden block flex-shrink-0 py-4 px-4 h-fit bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
@@ -645,13 +672,32 @@ export default function MyReportsPage() {
 
       {/* Reports list */}
       <main className="flex flex-col w-full gap-4 sm:gap-6 lg:gap-8 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14 py-6 sm:py-10 pb-12 sm:pb-[80px]">
-        {reports.map((report, idx) => (
-         
-          <ReportCard key={report.id} report={report} defaultExpanded={idx === 0} />
-         
-        ))}
-
-        <Pagination />
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 font-inter text-base">Loading your reports...</p>
+          </div>
+        ) : error ? (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+            <p className="text-yellow-800 font-inter text-base">{error}</p>
+          </div>
+        ) : fetchedReports?.length === 0 ? (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+            <p className="text-blue-800 font-inter text-base">No reports found.</p>
+          </div>
+        ) : (
+          <>
+            {fetchedReports?.map((report, idx) => (
+              <ReportCard key={report.id} report={report} defaultExpanded={idx === 0} />
+            ))}
+           {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={loadReports}
+              />
+            )}
+          </>
+        )}
       </main>
 
       <Footer />

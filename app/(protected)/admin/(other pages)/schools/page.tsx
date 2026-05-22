@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 
-type Association = "School District" | "Private" | "Charter";
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
