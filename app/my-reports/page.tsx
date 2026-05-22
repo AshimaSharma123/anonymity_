@@ -587,7 +587,7 @@ export default function MyReportsPage() {
 
         setIdentityCode(code);
 
-         let url = `/api/reports/search?code=${encodeURIComponent(code)}&page=${page}&limit=1`;
+         let url = `/api/reports/search?code=${encodeURIComponent(code)}&page=${page}&limit=10`;
       if (query.trim()) {
         url += `&search=${encodeURIComponent(query.trim())}`;
       }
