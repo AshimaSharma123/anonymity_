@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
 
 const SearchIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,78 +81,17 @@ const OneStar = () => (
 type SentimentType = "Positive" | "Neutral" | "Negative";
 
 interface School {
-  name: string;
-  location: string;
-  gradeLevel: string;
+  school_name: string;
+  city: string;
+  state: string;
+  grade_level: [];
   sentiment: SentimentType;
-  avgRating: number;
-  wouldReturn: string;
-  reviews: number;
-  quote: string;
+  avg_rating: number;
+  return_to_school_percentage: number;
+  total_reports: number;
+  calculated_risk: SentimentType;
 }
 
-const schools: School[] = [
-  {
-    name: "Lincoln High School",
-    location: "Portland, OR",
-    gradeLevel: "Pre-K",
-    sentiment: "Positive",
-    avgRating: 4.2,
-    wouldReturn: "92%",
-    reviews: 84,
-    quote: "Excellent Staff support and well-behaved students. Lesson plans are almos always left prepared.",
-  },
-  {
-    name: "Oakridge Elementary",
-    location: "Austin, TX",
-    gradeLevel: "Pre-K",
-    sentiment: "Positive",
-    avgRating: 4.1,
-    wouldReturn: "96%",
-    reviews: 102,
-    quote: "Classroom management can be challenging, but support staff are responsive when needed.",
-  },
-  {
-    name: "Riverside High School",
-    location: "Chicago, IL",
-    gradeLevel: "Pre-K",
-    sentiment: "Positive",
-    avgRating: 4.5,
-    wouldReturn: "95%",
-    reviews: 156,
-    quote: "Well-organized environment with clear instructions. Students are generally respectful and engaged.",
-  },
-  {
-    name: "Green Valley Elementary",
-    location: "San Diego, CA",
-    gradeLevel: "Pre-K",
-    sentiment: "Neutral",
-    avgRating: 3.1,
-    wouldReturn: "88%",
-    reviews: 67,
-    quote: "Positive environment with supportive regular teachers. Some classes may lack detailed lesson plans.",
-  },
-  {
-    name: "Sunset Ridge Academy",
-    location: "Denver, CO",
-    gradeLevel: "Pre-K",
-    sentiment: "Positive",
-    avgRating: 4.4,
-    wouldReturn: "97%",
-    reviews: 59,
-    quote: "Inconsistent lesson planning and occasional lack of communication, but some departments are very supportive.",
-  },
-  {
-    name: "Brookfield Elementary School",
-    location: "Seattle, WA",
-    gradeLevel: "Pre-K",
-    sentiment: "Positive",
-    avgRating: 4.6,
-    wouldReturn: "97%",
-    reviews: 134,
-    quote: "Highly organized staff and welcoming environment. Clear instructions make substitute teaching smooth and stress-free.",
-  },
-];
 
 function getRatingColor(rating: number): string {
   if (rating >= 4.0) return "#10B981";
@@ -171,7 +111,8 @@ function getSentimentStyle(sentiment: SentimentType) {
 }
 
 function SchoolCard({ school }: { school: School }) {
-  const ratingColor = getRatingColor(school.avgRating);
+  const ratingColor = getRatingColor(school.avg_rating);
+  const schoolratingColor = getRatingColor(school.return_to_school_percentage);
   const sentimentStyle = getSentimentStyle(school.sentiment);
 
   return (
@@ -182,18 +123,22 @@ function SchoolCard({ school }: { school: School }) {
           {/* School name, location, grade + sentiment badge */}
           <div className="flex flex-row sm:items-start gap-2 sm:gap-3">
             <div className="flex flex-col gap-2 sm:gap-3 flex-1 min-w-0">
-              <h3 className="text-[#121212] font-[Inter] text-sm sm:text-base font-bold leading-5">{school.name}</h3>
+              <h3 className="text-[#121212] font-[Inter] text-sm sm:text-base font-bold leading-5">{school.school_name}</h3>
               <div className="flex items-center gap-1.5 opacity-80">
                 <CardMapPinIcon />
-                <span className="font-[Outfit] text-xs text-[#414141]">{school.location}</span>
+                <span className="font-[Outfit] text-xs text-[#414141]">{`${school.city}, ${school.state}`}</span>
               </div>
-              <span className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
-                {school.gradeLevel}
+              <div className="flex flex-row gap-2">
+              {school.grade_level?.map((grade: string)=>{
+                return  <span className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
+                {grade}
               </span>
+              })}
+              </div>
             </div>
-            <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
+            {school.sentiment && <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
               {school.sentiment}
-            </span>
+            </span>}
           </div>
 
           {/* Divider */}
@@ -205,7 +150,7 @@ function SchoolCard({ school }: { school: School }) {
               <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Avg Rating</span>
               <div className="flex justify-left items-center gap-1 mt-1">
                 <span className="font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7" style={{ color: ratingColor }}>
-                  {school.avgRating}
+                  {school.avg_rating}
                 </span>
                 <div className="hidden sm:flex">
                   <StarOutlineIcon color={ratingColor} />
@@ -215,14 +160,14 @@ function SchoolCard({ school }: { school: School }) {
             <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
             <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
               <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] opacity-80">Would Return</span>
-              <span className="font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1" style={{ color: ratingColor }}>
-                {school.wouldReturn}
+              <span className="font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1" style={{ color: schoolratingColor }}>
+                {school.return_to_school_percentage || 0}%
               </span>
             </div>
             <div className="w-px h-[52px] bg-[#DADADA] opacity-40 flex-shrink-0" />
             <div className="flex flex-col flex-1 p-2 sm:p-2.5 rounded-lg bg-white">
               <span className="text-[#434654] font-[Inter] text-xs font-normal leading-[13px] sm:leading-[15px] tracking-[-0.5px] opacity-80">Reviews</span>
-              <span className="text-[#191C1D] font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1">{school.reviews}</span>
+              <span className="text-[#191C1D] font-[Inter] text-base sm:text-lg font-semibold leading-6 sm:leading-7 mt-1">{school.total_reports}</span>
             </div>
           </div>
 
@@ -234,7 +179,7 @@ function SchoolCard({ school }: { school: School }) {
             <div className="flex-shrink-0 mt-0.5 sm:mt-1">
               <QuoteIcon />
             </div>
-            <p className="flex-1 text-[#464555] font-[Inter] text-xs sm:text-[13px] font-normal leading-[16px] sm:leading-[18px]">{school.quote}</p>
+            <p className="flex-1 text-[#464555] font-[Inter] text-xs sm:text-[13px] font-normal leading-[16px] sm:leading-[18px]">Excellent Staff support and well-behaved students. Lesson plans are almos always left prepared.</p>
           </div>
         </div>
 
@@ -253,6 +198,49 @@ function SchoolCard({ school }: { school: School }) {
 const gradeOptions = ["Pre-K", "Elementary", "Middle School", "High School", "Special Ed"];
 
 export default function BrowseSchoolPage() {
+  const [fetchedSchools, setFetchedSchools] = useState<Report[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+
+  const loadSchools = async (page: number, query: string = "") => {
+        try {
+  
+          let url = `/api/browse-schools?page=${page}&limit=10`;
+          if (query.trim()) {
+            url += `&search=${encodeURIComponent(query.trim())}`;
+          }
+  
+        const response = await fetch(url);
+  
+          if (!response.ok) {
+            throw new Error("Failed to fetch schools");
+          }
+  
+          const result = await response.json();
+          setFetchedSchools(result?.schools || []);
+          setTotalPages(result.totalPages || 0);
+          setTotal(result.total || 0);
+          setCurrentPage(page);
+          console.log("result",result);
+          // if (result?.data?.length === 0) {
+          //   setError("No reports found for your identity code.");
+          // }else{
+          //   setError("");
+          // }
+        } catch (err) {
+          console.error("Error loading reports:", err);
+          // setError("Failed to load reports. Please try again.");
+        } finally {
+          // setLoading(false);
+        }
+      };
+      
+    useEffect(() => {
+      loadSchools(1);
+    }, []);
+
   return (
     <div className="min-h-screen bg-[#F8FAFE] flex flex-col">
       <Header />
@@ -402,8 +390,8 @@ export default function BrowseSchoolPage() {
 
             {/* School cards grid */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
-              {schools.map((school) => (
-                <SchoolCard key={school.name} school={school} />
+              {fetchedSchools.map((school:any) => (
+                <SchoolCard key={school.school_name} school={school} />
               ))}
             </div>
           </div>

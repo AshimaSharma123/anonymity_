@@ -8,16 +8,15 @@ export async function GET(
   try {
     const { id } = await params;
 
-
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
     const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10");
     const offset = (page - 1) * limit;
 
     // =========================
-    // 1. SCHOOL DETAILS
+    // 1. SCHOOL DETAILS (FAST)
     // =========================
     const { data: school, error: schoolError } = await supabase
-      .from("schools_analytics")
+      .from("schools")
       .select("*")
       .eq("id", id)
       .single();
@@ -30,27 +29,46 @@ export async function GET(
     }
 
     // =========================
-    // 2. STATS (VIEW - SINGLE QUERY)
+    // 2. MONTHLY STATS (FAST INDEXED QUERY)
     // =========================
-    const { data: stats } = await supabase
-      .from("school_report_stats")
+    const monthStart = new Date();
+    monthStart.setDate(1);
+
+    const lastMonthStart = new Date(monthStart);
+    lastMonthStart.setMonth(lastMonthStart.getMonth() - 1);
+
+    const { data: thisMonthStats } = await supabase
+      .from("school_monthly_stats")
       .select("*")
       .eq("school_id", id)
+      .eq("month", monthStart.toISOString().slice(0, 10))
       .single();
 
-    const safeStats = stats || {
-      this_month: 0,
-      last_month: 0,
-      school_yes: 0,
-      school_no: 0,
-      school_maybe: 0,
-      teacher_yes: 0,
-      teacher_no: 0,
-      teacher_maybe: 0,
+    const { data: lastMonthStats } = await supabase
+      .from("school_monthly_stats")
+      .select("*")
+      .eq("school_id", id)
+      .eq("month", lastMonthStart.toISOString().slice(0, 10))
+      .single();
+
+    // =========================
+    // 3. SAFE STATS
+    // =========================
+    const safeStats = {
+      this_month: thisMonthStats?.total_reports || 0,
+      last_month: lastMonthStats?.total_reports || 0,
+
+      school_yes: school.school_yes || 0,
+      school_no: school.school_no || 0,
+      school_maybe: school.school_maybe || 0,
+
+      teacher_yes: school.teacher_yes || 0,
+      teacher_no: school.teacher_no || 0,
+      teacher_maybe: school.teacher_maybe || 0,
     };
 
     // =========================
-    // 3. REPORTS (PAGINATION ONLY)
+    // 4. REPORTS (PAGINATION ONLY)
     // =========================
     const { data: reportsData, count: totalReports, error: reportsError } =
       await supabase
@@ -73,7 +91,7 @@ export async function GET(
     }));
 
     // =========================
-    // RESPONSE
+    // 5. RESPONSE
     // =========================
     return NextResponse.json({
       success: true,

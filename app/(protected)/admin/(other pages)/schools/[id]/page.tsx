@@ -1047,7 +1047,7 @@ interface SchoolData {
   avg_rating: number;
   calculated_risk: string;
   teacher_count: number;
-  report_count: number;
+  total_reports: number;
   school_year: string;
 }
 
@@ -1223,7 +1223,7 @@ export default function SchoolDetailPage() {
                 <span className="flex items-center px-3 sm:px-4 py-1 rounded-full border border-[rgba(11,119,249,0.40)] bg-[#EFF6FF]">
                   <span className="font-inter font-medium text-xs sm:text-sm text-[#0B77F9]">{schoolData?.school_association}</span>
                 </span>
-                {schoolData && schoolData?.report_count > 0 && (
+                {schoolData && schoolData?.total_reports > 0 && (
                   <span
                     className={`flex items-center px-3 sm:px-4 py-1 rounded-full font-inter font-medium text-xs sm:text-sm ${schoolData.calculated_risk === "Low"
                         ? "border border-[rgba(34,164,93,0.40)] bg-[#E6FBF0] text-[#22A45D]"
@@ -1274,7 +1274,7 @@ export default function SchoolDetailPage() {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:gap-1.5">
                   <span className="font-inter font-normal text-md text-[#9CA3AF] leading-[16.5px]">
-                    {schoolData.report_count} reviews
+                    {schoolData.total_reports} reviews
                   </span>
                   <span className="font-inter font-normal text-md text-[#9CA3AF] leading-[16.5px]">{schoolData.school_year}</span>
                 </div>

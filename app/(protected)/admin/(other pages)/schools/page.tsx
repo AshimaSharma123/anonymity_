@@ -278,7 +278,7 @@ export default function SchoolsPage() {
                         <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.teacher_count}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        {school.report_count > 0 ? <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] ${risk?.bg} ${risk?.text}`}>
+                        {school.total_reports > 0 ? <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] ${risk?.bg} ${risk?.text}`}>
                           {school.calculated_risk}
                         </span> : 
                           <span className={`inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md font-inter font-medium text-[10px] sm:text-[13px] bg-[#F6F6F6] text-[#030711]`}>
@@ -287,7 +287,7 @@ export default function SchoolsPage() {
                         }
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.report_count}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.total_reports}</span>
                       </td>
                       {/* <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className="inline-flex items-center px-1.5 sm:px-3 py-0.5 sm:py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[10px] sm:text-sm text-[#030711]">

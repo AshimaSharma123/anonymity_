@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     // BASE QUERY (VIEW)
     // =========================
     let query = supabase
-      .from("schools_analytics") // 🔥 IMPORTANT CHANGE
+      .from("schools") // IMPORTANT CHANGE
       .select("*", { count: "exact" });
 
     // =========================
