@@ -1,12 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect, use } from "react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Rating {
@@ -567,7 +564,11 @@ function Pagination({
   );
 }
 /* ─── Page ────────────────────────────────────────────────── */
-export default function MyReportsPage() {
+export default function MyReportsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ identityCode?: string }>;
+}) {
   const [identityCode, setIdentityCode] = useState<string | null>(null);
   const [fetchedReports, setFetchedReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
@@ -576,8 +577,9 @@ export default function MyReportsPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [total, setTotal] = useState(0);
   const [searchInput, setSearchInput] = useState("");
-  const searchParams = useSearchParams();
-  const Code = searchParams.get("identityCode") || "";
+  const params = use(searchParams);
+
+  const Code = params.identityCode || "";
 
 
   const loadReports = async (page: number, query: string = "") => {
@@ -629,7 +631,7 @@ export default function MyReportsPage() {
 
 
   return (
-     <Suspense fallback={<div>Loading...</div>}>
+     
     <div className="min-h-screen flex flex-col bg-[#F8FAFE]">
       <Header />
 
@@ -709,6 +711,6 @@ export default function MyReportsPage() {
 
       <Footer />
     </div>
-    </Suspense>
+   
   );
 }
