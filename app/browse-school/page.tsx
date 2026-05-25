@@ -4,6 +4,9 @@ import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
+import { ObjectType } from "@/lib/function";
+import { useDebounce } from "@/lib/useDebounce";
 
 const SearchIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,6 +84,7 @@ const OneStar = () => (
 type SentimentType = "Positive" | "Neutral" | "Negative";
 
 interface School {
+  id: Number;
   school_name: string;
   city: string;
   state: string;
@@ -92,6 +96,60 @@ interface School {
   calculated_risk: SentimentType;
 }
 
+function NoSchoolsFound({
+  onReset,
+}: {
+  onReset?: () => void;
+}) {
+  return (
+    <div className="w-full flex flex-col items-center justify-center py-16 px-6 text-center">
+
+      {/* Icon */}
+      <div className="w-20 h-20 rounded-full bg-[#F3F6FF] flex items-center justify-center mb-4">
+        <svg
+          width="34"
+          height="34"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2z"
+            stroke="#4B5563"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </div>
+
+      {/* Title */}
+      <h2 className="text-lg font-semibold text-[#111827]">
+        No Schools Found
+      </h2>
+
+      {/* Description */}
+      <p className="text-sm text-[#6B7280] mt-2 max-w-md">
+        We couldn’t find any schools matching your filters or search.
+        Try adjusting your location, grade, or rating filters.
+      </p>
+
+      {/* Actions */}
+      <div className="flex gap-3 mt-6">
+        <button
+          onClick={onReset}
+          className="cursor-pointer px-4 py-2 rounded-lg bg-[#0B77F9] text-white text-sm font-medium hover:bg-blue-700 transition"
+        >
+          Reset Filters
+        </button>
+
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function getRatingColor(rating: number): string {
   if (rating >= 4.0) return "#10B981";
@@ -129,11 +187,11 @@ function SchoolCard({ school }: { school: School }) {
                 <span className="font-[Outfit] text-xs text-[#414141]">{`${school.city}, ${school.state}`}</span>
               </div>
               <div className="flex flex-row gap-2">
-              {school.grade_level?.map((grade: string)=>{
-                return  <span className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
-                {grade}
-              </span>
-              })}
+                {school.grade_level?.map((grade: string, idx: number) => {
+                  return <span key={idx} className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
+                    {grade}
+                  </span>
+                })}
               </div>
             </div>
             {school.sentiment && <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
@@ -185,7 +243,7 @@ function SchoolCard({ school }: { school: School }) {
 
         {/* View Details button */}
         <Link
-          href={`/school`}
+          href={`/school/${school.id}`}
           className="flex items-center justify-center gap-2 w-full py-2 sm:py-2.5 px-6 sm:px-8 rounded-md bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-medium leading-6 hover:bg-blue-700 transition-colors cursor-pointer mt-auto"
         >
           View Details
@@ -195,51 +253,84 @@ function SchoolCard({ school }: { school: School }) {
   );
 }
 
+
+
 const gradeOptions = ["Pre-K", "Elementary", "Middle School", "High School", "Special Ed"];
 
 export default function BrowseSchoolPage() {
   const [fetchedSchools, setFetchedSchools] = useState<Report[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState<ObjectType>({});
+  const [filters, setFilters] = useState<ObjectType>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [searchingLoad, setSearchingLoad] = useState<boolean>(false);
+  const debouncedFilters = useDebounce(filters, 1000);
 
-  const loadSchools = async (page: number, query: string = "") => {
-        try {
-  
-          let url = `/api/browse-schools?page=${page}&limit=10`;
-          if (query.trim()) {
-            url += `&search=${encodeURIComponent(query.trim())}`;
-          }
-  
-        const response = await fetch(url);
-  
-          if (!response.ok) {
-            throw new Error("Failed to fetch schools");
-          }
-  
-          const result = await response.json();
-          setFetchedSchools(result?.schools || []);
-          setTotalPages(result.totalPages || 0);
-          setTotal(result.total || 0);
-          setCurrentPage(page);
-          console.log("result",result);
-          // if (result?.data?.length === 0) {
-          //   setError("No reports found for your identity code.");
-          // }else{
-          //   setError("");
-          // }
-        } catch (err) {
-          console.error("Error loading reports:", err);
-          // setError("Failed to load reports. Please try again.");
-        } finally {
-          // setLoading(false);
-        }
-      };
-      
-    useEffect(() => {
-      loadSchools(1);
-    }, []);
+  const loadSchools = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: String(currentPage),
+        limit: "10",
+        location: filters.location || "",
+      });
+
+      filters.grade?.forEach((g: string) => {
+        params.append("grade", g);
+      });
+
+      filters.rating?.forEach((r: string) => {
+        params.append("rating", r);
+      });
+
+
+
+      if (searchInput?.school_name?.trim()) {
+        params.append(
+          "searchBySchool",
+          searchInput.school_name.trim()
+        );
+      }
+
+      if (searchInput?.teacher_name?.trim()) {
+        params.append(
+          "searchByTeacher",
+          searchInput.teacher_name.trim()
+        );
+      }
+      let url = `/api/browse-schools?${params.toString()}`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch schools");
+      }
+
+      const result = await response.json();
+      setFetchedSchools(result?.schools || []);
+      setTotalPages(result?.pagination?.totalPages || 0);
+      setCurrentPage(currentPage);
+      // if (result?.data?.length === 0) {
+      //   setError("No reports found for your identity code.");
+      // }else{
+      //   setError("");
+      // }
+    } catch (err) {
+      console.error("Error loading reports:", err);
+      setLoading(false);
+      setSearchingLoad(false);
+      // setError("Failed to load reports. Please try again.");
+    } finally {
+      setLoading(false);
+      setSearchingLoad(false);
+    }
+  };
+
+  useEffect(() => {
+    loadSchools();
+  }, [currentPage, debouncedFilters]);
+
 
   return (
     <div className="min-h-screen bg-[#F8FAFE] flex flex-col">
@@ -266,6 +357,8 @@ export default function BrowseSchoolPage() {
                 <SearchIcon />
                 <input
                   type="text"
+                  value={searchInput?.school_name || ""}
+                  onChange={(e) => { setSearchInput({ ...searchInput, school_name: e.target.value }) }}
                   placeholder="Search by School Name..."
                   className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
@@ -275,13 +368,17 @@ export default function BrowseSchoolPage() {
                 <SearchIcon />
                 <input
                   type="text"
+                  value={searchInput?.teacher_name || ""}
+                  onChange={(e) => { setSearchInput({ ...searchInput, teacher_name: e.target.value }) }}
                   placeholder="Search by Teacher Name..."
                   className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
               </div>
               {/* Search button */}
-              <button className="flex-shrink-0 h-12 sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
-                Search
+              <button disabled={searchingLoad} onClick={()=>{loadSchools()
+                setSearchingLoad(true);
+              }} className="flex-shrink-0 h-12 sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
+                {searchingLoad ? "Searching..." : "Search"}
               </button>
             </div>
           </div>
@@ -299,9 +396,11 @@ export default function BrowseSchoolPage() {
                 {/* Filter header */}
                 <div className="flex items-end justify-between mb-5 sm:mb-7">
                   <span className="font-[Outfit] text-lg font-medium leading-5 text-black">Filter</span>
-                  <button className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
+                  {Object.keys(filters).length > 0 && <button onClick={() => {setFilters({})
+                setSearchInput({})
+                }} className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
                     Clear all
-                  </button>
+                  </button>}
                 </div>
 
                 {/* Location filter */}
@@ -315,7 +414,9 @@ export default function BrowseSchoolPage() {
 
                     <input
                       type="text"
+                      onChange={(e) => setFilters({ ...filters, ["location"]: e.target.value })}
                       placeholder="City or Zip Code"
+                      value={filters?.location || ""}
                       className="ml-1 w-full bg-transparent outline-none border-none font-[Inter] text-xs font-normal text-[#121212] placeholder:text-[#6B7280]"
                     />
                   </div>
@@ -331,7 +432,22 @@ export default function BrowseSchoolPage() {
                       >
                         <input
                           type="checkbox"
-                          defaultChecked={index === 0}
+                          checked={(filters.grade || []).includes(grade)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFilters((prev: any) => ({
+                                ...prev,
+                                grade: [...(prev.grade || []), grade],
+                              }));
+                            } else {
+                              setFilters((prev: any) => ({
+                                ...prev,
+                                grade: (prev.grade || []).filter(
+                                  (item: string) => item !== grade
+                                ),
+                              }));
+                            }
+                          }}
                           className="peer sr-only"
                         />
 
@@ -354,18 +470,33 @@ export default function BrowseSchoolPage() {
                   <span className="font-[Outfit] text-sm sm:text-base font-medium leading-6 text-[#121212]">Rating</span>
                   <div className="flex flex-col gap-2 sm:gap-3">
                     {[
-                      { label: "4.0+", icon: <FourStars />, checked: false },
-                      { label: "3.0+", icon: <ThreeStars />, checked: true },
-                      { label: "2.0+", icon: <TwoStars />, checked: false },
-                      { label: "1.0+", icon: <OneStar />, checked: false },
-                    ].map((item) => (
+                      { label: "4.0+", icon: <FourStars />, value: 4 },
+                      { label: "3.0+", icon: <ThreeStars />, value: 3 },
+                      { label: "2.0+", icon: <TwoStars />, value: 2 },
+                      { label: "1.0+", icon: <OneStar />, value: 1 },
+                    ].map((item: ObjectType) => (
                       <label
                         key={item.label}
                         className="flex items-center gap-2 cursor-pointer"
                       >
                         <input
                           type="checkbox"
-                          defaultChecked={item.checked}
+                          checked={(filters.rating || []).includes(item.value)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFilters((prev: any) => ({
+                                ...prev,
+                                rating: [...(prev.rating || []), item.value],
+                              }));
+                            } else {
+                              setFilters((prev: any) => ({
+                                ...prev,
+                                rating: (prev.rating || []).filter(
+                                  (rating: string) => rating !== item.value
+                                ),
+                              }));
+                            }
+                          }}
                           className="peer sr-only"
                         />
 
@@ -387,14 +518,125 @@ export default function BrowseSchoolPage() {
                 </div>
               </div>
             </aside>
+            {loading ? 
+            <div className="sm:min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
+        {Array.from({ length: 6 }).map((_, i) => (
+       <div key={i} className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-white animate-pulse">
 
+      {/* Top row: title + badge */}
+      <div className="flex justify-between items-start">
+        <div className="space-y-2 w-full">
+
+          {/* School name */}
+          <div className="h-5 bg-gray-200 rounded w-2/5" />
+
+          {/* Location */}
+          <div className="h-4 bg-gray-200 rounded w-1/3" />
+
+          {/* Grade chip */}
+        </div>
+
+        {/* Status badge */}
+        <div className="h-6 w-16 bg-gray-200 rounded-full" />
+      </div>
+
+      {/* Divider */}
+      <div className="my-4 h-px bg-gray-100" />
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3 text-center">
+
+        <div className="space-y-2">
+          <div className="h-4 w-16 bg-gray-200 rounded mx-auto" />
+          <div className="h-5 w-12 bg-gray-200 rounded mx-auto" />
+        </div>
+
+        <div className="space-y-2 border-l border-r border-gray-100">
+          <div className="h-4 w-20 bg-gray-200 rounded mx-auto" />
+          <div className="h-5 w-14 bg-gray-200 rounded mx-auto" />
+        </div>
+
+        <div className="space-y-2">
+          <div className="h-4 w-14 bg-gray-200 rounded mx-auto" />
+          <div className="h-5 w-10 bg-gray-200 rounded mx-auto" />
+        </div>
+      </div>
+
+      {/* Review box */}
+      <div className="mt-4 p-3 bg-gray-100 rounded-lg space-y-2">
+        <div className="h-3 bg-gray-200 rounded w-full" />
+        <div className="h-3 bg-gray-200 rounded w-5/6" />
+      </div>
+
+      {/* Button */}
+      <div className="mt-4 h-10 bg-gray-200 rounded-lg w-full" />
+    </div>
+      ))}
+    </div>
+ : ""}
+            {!loading && fetchedSchools.length === 0 && (
+              <NoSchoolsFound
+                onReset={() => {
+                  setFilters({});
+                  setSearchInput({});
+                }}
+              />
+            )}
             {/* School cards grid */}
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
-              {fetchedSchools.map((school:any) => (
-                <SchoolCard key={school.school_name} school={school} />
-              ))}
-            </div>
+             {!loading && fetchedSchools?.length > 0 &&
+              <div className="flex flex-col">
+
+
+                <div className="sm:min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
+                  {fetchedSchools.map((school: any) => (
+                    <SchoolCard key={school.school_name} school={school} />
+                  ))}
+                </div>
+
+
+
+                <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-9 flex-wrap">
+                  <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1} className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] disabled:cursor-not-allowed disabled:opacity-40 bg-white hover:bg-gray-50 transition-colors ${currentPage == 1 ? "" : "cursor-pointer"}`}>
+                    <ChevronLeftIcon />
+                  </button>
+                  {(() => {
+                    const pageWindow = 4;
+                    const startPage = Math.max(1, currentPage - Math.floor(pageWindow / 2));
+                    const endPage = Math.min(totalPages, startPage + pageWindow - 1);
+                    const adjustedStart = Math.max(1, endPage - pageWindow + 1);
+
+                    return Array.from(
+                      { length: Math.min(pageWindow, totalPages) },
+                      (_, i) => adjustedStart + i
+                    ).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => {
+                          setCurrentPage(page)
+                        }}
+                        className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md font-inter text-xs sm:text-sm font-medium transition-colors cursor-pointer ${page === currentPage
+                          ? "bg-[#0171F9] border border-[#0171F9] text-white"
+                          : "border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] hover:bg-gray-50"
+                          }`}
+                      >
+                        {page}
+                      </button>
+                    ));
+                  })()}
+
+
+                  <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
+                    <ChevronRightIcon />
+                  </button>
+                </div>
+
+
+              </div>}
           </div>
+
         </div>
       </main>
 

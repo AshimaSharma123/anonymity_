@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { ObjectType } from "@/lib/function";
 
 export async function GET(req: NextRequest) {
   try {
@@ -8,7 +9,15 @@ export async function GET(req: NextRequest) {
     // =========================
     const searchParams = req.nextUrl.searchParams;
 
-    const search = searchParams.get("search")?.trim() || "";
+    const search =
+      searchParams.get("search")?.trim() || "";
+
+    const location =
+      searchParams.get("location")?.trim() || "";
+
+    const grades = searchParams.getAll("grade");
+
+    const ratings = searchParams.getAll("rating");
 
     const page = Math.max(
       parseInt(searchParams.get("page") || "1", 10),
@@ -20,14 +29,29 @@ export async function GET(req: NextRequest) {
         parseInt(searchParams.get("limit") || "10", 10),
         1
       ),
-      50 // prevent huge requests
+      50
     );
 
     const risk = searchParams.get("risk");
+
     const state = searchParams.get("state");
+
+    const searchByTeacher = searchParams.get("searchByTeacher");
+
+    const searchBySchool = searchParams.get("searchBySchool");
 
     const offset = (page - 1) * limit;
 
+    let teacherSchoolIds: string[] = [];
+
+    if (searchByTeacher) {
+      const { data: teachers } = await supabase
+        .from("teachers")
+        .select("school_id")
+        .ilike("name", `%${searchByTeacher}%`);
+
+      teacherSchoolIds = teachers?.map(t => t.school_id) || [];
+    }
     // =========================
     // BASE QUERY
     // =========================
@@ -39,12 +63,14 @@ export async function GET(req: NextRequest) {
         school_name,
         city,
         state,
+        zipcode,
         avg_rating,
         total_reports,
         calculated_risk,
         return_to_school_percentage,
         sentiment,
-        created_at
+        created_at,
+        grade_level
       `,
         { count: "exact" }
       );
@@ -52,14 +78,63 @@ export async function GET(req: NextRequest) {
     // =========================
     // SEARCH
     // =========================
-    if (search) {
-      query = query.or(
-        `
-        school_name.ilike.%${search}%,
-        city.ilike.%${search}%,
-        state.ilike.%${search}%
-      `
+    if (searchBySchool) {
+      query = query.ilike(
+        "school_name",
+        `%${searchBySchool}%`
       );
+    }
+
+    if(searchByTeacher && teacherSchoolIds.length == 0){
+      return NextResponse.json({
+          success: true,
+          teacherSchoolIds,
+          schools: [],
+          pagination: {
+            total: 0,
+            page,
+            limit,
+            totalPages: 0,
+          },
+        });
+    }
+
+    if (searchByTeacher && teacherSchoolIds.length > 0) {
+      query = query.in("id", teacherSchoolIds);
+    }
+
+    // =========================
+    // LOCATION FILTER
+    // =========================
+    if (location) {
+      query = query.or(
+        `city.ilike.%${location}%,zipcode.ilike.%${location}%`
+      );
+    }
+
+    // =========================
+    // GRADE FILTER
+    // =========================
+    if (grades.length > 0) {
+      const gradeFilters = grades.map(
+        (grade) =>
+          `grade_level.cs.${JSON.stringify([grade])}`
+      );
+
+      query = query.or(gradeFilters.join(","));
+    }
+
+    // =========================
+    // RATING FILTER
+    // =========================
+    if (ratings.length > 0) {
+      const values = ratings.map((r) =>
+        parseFloat(r.replace("+", ""))
+      );
+
+      const minRating = Math.min(...values);
+
+      query = query.gte("avg_rating", minRating);
     }
 
     // =========================
@@ -73,16 +148,25 @@ export async function GET(req: NextRequest) {
     // RISK FILTER
     // =========================
     if (risk && risk !== "All") {
-      query = query.eq("calculated_risk", risk);
+      query = query.eq(
+        "calculated_risk",
+        risk
+      );
     }
 
     // =========================
     // SORTING
     // =========================
     query = query
-      .order("avg_rating", { ascending: false }) // best schools first
-      .order("total_reports", { ascending: false })
-      .order("id", { ascending: false });
+      .order("avg_rating", {
+        ascending: false,
+      })
+      .order("total_reports", {
+        ascending: false,
+      })
+      .order("id", {
+        ascending: false,
+      });
 
     // =========================
     // PAGINATION
@@ -135,7 +219,7 @@ export async function GET(req: NextRequest) {
         ),
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       "Unexpected server error:",
       error
@@ -144,7 +228,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: "Internal server error",
+        message: error.message,
       },
       { status: 500 }
     );

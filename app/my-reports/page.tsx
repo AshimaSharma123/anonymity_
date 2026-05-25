@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
+import { useSearchParams } from "next/navigation";
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Rating {
@@ -574,9 +575,13 @@ export default function MyReportsPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [total, setTotal] = useState(0);
   const [searchInput, setSearchInput] = useState("");
+  const searchParams = useSearchParams();
+  const Code = searchParams.get("identityCode");
+
 
   const loadReports = async (page: number, query: string = "") => {
       try {
+        setLoading(true);
         const code = localStorage.getItem("identityCode");
 
         if (!code) {
@@ -617,9 +622,9 @@ export default function MyReportsPage() {
       }
     };
     
-  useEffect(() => {
-    loadReports(1);
-  }, []);
+  
+
+  useEffect(()=>{ loadReports(1); },[Code])
 
 
   return (

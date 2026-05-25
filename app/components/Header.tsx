@@ -35,7 +35,13 @@ export default function Header() {
     e.preventDefault();
     if (identityCode.trim()) {
       localStorage.setItem("identityCode", identityCode);
-      router.push(`/my-reports`);
+      if (pathname != "/my-reports") {
+       router.push(`/my-reports?identityCode=${identityCode}`);
+      }else{
+        setIsReportsModalOpen(false);
+        setIdentityCode("");
+        router.push(`/my-reports?identityCode=${identityCode}`);
+      }
     }
   };
 
@@ -51,7 +57,7 @@ export default function Header() {
             <Link href="/" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Home</Link>
             <Link href="/submit-report" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Submit Report</Link>
             <Link href="/browse-school" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Browse School</Link>
-            <button onClick={() => { if (pathname != "/my-reports") { openReportsModal() } }} className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors cursor-pointer">My Reports</button>
+            <button onClick={() => {  openReportsModal()  }} className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors cursor-pointer">My Reports</button>
           </nav>
 
           <div className="flex items-center gap-4 flex-shrink-0">

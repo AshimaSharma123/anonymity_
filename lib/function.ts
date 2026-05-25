@@ -50,6 +50,7 @@ export const AvgRatings = (val: any) => {
 
 }
 
+
 export type ObjectType = {
   [key: string]: any;
 };

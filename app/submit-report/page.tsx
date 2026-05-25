@@ -442,12 +442,13 @@ export default function SubmitReportPage() {
     // add new param
 
     state.sentiments =
-      avg >= 4
-        ? "Positive"
-        : avg >= 3
-          ? "Neutral"
-          : "Negative";
-
+  avg >= 4
+    ? "Positive"
+    : avg >= 2.7
+      ? "Neutral"
+      : avg > 0
+        ? "Negative"
+        : "";
 
     const validationErrors = validateForm(state);
     setErrors(validationErrors);
@@ -470,7 +471,6 @@ export default function SubmitReportPage() {
       const data = await response.json();
       if (!response.ok) {
         setIsSubmitting(false);
-        console.log("data",data);
         setErrors({["yourIdentity"]: data.message})
         toast.error(data.message || "Failed to submit report", {
             duration: 6000,

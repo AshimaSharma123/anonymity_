@@ -98,7 +98,6 @@ export async function GET(
 
       school: {
         ...school,
-
         reports_this_month: safeStats.this_month,
         reports_last_month: safeStats.last_month,
 

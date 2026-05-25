@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
 
 // ─── Icon Components ──────────────────────────────────────────────────────────
 
@@ -43,17 +44,6 @@ const TrashIcon = () => (
   </svg>
 );
 
-const PaginationChevronLeftIcon = () => (
-  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-    <path d="M5.67629 0L0 6L5.67629 12L7 10.5996L2.64856 6L7 1.4004L5.67629 0Z" fill="#323152" />
-  </svg>
-);
-
-const PaginationChevronRightIcon = () => (
-  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-    <path d="M1.32371 0L7 6L1.32371 12L0 10.5996L4.35144 6L0 1.4004L1.32371 0Z" fill="#323152" />
-  </svg>
-);
 
 const BackArrowIcon = () => (
   <svg width="20" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -892,7 +882,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
                 disabled={currentPage === 1}
                 className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
               >
-                <PaginationChevronLeftIcon />
+                <ChevronLeftIcon />
               </button>
               {Array.from(
                 {
@@ -928,7 +918,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
                 disabled={currentPage === totalPages}
                 className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
               >
-                <PaginationChevronRightIcon />
+                <ChevronRightIcon />
               </button>
             </div>
           </div>
@@ -1418,7 +1408,7 @@ export default function SchoolDetailPage() {
                       disabled={currentPage === 1}
                       className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
-                      <PaginationChevronLeftIcon />
+                      <ChevronLeftIcon />
                     </button>
                     {Array.from(
                       {
@@ -1456,7 +1446,7 @@ export default function SchoolDetailPage() {
                       disabled={currentPage === totalPages}
                       className="w-[34px] h-[34px] sm:w-[38px] sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
-                      <PaginationChevronRightIcon />
+                      <ChevronRightIcon />
                     </button>
                   </div>
                 </div>

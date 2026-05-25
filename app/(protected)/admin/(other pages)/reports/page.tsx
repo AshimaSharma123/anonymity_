@@ -1,6 +1,7 @@
 "use client";
 
 import { formatDate } from "@/lib/function";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -48,17 +49,9 @@ const CloseIcon = () => (
   </svg>
 );
 
-const ChevronLeftIcon = () => (
-  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-    <path d="M5.67629 0L0 6L5.67629 12L7 10.5996L2.64856 6L7 1.4004L5.67629 0Z" fill="#323152" />
-  </svg>
-);
 
-const ChevronRightIcon = () => (
-  <svg width="7" height="12" viewBox="0 0 7 12" fill="none">
-    <path d="M1.32371 0L7 6L1.32371 12L0 10.5996L4.35144 6L0 1.4004L1.32371 0Z" fill="#323152" />
-  </svg>
-);
+
+
 
 const XIcon = () => (
   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -164,19 +157,27 @@ const getSentiment = (report: any) => {
     };
   }
 
-  if (avg < 3) {
+  if (avg >= 2.7) {
+    return {
+      label: "Neutral",
+      bg: "bg-yellow-100",
+      text: "text-yellow-700",
+    };
+  }
+
+  if (avg > 0) {
     return {
       label: "Negative",
       bg: "bg-red-100",
       text: "text-red-700",
     };
   }
-
   return {
-    label: "Neutral",
-    bg: "bg-yellow-100",
-    text: "text-yellow-700",
-  };
+      label: "Not sure",
+      bg: "bg-[#F6F6F6]",
+      text: "text-[#030711]",
+    };
+  
 };
 
 
