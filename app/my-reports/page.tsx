@@ -6,6 +6,7 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Rating {
@@ -628,6 +629,7 @@ export default function MyReportsPage() {
 
 
   return (
+     <Suspense fallback={<div>Loading...</div>}>
     <div className="min-h-screen flex flex-col bg-[#F8FAFE]">
       <Header />
 
@@ -707,5 +709,6 @@ export default function MyReportsPage() {
 
       <Footer />
     </div>
+    </Suspense>
   );
 }
