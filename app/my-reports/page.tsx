@@ -576,7 +576,7 @@ export default function MyReportsPage() {
   const [total, setTotal] = useState(0);
   const [searchInput, setSearchInput] = useState("");
   const searchParams = useSearchParams();
-  const Code = searchParams.get("identityCode");
+  const Code = searchParams.get("identityCode") || "";
 
 
   const loadReports = async (page: number, query: string = "") => {
