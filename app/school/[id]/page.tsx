@@ -6,37 +6,11 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { AvgRatings, formatDate } from "@/lib/function";
 import { useId } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
+import { ChatIcon, ChevronLeftIcon, ChevronRightIcon, LocationIcon, SchoolIcon } from "@/lib/icons";
+import toast from "react-hot-toast";
 
 // --- Icon Components ---
 
-const LocationIcon = ({ location }: { location: string }) => (
-  <div className="flex items-start gap-1.5 mt-[4px]">
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="mt-[2px]"
-    >
-      <g opacity="0.8">
-        <path
-          d="M8.39603 5.60426C8.39603 4.05804 7.14366 2.80566 5.59743 2.80566C4.0512 2.80566 2.79883 4.05804 2.79883 5.60426C2.79883 7.15049 4.0512 8.40287 5.59743 8.40287C7.14366 8.40287 8.39603 7.15049 8.39603 5.60426ZM4.19813 5.60426C4.19813 4.83465 4.82781 4.20496 5.59743 4.20496C6.36704 4.20496 6.99673 4.83465 6.99673 5.60426C6.99673 6.37388 6.36704 7.00356 5.59743 7.00356C4.82781 7.00356 4.19813 6.37388 4.19813 5.60426Z"
-          fill="#414141"
-        />
-        <path
-          d="M5.19147 13.8671C5.31041 13.951 5.45734 14 5.59727 14C5.7372 14 5.88412 13.958 6.00306 13.8671C6.21296 13.7131 11.2155 10.1099 11.1945 5.5972C11.1945 2.51174 8.68272 0 5.59727 0C2.51181 0 6.58647e-05 2.51174 6.58647e-05 5.5972C-0.0209236 10.1029 4.98158 13.7131 5.19147 13.8671ZM5.59727 1.4063C7.91311 1.4063 9.79517 3.28836 9.79517 5.6042C9.80916 8.71064 6.7237 11.5022 5.59727 12.4188C4.47083 11.5022 1.38537 8.71764 1.39937 5.6042C1.39937 3.28836 3.28143 1.4063 5.59727 1.4063Z"
-          fill="#414141"
-        />
-      </g>
-    </svg>
-
-    <p className="text-[#414141] text-sm font-normal leading-[20px] break-words">
-      {location}
-    </p>
-  </div>
-);
 
 const FileIcon = () => (
   <svg width="19" height="19" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,19 +27,7 @@ const CalendarIcon = () => (
 
 );
 
-const ChatIcon = () => (
-  <svg className="mt-[2px]" width="15" height="15" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10.6 7.26664C10.6 7.56133 10.4829 7.84394 10.2745 8.05232C10.0662 8.26069 9.78355 8.37775 9.48886 8.37775H2.8222L0.599976 10.6V1.71109C0.599976 1.4164 0.717039 1.13379 0.925412 0.925412C1.13379 0.717039 1.4164 0.599976 1.71109 0.599976H9.48886C9.78355 0.599976 10.0662 0.717039 10.2745 0.925412C10.4829 1.13379 10.6 1.4164 10.6 1.71109V7.26664Z" stroke="#0171F9" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
-const SchoolIcon = () => (
-
-  <svg width="15" height="15" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.16667 11.1667V5.16667L0.5 5.91667V11.1667H3.16667ZM3.16667 11.1667H8.5M3.16667 11.1667V2.278M8.5 11.1667V5.16667L11.1667 5.91667V11.1667H8.5ZM8.5 11.1667V2.278M9.83333 3.16667L5.83333 0.5L1.83333 3.16667M5.16667 3.83333H6.5M5.16667 5.83333H6.5" stroke="#464555" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-
-);
 
 const UserIcon = () => (
 
@@ -146,7 +108,39 @@ function StarRating({
   );
 }
 
-
+const reportSkeleton = () => {
+  return <div className="flex flex-col gap-4 sm:gap-6">
+    {[...Array(3)].map((_, i) => (
+      <div key={i} className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-6">
+        <div className="space-y-4">
+          <div className="flex justify-between items-start gap-4">
+            <div className="flex gap-2 flex-1">
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, j) => (
+                  <div key={j} className="w-4 h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer"></div>
+                ))}
+              </div>
+              <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-24"></div>
+            </div>
+            <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-20"></div>
+          </div>
+          <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-full"></div>
+          <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-5/6"></div>
+          <div className="flex gap-2">
+            {[...Array(4)].map((_, j) => (
+              <div key={j} className="h-8 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-20"></div>
+            ))}
+          </div>
+          <div className="h-px bg-gray-200 my-4" />
+          <div className="space-y-3">
+            <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-full"></div>
+            <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-full"></div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+}
 
 function ReviewStars({ count }: { count: number }) {
   const totalStars = 5;
@@ -498,10 +492,6 @@ function ReviewCard({ review }: { review: Review }) {
 }
 
 
-// --- Main Page ---
-type FilterType = "All" | "Positive" | "Neutral" | "Negative";
-type TabType = "reports" | "teachers";
-
 export default function SchoolDetailPage() {
   const params = useParams();
   const schoolId = params?.id as string;
@@ -543,6 +533,8 @@ export default function SchoolDetailPage() {
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
+        setLoadingReports(false);
+        toast.error(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoadingReports(false);
       }
@@ -573,6 +565,8 @@ export default function SchoolDetailPage() {
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
+        setLoading(false);
+        toast.error(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
         setCurrentPage(1)
@@ -586,12 +580,68 @@ export default function SchoolDetailPage() {
     return (
       <div className="min-h-screen bg-[#F8FAFE] flex flex-col">
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-[#0171F9] font-inter text-lg">Loading school details...</div>
+        <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-14 py-6 sm:py-10 pb-12 sm:pb-[80px]">
+          {/* School Info Skeleton */}
+          <div className="bg-white rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.10)] p-4 sm:p-6 lg:p-10 mb-6 sm:mb-10">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
+              <div className="flex flex-col gap-2 sm:gap-3 flex-1">
+                <div className="h-8 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-64"></div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-48"></div>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="h-12 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-20"></div>
+                <div className="flex flex-col gap-2">
+                  <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-32"></div>
+                  <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-24"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="h-px bg-black opacity-10 mt-6 sm:mt-8 lg:mt-10 mb-3 sm:mb-4" />
+
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 flex-wrap">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex flex-col gap-1">
+                  <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-24"></div>
+                  <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-32"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Reports Section Skeleton */}
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="h-8 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded animate-shimmer w-40"></div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-10 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-lg animate-shimmer w-24"></div>
+                ))}
+              </div>
+            </div>
+
+            {reportSkeleton()}
           </div>
         </main>
         <Footer />
+
+        <style jsx>{`
+          @keyframes shimmer {
+            0% {
+              background-position: -1000px 0;
+            }
+            100% {
+              background-position: 1000px 0;
+            }
+          }
+
+          .animate-shimmer {
+            animation: shimmer 2s infinite;
+            background-size: 1000px 100%;
+          }
+        `}</style>
       </div>
     );
   }
@@ -626,7 +676,12 @@ export default function SchoolDetailPage() {
                 {schoolData.school_name}
               </h1>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <LocationIcon location={`${schoolData.city}, ${schoolData.state}`} />
+                <div className="flex gap-[7px] items-center">
+                <LocationIcon />
+                <p className="text-[#414141] text-sm font-normal leading-[20px] break-words">{`${schoolData?.
+                  city}, ${schoolData?.state
+                  }`}</p>
+                </div>
                 {schoolData?.grade_level && schoolData.grade_level?.map((level: string, i: number) => (
                   <span key={i} className="inline-flex items-center px-2 sm:px-2.5 py-1 sm:py-1.5 rounded text-xs sm:text-sm bg-[#DFEEFF] text-[#0171F9] font-inter font-semibold leading-[15px]">
                     {level}
@@ -719,7 +774,7 @@ export default function SchoolDetailPage() {
                     {reviews?.length > 0 &&
                       <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8 flex-wrap">
                         <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1} className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ">
+                          disabled={currentPage === 1} className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ">
                           <ChevronLeftIcon />
                         </button>
                         {(() => {
@@ -783,10 +838,9 @@ export default function SchoolDetailPage() {
                     </p>
                   </div>
                 }
-
-              </> : <div className="text-center">
-                <div className="text-[#0171F9] font-inter text-md">Loading Reports...</div>
-              </div>}
+              </> :
+              reportSkeleton()
+            }
           </div>
         </div>
       </main>
