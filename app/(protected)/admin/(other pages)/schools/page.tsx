@@ -291,11 +291,11 @@ export default function SchoolsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-t border-[#E5E7EB]">
           <span className="font-inter font-normal text-xs sm:text-sm text-[#191C1E] opacity-80 order-2 sm:order-1">
-            {/* {filtered.length === 0
-              ? "Show 0 results"
-              : `Show ${startItem}-${endItem} of ${displayTotal.toLocaleString()}`} */}
+            <div className="font-inter font-normal text-xs sm:text-sm text-[#6F6C70]">
+                Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, total)} of {total} schools
+              </div>
           </span>
           <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
             <button

@@ -49,3 +49,10 @@ export const SchoolIcon = () => (
   </svg>
 
 );
+
+export const DeleteWarningIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="24" cy="24" r="20" fill="#FEEFEF" stroke="#E02C2C" strokeWidth="2" />
+    <path d="M24 16V28M24 32C24.5523 32 25 31.5523 25 31C25 30.4477 24.5523 30 24 30C23.4477 30 23 30.4477 23 31C23 31.5523 23.4477 32 24 32Z" stroke="#E02C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
