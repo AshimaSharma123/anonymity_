@@ -39,10 +39,6 @@ export default withAuth(
     if (token && pathname.startsWith("/admin") && role !== "admin") {
       return NextResponse.redirect(new URL("/my-reports", req.url));
     }
-
-    if (token && role === "admin" && pathname === "/my-reports") {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
-    }
   },
   {
     callbacks: {
