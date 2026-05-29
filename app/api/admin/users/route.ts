@@ -1,6 +1,18 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+const VALID_ROLES = ["admin", "guest_teacher"] as const;
+
+function validateRole(role: unknown): string | null {
+  if (role === null || role === undefined || role === "") {
+    return null;
+  }
+  if (typeof role !== "string" || !VALID_ROLES.includes(role as (typeof VALID_ROLES)[number])) {
+    return "Invalid role. Must be admin or guest_teacher.";
+  }
+  return null;
+}
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -10,7 +22,7 @@ export async function GET(req: Request) {
 
     const offset = (page - 1) * limit;
 
-    let query = supabase.from("users").select("id, full_name, email", { count: "exact" });
+    let query = supabase.from("users").select("id, full_name, email, role", { count: "exact" });
 
     if (search.trim()) {
       query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
@@ -51,7 +63,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { full_name, email } = body;
+    const { full_name, email, role } = body;
 
     // Validation
     if (!full_name || !full_name.trim()) {
@@ -76,6 +88,18 @@ export async function POST(req: Request) {
       );
     }
 
+    const roleError = validateRole(role);
+    if (roleError) {
+      return NextResponse.json({ error: roleError }, { status: 400 });
+    }
+
+    if (!role) {
+      return NextResponse.json(
+        { error: "Role is required" },
+        { status: 400 }
+      );
+    }
+
     // Check existing user
     const { data: existingUsers } = await supabase
       .from("users")
@@ -93,8 +117,8 @@ export async function POST(req: Request) {
     // Insert user
     const { data, error } = await supabase
       .from("users")
-      .insert([{ full_name: full_name.trim(), email: email.trim() }])
-      .select("id, full_name, email");
+      .insert([{ full_name: full_name.trim(), email: email.trim(), role }])
+      .select("id, full_name, email, role");
 
     if (error) {
       console.log(error);
@@ -117,7 +141,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, full_name, email } = body;
+    const { id, full_name, email, role } = body;
 
     // Validation
     if (!id) {
@@ -149,6 +173,11 @@ export async function PUT(req: Request) {
       );
     }
 
+    const roleError = validateRole(role);
+    if (roleError) {
+      return NextResponse.json({ error: roleError }, { status: 400 });
+    }
+
     // Check if email already exists for a different user
     const { data: existingUsers } = await supabase
       .from("users")
@@ -164,12 +193,21 @@ export async function PUT(req: Request) {
       );
     }
 
+    const updatePayload: { full_name: string; email: string; role?: string | null } = {
+      full_name: full_name.trim(),
+      email: email.trim(),
+    };
+
+    if (role !== undefined) {
+      updatePayload.role = role || null;
+    }
+
     // Update user
     const { data, error } = await supabase
       .from("users")
-      .update({ full_name: full_name.trim(), email: email.trim() })
+      .update(updatePayload)
       .eq("id", id)
-      .select("id, full_name, email");
+      .select("id, full_name, email, role");
 
     if (error) {
       console.log(error);

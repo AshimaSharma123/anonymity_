@@ -1,19 +1,17 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { supabase } from "@/lib/supabase";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
-    //  Google
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
 
-    //  Facebook
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
@@ -22,7 +20,6 @@ const handler = NextAuth({
       },
     }),
 
-    //  Email/Password
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -34,7 +31,6 @@ const handler = NextAuth({
           throw new Error("Email and password are required");
         }
 
-        // Find user
         const { data: users, error } = await supabase
           .from("users")
           .select("*")
@@ -64,6 +60,7 @@ const handler = NextAuth({
           id: user.id.toString(),
           name: user.full_name,
           email: user.email,
+          role: user.role,
         };
       },
     }),
@@ -75,32 +72,128 @@ const handler = NextAuth({
 
   pages: {
     signIn: "/login",
+    error: "/auth-error",
   },
 
   callbacks: {
-   async signIn({ user, account }) {
-  if (account?.provider === "google" || account?.provider === "facebook") {
+    async signIn({ user, account }) {
+      if (
+        account?.provider === "google" ||
+        account?.provider === "facebook"
+      ) {
+        if (!user.email) {
+          return false;
+        }
 
-  await supabase
-  .from("users")
-  .upsert(
-    {
-      full_name: user.name,
-      email: user.email,
-      provider: account.provider,
-      providerAccountId: account.providerAccountId,
+        const { data: existingUsers, error: checkError } = await supabase
+          .from("users")
+          .select("id, role")
+          .eq("email", user.email)
+          .limit(1);
+
+        if (checkError) {
+          throw new Error(checkError.message);
+        }
+
+        const existingUser = existingUsers?.[0];
+        const isNewUser = !existingUser;
+
+        if (isNewUser) {
+          const { data: userD, error } = await supabase
+            .from("users")
+            .insert({
+              full_name: user.name,
+              email: user.email,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+            })
+            .select()
+            .single();
+
+          if (error) {
+            throw new Error(error.message);
+          }
+
+          user.id = userD.id.toString();
+          user.role = userD.role ?? null;
+        } else {
+          const { data: userD, error } = await supabase
+            .from("users")
+            .update({
+              full_name: user.name,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+            })
+            .eq("email", user.email)
+            .select()
+            .single();
+
+          if (error) {
+            throw new Error(error.message);
+          }
+
+          user.id = userD.id.toString();
+          user.role = userD.role;
+        }
+
+        user.needsRoleSelection = isNewUser || !user.role;
+      }
+
+      return true;
     },
-    { onConflict: "email" }
-  );
 
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) {
+        return url;
+      }
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      return baseUrl;
+    },
 
-  }
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role ?? null;
+        token.needsRoleSelection = user.needsRoleSelection ?? false;
+      }
 
-  return true;
-},
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
+        token.needsRoleSelection = false;
+      }
+
+      if (token.email) {
+        const { data: dbUser } = await supabase
+          .from("users")
+          .select("id, role")
+          .eq("email", token.email)
+          .single();
+
+        if (dbUser) {
+          token.id = dbUser.id.toString();
+          token.role = dbUser.role ?? null;
+          token.needsRoleSelection = !dbUser.role;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = (token.role as string | null) ?? null;
+        session.user.needsRoleSelection = Boolean(token.needsRoleSelection);
+      }
+      return session;
+    },
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

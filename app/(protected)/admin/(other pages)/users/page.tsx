@@ -5,11 +5,19 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "@/lib/useDebounce";
 
+type UserRole = "admin" | "guest_teacher" | "";
+
 interface User {
   id: string;
   full_name: string;
   email: string;
+  role: UserRole | null;
 }
+
+const ROLE_OPTIONS = [
+  { value: "admin", label: "Super Admin" },
+  { value: "guest_teacher", label: "Guest Teacher" },
+] as const;
 
 const SearchIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,6 +56,8 @@ export default function UsersRolesPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
+  const [role, setRole] = useState<UserRole>("");
+  const [savingRoleUserId, setSavingRoleUserId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   const [submitMessage, setSubmitMessage] = useState({ type: "", text: "" });
@@ -114,6 +124,10 @@ const [currentPage, setCurrentPage] = useState(1);
       }
     }
 
+    if (!role) {
+      errors.role = "Role is required";
+    }
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -135,10 +149,12 @@ const [currentPage, setCurrentPage] = useState(1);
           id: editingUser.id,
           full_name: userName.trim(),
           email: emailAddress.trim(),
+          role,
         }
         : {
           full_name: userName.trim(),
           email: emailAddress.trim(),
+          role,
         };
 
       const response = await fetch("/api/admin/users", {
@@ -162,6 +178,7 @@ const [currentPage, setCurrentPage] = useState(1);
       setSubmitMessage({ type: "", text: "" });
       setUserName("");
       setEmailAddress("");
+      setRole("");
       setValidationErrors({});
       setEditingUser(null);
       
@@ -179,6 +196,7 @@ const [currentPage, setCurrentPage] = useState(1);
     setEditingUser(user);
     setUserName(user.full_name);
     setEmailAddress(user.email);
+    setRole((user.role as UserRole) || "");
     setValidationErrors({});
     setSubmitMessage({ type: "", text: "" });
     setIsSidebarOpen(true);
@@ -188,6 +206,7 @@ const [currentPage, setCurrentPage] = useState(1);
     setEditingUser(null);
     setUserName("");
     setEmailAddress("");
+    setRole("");
     setValidationErrors({});
     setSubmitMessage({ type: "", text: "" });
     setIsSidebarOpen(true);
@@ -198,10 +217,12 @@ const [currentPage, setCurrentPage] = useState(1);
     setEditingUser(null);
     setUserName("");
     setEmailAddress("");
+    setRole("");
     setValidationErrors({});
     setSubmitMessage({ type: "", text: "" });
   };
 
+  
   const openDeleteConfirm = (user: User) => {
     setDeleteConfirm({
       open: true,
@@ -331,9 +352,36 @@ const [currentPage, setCurrentPage] = useState(1);
                       </span>
                     </td>
                     <td className="px-2 sm:px-3 py-3 sm:py-[17.5px] align-middle">
-                      <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711] leading-5">
-                        User
+
+                    <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711] leading-5">
+                        {
+                          !user.role
+                            ? "No role"
+                            : ROLE_OPTIONS.find(
+                                (role) => role.value === user.role
+                              )?.label
+                        }
                       </span>
+                      {/* <select
+                        value={user.role || ""}
+                        disabled={savingRoleUserId === user.id}
+                        onChange={(e) =>
+                          handleRoleChange(user, e.target.value as UserRole)
+                        }
+                        className="min-w-[140px] appearance-none pl-3 pr-8 py-1.5 sm:py-2 rounded-lg border border-[#E5E7EB] bg-[#FAFCFF] font-inter text-xs sm:text-sm text-[#030711] outline-none focus:ring-2 focus:ring-[#0171F9]/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label={`Role for ${user.full_name}`}
+                      >
+                        {!user.role && (
+                          <option value="" disabled>
+                            No role
+                          </option>
+                        )}
+                        {ROLE_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select> */}
                     </td>
                     <td className="px-2 sm:px-3 py-3 sm:py-[17.5px] align-middle">
                       <div className="flex items-center gap-1 sm:gap-2">
@@ -562,6 +610,40 @@ const [currentPage, setCurrentPage] = useState(1);
             {validationErrors.email && (
               <span className="font-inter font-normal text-xs sm:text-sm text-red-600 mt-1">
                 {validationErrors.email}
+              </span>
+            )}
+          </div>
+
+          {/* Role field */}
+          <div className="flex flex-col gap-0.5">
+            <label className="font-outfit font-medium text-sm sm:text-base text-[#212121] leading-6">
+              Role
+            </label>
+            <select
+              value={role}
+              onChange={(e) => {
+                setRole(e.target.value as UserRole);
+                if (validationErrors.role) {
+                  setValidationErrors({ ...validationErrors, role: "" });
+                }
+              }}
+              className={`h-10 sm:h-12 px-3 sm:px-4 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 transition appearance-none cursor-pointer ${validationErrors.role
+                ? "focus:ring-red-500/30 border border-red-300"
+                : "focus:ring-[#0171F9]/30"
+                }`}
+            >
+              <option value="" disabled>
+                Select role
+              </option>
+              {ROLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {validationErrors.role && (
+              <span className="font-inter font-normal text-xs sm:text-sm text-red-600 mt-1">
+                {validationErrors.role}
               </span>
             )}
           </div>

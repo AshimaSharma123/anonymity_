@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
+      user_id,
       schoolName,
       schoolId,
       teacherId,
@@ -22,77 +23,16 @@ export async function POST(req: Request) {
       postAs,
       yourName,
       schoolAssociation,
-      sentiments,
-      newIdentity,
-      existingIdentity
+      sentiments
     } = body;
-
-    const identity = newIdentity || existingIdentity;
-
-
-    // =========================
-    // VALIDATE IDENTITY
-    // =========================
-
-    if (newIdentity) {
-      // Check if new identity already exists
-      const { data: existingCode, error: checkError } = await supabase
-        .from("reports")
-        .select("id")
-        .eq("yourIdentity", newIdentity)
-        .limit(1);
-
-      if (checkError) {
-        return NextResponse.json(
-          { message: checkError.message },
-          { status: 500 }
-        );
-      }
-
-      if (existingCode && existingCode.length > 0) {
-        return NextResponse.json(
-          {
-            message:
-              "This Identity Code already exists. Please choose another code.",
-          },
-          { status: 500 }
-        );
-      }
-    }
-
-    if (existingIdentity) {
-      // Check if existing identity exists
-      const { data: existingCode, error: checkError } = await supabase
-        .from("reports")
-        .select("id")
-        .eq("yourIdentity", existingIdentity)
-        .limit(1);
-
-      if (checkError) {
-        return NextResponse.json(
-          { message: checkError.message },
-          { status: 500 }
-        );
-      }
-
-      if (!existingCode || existingCode.length === 0) {
-        return NextResponse.json(
-          {
-            message:
-              "Identity Code not found. Please enter a valid code or a new one.",
-          },
-          { status: 500 }
-        );
-      }
-    }
-
-
 
     // Insert into Supabase
     const { data, error } = await supabase
       .from("reports")
       .insert([
         {
+          user_id: user_id,
+
           school_name: schoolName,
 
           school_id: schoolId || null,
@@ -160,8 +100,7 @@ export async function POST(req: Request) {
 
           school_association: schoolAssociation,
 
-          sentiments,
-          yourIdentity: identity
+          sentiments
         },
       ])
       .select();

@@ -22,28 +22,28 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
-  const openReportsModal = () => {
-    setIsReportsModalOpen(true);
-  };
+  // const openReportsModal = () => {
+  //   setIsReportsModalOpen(true);
+  // };
 
-  const closeReportsModal = () => {
-    setIsReportsModalOpen(false);
-    setIdentityCode("");
-  };
+  // const closeReportsModal = () => {
+  //   setIsReportsModalOpen(false);
+  //   setIdentityCode("");
+  // };
 
-  const handleSubmitIdentity = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (identityCode.trim()) {
-      localStorage.setItem("identityCode", identityCode);
-      if (pathname != "/my-reports") {
-       router.push(`/my-reports?identityCode=${identityCode}`);
-      }else{
-        setIsReportsModalOpen(false);
-        setIdentityCode("");
-        router.push(`/my-reports?identityCode=${identityCode}`);
-      }
-    }
-  };
+  // const handleSubmitIdentity = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (identityCode.trim()) {
+  //     localStorage.setItem("identityCode", identityCode);
+  //     if (pathname != "/my-reports") {
+  //      router.push(`/my-reports?identityCode=${identityCode}`);
+  //     }else{
+  //       setIsReportsModalOpen(false);
+  //       setIdentityCode("");
+  //       router.push(`/my-reports?identityCode=${identityCode}`);
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -57,7 +57,9 @@ export default function Header() {
             <Link href="/" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Home</Link>
             <Link href="/submit-report" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Submit Report</Link>
             <Link href="/browse-school" className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors">Browse School</Link>
-            <button onClick={() => {  openReportsModal()  }} className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors cursor-pointer">My Reports</button>
+            <button onClick={() => {
+                router.push("/my-reports");
+              }} className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors cursor-pointer">My Reports</button>
           </nav>
 
           <div className="flex items-center gap-4 flex-shrink-0">
@@ -73,7 +75,7 @@ export default function Header() {
             </button>
 
             {/* Desktop Sign In Button */}
-            {session && session.user ?
+            {session && session?.user ?
               <>
                 <button onClick={() => signOut()} className="cursor-pointer hidden sm:flex items-center gap-2 px-6 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,12 +83,13 @@ export default function Header() {
                     <path d="M7.19667 10.8633C7.45667 11.1233 7.87667 11.1233 8.13667 10.8633L10.5287 8.47129C10.6536 8.34628 10.7239 8.17674 10.7239 7.99996C10.7239 7.82319 10.6536 7.65365 10.5287 7.52863L8.13667 5.13663C8.00994 5.02209 7.84405 4.96062 7.67329 4.96493C7.50252 4.96924 7.33995 5.039 7.21916 5.15979C7.09837 5.28057 7.02862 5.44315 7.02431 5.61392C7.02 5.78468 7.08146 5.95057 7.196 6.07729L8.44667 7.33329H2.66667C2.48986 7.33329 2.32029 7.40353 2.19526 7.52856C2.07024 7.65358 2 7.82315 2 7.99996C2 8.17677 2.07024 8.34634 2.19526 8.47137C2.32029 8.59639 2.48986 8.66663 2.66667 8.66663H8.44667L7.196 9.92263C7.07172 10.0477 7.00202 10.2168 7.00214 10.3931C7.00226 10.5694 7.07221 10.7384 7.19667 10.8633Z" fill="white" />
                   </svg>Sign Out
                 </button>
-                <Link href="/admin/dashboard" className="cursor-pointer hidden sm:flex items-center gap-2 px-6 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+                {session && session?.user?.role == "admin" && <Link href="/admin/dashboard" className="cursor-pointer hidden sm:flex items-center gap-2 px-6 py-3 bg-[#0171F9] text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8.88889 5.33333V0H16V5.33333H8.88889ZM0 8.88889V0H7.11111V8.88889H0ZM8.88889 16V7.11111H16V16H8.88889ZM0 16V10.6667H7.11111V16H0ZM1.77778 7.11111H5.33333V1.77778H1.77778V7.11111ZM10.6667 14.2222H14.2222V8.88889H10.6667V14.2222ZM10.6667 3.55556H14.2222V1.77778H10.6667V3.55556ZM1.77778 14.2222H5.33333V12.4444H1.77778V14.2222Z" fill="white" />
                   </svg>
                   Dashboard
-                </Link>
+                </Link>}
+                
               </>
 
               :
@@ -129,12 +132,11 @@ export default function Header() {
             </Link>
             <button
               onClick={() => {
-                closeMenu();
-                openReportsModal();
+                router.push("/my-reports");
               }}
               className="font-inter text-[15px] font-normal text-[#121212] hover:text-blue-600 transition-colors py-2 text-left cursor-pointer"
             >
-              View Reports
+              My Reports
             </button>
             <div className="border-t border-black/6 pt-3 mt-2">
               {session && session.user ? <div className="flex flex-row w-full gap-[10px]">
@@ -176,68 +178,7 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* Reports Modal - Outside Header */}
-      {isReportsModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 sm:p-8 relative">
-            {/* Close Button */}
-            <button
-              onClick={closeReportsModal}
-              className="cursor-pointer absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Close modal"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-
-
-
-            {/* Modal Header */}
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-[#121212] mb-2">View Reports</h2>
-              <p className="text-gray-600 text-sm">Enter your identity code to access your reports history</p>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmitIdentity} className="space-y-4">
-              <div>
-                <label htmlFor="identity-code" className="block text-sm font-medium text-[#121212] mb-2">
-                  Identity Code
-                </label>
-                <input
-                  id="identity-code"
-                  type="text"
-                  value={identityCode}
-                  onChange={(e) => setIdentityCode(e.target.value)}
-                  placeholder="Enter your identity code"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                  required
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={closeReportsModal}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="cursor-pointer flex-1 px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={!identityCode.trim()}
-                >
-                  View Reports
-                </button>
-              </div>
-            </form>
-
-
-          </div>
-        </div>
-      )}
+     
     </>
   );
 }

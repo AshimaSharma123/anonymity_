@@ -1,7 +1,12 @@
+"use client";
+
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
+  const { data: session } = useSession();
+  console.log("session",session)
   return (
     <footer className="bg-[#FAFCFE] border-t border-[rgba(226,232,240,0.64)]">
       <div className="px-6 sm:px-[120px] flex flex-col">
@@ -23,7 +28,11 @@ export default function Footer() {
               <Link href="/browse-school" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Browse School</Link>
             </div>
             <div className="w-44">
+              {!session?
               <Link href="/login" className="font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Login/Signup</Link>
+              :
+              <button onClick={() => signOut()} className="cursor-pointer font-[Outfit] text-base font-normal text-[#121212] hover:text-blue-600 transition-colors">Logout</button>
+              }
             </div>
           </nav>
         </div>

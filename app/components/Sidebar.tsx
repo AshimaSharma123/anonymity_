@@ -89,7 +89,7 @@ export default function Sidebar() {
           <Link
             key={item.name}
             href={item.href}
-            className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 rounded-md transition-colors ${isActive
+            className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 rounded-md transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0171F9]/40 ${isActive
                 ? "bg-[#0171F9] text-white"
                 : "hover:bg-gray-50 text-[#666666]"
               }`}
@@ -104,7 +104,7 @@ export default function Sidebar() {
       <button
         onClick={() => signOut({ callbackUrl: "/login" })}
 
-        className={`cursor-pointer flex items-center hover:bg-gray-50 text-[#666666] gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 rounded-md transition-colors`}
+        className="cursor-pointer flex items-center hover:bg-gray-50 text-[#666666] gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 rounded-md transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0171F9]/40"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path

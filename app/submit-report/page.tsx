@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { scrollToError } from "@/lib/function";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 /* ─── Types ───────────────────────────────────────── */
 
@@ -17,6 +18,7 @@ type RatingKeys =
   | "supportLevel";
 
 type FormState = {
+  user_id: number,
   yourName: string,
   yourIdentity: string,
   newIdentity: string,
@@ -52,6 +54,7 @@ type Action =
 /* ─── Initial State ───────────────────────────────── */
 
 const initialState: FormState = {
+  user_id: 0,
   yourName: "",
   schoolName: "",
   yourIdentity:"",
@@ -152,12 +155,12 @@ function validateForm(state: FormState): FormErrors {
   if (!state.returnToTeacher) {
     errors.returnToTeacher = "Required";
   }
-  if (!state.newIdentity && !state.existingIdentity) {
-    errors.yourIdentity = "Please create a new code or enter an existing code";
-  }
-  if (state.newIdentity && state.existingIdentity) {
-    errors.yourIdentity = "Fill either New Code or Existing Code, not both";
-  }
+  // if (!state.newIdentity && !state.existingIdentity) {
+  //   errors.yourIdentity = "Please create a new code or enter an existing code";
+  // }
+  // if (state.newIdentity && state.existingIdentity) {
+  //   errors.yourIdentity = "Fill either New Code or Existing Code, not both";
+  // }
 
   // // ratings validation
   const hasAnyRating = Object.values(state.ratings).some((v) => v > 0);
@@ -348,7 +351,7 @@ export default function SubmitReportPage() {
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [errors, setErrors] = useState<FormErrors>({});
   const dateRef = useRef<HTMLInputElement>(null);
-
+  const { data: session, status } = useSession();
   // Schools search state
   const [schoolSuggestions, setSchoolSuggestions] = useState<string[]>([]);
   const [schoolSearchLoading, setSchoolSearchLoading] = useState(false);
@@ -422,7 +425,11 @@ export default function SubmitReportPage() {
     []
   );
 
-
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, session, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -449,6 +456,11 @@ export default function SubmitReportPage() {
       : avg > 0
         ? "Negative"
         : "";
+
+    if (session) {
+      state.user_id = Number(session?.user?.id)
+    }
+    
 
     const validationErrors = validateForm(state);
     setErrors(validationErrors);
@@ -951,7 +963,7 @@ export default function SubmitReportPage() {
                 </div>
 
                     {/* yourIdentity */}
-                <div className="flex flex-col gap-2" id="yourIdentity">
+                {/* <div className="flex flex-col gap-2" id="yourIdentity">
                   <label className={fieldLabel}>Your Identity</label>
                   <div className="flex flex-row gap-5">
                     <input
@@ -975,7 +987,7 @@ export default function SubmitReportPage() {
                   <span className="text-sm text-[#ef4444] mt-1">
                     <b>Important Note:</b> Use the same Identity Code for future report submissions and to view all your submitted reports together. This code remains private.
                   </span>
-                </div>
+                </div> */}
               </section>
 
               <div className="h-px bg-black opacity-10" />

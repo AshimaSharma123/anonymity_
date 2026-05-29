@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const code = searchParams.get("code") || "";
+    const userid = searchParams.get("userid") || "";
     const searchQuery = searchParams.get("search") || "";
 
     const page = parseInt(
@@ -22,10 +22,10 @@ export async function GET(req: Request) {
 
     const offset = (page - 1) * limit;
 
-    if (!code) {
+    if (!userid) {
       return NextResponse.json(
         {
-          error: "Code is required",
+          error: "Login is required",
         },
         {
           status: 400,
@@ -53,7 +53,7 @@ export async function GET(req: Request) {
           count: "exact",
         }
       )
-      .eq("yourIdentity", code);
+      .eq("user_id", userid);
 
     // Add search filters if search query provided
     if (searchQuery.trim()) {

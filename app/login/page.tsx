@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -35,16 +35,17 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
-
     const validationErrors = validateForm(formValues);
     setErrors(validationErrors);
-    
 
     if (Object.keys(validationErrors).length > 0) {
       scrollToError(validationErrors);
       return;
     }
+
     setLoader(true);
+    setButtonMsg("Logging in...");
+
     const res = await signIn("credentials", {
       email: formValues.email,
       password: formValues.password,
@@ -53,19 +54,13 @@ export default function LoginPage() {
 
     if (res?.error) {
       setLoader(false);
-      toast.error(`Error: ${res.error}` || "Something went wrong! Please try again."); // show in UI
-    } else {
-      
-       setTimeout(() => {
-        setButtonMsg("Redirecting to dashboard...");
-        setLoader(false);
-      }, 1000);
-      
-      setTimeout(() => {
-        router.push("/admin/dashboard");
-      }, 3000);
-      
+      setButtonMsg("Login");
+      toast.error(res.error || "Something went wrong! Please try again.");
+      return;
     }
+
+    setButtonMsg("Redirecting...");
+    router.replace("/auth-redirect");
   };
 
   return (
@@ -221,7 +216,7 @@ export default function LoginPage() {
             {/* Google */}
             <button
               type="button"
-              onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
+              onClick={() => signIn("google", { callbackUrl: "/auth-redirect" })}
               className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -236,7 +231,7 @@ export default function LoginPage() {
             {/* Facebook */}
             <button
               type="button"
-              onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard", redirect: true, })}
+              onClick={() => signIn("facebook", { callbackUrl: "/auth-redirect" })}
               className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

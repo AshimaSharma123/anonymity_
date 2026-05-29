@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import PageLoader from "@/app/components/PageLoader";
 import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
 import { ChatIcon, LocationIcon, SchoolIcon, TeacherIcon } from "@/lib/icons";
 
@@ -538,11 +541,9 @@ function Pagination({
   );
 }
 /* ─── Page ────────────────────────────────────────────────── */
-export default function MyReportsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ identityCode?: string }>;
-}) {
+export default function MyReportsPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [identityCode, setIdentityCode] = useState<string | null>(null);
   const [fetchedReports, setFetchedReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
@@ -551,25 +552,26 @@ export default function MyReportsPage({
   const [totalPages, setTotalPages] = useState(0);
   const [total, setTotal] = useState(0);
   const [searchInput, setSearchInput] = useState("");
-  const params = use(searchParams);
 
-  const Code = params.identityCode || "";
+  useEffect(() => {
+    console.log("session",session);
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }else if(session?.user?.id){
+        loadReports(1)
+    }
+  }, [status, session, router]);
+
 
 
   const loadReports = async (page: number, query: string = "") => {
       try {
+
+        
         setLoading(true);
-        const code = localStorage.getItem("identityCode");
+        
 
-        if (!code) {
-          setError("No identity code found. Please enter your identity code to view reports.");
-          setLoading(false);
-          return;
-        }
-
-        setIdentityCode(code);
-
-         let url = `/api/reports/search?code=${encodeURIComponent(code)}&page=${page}&limit=10`;
+      let url = `/api/reports/search?userid=${session?.user?.id}&page=${page}&limit=10`;
       if (query.trim()) {
         url += `&search=${encodeURIComponent(query.trim())}`;
       }
@@ -587,7 +589,7 @@ export default function MyReportsPage({
         setCurrentPage(page);
 	  
         if (result?.data?.length === 0) {
-          setError("No reports found for your identity code.");
+          setError("No reports found.");
         }else{
           setError("");
         }
@@ -601,8 +603,17 @@ export default function MyReportsPage({
     
   
 
-  useEffect(()=>{ loadReports(1); },[Code])
 
+
+  if (status === "loading") {
+    return (
+      <PageLoader className="min-h-screen flex items-center justify-center bg-[#F8FAFE]" />
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null;
+  }
 
   return (
 

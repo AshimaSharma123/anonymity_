@@ -35,7 +35,7 @@ export default function AdminLayout({
         <Sidebar/>
       </div>
 
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden [&_main]:outline-none [&_main]:focus:outline-none">
 
         {/* Top header bar */}
         <header className="z-40 relative h-[92px] bg-white border-b border-black/10 flex items-center px-4 sm:px-6 lg:px-8 flex-shrink-0">
@@ -65,7 +65,7 @@ export default function AdminLayout({
 
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="sm:hidden flex flex-col gap-1.5 p-2"
+            className="sm:hidden flex flex-col gap-1.5 p-2 outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0171F9]/40 rounded-md"
             aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
           >
             <div className={`w-6 h-0.5 bg-[#121212] transition-all duration-300 ${sidebarOpen ? "rotate-45 translate-y-2" : ""}`}></div>

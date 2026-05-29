@@ -15,6 +15,7 @@ type objectType = {
 type FormState = {
   full_name: string,
   email: string,
+  role: string,
   password: string,
   confirm_password: string;
 };
@@ -49,6 +50,10 @@ function validateForm(state: FormState): FormErrors {
     errors.email = "Please enter a valid email address";
   }
 
+  if (!state.role.trim()) {
+    errors.role = "Role is required";
+  }
+
   if (!state.password.trim()) {
     errors.password = "Password is required";
   } else {
@@ -73,7 +78,7 @@ function validateForm(state: FormState): FormErrors {
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formValues, setFormValues] = useState<FormState>({ full_name: "", email: "", password: "", confirm_password: "" });
+  const [formValues, setFormValues] = useState<FormState>({ full_name: "", email: "", role: "", password: "", confirm_password: "" });
   const [errors, setErrors] = useState<objectType>({});
   const [loader, setLoader] = useState<boolean>(false);
   const router = useRouter();
@@ -234,6 +239,37 @@ export default function SignUpPage() {
             )}
           </div>
 
+          {/* Role */}
+          <div className="flex flex-col gap-2">
+            <label className="font-[Outfit] text-base font-medium text-[#212121]">
+              Role
+            </label>
+            <select
+              name="role"
+              id="role"
+              onChange={(e) => {
+                const { name, value } = e.target;
+                setFormValues((prev) => ({
+                  ...prev,
+                  [name]: value,
+                }));
+                setErrors((prev) => ({
+                  ...prev,
+                  role: "",
+                }));
+              }}
+              value={formValues.role}
+              className="w-full px-4 py-[15px] rounded-lg bg-[#F3F4F5] font-inter text-sm font-medium text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition appearance-none cursor-pointer"
+            >
+              <option value="">Select a role</option>
+              <option value="admin">Super Admin</option>
+              <option value="guest_teacher">Guest Teacher</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-xs">{errors.role}</p>
+            )}
+          </div>
+
           {/* Password */}
           <div className="flex flex-col gap-2">
             <label className="font-[Outfit] text-base font-medium text-[#212121]">
@@ -340,7 +376,7 @@ export default function SignUpPage() {
             {/* Google */}
             <button
               type="button"
-              onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
+              onClick={() => signIn("google", { callbackUrl: "/auth-redirect" })}
               className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -355,7 +391,7 @@ export default function SignUpPage() {
             {/* Facebook */}
             <button
               type="button"
-              onClick={() => signIn("facebook", { callbackUrl: "/admin/dashboard" })}
+              onClick={() => signIn("facebook", { callbackUrl: "/auth-redirect" })}
               className="cursor-pointer w-full py-3 rounded-lg border border-[#E5E7EB] bg-white text-[#212121] font-inter text-base font-semibold leading-6 text-center hover:bg-[#F9FAFB] active:bg-[#F3F4F6] transition-colors flex items-center justify-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
