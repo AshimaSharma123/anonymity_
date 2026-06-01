@@ -717,13 +717,23 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
       {/* Tab header */}
       <div className="flex flex-row items-center justify-between gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-0">
         <h3 className="font-outfit font-medium text-lg sm:text-2xl text-[#121212]">Teachers</h3>
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap"
-        >
-          <AddCircleIcon />
-          <span className="font-outfit font-normal text-sm sm:text-[16px] text-[#0171F9]">Add New</span>
-        </button>
+        <div className="flex items-center gap-3 sm:gap-4">
+          {schoolId === "15680" && (
+            <Link
+              href="/admin/teachers/import"
+              className="font-outfit font-normal text-sm sm:text-[16px] text-[#0171F9] hover:underline whitespace-nowrap"
+            >
+              Import CSV
+            </Link>
+          )}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap"
+          >
+            <AddCircleIcon />
+            <span className="font-outfit font-normal text-sm sm:text-[16px] text-[#0171F9]">Add New</span>
+          </button>
+        </div>
       </div>
 
       {loading ? (
