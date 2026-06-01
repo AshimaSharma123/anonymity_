@@ -13,10 +13,9 @@ type objectType = {
 }
 
 type FormState = {
-  full_name: string,
-  email: string,
-  role: string,
-  password: string,
+  full_name: string;
+  email: string;
+  password: string;
   confirm_password: string;
 };
 
@@ -50,10 +49,6 @@ function validateForm(state: FormState): FormErrors {
     errors.email = "Please enter a valid email address";
   }
 
-  if (!state.role.trim()) {
-    errors.role = "Role is required";
-  }
-
   if (!state.password.trim()) {
     errors.password = "Password is required";
   } else {
@@ -78,7 +73,12 @@ function validateForm(state: FormState): FormErrors {
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formValues, setFormValues] = useState<FormState>({ full_name: "", email: "", role: "", password: "", confirm_password: "" });
+  const [formValues, setFormValues] = useState<FormState>({
+    full_name: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
   const [errors, setErrors] = useState<objectType>({});
   const [loader, setLoader] = useState<boolean>(false);
   const router = useRouter();
@@ -100,7 +100,11 @@ export default function SignUpPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formValues),
+      body: JSON.stringify({
+        full_name: formValues.full_name,
+        email: formValues.email,
+        password: formValues.password,
+      }),
     });
 
     const data = await res.json();
@@ -236,37 +240,6 @@ export default function SignUpPage() {
             />
             {errors.email && (
               <p className="text-red-500 text-xs">{errors.email}</p>
-            )}
-          </div>
-
-          {/* Role */}
-          <div className="flex flex-col gap-2">
-            <label className="font-[Outfit] text-base font-medium text-[#212121]">
-              Role
-            </label>
-            <select
-              name="role"
-              id="role"
-              onChange={(e) => {
-                const { name, value } = e.target;
-                setFormValues((prev) => ({
-                  ...prev,
-                  [name]: value,
-                }));
-                setErrors((prev) => ({
-                  ...prev,
-                  role: "",
-                }));
-              }}
-              value={formValues.role}
-              className="w-full px-4 py-[15px] rounded-lg bg-[#F3F4F5] font-inter text-sm font-medium text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition appearance-none cursor-pointer"
-            >
-              <option value="">Select a role</option>
-              <option value="admin">Super Admin</option>
-              <option value="guest_teacher">Guest Teacher</option>
-            </select>
-            {errors.role && (
-              <p className="text-red-500 text-xs">{errors.role}</p>
             )}
           </div>
 

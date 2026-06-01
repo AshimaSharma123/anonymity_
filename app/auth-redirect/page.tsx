@@ -33,17 +33,7 @@ export default function AuthRedirectPage() {
       return;
     }
 
-    if (role === "guest_teacher") {
-      redirectTo("/my-reports");
-      return;
-    }
-
-    if (session?.user?.needsRoleSelection || !role) {
-      redirectTo("/select-role");
-      return;
-    }
-
-    redirectTo("/login");
+    redirectTo("/my-reports");
   }, [status, session, router]);
 
   return <PageLoader message="Redirecting..." />;

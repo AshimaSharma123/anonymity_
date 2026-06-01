@@ -96,9 +96,8 @@ export const authOptions: NextAuthOptions = {
         }
 
         const existingUser = existingUsers?.[0];
-        const isNewUser = !existingUser;
 
-        if (isNewUser) {
+        if (!existingUser) {
           const { data: userD, error } = await supabase
             .from("users")
             .insert({
@@ -106,6 +105,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               provider: account.provider,
               providerAccountId: account.providerAccountId,
+              role: "guest_teacher",
             })
             .select()
             .single();
@@ -115,7 +115,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           user.id = userD.id.toString();
-          user.role = userD.role ?? null;
+          user.role = userD.role;
         } else {
           const { data: userD, error } = await supabase
             .from("users")
@@ -136,7 +136,6 @@ export const authOptions: NextAuthOptions = {
           user.role = userD.role;
         }
 
-        user.needsRoleSelection = isNewUser || !user.role;
       }
 
       return true;
@@ -156,12 +155,10 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role ?? null;
-        token.needsRoleSelection = user.needsRoleSelection ?? false;
       }
 
       if (trigger === "update" && session?.role) {
         token.role = session.role;
-        token.needsRoleSelection = false;
       }
 
       if (token.email) {
@@ -174,7 +171,6 @@ export const authOptions: NextAuthOptions = {
         if (dbUser) {
           token.id = dbUser.id.toString();
           token.role = dbUser.role ?? null;
-          token.needsRoleSelection = !dbUser.role;
         }
       }
 
@@ -185,7 +181,6 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = (token.role as string | null) ?? null;
-        session.user.needsRoleSelection = Boolean(token.needsRoleSelection);
       }
       return session;
     },

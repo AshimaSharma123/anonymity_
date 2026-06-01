@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { full_name, email, role, password } = body;
+    const { full_name, email, password } = body;
 
     // Validation
     if (!full_name || !email || !password) {
@@ -50,8 +50,8 @@ export async function POST(req: Request) {
         {
           full_name,
           email,
-          role,
           password: hashedPassword,
+          role: "guest_teacher",
         },
       ])
       .select();

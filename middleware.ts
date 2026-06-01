@@ -6,25 +6,12 @@ export default withAuth(
     const token = req.nextauth.token;
     const { pathname } = req.nextUrl;
     const role = token?.role as string | null | undefined;
-    const needsRoleSelection = !role;
-
-    if (token && needsRoleSelection) {
-      if (
-        pathname !== "/select-role" &&
-        pathname !== "/auth-redirect"
-      ) {
-        return NextResponse.redirect(new URL("/select-role", req.url));
-      }
-      return NextResponse.next();
-    }
 
     if (token && (pathname === "/login" || pathname === "/signup")) {
       if (role === "admin") {
         return NextResponse.redirect(new URL("/admin/dashboard", req.url));
       }
-      if (role === "guest_teacher") {
-        return NextResponse.redirect(new URL("/my-reports", req.url));
-      }
+      return NextResponse.redirect(new URL("/my-reports", req.url));
     }
 
     if (
@@ -54,7 +41,6 @@ export const config = {
     "/admin/:path*",
     "/my-reports",
     "/submit-report",
-    "/select-role",
     "/auth-redirect",
   ],
 };
