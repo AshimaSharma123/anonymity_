@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
 import { useDebounce } from "@/lib/useDebounce";
 import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -421,7 +422,7 @@ export default function DataExportPage() {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-
+      fetchAllCities(currentPage);
       toast.success("Data exported successfully!");
     } catch (error) {
       console.error("Export error:", error);
@@ -431,13 +432,9 @@ export default function DataExportPage() {
     }
   };
 
-
-
-  // Fetch all exported reports once on mount to extract cities
-  useEffect(() => {
-    const fetchAllCities = async () => {
+ const fetchAllCities = async (page: Number) => {
       try {
-        const res = await fetch(`/api/data-export/reports-history?page=1&limit=1000`);
+        const res = await fetch(`/api/data-export/reports-history?page=${page}&limit=${itemsPerPage}`);
         const data = await res.json();
         if (data.success) {
           // Extract unique cities from all exported reports
@@ -467,7 +464,9 @@ export default function DataExportPage() {
       }
     };
 
-    fetchAllCities();
+  // Fetch all exported reports once on mount to extract cities
+  useEffect(() => {
+    fetchAllCities(1);
   }, []);
 
   // Fetch reports with pagination and filtering
@@ -493,7 +492,7 @@ export default function DataExportPage() {
       }
     };
 
-    if (filterByCity) fetchExportedReports();
+   fetchExportedReports();
   }, [currentPage, filterByCity]);
 
   // useEffect(() => {
@@ -599,7 +598,7 @@ export default function DataExportPage() {
             </h2>
 
             {/* Filter and Export All Section */}
-            <div className="flex flex-col sm:flex-row gap-4 items-end">
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
               <div className="flex-1">
                 <div className="flex items-center gap-3 relative">
                   <label className="font-[Outfit] font-medium text-md text-[#121212] whitespace-nowrap">
@@ -759,39 +758,38 @@ export default function DataExportPage() {
                 <button
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white font-[Inter] font-medium text-sm text-[#121212] hover:bg-[#F3F4F5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`${currentPage == 1 ? "" : "cursor-pointer"} w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors`}
                 >
-                  Previous
+                  <ChevronLeftIcon/>
                 </button>
                 <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(page => {
-                      const diff = Math.abs(page - currentPage);
-                      return diff === 0 || diff === 1 || page === 1 || page === totalPages;
-                    })
-                    .map((page, idx, arr) => (
-                      <div key={page}>
-                        {idx > 0 && arr[idx - 1] !== page - 1 && (
-                          <span className="px-2 py-1 text-[#6F6C70]">...</span>
-                        )}
-                        <button
-                          onClick={() => setCurrentPage(page)}
-                          className={`px-3 py-2 rounded-lg font-[Inter] font-medium text-sm transition-colors ${currentPage === page
-                              ? "bg-[#0171F9] text-white"
-                              : "border border-[#E5E7EB] bg-white text-[#121212] hover:bg-[#F3F4F5]"
-                            }`}
-                        >
-                          {page}
-                        </button>
-                      </div>
-                    ))}
+                  {(() => {
+              const pageWindow = 4;
+              const startPage = Math.max(1, currentPage - Math.floor(pageWindow / 2));
+              const endPage = Math.min(totalPages, startPage + pageWindow - 1);
+              const adjustedStart = Math.max(1, endPage - pageWindow + 1);
+
+              return Array.from(
+                { length: Math.min(pageWindow, totalPages) },
+                (_, i) => adjustedStart + i
+              ).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`cursor-pointer w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg font-inter text-[13px] sm:text-[15px] transition-colors ${currentPage === page ? "bg-[#0171F9] text-white font-semibold" : "border border-[#E5E7EB] bg-white text-[#323152] font-medium hover:bg-gray-50"
+                    }`}
+                >
+                  {page}
+                </button>
+              ));
+            })()}
                 </div>
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white font-[Inter] font-medium text-sm text-[#121212] hover:bg-[#F3F4F5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`${currentPage === totalPages ? "" : "cursor-pointer" } w-8 sm:w-[38px] h-8 sm:h-[38px] flex items-center justify-center rounded-lg border border-[#E5E7EB] bg-white disabled:opacity-40 hover:bg-gray-50 transition-colors`}
                 >
-                  Next
+                 <ChevronRightIcon/>
                 </button>
               </div>
             </div>
