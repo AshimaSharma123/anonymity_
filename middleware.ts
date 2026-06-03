@@ -7,7 +7,13 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     const role = token?.role as string | null | undefined;
 
-    if (token && (pathname === "/login" || pathname === "/signup")) {
+    if (
+      token &&
+      (pathname === "/login" ||
+        pathname === "/signup" ||
+        pathname === "/forgot-password" ||
+        pathname === "/reset-password")
+    ) {
       if (role === "admin") {
         return NextResponse.redirect(new URL("/admin/dashboard", req.url));
       }
@@ -38,6 +44,8 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
+    "/forgot-password",
+    "/reset-password",
     "/admin/:path*",
     "/my-reports",
     "/submit-report",

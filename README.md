@@ -1,6 +1,14 @@
 # anonymity
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Password reset email (optional)
+
+Forgot-password emails use [Resend](https://resend.com). Add these to `.env.local`:
+
+- `RESEND_API_KEY`
+- `EMAIL_FROM` — sender address shown to users (must be a verified sender/domain in Resend)
+- `NEXTAUTH_URL` — public app URL used in reset links (e.g. `http://localhost:3000`)
+
 ## Getting Started
 
 First, run the development server:

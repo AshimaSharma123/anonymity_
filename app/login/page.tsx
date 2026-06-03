@@ -157,9 +157,17 @@ export default function LoginPage() {
 
           {/* Password */}
           <div className="flex flex-col gap-2">
-            <label className="font-[Outfit] text-base font-medium text-[#212121]">
-              Password
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="font-[Outfit] text-base font-medium text-[#212121]">
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="font-inter text-[13px] font-semibold text-[#0171F9] hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <div className="flex items-center w-full px-4 py-[15px] rounded-lg bg-[#F3F4F5] focus-within:ring-2 focus-within:ring-[#0171F9]/30 transition">
               <input
                 type={showPassword ? "text" : "password"}

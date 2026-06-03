@@ -23,7 +23,8 @@ export async function POST(req: Request) {
       postAs,
       yourName,
       schoolAssociation,
-      sentiments
+      sentiments,
+      city
     } = body;
 
     // Insert into Supabase
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
       .insert([
         {
           user_id: user_id,
-
+          city,
           school_name: schoolName,
 
           school_id: schoolId || null,

@@ -1,29 +1,14 @@
 "use client";
 
+import { useDebounce } from "@/lib/useDebounce";
 import { useState, useRef, useEffect } from "react";
+import toast from "react-hot-toast";
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 
-const ChevronDownIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clipPath="url(#chevron-clip)">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M8.47221 10.4712C8.34719 10.5962 8.17766 10.6664 8.00088 10.6664C7.8241 10.6664 7.65456 10.5962 7.52955 10.4712L3.75821 6.6999C3.69454 6.63841 3.64375 6.56484 3.60881 6.48351C3.57387 6.40217 3.55548 6.31469 3.55471 6.22617C3.55394 6.13765 3.57081 6.04986 3.60433 5.96793C3.63785 5.886 3.68735 5.81157 3.74995 5.74897C3.81254 5.68638 3.88698 5.63688 3.96891 5.60336C4.05084 5.56983 4.13863 5.55297 4.22715 5.55374C4.31567 5.55451 4.40315 5.5729 4.48448 5.60784C4.56582 5.64277 4.63938 5.69356 4.70088 5.75724L8.00088 9.05724L11.3009 5.75724C11.4266 5.6358 11.595 5.5686 11.7698 5.57012C11.9446 5.57164 12.1118 5.64175 12.2354 5.76536C12.359 5.88896 12.4291 6.05617 12.4307 6.23097C12.4322 6.40577 12.365 6.57417 12.2435 6.6999L8.47221 10.4712Z"
-        fill="#1E1E1E"
-      />
-    </g>
-    <defs>
-      <clipPath id="chevron-clip">
-        <rect width="16" height="16" fill="white" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 
 const CalendarIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path stroke="#121212" strokeWidth="1.5" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z"/><path stroke="#121212" strokeLinecap="round" strokeWidth="1.5" d="M7 4V2.5M17 4V2.5M2.5 9h19"/><path fill="#121212" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></g></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none"><path stroke="#121212" strokeWidth="1.5" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z" /><path stroke="#121212" strokeLinecap="round" strokeWidth="1.5" d="M7 4V2.5M17 4V2.5M2.5 9h19" /><path fill="#121212" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" /></g></svg>
 );
 
 const ExportAllBtnIcon = () => (
@@ -44,92 +29,72 @@ const ExportRowIcon = () => (
   </svg>
 );
 
-const ScrollIndicatorIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M5 12L19 12M19 12L15 8M19 12L15 16"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
-
-const DISTRICTS: { id: string; name: string }[] = [
-  { id: "lincoln", name: "Lincoln Unified School District" },
-  { id: "riverside", name: "Riverside Unified School District" },
-  { id: "oakwood", name: "Oakwood Private Academy" },
-  { id: "pinehill", name: "Pinehill Education Group" },
-];
-
-const SCHOOLS_BY_DISTRICT: Record<string, string[]> = {
-  lincoln: ["Lincoln High School", "Lincoln Middle School", "Lincoln Elementary"],
-  riverside: ["Riverside Academy", "Riverside Elementary"],
-  oakwood: ["Oakwood Primary"],
-  pinehill: ["Pinehill Preparatory"],
-};
-
-const TEACHERS_BY_SCHOOL: Record<string, string[]> = {
-  "Lincoln High School": ["Ms. Johnson", "Mr. Smith", "Ms. Davis"],
-  "Lincoln Middle School": ["Mr. Brown", "Ms. Wilson", "Mr. Taylor"],
-  "Lincoln Elementary": ["Ms. Anderson", "Mr. Thomas", "Ms. Jackson"],
-  "Riverside Academy": ["Mr. White", "Ms. Harris", "Mr. Martin"],
-  "Riverside Elementary": ["Ms. Garcia", "Mr. Martinez", "Ms. Robinson"],
-  "Oakwood Primary": ["Mr. Clark", "Ms. Rodriguez", "Mr. Lewis"],
-  "Pinehill Preparatory": ["Ms. Lee", "Mr. Walker", "Ms. Hall"],
-};
-
-const GRADES = ["K", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-
-const USERS_AND_ROLES = ["Student", "Teacher", "Admin", "Parent", "Counselor"];
 
 // ─── Form Field Components ─────────────────────────────────────────────────────
 
-function SelectField({
+function SearchField({
   label,
   value,
   onChange,
+  onSelect,
   options,
   disabled = false,
-  placeholder = "Select",
+  placeholder = "Search",
+  isLoading = false,
 }: {
   label: string;
   value: string;
   onChange: (val: string) => void;
+  onSelect: (val: string) => void;
   options: string[];
   disabled?: boolean;
   placeholder?: string;
+  isLoading?: boolean;
 }) {
-  const selectRef = useRef<HTMLSelectElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="flex flex-col gap-1.5 flex-1">
+    <div className="flex flex-col gap-1.5 flex-1 relative">
       <label className="font-[Outfit] font-medium text-md text-[#121212]">{label}</label>
-      <div
-        className={`relative flex items-center rounded-lg bg-[#F3F4F5]${disabled ? " opacity-55 cursor-not-allowed" : ""}`}
-        onClick={() => selectRef.current?.focus()}
-      >
-        <select
-          ref={selectRef}
+      <div className={`relative rounded-lg bg-[#F3F4F5]${disabled ? " opacity-55 cursor-not-allowed" : ""}`}>
+        <input
+          ref={inputRef}
+          type="text"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => { onChange(e.target.value), setShowDropdown(true) }}
+          onFocus={() => setShowDropdown(true)}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           disabled={disabled}
-          className="flex-1 appearance-none bg-transparent border-none outline-none font-[Inter] text-sm font-normal text-[#121212] cursor-pointer w-full px-4 py-3 pr-8 disabled:cursor-not-allowed disabled:text-[#737685]"
-        >
-          <option value="" className="text-[#737685]">{placeholder}</option>
-          {options.map((opt) => (
-            <option key={opt} value={opt} className="text-[#121212]">
-              {opt}
-            </option>
-          ))}
-        </select>
-        <span className="pointer-events-none flex items-center flex-shrink-0  absolute right-5">
-          <ChevronDownIcon />
-        </span>
+          placeholder={placeholder}
+          className="w-full px-4 py-3 bg-transparent outline-none font-[Inter] text-sm font-normal text-[#121212] placeholder:text-[#737685] disabled:cursor-not-allowed disabled:text-[#737685]"
+        />
+        {isLoading && (
+          <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#737685] text-sm">
+            Loading...
+          </span>
+        )}
       </div>
+
+      {showDropdown && options.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E5E7EB] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onSelect(opt);
+                setShowDropdown(false);
+              }}
+              className="w-full text-left px-4 py-2.5 hover:bg-[#F3F4F5] font-[Inter] text-sm text-[#121212] transition-colors"
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -173,282 +138,666 @@ function DateField({
   );
 }
 
-// ─── Table Data ────────────────────────────────────────────────────────────────
-
-type DistrictRow = { type: "district"; name: string };
-type SchoolRow = {
-  type: "school";
-  name: string;
-  startDate: string;
-  endDate: string;
-  reportDate: string;
-  tags?: { label: string; style: "private" | "association" }[];
-};
-type TableRow = DistrictRow | SchoolRow;
-
-const recentExports: TableRow[] = [
-  { type: "district", name: "Lincoln Unified School District" },
-  { type: "school", name: "Lincoln High School", startDate: "01/01/26", endDate: "01/14/26", reportDate: "03/15/26" },
-  { type: "school", name: "Lincoln Middle School", startDate: "01/16/26", endDate: "01/30/26", reportDate: "01/14/26" },
-  { type: "school", name: "Lincoln Elementary", startDate: "02/15/26", endDate: "02/15/26", reportDate: "03/13/26" },
-  { type: "district", name: "Riverside Unified School District" },
-  { type: "school", name: "Riverside Academy", startDate: "03/01/26", endDate: "03/01/26", reportDate: "03/12/26" },
-  { type: "school", name: "Riverside Elementary", startDate: "03/31/26", endDate: "03/17/26", reportDate: "03/11/26" },
-  {
-    type: "school",
-    name: "Oakwood Primary",
-    startDate: "04/15/26",
-    endDate: "04/02/26",
-    reportDate: "03/10/26",
-    tags: [
-      { label: "Private", style: "private" },
-      { label: "Oakwood Private Academy", style: "association" },
-    ],
-  },
-  {
-    type: "school",
-    name: "Pinehill Preparatory",
-    startDate: "05/05/26",
-    endDate: "04/18/26",
-    reportDate: "03/09/26",
-    tags: [
-      { label: "Private", style: "private" },
-      { label: "Pinehill Education Group", style: "association" },
-    ],
-  },
-];
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
+
 export default function DataExportPage() {
-  const [district, setDistrict] = useState("");
+  const [cityInput, setCityInput] = useState("");
+  const [city, setCity] = useState("");
+  const [schoolInput, setSchoolInput] = useState("");
   const [school, setSchool] = useState("");
+  const [schoolId, setSchoolId] = useState("");
+  const [teacherInput, setTeacherInput] = useState("");
   const [teacher, setTeacher] = useState("");
+  const [teacherId, setTeacherId] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState(""); 
-  const [grade, setGrade] = useState("");
-  const [userRole, setUserRole] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [filterByCity, setfilterByCity] = useState(false);
+  const [removeFilter, setRemoveFilter] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [exportedReports, setExportedReports] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalReports, setTotalReports] = useState(0);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [filterCity, setFilterCity] = useState("");
+  const [citiesList, setCitiesList] = useState<string[]>([]);
+  const [loadingCitiesFilter, setLoadingCitiesFilter] = useState(false);
+  const [isExportingAll, setIsExportingAll] = useState(false);
+  const [exportingRecordId, setExportingRecordId] = useState<string | null>(null);
+  const itemsPerPage = 10;
 
-  const schoolOptions = district ? (SCHOOLS_BY_DISTRICT[district] ?? []) : [];
-  const teacherOptions = school ? (TEACHERS_BY_SCHOOL[school] ?? []) : [];
+  const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
+  const [schoolSuggestions, setSchoolSuggestions] = useState<string[]>([]);
+  const [teacherSuggestions, setTeacherSuggestions] = useState<string[]>([]);
+  const [exportedCities, setExportedCities] = useState<string[]>([]);
 
-  function handleDistrictChange(val: string) {
-    setDistrict(val);
-    setSchool("");
-    setTeacher("");
-  }
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingSchools, setLoadingSchools] = useState(false);
+  const [loadingTeachers, setLoadingTeachers] = useState(false);
 
-  function handleSchoolChange(val: string) {
-    setSchool(val);
-    setTeacher("");
-  }
+  // const tableContainerRef = useRef<HTMLDivElement>(null);
+
+  const debouncedCityInput = useDebounce(cityInput, 1000);
+  const debouncedSchoolInput = useDebounce(schoolInput, 1000);
+  const debouncedTeacherInput = useDebounce(teacherInput, 1000);
+  const debouncedCityFilter = useDebounce(filterCity, 1000);
 
   useEffect(() => {
-    const container = tableContainerRef.current;
-    if (!container) return;
-
-    const checkScroll = () => {
-      setHasHorizontalScroll(container.scrollWidth > container.clientWidth);
+    const fetchCities = async () => {
+      setLoadingCities(true);
+      const city = debouncedCityInput ? debouncedCityInput : debouncedCityFilter
+      try {
+        const res = await fetch(`/api/data-export/cities?search=${encodeURIComponent(city)}`);
+        const data = await res.json();
+        console.log("data", data)
+        if (data.success) {
+          setCitySuggestions(data.cities);
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+        toast.error("Failed to load cities");
+      } finally {
+        setLoadingCities(false);
+      }
     };
 
-    checkScroll();
+    if (debouncedCityInput || debouncedCityFilter) fetchCities();
+  }, [debouncedCityInput, debouncedCityFilter]);
 
-    const resizeObserver = new ResizeObserver(checkScroll);
-    resizeObserver.observe(container);
 
-    container.addEventListener("scroll", checkScroll);
-    window.addEventListener("resize", checkScroll);
+  useEffect(() => {
 
-    return () => {
-      resizeObserver.disconnect();
-      container.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("resize", checkScroll);
+    if (!city) {
+      setSchoolSuggestions([]);
+      return;
+    }
+
+    const fetchSchools = async () => {
+      setLoadingSchools(true);
+      try {
+        const res = await fetch(
+          `/api/data-export/schools?city=${encodeURIComponent(city)}&search=${encodeURIComponent(debouncedSchoolInput)}`
+        );
+        const data = await res.json();
+        if (data.success) {
+          setSchoolSuggestions(data.schools.map((s: any) => s.name));
+        }
+      } catch (error) {
+        console.error("Error fetching schools:", error);
+        toast.error("Failed to load schools");
+      } finally {
+        setLoadingSchools(false);
+      }
     };
+
+    fetchSchools();
+  }, [city, debouncedSchoolInput]);
+
+  useEffect(() => {
+    if (!schoolId) {
+      setTeacherSuggestions([]);
+      return;
+    }
+
+    const fetchTeachers = async () => {
+      setLoadingTeachers(true);
+      try {
+        const res = await fetch(
+          `/api/data-export/teachers?school_id=${schoolId}&city=${encodeURIComponent(city)}&search=${encodeURIComponent(debouncedTeacherInput)}`
+        );
+        const data = await res.json();
+        if (data.success) {
+          setTeacherSuggestions(data.teachers.map((t: any) => t.name));
+        }
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+        toast.error("Failed to load teachers");
+      } finally {
+        setLoadingTeachers(false);
+      }
+    };
+
+    fetchTeachers();
+  }, [schoolId, city, debouncedTeacherInput]);
+
+  const handleCitySelect = (selectedCity: string) => {
+    setCity(selectedCity);
+    setCityInput(selectedCity);
+    setSchool("");
+    setSchoolInput("");
+    setSchoolId("");
+    setTeacher("");
+    setTeacherInput("");
+  };
+
+  const handleCityFilter = (selectedCity2: string) => {
+    setFilterCity(selectedCity2);
+    setfilterByCity(true);
+    setCurrentPage(1);
+  };
+  const handleSchoolSelect = async (selectedSchool: string) => {
+    setSchool(selectedSchool);
+    setSchoolInput(selectedSchool);
+    setTeacher("");
+    setTeacherInput("");
+
+    const res = await fetch(`/api/data-export/schools?city=${encodeURIComponent(city)}&search=${encodeURIComponent(selectedSchool)}`);
+    const data = await res.json();
+    if (data.success) {
+      const foundSchool = data.schools.find((s: any) => s.name === selectedSchool);
+      if (foundSchool) {
+        setSchoolId(foundSchool.id);
+      }
+    }
+  };
+
+  const handleTeacherSelect = async (selectedTeacher: string) => {
+    setTeacher(selectedTeacher);
+    setTeacherInput(selectedTeacher);
+
+    const res = await fetch(
+      `/api/data-export/teachers?school_id=${schoolId}&city=${encodeURIComponent(city)}&search=${encodeURIComponent(selectedTeacher)}`
+    );
+    const data = await res.json();
+    if (data.success) {
+      const foundTeacher = data.teachers.find((t: any) => t.name === selectedTeacher);
+      if (foundTeacher) {
+        setTeacherId(foundTeacher.id);
+      }
+    }
+  };
+
+  const isDateRangeValid = () => {
+    if (!startDate || !endDate) return true;
+    return new Date(startDate) <= new Date(endDate);
+  };
+
+  const handleExportRecord = async (recordId: string) => {
+    setExportingRecordId(recordId);
+    try {
+      const response = await fetch(`/api/data-export/export-record?record_id=${recordId}`);
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.message || "Failed to export record");
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `report_${recordId}_${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Record exported successfully!");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export record");
+    } finally {
+      setExportingRecordId(null);
+    }
+  };
+
+  const handleExportAll = async () => {
+    setIsExportingAll(true);
+    try {
+      const params = new URLSearchParams();
+      if (filterCity) {
+        params.append("city", filterCity);
+      }
+
+      const response = await fetch(`/api/data-export/export-all?${params}`);
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.message || "Failed to export data");
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `reports_${filterCity || "all"}_${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Data exported successfully!");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export data");
+    } finally {
+      setIsExportingAll(false);
+    }
+  };
+
+  const handleExportData = async () => {
+    if (!city || !school || !teacher || !startDate || !endDate) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (!isDateRangeValid()) {
+      toast.error("Start date must be before or equal to end date");
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      const params = new URLSearchParams({
+        school_id: schoolId,
+        school: school,
+        teacher_id: teacherId,
+        city,
+        start_date: startDate,
+        end_date: endDate,
+      });
+
+      const response = await fetch(`/api/data-export/export?${params}`);
+
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.message || "Failed to export data");
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `reports_${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Data exported successfully!");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export data");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+
+
+  // Fetch all exported reports once on mount to extract cities
+  useEffect(() => {
+    const fetchAllCities = async () => {
+      try {
+        const res = await fetch(`/api/data-export/reports-history?page=1&limit=1000`);
+        const data = await res.json();
+        if (data.success) {
+          // Extract unique cities from all exported reports
+          const citiesSet = new Set<string>();
+          data.reports.forEach((report: any) => {
+            if (report.city) {
+              citiesSet.add(report.city);
+            }
+          });
+
+          let reports = data.reports;
+
+          // Filter reports by selected city
+          if (filterCity) {
+            reports = reports.filter((report: any) => report.city === filterCity);
+          }
+
+          setExportedReports(reports);
+          setTotalPages(data.pagination.totalPages);
+          setTotalReports(data.pagination.total);
+
+          setExportedCities(Array.from(citiesSet).sort());
+
+        }
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
+
+    fetchAllCities();
   }, []);
+
+  // Fetch reports with pagination and filtering
+  useEffect(() => {
+    const fetchExportedReports = async () => {
+      // setLoadingHistory(true);
+      try {
+        const res = await fetch(`/api/data-export/reports-history?city=${filterCity}&page=${currentPage}&limit=${itemsPerPage}`);
+        const data = await res.json();
+        if (data.success) {
+          let reports = data.reports;
+
+          setExportedReports(reports);
+          setTotalPages(data.pagination.totalPages);
+          setTotalReports(data.pagination.total);
+        }
+      } catch (error) {
+        console.error("Error fetching exported reports:", error);
+        toast.error("Failed to load export history");
+      } finally {
+        // setLoadingHistory(false);
+        setfilterByCity(false);
+      }
+    };
+
+    if (filterByCity) fetchExportedReports();
+  }, [currentPage, filterByCity]);
+
+  // useEffect(() => {
+  //   const container = tableContainerRef.current;
+  //   if (!container) return;
+
+  //   const checkScroll = () => {
+  //     setHasHorizontalScroll(container.scrollWidth > container.clientWidth);
+  //   };
+
+  //   checkScroll();
+
+  //   const resizeObserver = new ResizeObserver(checkScroll);
+  //   resizeObserver.observe(container);
+
+  //   container.addEventListener("scroll", checkScroll);
+  //   window.addEventListener("resize", checkScroll);
+
+  //   return () => {
+  //     resizeObserver.disconnect();
+  //     container.removeEventListener("scroll", checkScroll);
+  //     window.removeEventListener("resize", checkScroll);
+  //   };
+  // }, []);
 
   return (
     <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative">
-<h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5 mb-6 ">Data Export</h1>
-<div className="flex flex-col gap-10">
-      {/* ── Export Data Card ── */}
-      <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] sm:p-8 p-6 flex flex-col lg:flex-row gap-8">
+      <h1 className="font-outfit font-semibold text-2xl sm:text-3xl  text-[#121212] leading-5 mb-6 ">Data Export</h1>
+      <div className="flex flex-col gap-10">
+        {/* ── Export Data Card ── */}
+        <div className="bg-white rounded-2xl shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] sm:p-8 p-6 flex flex-col lg:flex-row gap-8">
 
-        {/* Left: title + description */}
-        <div className="lg:w-64 flex-shrink-0 flex flex-col gap-1">
-          <h2 className="font-[Inter] font-bold text-xl sm:text-2xl text-[#121C28] leading-8">
-            Export Data
-          </h2>
-          <p className="font-[Inter] font-normal sm:text-base text-sm text-[#434655] leading-[26px]">
-            Select a School and date range<br className="hidden sm:block" />to generate Report.
-          </p>
-        </div>
-
-        {/* Right: form */}
-        <div className="flex-1 flex flex-col gap-5">
-          <SelectField
-            label="School District / Association"
-            value={district}
-            onChange={handleDistrictChange}
-            options={DISTRICTS.map((d) => d.name)}
-            placeholder="Select"
-          />
-
-          <SelectField
-            label="School"
-            value={school}
-            onChange={handleSchoolChange}
-            options={schoolOptions}
-            // disabled={!district}
-            placeholder={district ? "Select" : "Select a district first"}
-          />
-
-          <SelectField
-            label="Teacher(s)"
-            value={teacher}
-            onChange={setTeacher}
-            options={teacherOptions}
-            // disabled={!school}
-            placeholder={school ? "Select" : "Select a school first"}
-          />
-
-          <div className="flex flex-col sm:flex-row gap-5">
-            <DateField label="Start Date" value={startDate} onChange={setStartDate} />
-            <DateField label="End Date" value={endDate} onChange={setEndDate} />
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-5">
-            <SelectField
-              label="Grades"
-              value={grade}
-              onChange={setGrade}
-              options={GRADES}
-              placeholder="Select"
-            />
-            <SelectField
-              label="Users & Roles"
-              value={userRole}
-              onChange={setUserRole}
-              options={USERS_AND_ROLES}
-              placeholder="Select"
-            />
-          </div>
-
-          <div>
-            <button className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white leading-6 hover:bg-blue-700 transition-colors cursor-pointer">
+          {/* Left: title + description */}
+          <div className="lg:w-64 flex-shrink-0 flex flex-col gap-1">
+            <h2 className="font-[Inter] font-bold text-xl sm:text-2xl text-[#121C28] leading-8">
               Export Data
+            </h2>
+            <p className="font-[Inter] font-normal sm:text-base text-sm text-[#434655] leading-[26px]">
+              Select a School and date range<br className="hidden sm:block" />to generate Report.
+            </p>
+          </div>
+
+          {/* Right: form */}
+          <div className="flex-1 flex flex-col gap-5">
+            <SearchField
+              label="City *"
+              value={cityInput}
+              onChange={setCityInput}
+              onSelect={handleCitySelect}
+              options={citySuggestions}
+              isLoading={loadingCities}
+              placeholder="Search city..."
+            />
+
+            <SearchField
+              label="School *"
+              value={schoolInput}
+              onChange={setSchoolInput}
+              onSelect={handleSchoolSelect}
+              options={schoolSuggestions}
+              disabled={!city}
+              isLoading={loadingSchools}
+              placeholder={city ? "Search school..." : "Select a city first"}
+            />
+
+            <SearchField
+              label="Teacher(s) *"
+              value={teacherInput}
+              onChange={setTeacherInput}
+              onSelect={handleTeacherSelect}
+              options={teacherSuggestions}
+              disabled={!schoolId}
+              isLoading={loadingTeachers}
+              placeholder={schoolId ? "Search teacher..." : "Select a school first"}
+            />
+
+            <div className="flex flex-col sm:flex-row gap-5">
+              <DateField label="Start Date *" value={startDate} onChange={setStartDate} />
+              <DateField label="End Date *" value={endDate} onChange={setEndDate} />
+            </div>
+
+            <button
+              onClick={handleExportData}
+              disabled={!city || !school || !teacher || !startDate || !endDate || !isDateRangeValid() || isExporting}
+              className="w-fit flex items-center gap-1.5 px-5 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white leading-6 hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {isExporting ? "Exporting..." : "Export Data"}
             </button>
+            {startDate && endDate && !isDateRangeValid() && (
+              <p className="text-sm text-red-600 font-[Inter]">
+                Start date must be before or equal to end date
+              </p>
+            )}
+
           </div>
         </div>
-      </div>
 
-      {/* ── Recent Data Export Table ── */}
-      <div className="bg-white rounded-lg">
-        <div className="px-5 py-6">
-          <h2 className="font-[Outfit] font-semibold sm:text-2xl text-xl text-[#121212] leading-5">
-            Recent Data Export
-          </h2>
-        </div>
+        {/* ── Recent Data Export Table ── */}
+        <div className="bg-white rounded-lg">
+          <div className="px-5 py-6">
+            <h2 className="font-[Outfit] font-semibold sm:text-2xl text-xl text-[#121212] leading-5 mb-6">
+              Recent Data Export
+            </h2>
 
-        <div className="relative">
-          <div
-            ref={tableContainerRef}
-            className="overflow-x-auto border-t border-[#E5E7EB]"
-          >
-            <table className="w-full min-w-max">
-            <thead>
-              <tr className="border-y border-[#E5E7EB] bg-white">
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
-                  School Name
-                </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
-                  Start Date
-                </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
-                  End Date
-                </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
-                  Report Date
-                </th>
-                <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentExports.map((row, idx) => {
-                if (row.type === "district") {
-                  return (
-                    <tr key={idx} className="border-b border-[#E5E7EB] bg-[#F8F9FB]">
-                      <td className="px-5 py-3.5 whitespace-nowrap" colSpan={4}>
-                        <div className="flex items-center gap-2.5">
-                          <span className="font-[Inter] font-bold sm:text-md text-sm text-[#121212]">
-                            {row.name}
-                          </span>
-                          <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#EFF6FF] font-[Inter] font-medium sm:text-[12px] text-[11px] text-[#0171F9]">
-                            District
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                        <button className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-medium sm:text-sm text-white leading-6 whitespace-nowrap hover:bg-blue-700 transition-colors cursor-pointer text-xs">
-                          <ExportAllBtnIcon />
-                          Export All
-                        </button>
+            {/* Filter and Export All Section */}
+            <div className="flex flex-col sm:flex-row gap-4 items-end">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 relative">
+                  <label className="font-[Outfit] font-medium text-md text-[#121212] whitespace-nowrap">
+                    Filter by City
+                  </label>
+
+                  <div className="relative flex-1 max-w-xs rounded-lg bg-[#F3F4F5]">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={filterCity}
+                      onChange={(e) => {
+                        setFilterCity(e.target.value);
+                        setShowDropdown(true);
+                      }}
+                      onFocus={() => setShowDropdown(true)}
+                      onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+                      placeholder="Search by city..."
+                      className="w-full px-4 py-3 bg-transparent outline-none font-[Inter] text-sm text-[#121212] placeholder:text-[#737685]"
+                    />
+
+                    {loadingCities && (
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#737685] text-sm">
+                        Loading...
+                      </span>
+                    )}
+                    {showDropdown && citySuggestions?.length > 0 && (
+                      <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#E5E7EB] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                        {citySuggestions.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleCityFilter(opt);
+                              setShowDropdown(false);
+                            }}
+                            className="w-full text-left px-4 py-2.5 hover:bg-[#F3F4F5] font-[Inter] text-sm text-[#121212]"
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {filterCity && <button
+                    type="button"
+                    onClick={() => {
+                      setCitySuggestions([]);
+                      setfilterByCity(true);
+                      setFilterCity("");
+                    }}
+                    className="cursor-pointer text-sm text-blue-600 hover:text-blue-800 underline whitespace-nowrap"
+                  >
+                    Clear Filter
+                  </button>}
+
+
+                </div>
+              </div>
+
+              <button
+                onClick={handleExportAll}
+                disabled={isExportingAll}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed whitespace-nowrap"
+              >
+                <ExportAllBtnIcon />
+                {isExportingAll ? "Exporting..." : "Export All"}
+              </button>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div
+              // ref={tableContainerRef}
+              className="overflow-x-auto border-t border-[#E5E7EB]"
+            >
+              <table className="w-full min-w-max">
+                <thead>
+                  <tr className="border-y border-[#E5E7EB] bg-white">
+                    <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                      School Name
+                    </th>
+                    <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                      Start Date
+                    </th>
+                    <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                      End Date
+                    </th>
+                    <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                      Report Date
+                    </th>
+                    <th className="text-left px-5 py-3.5 font-[Inter] font-medium sm:text-sm  text-[12px] text-[#6F6C70] uppercase tracking-wide whitespace-nowrap">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingHistory ? (
+                    <tr>
+                      <td colSpan={5} className="px-5 py-8 text-center text-[#737685]">
+                        Loading...
                       </td>
                     </tr>
-                  );
-                }
-
-                return (
-                  <tr key={idx} className="border-b border-[#F2F4F7] bg-white hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <div className="flex flex-col gap-1.5">
-                        <span className="font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] leading-5">
-                          {row.name}
-                        </span>
-                        {row.tags && (
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {row.tags.map((tag, tIdx) => (
-                              <span
-                                key={tIdx}
-                                className="inline-flex items-center px-2 py-0.5 rounded border border-[#E5E7EB] font-[Inter] font-medium text-xs sm:text-sm text-[#6F6C70] bg-white"
-                              >
-                                {tag.label}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
-                      {row.startDate}
-                    </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
-                      {row.endDate}
-                    </td>
-                    <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
-                      {row.reportDate}
-                    </td>
-                    <td className="px-5 py-[17.5px] whitespace-nowrap">
-                      <div className="flex items-center justify-start gap-3">
-                        <ExportRowIcon />
-                        <button className="flex items-center justify-center px-4 py-1 rounded-md border border-[#EFF0F2] bg-white font-[Inter] font-normal sm:text-[14px] text-[12px] text-black/80 tracking-[-0.2px] leading-6 whitespace-nowrap hover:bg-gray-50 transition-colors cursor-pointer">
+                  ) : exportedReports.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-5 py-8 text-center text-[#737685]">
+                        No exports yet
+                      </td>
+                    </tr>
+                  ) : (
+                    exportedReports.map((report, idx) => (
+                      <tr key={idx} className="border-b border-[#F2F4F7] bg-white hover:bg-gray-50 transition-colors">
+                        <td className="px-5 py-[17.5px] whitespace-nowrap">
+                          <span className="font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] leading-5">
+                            {report.school_name || "-"}
+                          </span>
+                        </td>
+                        <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
+                          {report.start_date ? new Date(report.start_date).toLocaleDateString() : "-"}
+                        </td>
+                        <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
+                          {report.end_date ? new Date(report.end_date).toLocaleDateString() : "-"}
+                        </td>
+                        <td className="px-5 py-[17.5px] font-[Inter] font-normal sm:text-[14px] text-[12px] text-[#030711] whitespace-nowrap">
+                          {report.created_at ? new Date(report.created_at).toLocaleDateString() : "-"}
+                        </td>
+                        <td className="px-5 py-[17.5px] whitespace-nowrap">
+                          <div className="flex items-center justify-start gap-2">
+                            <div
+                              onClick={() => handleExportRecord(report.id)}
+                              
+                              title="Export"
+                              className="cursor-pointer"
+                            >
+                              <ExportRowIcon />
+                            </div>
+                            {/* <button className="flex items-center justify-center px-4 py-1 rounded-md border border-[#EFF0F2] bg-white font-[Inter] font-normal sm:text-[14px] text-[12px] text-black/80 tracking-[-0.2px] leading-6 whitespace-nowrap hover:bg-gray-50 transition-colors cursor-pointer">
                           View
+                        </button> */}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center justify-between px-5 py-4 border-t border-[#E5E7EB] bg-white">
+              <span className="font-[Inter] text-sm text-[#6F6C70]">
+                Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, totalReports)} of {totalReports} exports
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white font-[Inter] font-medium text-sm text-[#121212] hover:bg-[#F3F4F5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page => {
+                      const diff = Math.abs(page - currentPage);
+                      return diff === 0 || diff === 1 || page === 1 || page === totalPages;
+                    })
+                    .map((page, idx, arr) => (
+                      <div key={page}>
+                        {idx > 0 && arr[idx - 1] !== page - 1 && (
+                          <span className="px-2 py-1 text-[#6F6C70]">...</span>
+                        )}
+                        <button
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-2 rounded-lg font-[Inter] font-medium text-sm transition-colors ${currentPage === page
+                              ? "bg-[#0171F9] text-white"
+                              : "border border-[#E5E7EB] bg-white text-[#121212] hover:bg-[#F3F4F5]"
+                            }`}
+                        >
+                          {page}
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-            </table>
+                    ))}
+                </div>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-2 rounded-lg border border-[#E5E7EB] bg-white font-[Inter] font-medium text-sm text-[#121212] hover:bg-[#F3F4F5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
-         
         </div>
       </div>
-    </div>
     </main>
   );
 }

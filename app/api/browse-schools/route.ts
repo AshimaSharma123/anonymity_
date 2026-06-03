@@ -9,8 +9,6 @@ export async function GET(req: NextRequest) {
     // =========================
     const searchParams = req.nextUrl.searchParams;
 
-    const search =
-      searchParams.get("search")?.trim() || "";
 
     const location =
       searchParams.get("location")?.trim() || "";

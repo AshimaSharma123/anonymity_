@@ -41,6 +41,7 @@ type FormState = {
   teacherComment: string;
   sentiments: string;
   error: string;
+  city: string;
 };
 
 type FormErrors = Partial<Record<keyof FormState | "ratings", string>>;
@@ -82,7 +83,8 @@ const initialState: FormState = {
   schoolComment: "",
   teacherComment: "",
   sentiments: "",
-  error:""
+  error:"",
+  city:"",
 };
 
 /* ─── Reducer ─────────────────────────────────────── */
@@ -584,6 +586,7 @@ export default function SubmitReportPage() {
                                 setTeacherSuggestions([]);
                                 updateField("schoolGrades", []);
                                 updateField("schoolName", school.school_name);
+                                updateField("city",school.city);
                                 updateField("schoolGrades", school.grade_level);
                                 updateField("schoolId", school.id);
                                 updateField(
