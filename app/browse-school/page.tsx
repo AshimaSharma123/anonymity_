@@ -264,12 +264,27 @@ export default function BrowseSchoolPage() {
   const [searchInput, setSearchInput] = useState<ObjectType>({});
   const [filters, setFilters] = useState<ObjectType>({});
   const [loading, setLoading] = useState<boolean>(true);
+  const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const [searchingLoad, setSearchingLoad] = useState<boolean>(false);
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
+
   const debouncedFilters = useDebounce(filters, 1000);
 
   const loadSchools = async () => {
     try {
-      setLoading(true);
+      // If any filter or search is applied, use page 1
+      const hasFilters =
+        filters.location ||
+        filters.grade?.length > 0 ||
+        filters.rating?.length > 0 ||
+        searchInput?.school_name?.trim() ||
+        searchInput?.teacher_name?.trim();
+
+      if (firstLoad || hasFilters) {
+        setLoading(true);
+      }
+
+
       const params = new URLSearchParams({
         page: String(currentPage),
         limit: "10",
@@ -284,52 +299,51 @@ export default function BrowseSchoolPage() {
         params.append("rating", r);
       });
 
-
-
       if (searchInput?.school_name?.trim()) {
-        params.append(
-          "searchBySchool",
-          searchInput.school_name.trim()
-        );
+        params.append("searchBySchool", searchInput.school_name.trim());
       }
 
       if (searchInput?.teacher_name?.trim()) {
-        params.append(
-          "searchByTeacher",
-          searchInput.teacher_name.trim()
-        );
+        params.append("searchByTeacher", searchInput.teacher_name.trim());
       }
-      let url = `/api/browse-schools?${params.toString()}`;
 
-      const response = await fetch(url);
+      const response = await fetch(
+        `/api/browse-schools?${params.toString()}`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch schools");
       }
 
       const result = await response.json();
+
       setFetchedSchools(result?.schools || []);
       setTotalPages(result?.pagination?.totalPages || 0);
-      setCurrentPage(currentPage);
-      // if (result?.data?.length === 0) {
-      //   setError("No reports found for your identity code.");
-      // }else{
-      //   setError("");
-      // }
     } catch (err) {
       console.error("Error loading reports:", err);
       setLoading(false);
+      setPageLoading(false);
       setSearchingLoad(false);
-      // setError("Failed to load reports. Please try again.");
     } finally {
       setLoading(false);
+      setFirstLoad(false);
+      setPageLoading(false);
       setSearchingLoad(false);
     }
   };
 
   useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      loadSchools();
+    }
+  }, [debouncedFilters]);
+
+  useEffect(() => {
     loadSchools();
-  }, [currentPage, debouncedFilters]);
+    setPageLoading(true);
+  }, [currentPage]);
 
 
   return (
@@ -375,7 +389,8 @@ export default function BrowseSchoolPage() {
                 />
               </div>
               {/* Search button */}
-              <button disabled={searchingLoad} onClick={()=>{loadSchools()
+              <button disabled={searchingLoad} onClick={() => {
+                loadSchools()
                 setSearchingLoad(true);
               }} className="flex-shrink-0 h-12 sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
                 {searchingLoad ? "Searching..." : "Search"}
@@ -396,9 +411,10 @@ export default function BrowseSchoolPage() {
                 {/* Filter header */}
                 <div className="flex items-end justify-between mb-5 sm:mb-7">
                   <span className="font-[Outfit] text-lg font-medium leading-5 text-black">Filter</span>
-                  {Object.keys(filters).length > 0 && <button onClick={() => {setFilters({})
-                setSearchInput({})
-                }} className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
+                  {Object.keys(filters).length > 0 && <button onClick={() => {
+                    setFilters({})
+                    setSearchInput({})
+                  }} className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">
                     Clear all
                   </button>}
                 </div>
@@ -518,62 +534,62 @@ export default function BrowseSchoolPage() {
                 </div>
               </div>
             </aside>
-            {loading ? 
-            <div className="sm:min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
-        {Array.from({ length: 6 }).map((_, i) => (
-       <div key={i} className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-white animate-pulse">
+            {loading ?
+              <div className="sm:min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-white animate-pulse">
 
-      {/* Top row: title + badge */}
-      <div className="flex justify-between items-start">
-        <div className="space-y-2 w-full">
+                    {/* Top row: title + badge */}
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2 w-full">
 
-          {/* School name */}
-          <div className="h-5 bg-gray-200 rounded w-2/5" />
+                        {/* School name */}
+                        <div className="h-5 bg-gray-200 rounded w-2/5" />
 
-          {/* Location */}
-          <div className="h-4 bg-gray-200 rounded w-1/3" />
+                        {/* Location */}
+                        <div className="h-4 bg-gray-200 rounded w-1/3" />
 
-          {/* Grade chip */}
-        </div>
+                        {/* Grade chip */}
+                      </div>
 
-        {/* Status badge */}
-        <div className="h-6 w-16 bg-gray-200 rounded-full" />
-      </div>
+                      {/* Status badge */}
+                      <div className="h-6 w-16 bg-gray-200 rounded-full" />
+                    </div>
 
-      {/* Divider */}
-      <div className="my-4 h-px bg-gray-100" />
+                    {/* Divider */}
+                    <div className="my-4 h-px bg-gray-100" />
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-3 text-center">
+                    {/* Stats row */}
+                    <div className="grid grid-cols-3 gap-3 text-center">
 
-        <div className="space-y-2">
-          <div className="h-4 w-16 bg-gray-200 rounded mx-auto" />
-          <div className="h-5 w-12 bg-gray-200 rounded mx-auto" />
-        </div>
+                      <div className="space-y-2">
+                        <div className="h-4 w-16 bg-gray-200 rounded mx-auto" />
+                        <div className="h-5 w-12 bg-gray-200 rounded mx-auto" />
+                      </div>
 
-        <div className="space-y-2 border-l border-r border-gray-100">
-          <div className="h-4 w-20 bg-gray-200 rounded mx-auto" />
-          <div className="h-5 w-14 bg-gray-200 rounded mx-auto" />
-        </div>
+                      <div className="space-y-2 border-l border-r border-gray-100">
+                        <div className="h-4 w-20 bg-gray-200 rounded mx-auto" />
+                        <div className="h-5 w-14 bg-gray-200 rounded mx-auto" />
+                      </div>
 
-        <div className="space-y-2">
-          <div className="h-4 w-14 bg-gray-200 rounded mx-auto" />
-          <div className="h-5 w-10 bg-gray-200 rounded mx-auto" />
-        </div>
-      </div>
+                      <div className="space-y-2">
+                        <div className="h-4 w-14 bg-gray-200 rounded mx-auto" />
+                        <div className="h-5 w-10 bg-gray-200 rounded mx-auto" />
+                      </div>
+                    </div>
 
-      {/* Review box */}
-      <div className="mt-4 p-3 bg-gray-100 rounded-lg space-y-2">
-        <div className="h-3 bg-gray-200 rounded w-full" />
-        <div className="h-3 bg-gray-200 rounded w-5/6" />
-      </div>
+                    {/* Review box */}
+                    <div className="mt-4 p-3 bg-gray-100 rounded-lg space-y-2">
+                      <div className="h-3 bg-gray-200 rounded w-full" />
+                      <div className="h-3 bg-gray-200 rounded w-5/6" />
+                    </div>
 
-      {/* Button */}
-      <div className="mt-4 h-10 bg-gray-200 rounded-lg w-full" />
-    </div>
-      ))}
-    </div>
- : ""}
+                    {/* Button */}
+                    <div className="mt-4 h-10 bg-gray-200 rounded-lg w-full" />
+                  </div>
+                ))}
+              </div>
+              : ""}
             {!loading && fetchedSchools.length === 0 && (
               <NoSchoolsFound
                 onReset={() => {
@@ -583,58 +599,69 @@ export default function BrowseSchoolPage() {
               />
             )}
             {/* School cards grid */}
-             {!loading && fetchedSchools?.length > 0 &&
+            {!loading && fetchedSchools?.length > 0 &&
               <div className="flex flex-col">
 
 
                 <div className="sm:min-h-[600px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5 lg:gap-7 content-start w-full">
-                  {fetchedSchools.map((school: any) => (
-                    <SchoolCard key={school.school_name} school={school} />
+                  {fetchedSchools.map((school: any, idx: number) => (
+                    <SchoolCard key={idx} school={school} />
                   ))}
                 </div>
 
 
 
-                <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-9 flex-wrap">
-                  <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1} className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] disabled:cursor-not-allowed disabled:opacity-40 bg-white hover:bg-gray-50 transition-colors ${currentPage == 1 ? "" : "cursor-pointer"}`}>
-                    <ChevronLeftIcon />
-                  </button>
-                  {(() => {
-                    const pageWindow = 4;
-                    const startPage = Math.max(1, currentPage - Math.floor(pageWindow / 2));
-                    const endPage = Math.min(totalPages, startPage + pageWindow - 1);
-                    const adjustedStart = Math.max(1, endPage - pageWindow + 1);
+                <div className="flex items-center justify-center gap-3 mt-6 sm:mt-9 relative">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1} className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] disabled:cursor-not-allowed disabled:opacity-40 bg-white hover:bg-gray-50 transition-colors ${currentPage == 1 ? "" : "cursor-pointer"}`}>
+                      <ChevronLeftIcon />
+                    </button>
+                    {(() => {
+                      const pageWindow = 4;
+                      const startPage = Math.max(1, currentPage - Math.floor(pageWindow / 2));
+                      const endPage = Math.min(totalPages, startPage + pageWindow - 1);
+                      const adjustedStart = Math.max(1, endPage - pageWindow + 1);
 
-                    return Array.from(
-                      { length: Math.min(pageWindow, totalPages) },
-                      (_, i) => adjustedStart + i
-                    ).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => {
-                          setCurrentPage(page)
-                        }}
-                        className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md font-inter text-xs sm:text-sm font-medium transition-colors cursor-pointer ${page === currentPage
-                          ? "bg-[#0171F9] border border-[#0171F9] text-white"
-                          : "border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] hover:bg-gray-50"
-                          }`}
-                      >
-                        {page}
-                      </button>
-                    ));
-                  })()}
-
-
-                  <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
-                    <ChevronRightIcon />
-                  </button>
-                </div>
+                      return Array.from(
+                        { length: Math.min(pageWindow, totalPages) },
+                        (_, i) => adjustedStart + i
+                      ).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => {
+                            setCurrentPage(page)
+                          }}
+                          className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md font-inter text-xs sm:text-sm font-medium transition-colors cursor-pointer ${page === currentPage
+                            ? "bg-[#0171F9] border border-[#0171F9] text-white"
+                            : "border border-[rgba(0,0,0,0.08)] bg-white text-[#0171F9] hover:bg-gray-50"
+                            }`}
+                        >
+                          {page}
+                        </button>
+                      ));
+                    })()}
 
 
-              </div>}
+                    <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-md border border-[rgba(0,0,0,0.08)] bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
+                      <ChevronRightIcon />
+                    </button>
+
+                  </div>
+
+
+                  <div className="text-sm text-gray-500 absolute right-0">
+                    {pageLoading && (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-black border-t-white rounded-full animate-spin" />
+                        <span>Loading...</span>
+                      </div>
+                    )}
+                  </div>
+
+                </div></div>}
           </div>
 
         </div>
