@@ -552,28 +552,25 @@ export default function MyReportsPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [total, setTotal] = useState(0);
   const [searchInput, setSearchInput] = useState("");
+  const [userId, setUserId] = useState<Number>();
 
   useEffect(() => {
-    console.log("session",session);
     if (status === "unauthenticated") {
       router.push("/login");
-    }else if(session?.user?.id){
-        loadReports(1)
+    }else{
+      setUserId(Number(session?.user?.id))
     }
   }, [status, session, router]);
 
+  useEffect(() => { if (userId) loadReports(1) }, [userId])
 
-
-  const loadReports = async (page: number, query: string = "") => {
+  const loadReports = async (page: number) => {
       try {
-
+      setLoading(true);
         
-        setLoading(true);
-        
-
-      let url = `/api/reports/search?userid=${session?.user?.id}&page=${page}&limit=10`;
-      if (query.trim()) {
-        url += `&search=${encodeURIComponent(query.trim())}`;
+      let url = `/api/reports/search?userid=${userId}&page=${page}&limit=10`;
+      if (searchInput.trim()) {
+        url += `&search=${encodeURIComponent(searchInput.trim())}`;
       }
 
       const response = await fetch(url);
@@ -664,7 +661,7 @@ export default function MyReportsPage() {
             <button onClick={(e)=>{
                   e.preventDefault();
                   setCurrentPage(1);
-                  loadReports(1, searchInput);
+                  loadReports(1);
                 }} 
                 className="sm:block hidden flex-shrink-0 h-[54px] px-11 bg-[#0171F9] text-white font-[Inter] text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
               Search
