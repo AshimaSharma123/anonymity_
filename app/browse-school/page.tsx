@@ -272,19 +272,13 @@ export default function BrowseSchoolPage() {
 
   const loadSchools = async () => {
     try {
-      // If any filter or search is applied, use page 1
-      const hasFilters =
-        filters.location ||
-        filters.grade?.length > 0 ||
-        filters.rating?.length > 0 ||
-        searchInput?.school_name?.trim() ||
-        searchInput?.teacher_name?.trim();
+     
 
-      if (firstLoad || hasFilters) {
+      if (firstLoad) {
         setLoading(true);
       }
 
-
+console.log("loading",loading);
       const params = new URLSearchParams({
         page: String(currentPage),
         limit: "10",
@@ -319,10 +313,12 @@ export default function BrowseSchoolPage() {
 
       setFetchedSchools(result?.schools || []);
       setTotalPages(result?.pagination?.totalPages || 0);
+      setFirstLoad(false);
     } catch (err) {
       console.error("Error loading reports:", err);
       setLoading(false);
       setPageLoading(false);
+      setFirstLoad(false);
       setSearchingLoad(false);
     } finally {
       setLoading(false);
@@ -333,17 +329,34 @@ export default function BrowseSchoolPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (currentPage !== 1) {
       setCurrentPage(1);
+      
     } else {
       loadSchools();
     }
+    
   }, [debouncedFilters]);
 
+
+
   useEffect(() => {
-    loadSchools();
-    setPageLoading(true);
+ 
+    if(!searchingLoad){
+      loadSchools();
+      setPageLoading(true);
+    }
+    
   }, [currentPage]);
+
+  useEffect(()=>{
+    
+    if(searchingLoad){
+      loadSchools();
+      setLoading(true);
+    }
+  },[searchingLoad])
 
 
   return (
@@ -372,7 +385,7 @@ export default function BrowseSchoolPage() {
                 <input
                   type="text"
                   value={searchInput?.school_name || ""}
-                  onChange={(e) => { setSearchInput({ ...searchInput, school_name: e.target.value }) }}
+                  onChange={(e) => { setSearchInput({ ...searchInput, school_name: e.target.value }); }}
                   placeholder="Search by School Name..."
                   className="flex-1 bg-transparent text-[#737685] font-[Inter] text-xs sm:text-base font-normal outline-none placeholder:text-[#737685] min-w-0"
                 />
@@ -390,8 +403,8 @@ export default function BrowseSchoolPage() {
               </div>
               {/* Search button */}
               <button disabled={searchingLoad} onClick={() => {
-                loadSchools()
                 setSearchingLoad(true);
+                setCurrentPage(1);
               }} className="flex-shrink-0 h-12 sm:h-[54px] px-6 sm:px-11 bg-[#0171F9] text-white font-[Inter] text-xs sm:text-sm font-semibold leading-5 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
                 {searchingLoad ? "Searching..." : "Search"}
               </button>
@@ -411,7 +424,12 @@ export default function BrowseSchoolPage() {
                 {/* Filter header */}
                 <div className="flex items-end justify-between mb-5 sm:mb-7">
                   <span className="font-[Outfit] text-lg font-medium leading-5 text-black">Filter</span>
-                  {Object.keys(filters).length > 0 && <button onClick={() => {
+                  {Object.values(filters).some((value) => {
+  if (Array.isArray(value)) return value.length > 0;
+  return !!value;
+}) &&
+                  
+                  <button onClick={() => {
                     setFilters({})
                     setSearchInput({})
                   }} className="font-[Outfit] text-sm  font-medium leading-5 text-[#0171F9] hover:underline cursor-pointer">

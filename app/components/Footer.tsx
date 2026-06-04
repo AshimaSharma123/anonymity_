@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Footer() {
   const { data: session } = useSession();
-  console.log("session",session)
+ 
   return (
     <footer className="bg-[#FAFCFE] border-t border-[rgba(226,232,240,0.64)]">
       <div className="px-6 sm:px-[120px] flex flex-col">
