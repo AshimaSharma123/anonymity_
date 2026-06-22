@@ -71,7 +71,7 @@ export default function DeleteByCSVPage() {
       setShowPreview(true);
 
       if (data.matchedCount === 0) {
-        toast.info("No schools in the database matched your CSV file");
+        toast.error("No schools in the database matched your CSV file");
       } else {
         toast.success(`Found ${data.matchedCount} matching school(s)`);
       }
