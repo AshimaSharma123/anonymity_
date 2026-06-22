@@ -40,7 +40,7 @@ export async function GET(req: Request) {
         .from("schools")
         .select("import_batch_id, imported_at, COUNT(*) as count")
         .not("import_batch_id", "is", null)
-        .group_by("import_batch_id, imported_at")
+        // .group_by("import_batch_id, imported_at")
         .order("imported_at", { ascending: false });
 
       if (!fallbackBatches) {
