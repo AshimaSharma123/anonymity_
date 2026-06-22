@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import PageLoader from "@/app/components/PageLoader";
-import { AvgRatings, formatDate, ObjectType } from "@/lib/function";
+import { AvgRatings, formatDate } from "@/lib/function";
 import { ChatIcon, LocationIcon, SchoolIcon, TeacherIcon } from "@/lib/icons";
+import { ObjectType } from "@/lib/types";
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Rating {

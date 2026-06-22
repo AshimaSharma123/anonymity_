@@ -7,10 +7,7 @@ import { signIn } from "next-auth/react";
 import { scrollToError } from "@/lib/function";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
-type objectType = {
-  [key: string]: any
-}
+import { ObjectType } from "@/lib/types";
 
 type FormState = {
   full_name: string;
@@ -79,7 +76,7 @@ export default function SignUpPage() {
     password: "",
     confirm_password: "",
   });
-  const [errors, setErrors] = useState<objectType>({});
+  const [errors, setErrors] = useState<ObjectType>({});
   const [loader, setLoader] = useState<boolean>(false);
   const router = useRouter();
 

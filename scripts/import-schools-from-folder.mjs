@@ -67,6 +67,7 @@ function inferAssociation(filename) {
 function parseFile(filePath) {
   const wb = XLSX.readFile(filePath);
   const sheet = wb.Sheets[wb.SheetNames[0]];
+
   const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
   const association = inferAssociation(path.basename(filePath));
   const schoolYear = getCurrentSchoolYear();
@@ -75,18 +76,22 @@ function parseFile(filePath) {
   return rows
     .map((row) => {
       const name = String(row["School Name"] ?? "").trim();
-      if (!name) return null;
       const zip = String(row["Zip"] ?? "").replace(/\.0$/, "");
+      const gradeLevel = String(row["Grade"] ?? "").trim();
+
       const record = {
         school_name: name,
         street_address: String(row["Street Address"] ?? "").trim(),
         city: String(row["City"] ?? "").trim(),
         state: String(row["State"] ?? "").trim(),
         zipcode: zip,
-        school_association: association,
-        school_district_name: null,
+        school_association: "School District",
+        school_district_name:String(row["District"] ?? "").trim(),
         school_year: schoolYear,
-        grade_level: [],
+        grade_level: gradeLevel
+    ? gradeLevel.split(", ").map((g) => g.trim())
+    : [],
+        phone: String(row["Phone"] ?? "").trim()
       };
       const key = `${record.school_name}|${record.state}|${record.zipcode}|${record.street_address}`.toLowerCase();
       if (seen.has(key)) return null;
@@ -111,7 +116,9 @@ for (const file of files) {
     const batch = schools.slice(i, i + 200);
     const { error } = await supabase.from("schools").insert(batch);
     if (error) {
-      console.error("  Batch error:", error.message);
+      // console.error("  Batch error:", error.message);
+      console.error("Batch error:", JSON.stringify(error, null, 2));
+console.log("Sample row:", batch[0]);
     } else {
       totalInserted += batch.length;
       process.stdout.write(".");

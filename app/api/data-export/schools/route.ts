@@ -6,20 +6,14 @@ export async function GET(req: NextRequest) {
     const city = req.nextUrl.searchParams.get("city");
     const search = req.nextUrl.searchParams.get("search") || "";
 
-    if (!city) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "City is required",
-        },
-        { status: 400 }
-      );
-    }
-
     let query = supabase
       .from("schools")
-      .select("id, school_name")
-      .eq("city", city);
+      .select("id, school_name");
+
+    // City filter is optional - if provided, filter by city; otherwise, get all schools
+    if (city) {
+      query = query.eq("city", city);
+    }
 
     if (search.trim()) {
       query = query.ilike("school_name", `%${search}%`);

@@ -415,7 +415,7 @@ const [currentPage, setCurrentPage] = useState(1);
             </table>
           </div>
 		  {/* Pagination */}
-          {!isLoading && !error && totalPages > 1 && (
+          {!isLoading && !error && (
             <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-t border-[#E5E7EB]">
               <div className="font-inter font-normal text-xs sm:text-sm text-[#6F6C70]">
                 Showing {(currentPage - 1) * 10 + 1} to {Math.min(currentPage * 10, totalUsers)} of {totalUsers} users

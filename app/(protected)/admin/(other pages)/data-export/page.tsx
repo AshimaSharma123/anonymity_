@@ -100,6 +100,92 @@ function SearchField({
   );
 }
 
+function MultiSelectTeacherField({
+  label,
+  value,
+  onChange,
+  onSelect,
+  options,
+  selectedTeachers,
+  onRemove,
+  isLoading = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  onSelect: (val: string) => void;
+  options: string[];
+  selectedTeachers: Array<{ name: string; id: string }>;
+  onRemove: (id: string) => void;
+  isLoading?: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-1.5 flex-1 relative">
+      <label className="font-[Outfit] font-medium text-md text-[#121212]">{label}</label>
+      <div className="relative rounded-lg bg-[#F3F4F5]">
+        <div className={`flex flex-wrap gap-2 py-3 px-4`}>
+          {selectedTeachers.map((teacher) => (
+            <div
+              key={teacher.id}
+              className="inline-flex h-fit items-center gap-2 px-3 py-1 bg-[#0171F9] text-white rounded-lg text-sm"
+            >
+              <span>{teacher.name}</span>
+              <button
+                type="button"
+                onClick={() => onRemove(teacher.id)}
+                title="Remove"
+                className="ml-1 font-bold cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={(e) => {
+              onChange(e.target.value);
+              setShowDropdown(true);
+            }}
+            onFocus={() => setShowDropdown(true)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+            placeholder="Search teachers..."
+            className="flex-1 min-w-[200px]  bg-transparent outline-none font-[Inter] text-sm font-normal text-[#121212] placeholder:text-[#737685]"
+          />
+          {isLoading && (
+            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#737685] text-sm">
+              Loading...
+            </span>
+          )}
+        </div>
+      </div>
+
+      {showDropdown && options.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E5E7EB] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                onSelect(opt);
+                // setShowDropdown(false);
+              }}
+              className="w-full text-left px-4 py-2.5 hover:bg-[#F3F4F5] font-[Inter] text-sm text-[#121212] transition-colors"
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DateField({
   label,
   value,
@@ -150,8 +236,7 @@ export default function DataExportPage() {
   const [school, setSchool] = useState("");
   const [schoolId, setSchoolId] = useState("");
   const [teacherInput, setTeacherInput] = useState("");
-  const [teacher, setTeacher] = useState("");
-  const [teacherId, setTeacherId] = useState("");
+  const [teachers, setTeachers] = useState<Array<{ name: string; id: string }>>([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isExporting, setIsExporting] = useState(false);
@@ -195,7 +280,6 @@ export default function DataExportPage() {
       try {
         const res = await fetch(`/api/data-export/cities?search=${encodeURIComponent(city)}`);
         const data = await res.json();
-        console.log("data", data)
         if (data.success) {
           setCitySuggestions(data.cities);
         }
@@ -212,17 +296,14 @@ export default function DataExportPage() {
 
 
   useEffect(() => {
-
-    if (!city) {
-      setSchoolSuggestions([]);
-      return;
-    }
-
     const fetchSchools = async () => {
       setLoadingSchools(true);
       try {
+        const params = new URLSearchParams();
+        if (debouncedSchoolInput) params.append("search", debouncedSchoolInput);
+
         const res = await fetch(
-          `/api/data-export/schools?city=${encodeURIComponent(city)}&search=${encodeURIComponent(debouncedSchoolInput)}`
+          `/api/data-export/schools?${params}`
         );
         const data = await res.json();
         if (data.success) {
@@ -236,20 +317,20 @@ export default function DataExportPage() {
       }
     };
 
-    fetchSchools();
-  }, [city, debouncedSchoolInput]);
+    if (debouncedSchoolInput) {
+      fetchSchools();
+    }
+  }, [debouncedSchoolInput]);
 
   useEffect(() => {
-    if (!schoolId) {
-      setTeacherSuggestions([]);
-      return;
-    }
-
     const fetchTeachers = async () => {
       setLoadingTeachers(true);
       try {
+        const params = new URLSearchParams();
+        if (debouncedTeacherInput) params.append("search", debouncedTeacherInput);
+
         const res = await fetch(
-          `/api/data-export/teachers?school_id=${schoolId}&city=${encodeURIComponent(city)}&search=${encodeURIComponent(debouncedTeacherInput)}`
+          `/api/data-export/teachers?${params}`
         );
         const data = await res.json();
         if (data.success) {
@@ -263,17 +344,14 @@ export default function DataExportPage() {
       }
     };
 
-    fetchTeachers();
-  }, [schoolId, city, debouncedTeacherInput]);
+    if (debouncedTeacherInput) {
+      fetchTeachers();
+    }
+  }, [debouncedTeacherInput]);
 
   const handleCitySelect = (selectedCity: string) => {
     setCity(selectedCity);
     setCityInput(selectedCity);
-    setSchool("");
-    setSchoolInput("");
-    setSchoolId("");
-    setTeacher("");
-    setTeacherInput("");
   };
 
   const handleCityFilter = (selectedCity2: string) => {
@@ -284,10 +362,11 @@ export default function DataExportPage() {
   const handleSchoolSelect = async (selectedSchool: string) => {
     setSchool(selectedSchool);
     setSchoolInput(selectedSchool);
-    setTeacher("");
-    setTeacherInput("");
 
-    const res = await fetch(`/api/data-export/schools?city=${encodeURIComponent(city)}&search=${encodeURIComponent(selectedSchool)}`);
+    const params = new URLSearchParams();
+    params.append("search", selectedSchool);
+
+    const res = await fetch(`/api/data-export/schools?${params}`);
     const data = await res.json();
     if (data.success) {
       const foundSchool = data.schools.find((s: any) => s.name === selectedSchool);
@@ -298,25 +377,35 @@ export default function DataExportPage() {
   };
 
   const handleTeacherSelect = async (selectedTeacher: string) => {
-    setTeacher(selectedTeacher);
-    setTeacherInput(selectedTeacher);
+    const params = new URLSearchParams();
+    params.append("search", selectedTeacher);
 
     const res = await fetch(
-      `/api/data-export/teachers?school_id=${schoolId}&city=${encodeURIComponent(city)}&search=${encodeURIComponent(selectedTeacher)}`
+      `/api/data-export/teachers?${params}`
     );
     const data = await res.json();
     if (data.success) {
       const foundTeacher = data.teachers.find((t: any) => t.name === selectedTeacher);
       if (foundTeacher) {
-        setTeacherId(foundTeacher.id);
+        // Check if teacher already selected
+        if (!teachers.find(t => t.id === foundTeacher.id)) {
+          setTeachers([...teachers, { id: foundTeacher.id, name: foundTeacher.name }]);
+          setTeacherInput("");
+        }
       }
     }
+  };
+
+  const removeTeacher = (teacherId: string) => {
+    setTeachers(teachers.filter(t => t.id !== teacherId));
   };
 
   const isDateRangeValid = () => {
     if (!startDate || !endDate) return true;
     return new Date(startDate) <= new Date(endDate);
   };
+
+  const canExport = isDateRangeValid();
 
   const handleExportRecord = async (recordId: string) => {
     setExportingRecordId(recordId);
@@ -384,11 +473,6 @@ export default function DataExportPage() {
   };
 
   const handleExportData = async () => {
-    if (!city || !school || !teacher || !startDate || !endDate) {
-      toast.error("All fields are required");
-      return;
-    }
-
     if (!isDateRangeValid()) {
       toast.error("Start date must be before or equal to end date");
       return;
@@ -396,14 +480,16 @@ export default function DataExportPage() {
 
     setIsExporting(true);
     try {
-      const params = new URLSearchParams({
-        school_id: schoolId,
-        school: school,
-        teacher_id: teacherId,
-        city,
-        start_date: startDate,
-        end_date: endDate,
-      });
+      const params = new URLSearchParams();
+
+      if (city) params.append("city", city);
+      if (schoolId) params.append("school_id", schoolId);
+      if (school) params.append("school", school);
+      if (teachers.length > 0) {
+        teachers.forEach(t => params.append("teacher_ids", t.id));
+      }
+      if (startDate) params.append("start_date", startDate);
+      if (endDate) params.append("end_date", endDate);
 
       const response = await fetch(`/api/data-export/export?${params}`);
 
@@ -531,52 +617,51 @@ export default function DataExportPage() {
               Export Data
             </h2>
             <p className="font-[Inter] font-normal sm:text-base text-sm text-[#434655] leading-[26px]">
-              Select a School and date range<br className="hidden sm:block" />to generate Report.
+              Select filters to generate Report.<br className="hidden sm:block" />All fields are optional.
             </p>
           </div>
 
           {/* Right: form */}
           <div className="flex-1 flex flex-col gap-5">
             <SearchField
-              label="City *"
+              label="City"
               value={cityInput}
               onChange={setCityInput}
               onSelect={handleCitySelect}
               options={citySuggestions}
               isLoading={loadingCities}
-              placeholder="Search city..."
+              placeholder="Search city"
             />
 
             <SearchField
-              label="School *"
+              label="School"
               value={schoolInput}
               onChange={setSchoolInput}
               onSelect={handleSchoolSelect}
               options={schoolSuggestions}
-              disabled={!city}
               isLoading={loadingSchools}
-              placeholder={city ? "Search school..." : "Select a city first"}
+              placeholder="Search school"
             />
 
-            <SearchField
-              label="Teacher(s) *"
+            <MultiSelectTeacherField
+              label="Teacher(s)"
               value={teacherInput}
               onChange={setTeacherInput}
               onSelect={handleTeacherSelect}
               options={teacherSuggestions}
-              disabled={!schoolId}
+              selectedTeachers={teachers}
+              onRemove={removeTeacher}
               isLoading={loadingTeachers}
-              placeholder={schoolId ? "Search teacher..." : "Select a school first"}
             />
 
             <div className="flex flex-col sm:flex-row gap-5">
-              <DateField label="Start Date *" value={startDate} onChange={setStartDate} />
-              <DateField label="End Date *" value={endDate} onChange={setEndDate} />
+              <DateField label="Start Date" value={startDate} onChange={setStartDate} />
+              <DateField label="End Date" value={endDate} onChange={setEndDate} />
             </div>
 
             <button
               onClick={handleExportData}
-              disabled={!city || !school || !teacher || !startDate || !endDate || !isDateRangeValid() || isExporting}
+              disabled={!canExport || isExporting}
               className="w-fit flex items-center gap-1.5 px-5 py-2 rounded-lg bg-[#0171F9] font-[Inter] font-semibold text-sm text-white leading-6 hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isExporting ? "Exporting..." : "Export Data"}
@@ -752,7 +837,7 @@ export default function DataExportPage() {
             {/* Pagination Controls */}
             <div className="flex items-center justify-between px-5 py-4 border-t border-[#E5E7EB] bg-white">
               <span className="font-[Inter] text-sm text-[#6F6C70]">
-                Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, totalReports)} of {totalReports} exports
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, totalReports)} of {totalReports} exports
               </span>
               <div className="flex items-center gap-2">
                 <button

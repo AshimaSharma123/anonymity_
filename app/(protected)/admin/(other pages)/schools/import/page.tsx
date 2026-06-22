@@ -25,8 +25,10 @@ export default function SchoolImportPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [summary, setSummary] = useState<ImportSummary | null>(null);
   const [fileResults, setFileResults] = useState<FileResult[]>([]);
+  const [batchId, setBatchId] = useState<string | null>(null);
 
   const onFilesSelected = (selected: FileList | null) => {
     if (!selected?.length) {
@@ -69,6 +71,7 @@ export default function SchoolImportPage() {
     setUploading(true);
     setSummary(null);
     setFileResults([]);
+    setBatchId(null);
 
     try {
       const formData = new FormData();
@@ -88,6 +91,9 @@ export default function SchoolImportPage() {
 
       setSummary(data.summary);
       setFileResults(data.fileResults || []);
+      if (data.batchId) {
+        setBatchId(data.batchId);
+      }
 
       if (data.summary.inserted > 0) {
         toast.success(`Imported ${data.summary.inserted} schools`);
@@ -104,15 +110,77 @@ export default function SchoolImportPage() {
     }
   };
 
+  const handleDeleteImport = async () => {
+    if (!batchId) {
+      toast.error("No import batch to delete");
+      return;
+    }
+
+    const confirmed = confirm(
+      "Are you sure you want to delete all schools from this import? This action cannot be undone."
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setDeleting(true);
+
+    try {
+      const response = await fetch("/api/admin/schools/import/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ batchId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || "Failed to delete schools");
+        return;
+      }
+
+      toast.success(data.message || "Schools deleted successfully");
+      setSummary(null);
+      setFileResults([]);
+      setBatchId(null);
+      setFiles([]);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete schools");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between gap-4">
         <Link
           href="/admin/schools"
           className="font-inter text-sm text-[#0171F9] hover:underline"
         >
           ← Back to schools
         </Link>
+        <div className="flex gap-4 flex-wrap">
+          <Link
+            href="/admin/schools/delete-by-csv"
+            className="font-inter text-sm text-[#0171F9] hover:underline"
+          >
+            Delete by CSV →
+          </Link>
+          <Link
+            href="/admin/schools/delete"
+            className="font-inter text-sm text-[#0171F9] hover:underline"
+          >
+            Delete manually →
+          </Link>
+          <Link
+            href="/admin/schools/import-history"
+            className="font-inter text-sm text-[#0171F9] hover:underline"
+          >
+            View history →
+          </Link>
+        </div>
       </div>
 
       <div className="max-w-3xl">
@@ -192,9 +260,21 @@ export default function SchoolImportPage() {
 
         {summary && (
           <div className="mt-8 bg-white rounded-lg border border-[#E5E7EB] p-6">
-            <h2 className="font-outfit font-semibold text-lg text-[#121212] mb-4">
-              Import results
-            </h2>
+            <div className="flex items-start justify-between mb-4">
+              <h2 className="font-outfit font-semibold text-lg text-[#121212]">
+                Import results
+              </h2>
+              {batchId && summary.inserted > 0 && (
+                <button
+                  type="button"
+                  onClick={handleDeleteImport}
+                  disabled={deleting}
+                  className="px-4 py-2 rounded-lg bg-[#E53E3E] text-white font-inter font-semibold text-sm hover:bg-[#c71a1a] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {deleting ? "Deleting..." : "Delete import"}
+                </button>
+              )}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
               <div>
                 <p className="text-xs text-[#737786] font-inter">Parsed</p>

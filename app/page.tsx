@@ -2,8 +2,100 @@ import Image from "next/image";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import { LocationIcon } from "@/lib/icons";
+import { getSentiment } from "@/lib/function";
 
-export default function Home() {
+async function getHomePageData() {
+  try {
+    const [
+      recentReportsResult,
+      reportsCountResult,
+      schoolsCountResult,
+    ] = await Promise.all([
+      supabase
+        .from("reports")
+        .select(`
+          school_name,
+          feedback,
+          AI_sentiment,
+          created_at,
+          grade_level,
+          schools (
+            city,
+            state
+          )
+        `)
+        .eq("status", 2)
+        .order("created_at", {
+          ascending: false,
+        })
+        .limit(3),
+
+      supabase
+        .from("reports")
+        .select("*", {
+          count: "exact",
+          head: true,
+        })
+        .eq("status", 2),
+
+      supabase
+        .from("schools")
+        .select("*", {
+          count: "exact",
+          head: true,
+        }),
+    ]);
+
+    return {
+      recentReports:
+        recentReportsResult.data || [],
+
+      totalReports:
+        reportsCountResult.count || 0,
+
+      totalSchools:
+        schoolsCountResult.count || 0,
+    };
+  } catch (error) {
+    console.error(
+      "Failed to fetch homepage data:",
+      error
+    );
+
+    return {
+      recentReports: [],
+      totalReports: 0,
+      totalSchools: 0,
+    };
+  }
+}
+
+export default async function Home() {
+  const {
+    recentReports,
+    totalReports,
+    totalSchools,
+  } = await getHomePageData();
+
+
+  const formatCount = (count: number) => {
+  if (count >= 1000000) {
+    return `${(count / 1000000)
+      .toFixed(1)
+      .replace(".0", "")}M+`;
+  }
+
+  if (count >= 1000) {
+    return `${(count / 1000)
+      .toFixed(1)
+      .replace(".0", "")}K+`;
+  }
+
+  return String(count).padStart(2, "0");
+}
+
   return (
     <>
       <Header />
@@ -431,151 +523,87 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Recent Classroom Experiences Section */}
-        <section className="bg-white sm:px-9 px-6 py-[35px] pb-[80px]">
-          <div className="rounded-[28px] bg-[#F8F9FD] sm:p-14 px-4 pt-10 flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
+        {/* Recent Reports Experiences Section */}
+        {recentReports.length > 0 && (
+          <section className="bg-white sm:px-9 px-6 py-[35px] pb-[80px]">
+            <div className="rounded-[28px] bg-[#F8F9FD] sm:p-14 px-4 pt-10 flex flex-col lg:flex-row justify-between gap-10 lg:gap-16">
 
-            {/* Left: heading, subtitle, stats */}
-            <div className="flex flex-col justify-between gap-10 flex-shrink-0 lg:w-[556px]">
-              <div className="flex flex-col sm:gap-8 gap-4">
-                <h2 className="font-[Outfit] sm:text-[clamp(28px,3.2vw,44px)] text-[clamp(20px,3.2vw,44px)] font-semibold text-[#121212] leading-[1.32]">
-                  Recent Classroom Experiences
-                </h2>
-                <p className="font-inter sm:text-base text-[15px] text-[#212121] leading-[26px] opacity-[0.96] max-w-[492px]">
-                  Real insights shared by Guest teacher to help you better understand schools and teaching environments.
-                </p>
+              {/* Left: heading, subtitle, stats */}
+              <div className="flex flex-col justify-between gap-10 flex-shrink-0 lg:w-[556px]">
+                <div className="flex flex-col sm:gap-8 gap-4">
+                  <h2 className="font-[Outfit] sm:text-[clamp(28px,3.2vw,44px)] text-[clamp(20px,3.2vw,44px)] font-semibold text-[#121212] leading-[1.32]">
+                    Recent Reports <br></br> Experiences
+                  </h2>
+                  <p className="font-inter sm:text-base text-[15px] text-[#212121] leading-[26px] opacity-[0.96] max-w-[492px]">
+                    Real insights shared by Guest teacher to help you better understand schools and teaching environments.
+                  </p>
+                </div>
+                <div className="flex items-start gap-12">
+                  <div className="flex flex-col gap-5">
+                    <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">{formatCount(totalReports)}</span>
+                    <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Reports</span>
+                  </div>
+                  <div className="flex flex-col gap-5">
+                    <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">{formatCount(totalSchools)}</span>
+                    <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Schools</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-start gap-12">
-                <div className="flex flex-col gap-5">
-                  <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">2M+</span>
-                  <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Reports</span>
-                </div>
-                <div className="flex flex-col gap-5">
-                  <span className="font-[Outfit] sm:text-5xl text-3xl font-semibold text-[#121212] opacity-[0.96]">1M+</span>
-                  <span className="font-inter text-base text-[#212121] leading-[26px] tracking-[1px] uppercase opacity-80">Schools</span>
-                </div>
+
+              {/* Right: review cards */}
+              <div className="flex flex-col gap-5 flex-1 min-w-0">
+                {recentReports.map((report: any, index: number) => {
+                  const sc = getSentiment(report);
+                  const createdDate = new Date(report.created_at);
+                  const now = new Date();
+                  const diffTime = now.getTime() - createdDate.getTime();
+                  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                  const daysAgo = diffDays === 0 ? "Today" : `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+
+                  return (
+                    <div key={index} className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
+                      <div className="flex sm:items-center items-start justify-between">
+                        <div className="flex flex-col gap-1.5">
+                          <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
+                            <span className="font-inter text-sm font-bold text-[#121212] leading-5">{report.school_name}</span>
+                            {report.grade_level && (
+                              <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: {report.grade_level}</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <LocationIcon />
+                            <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">
+                              {[report.schools.city, report.schools.state].filter(Boolean).join(", ")}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={`flex px-[13px] py-[5px] rounded ${sc.bg}`}>
+                          <span className={`font-inter text-xs font-semibold ${sc.text} leading-[15px]`}>{sc.label}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
+                          <p className="font-inter text-sm text-[#464555] leading-6">{report.feedback}</p>
+                        </div>
+                        <div className="flex sm:items-center items-start justify-between">
+                          <div className="flex items-center gap-1">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
+                            </svg>
+                            <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
+                          </div>
+                          <span className="font-inter text-xs text-[#777587] leading-4">{daysAgo}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-
-            {/* Right: review cards */}
-            <div className="flex flex-col gap-5 flex-1 min-w-0">
-
-              {/* Card 1 – Green Valley High School */}
-              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex sm:items-center items-start justify-between">
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
-                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Green Valley High School</span>
-                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 8th</span>
-                    </div>
-                    <div className="flex items-center gap-1 opacity-64">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Austin, Texas, USA</span>
-                    </div>
-                  </div>
-                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(47,175,0,0.10)]">
-                    <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
-                    <p className="font-inter text-sm text-[#464555] leading-6">Classroom was mostly organized and lesson plans were available, but managing student behavior required extra attention throughout the day</p>
-                  </div>
-                  <div className="flex sm:items-center items-start justify-between">
-                    <div className="flex items-center gap-1">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
-                    </div>
-                    <span className="font-inter text-xs text-[#777587] leading-4">1 days ago</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2 – Riverdale High School */}
-              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex sm:items-center items-start justify-between">
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
-                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Riverdale High School</span>
-                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 10th</span>
-                    </div>
-                    <div className="flex items-center gap-1 opacity-64">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Chicago, Illinois, USA</span>
-                    </div>
-                  </div>
-                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(47,175,0,0.10)]">
-                    <span className="font-inter text-xs font-semibold text-[#2FAF00] leading-[15px]">Positive</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
-                    <p className="font-inter text-sm text-[#464555] leading-6">Clear instructions were provided and the staff was supportive, students were engaged which made the overall experience smooth</p>
-                  </div>
-                  <div className="flex sm:items-center items-start justify-between">
-                    <div className="flex items-center gap-1">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
-                    </div>
-                    <span className="font-inter text-xs text-[#777587] leading-4">2 days ago</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 3 – Maplewood Middle School */}
-              <div className="flex flex-col gap-4 p-4 rounded-[20px] border border-[rgba(219,219,219,0.40)] bg-white backdrop-blur-[5px]">
-                <div className="flex sm:items-center items-start justify-between">
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex sm:items-center items-start sm:gap-3 gap-1.5 flex-col sm:flex-row">
-                      <span className="font-inter text-sm font-bold text-[#121212] leading-5">Maplewood Middle School</span>
-                      <span className="font-inter text-xs text-[#464555] leading-[15px] tracking-[0.5px] uppercase opacity-80">Grade Level: 7th</span>
-                    </div>
-                    <div className="flex items-center gap-1 opacity-64">
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.33268 5.83333C9.33268 4.54417 8.28852 3.5 6.99935 3.5C5.71018 3.5 4.66602 4.54417 4.66602 5.83333C4.66602 7.1225 5.71018 8.16667 6.99935 8.16667C8.28852 8.16667 9.33268 7.1225 9.33268 5.83333ZM5.83268 5.83333C5.83268 5.19167 6.35768 4.66667 6.99935 4.66667C7.64102 4.66667 8.16602 5.19167 8.16602 5.83333C8.16602 6.475 7.64102 7 6.99935 7C6.35768 7 5.83268 6.475 5.83268 5.83333Z" fill="#121212" />
-                        <path d="M6.66237 12.7226C6.76154 12.7926 6.88404 12.8334 7.00071 12.8334C7.11737 12.8334 7.23987 12.7984 7.33904 12.7226C7.51404 12.5942 11.6849 9.59006 11.6674 5.82756C11.6674 3.25506 9.57321 1.16089 7.00071 1.16089C4.42821 1.16089 2.33404 3.25506 2.33404 5.82756C2.31654 9.58422 6.48737 12.5942 6.66237 12.7226ZM7.00071 2.33339C8.93154 2.33339 10.5007 3.90256 10.5007 5.83339C10.5124 8.42339 7.93987 10.7509 7.00071 11.5151C6.06154 10.7509 3.48904 8.42922 3.50071 5.83339C3.50071 3.90256 5.06987 2.33339 7.00071 2.33339Z" fill="#121212" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#121212] leading-[26px]">Denver, Colorado, USA</span>
-                    </div>
-                  </div>
-                  <div className="flex px-[13px] py-[5px] rounded bg-[rgba(243,33,33,0.10)]">
-                    <span className="font-inter text-xs font-semibold text-[#F32121] leading-[15px]">Negative</span>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <div className="px-[18px] py-2.5 rounded-lg bg-[#F8F9FD]">
-                    <p className="font-inter text-sm text-[#464555] leading-6">There was limited guidance from the regular teacher and classroom management was a bit challenging due to unclear expectations</p>
-                  </div>
-                  <div className="flex sm:items-center items-start justify-between">
-                    <div className="flex items-center gap-1">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.73464 15L4.46797 12.8667L2.06797 12.3333L2.3013 9.86667L0.667969 8L2.3013 6.13333L2.06797 3.66667L4.46797 3.13333L5.73464 1L8.0013 1.96667L10.268 1L11.5346 3.13333L13.9346 3.66667L13.7013 6.13333L15.3346 8L13.7013 9.86667L13.9346 12.3333L11.5346 12.8667L10.268 15L8.0013 14.0333L5.73464 15ZM6.3013 13.3L8.0013 12.5667L9.73464 13.3L10.668 11.7L12.5013 11.2667L12.3346 9.4L13.568 8L12.3346 6.56667L12.5013 4.7L10.668 4.3L9.7013 2.7L8.0013 3.43333L6.26797 2.7L5.33464 4.3L3.5013 4.7L3.66797 6.56667L2.43464 8L3.66797 9.4L3.5013 11.3L5.33464 11.7L6.3013 13.3ZM7.3013 10.3667L11.068 6.6L10.1346 5.63333L7.3013 8.46667L5.86797 7.06667L4.93464 8L7.3013 10.3667Z" fill="#0171F9" />
-                      </svg>
-                      <span className="font-inter text-xs text-[#0171F9] leading-4">Verified User</span>
-                    </div>
-                    <span className="font-inter text-xs text-[#777587] leading-4">2 days ago</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
+          </section>
+        )}
       </main>
-
       <Footer />
-
     </>
   );
 }

@@ -32,13 +32,23 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    let query = supabase
-      .from("reports")
-      .select("*")
-      .eq("school_id", record.school_id)
-      .eq("teacher_id", record.teacher_id)
-      .gte("created_at", record.start_date)
-      .lte("created_at", record.end_date);
+    let query = supabase.from("reports").select("*");
+
+      if (record.school_id) {
+        query = query.eq("school_id", record.school_id);
+      }
+
+      if (record.teacher_id?.length) {
+        query = query.in("teacher_id", record.teacher_id);
+      }
+
+      if (record.start_date) {
+        query = query.gte("created_at", record.start_date);
+      }
+
+      if (record.end_date) {
+        query = query.lte("created_at", record.end_date);
+      }
 
     const { data: reports, error: reportsError } = await query;
 

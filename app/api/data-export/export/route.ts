@@ -5,31 +5,31 @@ export async function GET(req: NextRequest) {
   try {
     const schoolId = req.nextUrl.searchParams.get("school_id");
     const schoolName = req.nextUrl.searchParams.get("school");
-    const teacherId = req.nextUrl.searchParams.get("teacher_id");
+    const teacherIds = req.nextUrl.searchParams.getAll("teacher_ids");
     const city = req.nextUrl.searchParams.get("city");
     const startDate = req.nextUrl.searchParams.get("start_date");
     const endDate = req.nextUrl.searchParams.get("end_date");
 
-    if (!schoolId || !teacherId || !city || !startDate || !endDate) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "All parameters are required: school_id, teacher_id, city, start_date, end_date",
-        },
-        { status: 400 }
-      );
-    }
-
-    const startDateTime = `${startDate}T00:00:00.000Z`;
-    const endDateTime = `${endDate}T23:59:59.999Z`;
+    // All fields are now optional - if empty, export all data for that filter level
+    const startDateTime = startDate ? `${startDate}T00:00:00.000Z` : "1970-01-01T00:00:00.000Z";
+    const endDateTime = endDate ? `${endDate}T23:59:59.999Z` : "2099-12-31T23:59:59.999Z";
 
     let query = supabase
       .from("reports")
-      .select("*")
-      .eq("school_id", schoolId)
-      .eq("teacher_id", teacherId)
-      .gte("created_at", startDateTime)
-      .lte("created_at", endDateTime);
+      .select("*");
+
+    // Apply filters only if they are provided
+    if (city) {
+      query = query.eq("city", city);
+    }
+    if (schoolId) {
+      query = query.eq("school_id", schoolId);
+    }
+    if (teacherIds.length > 0) {
+      query = query.in("teacher_id", teacherIds);
+    }
+
+    query = query.gte("created_at", startDateTime).lte("created_at", endDateTime);
 
     const { data: reports, error } = await query;
 
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
           city,
           school_name: schoolName,
           school_id: schoolId,
-          teacher_id: teacherId,
+          teacher_id: teacherIds,
           start_date: startDate,
           end_date: endDate,
         },

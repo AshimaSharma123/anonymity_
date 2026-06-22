@@ -7,13 +7,12 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { scrollToError } from "@/lib/function";
 import toast from "react-hot-toast";
+import { ObjectType } from "@/lib/types";
 
-type objectType = {
-  [key: string]: any
-}
 
-function validateForm(state: objectType) {
-  const errors: objectType = {};
+
+function validateForm(state: ObjectType) {
+  const errors: ObjectType = {};
 
   if (!state.email.trim()) {
     errors.email = "Email is required";
@@ -28,8 +27,8 @@ function validateForm(state: objectType) {
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [formValues, setFormValues] = useState<objectType>({ email: "", password: "" });
-  const [errors, setErrors] = useState<objectType>({});
+  const [formValues, setFormValues] = useState<ObjectType>({ email: "", password: "" });
+  const [errors, setErrors] = useState<ObjectType>({});
   const [loader, setLoader] = useState<boolean>(false);
   const [ButtonMsg, setButtonMsg] = useState<string>("Login");
   const router = useRouter();

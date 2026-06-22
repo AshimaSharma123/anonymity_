@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
-import { ObjectType } from "@/lib/function";
+import { ObjectType } from "@/lib/types";
 import { useDebounce } from "@/lib/useDebounce";
 
 const SearchIcon = () => (
@@ -86,6 +86,7 @@ type SentimentType = "Positive" | "Neutral" | "Negative";
 interface School {
   id: Number;
   school_name: string;
+  ai_summary: string;
   city: string;
   state: string;
   grade_level: [];
@@ -184,8 +185,9 @@ function SchoolCard({ school }: { school: School }) {
               <h3 className="text-[#121212] font-[Inter] text-sm sm:text-base font-bold leading-5">{school.school_name}</h3>
               <div className="flex items-center gap-1.5 opacity-80">
                 <CardMapPinIcon />
-                <span className="font-[Outfit] text-xs text-[#414141]">{`${school.city}, ${school.state}`}</span>
-              </div>
+                <span className="font-[Outfit] text-xs text-[#414141]">
+                  {[school.city, school.state].filter(Boolean).join(", ")}
+                </span>              </div>
               <div className="flex flex-row gap-2">
                 {school.grade_level?.map((grade: string, idx: number) => {
                   return <span key={idx} className="inline-flex self-start px-2 py-1 rounded bg-[#DFEEFF] text-[#0171F9] font-[Inter] text-xs font-semibold leading-[15px]">
@@ -194,7 +196,7 @@ function SchoolCard({ school }: { school: School }) {
                 })}
               </div>
             </div>
-            {school.sentiment && <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
+            {school?.sentiment && <span className={`flex-shrink-0 h-fit inline-flex px-2 py-1 w-fit rounded font-[Inter] text-xs font-semibold leading-[15px] ${sentimentStyle.bg} ${sentimentStyle.text}`}>
               {school.sentiment}
             </span>}
           </div>
@@ -233,12 +235,12 @@ function SchoolCard({ school }: { school: School }) {
           <div className="h-px w-full bg-[#DADADA] opacity-40" />
 
           {/* Quote snippet */}
-          <div className="flex items-start gap-2 p-2 sm:p-2.5 rounded bg-[#F8F9FD]">
+         {school.ai_summary && <div className="flex items-start gap-2 p-2 sm:p-2.5 rounded bg-[#F8F9FD]">
             <div className="flex-shrink-0 mt-0.5 sm:mt-1">
               <QuoteIcon />
             </div>
-            <p className="flex-1 text-[#464555] font-[Inter] text-xs sm:text-[13px] font-normal leading-[16px] sm:leading-[18px]">Excellent Staff support and well-behaved students. Lesson plans are almos always left prepared.</p>
-          </div>
+             <p className="flex-1 text-[#464555] font-[Inter] text-xs sm:text-[13px] font-normal leading-[16px] sm:leading-[18px]">{school.ai_summary}</p>
+          </div>}
         </div>
 
         {/* View Details button */}

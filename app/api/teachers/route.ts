@@ -154,108 +154,109 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch reports
-    const { data: reportsData } = await supabase
-      .from("reports")
-      .select("*")
-      .eq("school_id", school_id);
+    // const { data: reportsData } = await supabase
+    //   .from("reports")
+    //   .select("*")
+    //   .eq("status",2)
+    //   .eq("school_id", school_id);
 
     // Merge teachers with reports analytics
-    const teachers = (teachersData || [])
-      .map((teacher: any) => {
-        const teacherReports =
-          (reportsData || []).filter(
-            (r: any) =>
-              r.teacher_id === teacher.id
-          );
+    // const teachers = (teachersData || [])
+    //   .map((teacher: any) => {
+    //     const teacherReports =
+    //       (reportsData || []).filter(
+    //         (r: any) =>
+    //           r.teacher_id === teacher.id
+    //       );
 
-        const reportsCount =
-          teacherReports.length;
+    //     const reportsCount =
+    //       teacherReports.length;
 
-        let avgRating = 0;
+    //     let avgRating = 0;
 
-        if (reportsCount > 0) {
-          const total = teacherReports.reduce(
-            (sum: number, r: any) => {
-              if (r.return_to_teacher === 1)
-                return sum + 5;
+    //     if (reportsCount > 0) {
+    //       const total = teacherReports.reduce(
+    //         (sum: number, r: any) => {
+    //           if (r.return_to_teacher === 1)
+    //             return sum + 5;
 
-              if (r.return_to_teacher === 3)
-                return sum + 3;
+    //           if (r.return_to_teacher === 3)
+    //             return sum + 3;
 
-              if (r.return_to_teacher === 2)
-                return sum + 0;
+    //           if (r.return_to_teacher === 2)
+    //             return sum + 0;
 
-              return sum;
-            },
-            0
-          );
+    //           return sum;
+    //         },
+    //         0
+    //       );
 
-          avgRating = Number(
-            (total / reportsCount).toFixed(1)
-          );
-        }
+    //       avgRating = Number(
+    //         (total / reportsCount).toFixed(1)
+    //       );
+    //     }
 
-        // Risk calculation
-        let risk = "Medium";
+    //     // Risk calculation
+    //     let risk = "Medium";
 
-        const negativeCount =
-          teacherReports.filter(
-            (r: any) =>
-              r.return_to_teacher === 2
-          ).length;
+    //     const negativeCount =
+    //       teacherReports.filter(
+    //         (r: any) =>
+    //           r.return_to_teacher === 2
+    //       ).length;
 
-        const positiveCount =
-          teacherReports.filter(
-            (r: any) =>
-              r.return_to_teacher === 1
-          ).length;
+    //     const positiveCount =
+    //       teacherReports.filter(
+    //         (r: any) =>
+    //           r.return_to_teacher === 1
+    //       ).length;
 
-        if (reportsCount === 0) {
-          risk = "N/A";
-        } else if (
-          negativeCount >
-          reportsCount * 0.5
-        ) {
-          risk = "High";
-        } else if (
-          positiveCount >
-          reportsCount * 0.6
-        ) {
-          risk = "Low";
-        }
+    //     if (reportsCount === 0) {
+    //       risk = "N/A";
+    //     } else if (
+    //       negativeCount >
+    //       reportsCount * 0.5
+    //     ) {
+    //       risk = "High";
+    //     } else if (
+    //       positiveCount >
+    //       reportsCount * 0.6
+    //     ) {
+    //       risk = "Low";
+    //     }
 
-        return {
-          id: teacher.id,
+    //     return {
+    //       id: teacher.id,
 
-          name: teacher.name,
+    //       name: teacher.name,
 
-          reports: reportsCount,
+    //       reports: reportsCount,
 
-          avgRating,
+    //       avgRating,
 
-          risk,
+    //       risk,
 
-          status:
-            teacher.status === 1
-              ? "Active"
-              : "Inactive",
-        };
-      })
-      .filter((teacher: any) => {
-        if (
-          riskFilter &&
-          riskFilter !== "All"
-        ) {
-          return teacher.risk === riskFilter;
-        }
+    //       status:
+    //         teacher.status === 1
+    //           ? "Active"
+    //           : "Inactive",
+    //     };
+    //   })
+    //   .filter((teacher: any) => {
+    //     if (
+    //       riskFilter &&
+    //       riskFilter !== "All"
+    //     ) {
+    //       return teacher.risk === riskFilter;
+    //     }
 
-        return true;
-      });
+    //     return true;
+    //   });
 
     return NextResponse.json({
       success: true,
 
-      teachers,
+      teachers: teachersData,
 
       pagination: {
         page,

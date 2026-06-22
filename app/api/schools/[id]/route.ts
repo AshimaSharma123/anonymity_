@@ -75,6 +75,7 @@ export async function GET(
         .from("reports")
         .select("*", { count: "exact" })
         .eq("school_id", id)
+        .eq("status", 2)
         .order("created_at", { ascending: false })
         .range(offset, offset + limit - 1);
 

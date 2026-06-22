@@ -4,23 +4,16 @@ import { supabase } from "@/lib/supabase";
 export async function GET(req: NextRequest) {
   try {
     const school_id = req.nextUrl.searchParams.get("school_id");
-    const city = req.nextUrl.searchParams.get("city");
     const search = req.nextUrl.searchParams.get("search") || "";
-
-    if (!school_id || !city) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "school_id and city are required",
-        },
-        { status: 400 }
-      );
-    }
 
     let query = supabase
       .from("teachers")
-      .select("id, name")
-      .eq("school_id", school_id);
+      .select("id, name");
+
+    // school_id filter is optional - if provided, filter by school; otherwise, get all teachers
+    if (school_id) {
+      query = query.eq("school_id", school_id);
+    }
 
     if (search.trim()) {
       query = query.ilike("name", `%${search}%`);

@@ -136,15 +136,14 @@ const DotIcon = () => (
 // ─── Teacher Types & Data ─────────────────────────────────────────────────────
 
 type TeacherRisk = "High" | "Medium" | "Low";
-type TeacherStatus = "Active" | "Inactive";
 
 interface Teacher {
   id: number;
   name: string;
-  reports: number;
-  avgRating: number;
+  total_reports: number;
+  avg_rating: number;
   risk: TeacherRisk;
-  status: TeacherStatus;
+  status: string;
 }
 
 const teacherRiskStyles: Record<TeacherRisk, { bg: string; text: string }> = {
@@ -284,13 +283,13 @@ function AddTeacherSidebar({ isOpen, onClose, schoolId, onTeacherAdded }: AddTea
             <div className="relative">
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e) => {console.log(e.target.value,"value");setStatus(e.target.value)}}
                 disabled={loading}
                 className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>Select</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="1">Active</option>
+                <option value="2">Inactive</option>
               </select>
               <span className="pointer-events-none absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
                 <ChevronDownIcon />
@@ -329,6 +328,7 @@ function EditTeacherSidebar({ isOpen, onClose, teacher, onTeacherUpdated }: Edit
 
   useEffect(() => {
     if (teacher) {
+      console.log(teacher.status)
       setName(teacher.name);
       setStatus(teacher.status);
     }
@@ -431,8 +431,8 @@ function EditTeacherSidebar({ isOpen, onClose, teacher, onTeacherUpdated }: Edit
                 className="appearance-none w-full h-10 sm:h-12 px-3 sm:px-4 pr-10 rounded-lg bg-[#F3F4F5] font-inter font-normal text-sm text-[#6B7280] outline-none focus:ring-2 focus:ring-[#0171F9]/30 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="" disabled>Select</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="1">Active</option>
+                <option value="2">Inactive</option>
               </select>
               <span className="pointer-events-none absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
                 <ChevronDownIcon />
@@ -555,7 +555,7 @@ function DeleteConfirmationModal({
 function TeachersTab({ schoolId }: { schoolId: string }) {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [riskFilter, setRiskFilter] = useState<"All" | TeacherRisk>("All");
-  const [statusFilter, setStatusFilter] = useState<"All" | TeacherStatus>("All");
+  const [statusFilter, setStatusFilter] = useState<"All" | string>("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editSidebarOpen, setEditSidebarOpen] = useState(false);
@@ -593,7 +593,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
         }
 
         const data = await response.json();
-
+       
         if (!data.success) {
           throw new Error(data.message || "Failed to fetch teachers");
         }
@@ -648,6 +648,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
     setDeleteModalOpen(true);
   };
 
+
   const handleConfirmDelete = async () => {
     if (teacherToDelete === null) {
       return;
@@ -681,6 +682,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
     }
   };
 
+  
   const handleCancelDelete = () => {
     setDeleteModalOpen(false);
     setTeacherToDelete(null);
@@ -773,7 +775,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
             <div className="relative">
               <select
                 value={statusFilter}
-                onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | TeacherStatus)}
+                onChange={(e) => handleFilterChange(setStatusFilter)(e.target.value as "All" | string)}
                 className="appearance-none flex items-center gap-2.5 pl-9 pr-8 py-[11px] rounded-[10px] border border-[rgba(178,178,178,0.20)] bg-[#FAFCFF] font-inter text-sm text-[#121212] opacity-80 cursor-pointer outline-none"
               >
                 <option value="All">Status: All</option>
@@ -823,18 +825,18 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
                         {/* Reports */}
                         <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
                           <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711] ">
-                            {teacher.reports}
+                            {teacher.total_reports || 0}
                           </span>
                         </td>
                         {/* Avg Rating */}
                         <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
                           <span className="font-inter font-normal text-[12px] sm:text-[13px] text-[#030711]">
-                            {teacher.reports > 0 ? <>{Number(teacher.avgRating)}<span className="text-[#9CA3AF]">/5</span></> : "N/A"}
+                            {teacher.total_reports > 0 ? <>{Number(teacher.avg_rating)}<span className="text-[#9CA3AF]">/5</span></> : "N/A"}
                           </span>
                         </td>
                         {/* Risk badge */}
-                        {teacher.reports > 0 ? <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
-                          <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs ${risk.bg} ${risk.text}`}>
+                        {teacher.total_reports > 0 ? <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
+                          <span className={`inline-flex items-center justify-center px-2 sm:px-2.5 py-1 rounded-md font-inter font-medium text-[10px] sm:text-xs ${risk?.bg} ${risk?.text}`}>
                             {teacher.risk}
                           </span>
                         </td>
@@ -848,7 +850,7 @@ function TeachersTab({ schoolId }: { schoolId: string }) {
                         {/* Status */}
                         <td className="px-2 sm:px-5 py-3 sm:py-[17.5px] whitespace-nowrap">
                           <span className="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-md border border-[#EFF0F2] bg-[#F6F6F6] font-inter font-normal text-[11px] sm:text-xs text-[#030711]">
-                            {teacher.status}
+                            {teacher.status == "1" ? "Active" : "Inactive"}
                           </span>
                         </td>
                         {/* Actions */}
@@ -1239,7 +1241,7 @@ export default function SchoolDetailPage() {
                 <div className="flex items-center gap-1.5">
                   <LocationPinIcon />
                   <span className="font-outfit font-normal text-xs sm:text-sm text-[#414141] leading-7">
-                    {schoolData.city}, {schoolData.state}
+                    {[schoolData.city, schoolData.state].filter(Boolean).join(", ")}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">

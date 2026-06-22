@@ -82,14 +82,12 @@ export async function PUT(
       );
     }
 
-    // convert status
-    const statusValue = status === "Active" ? 1 : 0;
 
     const { error } = await supabase
       .from("teachers")
       .update({
         name,
-        status: statusValue,
+        status: status,
         updated_at: new Date().toISOString(), // optional but recommended
       })
       .eq("id", id);

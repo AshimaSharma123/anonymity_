@@ -51,49 +51,55 @@ export const AvgRatings = (val: any) => {
 }
 
 
-export type ObjectType = {
-  [key: string]: any;
+export const getSentiment = (report: any) => {
+
+  if (report?.AI_sentiment == "Positive") {
+    return {
+      label: "Positive",
+      bg: "bg-green-100",
+      text: "text-green-700",
+    };
+  }
+
+  if (report?.AI_sentiment == "Neutral") {
+    return {
+      label: "Neutral",
+      bg: "bg-yellow-100",
+      text: "text-yellow-700",
+    };
+  }
+
+  if (report?.AI_sentiment == "Negative") {
+    return {
+      label: "Negative",
+      bg: "bg-red-100",
+      text: "text-red-700",
+    };
+  }
+  return {
+      label: "Not sure",
+      bg: "bg-[#F6F6F6]",
+      text: "text-[#030711]",
+    };
+  
 };
 
-// export async function generateAISummary(
-//   school: any
-// ) {
-//   const prompt = `
-// Generate a short natural sounding school summary
-// for guest teachers.
+export const colors = [
+  { bg: "bg-red-100", text: "text-red-700" },
+  { bg: "bg-blue-100", text: "text-blue-700" },
+  { bg: "bg-green-100", text: "text-green-700" },
+  { bg: "bg-purple-100", text: "text-purple-700" },
+  { bg: "bg-pink-100", text: "text-pink-700" },
+  { bg: "bg-yellow-100", text: "text-yellow-700" },
+  { bg: "bg-indigo-100", text: "text-indigo-700" },
+];
 
-// Keep it under 35 words.
+export const getTeacherColor = (name: string) => {
+  let hash = 0;
 
-// School analytics:
-// - Overall rating: ${school.avg_rating}/5
-// - Classroom management: ${school.avg_classroom_behavior}/5
-// - Staff friendliness: ${school.avg_staff_friendliness}/5
-// - Lesson preparedness: ${school.avg_lesson_preparedness}/5
-// - Support level: ${school.avg_support_level}/5
-// - Cleanliness: ${school.avg_school_cleanliness}/5
-// - Reviews: ${school.total_reports}
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  }
 
-// Requirements:
-// - Sound human and trustworthy
-// - Mention strengths and weaknesses naturally
-// - Avoid robotic wording
-// - No bullet points
-// - No quotes
-// `;
-
-//   const response =
-//     await openai.chat.completions.create({
-//       model: "gpt-4.1-mini",
-
-//       messages: [
-//         {
-//           role: "user",
-//           content: prompt,
-//         },
-//       ],
-
-//       temperature: 0.8,
-//     });
-
-//   return response.choices[0].message.content;
-// }
+  return colors[hash % colors.length];
+};

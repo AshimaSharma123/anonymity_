@@ -1,4 +1,3 @@
-// app/api/schools/[id]/reports/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
@@ -27,8 +26,9 @@ export async function GET(
     let reportsQuery = supabase
       .from("reports")
       .select("*", { count: "exact" })
+      .eq("status", 2)
       .eq("school_id", id);
-
+      
     // =========================
     // SENTIMENT FILTER
     // =========================
@@ -37,7 +37,7 @@ export async function GET(
       status === "Neutral" ||
       status === "Negative"
     ) {
-      reportsQuery = reportsQuery.eq("sentiments", status);
+      reportsQuery = reportsQuery.eq("AI_sentiment", status);
     }
 
     // =========================

@@ -22,6 +22,10 @@ type FileResult = {
   errors: string[];
 };
 
+function generateBatchId(): string {
+  return `import_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
 async function filterExisting(
   batch: SchoolImportRecord[]
 ): Promise<{ toInsert: SchoolImportRecord[]; skipped: number }> {
@@ -87,6 +91,7 @@ export async function POST(req: Request) {
       );
     }
 
+    const batchId = generateBatchId();
     const fileResults: FileResult[] = [];
     let totalParsed = 0;
     let totalInserted = 0;
@@ -118,7 +123,13 @@ export async function POST(req: Request) {
           continue;
         }
 
-        const { error } = await supabase.from("schools").insert(toInsert);
+        const schoolsWithBatchId = toInsert.map((school) => ({
+          ...school
+        }));
+
+        const { error } = await supabase
+          .from("schools")
+          .insert(schoolsWithBatchId);
 
         if (error) {
           result.failed += toInsert.length;
@@ -146,6 +157,7 @@ export async function POST(req: Request) {
         failed: totalFailed,
       },
       fileResults,
+      batchId: totalInserted > 0 ? batchId : null,
     });
   } catch (error) {
     console.error("School import error:", error);

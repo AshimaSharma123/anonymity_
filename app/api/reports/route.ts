@@ -50,7 +50,7 @@ export async function GET(request: Request) {
     // Sentiment filter
     if (sentiment !== "All") {
       query = query.eq(
-        "sentiments",
+        "AI_sentiment",
         sentiment
       );
     }

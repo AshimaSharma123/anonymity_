@@ -265,9 +265,11 @@ export default function SchoolsPage() {
                         <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school?.school_year}</span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
-                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{`${school.
-                          city}, ${school.state
-                          }`}</span>
+                        <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">
+                          {school.city && school.state
+                            ? `${school.city}, ${school.state}`
+                            : school.city || school.state || ""}
+                        </span>
                       </td>
                       <td className="px-2 sm:px-4 lg:px-5 py-2.5 sm:py-[17.5px] whitespace-nowrap">
                         <span className="font-inter font-normal text-[12px] sm:text-[14px] text-[#030711]">{school.teacher_count}</span>

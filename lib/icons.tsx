@@ -56,3 +56,124 @@ export const DeleteWarningIcon = () => (
     <path d="M24 16V28M24 32C24.5523 32 25 31.5523 25 31C25 30.4477 24.5523 30 24 30C23.4477 30 23 30.4477 23 31C23 31.5523 23.4477 32 24 32Z" stroke="#E02C2C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+export function RatingBar({ label, value = 0, max = 5 }: { label?: string; value?: number; max?: number }) {
+  const pct = (value / max) * 100;
+  return (
+    <div className="flex items-center w-full">
+      <span className="w-[145px] flex-shrink-0 font-outfit text-sm text-[#6B7280] leading-6">{label}</span>
+      <div className="flex items-center gap-4 flex-1">
+        <div className="flex-1 h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+          <div className="h-full rounded-full bg-[#0171F9]" style={{ width: `${pct}%` }} />
+        </div>
+        <span className="font-outfit text-sm text-black leading-6 w-6 text-right">{value}/{max}</span>
+      </div>
+    </div>
+  );
+}
+
+export function StarRating({ count = 0 }: { count?: number }) {
+  return (
+    <svg width="90" height="16" viewBox="0 0 90 16" fill="none">
+      {[0, 1, 2, 3, 4].map((i) => {
+        const x = i * 18;
+
+        // ⭐ Determine fill percentage for this star
+        const fillPercent = Math.max(
+          0,
+          Math.min(1, count - i)
+        );
+
+        return (
+          <g key={i} transform={`translate(${x}, 0)`}>
+            {/* Empty star */}
+            <path
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#E2E8F0"
+              stroke="#E2E8F0"
+              strokeWidth="0.92"
+            />
+
+            {/* Partial filled star */}
+            <clipPath id={`clip-${i}`}>
+              <rect
+                x="0"
+                y="0"
+                width={13 * fillPercent}
+                height="13"
+              />
+            </clipPath>
+
+            <path
+              clipPath={`url(#clip-${i})`}
+              d="M7.89844 4.36816L8.00781 4.62012L8.28125 4.64258L11.8516 4.94336L9.16113 7.21094L8.94434 7.39355L9.00977 7.66992L9.81641 11.0576L6.73242 9.25L6.5 9.11426L6.26758 9.25L3.18262 11.0576L3.99023 7.66992L4.05566 7.39355L3.83887 7.21094L1.14746 4.94336L4.71875 4.64258L4.99219 4.62012L5.10156 4.36816L6.5 1.15332L7.89844 4.36816Z"
+              fill="#0171F9"
+              stroke="#0171F9"
+              strokeWidth="0.92"
+            />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+export function ScoreCircle({ score }: { score: number }) {
+  const radius = 31;
+  const circumference = 2 * Math.PI * radius;
+
+  //  convert 5-scale to percentage
+  const percentage = (score / 5) * 100;
+
+  const progress = (percentage / 100) * circumference;
+
+  const scoreColor =
+    score >= 4
+      ? "#34C567"
+      : score >= 3
+        ? "#F8A202"
+        : "#EF4444";
+
+  return (
+    <div className="relative w-[70px] h-[70px]">
+      <svg
+        width="70"
+        height="70"
+        viewBox="0 0 70 70"
+        className="rotate-[-90deg]"
+      >
+        {/* Background */}
+        <circle
+          cx="35"
+          cy="35"
+          r={radius}
+          fill="none"
+          stroke="#F1F5F9"
+          strokeWidth="6"
+        />
+
+        {/* Progress */}
+        <circle
+          cx="35"
+          cy="35"
+          r={radius}
+          fill="none"
+          stroke={scoreColor}
+          strokeWidth="6"
+          strokeDasharray={`${progress} ${circumference}`}
+          strokeLinecap="round"
+        />
+      </svg>
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-outfit font-semibold text-lg text-black leading-none">
+          {score}
+        </span>
+
+        <span className="font-outfit text-[10px] text-[#6B7280] leading-none mt-0.5">
+          Score
+        </span>
+      </div>
+    </div>
+  );
+}

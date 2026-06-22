@@ -198,7 +198,7 @@ interface Review {
   your_name: string;
   teacher_name?: string;
   created_at: string;
-  sentiments: SentimentType;
+  AI_sentiment:SentimentType;
   avg_rating: number;
   feedback: string;
   tags: string[];
@@ -306,8 +306,8 @@ function ReviewCard({ review }: { review: Review }) {
             <span className="text-[#121212] font-inter text-xs sm:text-sm font-normal leading-5">{formatDate(review.created_at)}</span>
           </div>
         </div>
-        <span className={`px-2 sm:px-2.5 py-1 w-fit h-fit rounded-md font-inter text-xs font-semibold leading-[15px] flex-shrink-0 ${getSentimentBadgeStyle(review.sentiments)}`}>
-          {review.sentiments}
+        <span className={`px-2 sm:px-2.5 py-1 w-fit h-fit rounded-md font-inter text-xs capitalize font-semibold leading-[15px] flex-shrink-0 ${getSentimentBadgeStyle(review.AI_sentiment)}`}>
+          {review.AI_sentiment}
         </span>
       </div>
 
@@ -678,9 +678,7 @@ export default function SchoolDetailPage() {
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <div className="flex gap-[7px] items-center">
                 <LocationIcon />
-                <p className="text-[#414141] text-sm font-normal leading-[20px] break-words">{`${schoolData?.
-                  city}, ${schoolData?.state
-                  }`}</p>
+                <p className="text-[#414141] text-sm font-normal leading-[20px] break-words"> {[schoolData.city, schoolData.state].filter(Boolean).join(", ")}</p>
                 </div>
                 {schoolData?.grade_level && schoolData.grade_level?.map((level: string, i: number) => (
                   <span key={i} className="inline-flex items-center px-2 sm:px-2.5 py-1 sm:py-1.5 rounded text-xs sm:text-sm bg-[#DFEEFF] text-[#0171F9] font-inter font-semibold leading-[15px]">

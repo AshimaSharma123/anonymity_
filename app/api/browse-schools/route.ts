@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { ObjectType } from "@/lib/function";
 
 export async function GET(req: NextRequest) {
   try {
@@ -68,7 +67,8 @@ export async function GET(req: NextRequest) {
         return_to_school_percentage,
         sentiment,
         created_at,
-        grade_level
+        grade_level,
+        ai_summary
       `,
         { count: "exact" }
       );

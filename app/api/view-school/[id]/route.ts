@@ -7,10 +7,6 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-
-    const page = parseInt(req.nextUrl.searchParams.get("page") || "1");
-    const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10");
-
     // =========================
     // 1. SCHOOL DETAILS (FAST)
     // =========================

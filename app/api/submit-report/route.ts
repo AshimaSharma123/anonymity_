@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { analyzeReport } from "@/lib/analyze-report";
 
 export async function POST(req: Request) {
   try {
@@ -26,6 +27,16 @@ export async function POST(req: Request) {
       sentiments,
       city
     } = body;
+
+    const aiReportAnalysis = await analyzeReport({
+      ratings,
+      feedback,
+      selectedTags,
+      returnToSchool,
+      returnToTeacher,
+      schoolComment,
+      teacherComment
+    });
 
     // Insert into Supabase
     const { data, error } = await supabase
@@ -73,15 +84,15 @@ export async function POST(req: Request) {
             returnToSchool === "yes"
               ? 1
               : returnToSchool === "no"
-              ? 2
-              : 3,
+                ? 2
+                : 3,
 
           return_to_teacher:
             returnToTeacher === "yes"
               ? 1
               : returnToTeacher === "no"
-              ? 2
-              : 3,
+                ? 2
+                : 3,
 
           school_comment: schoolComment,
 
@@ -101,7 +112,22 @@ export async function POST(req: Request) {
 
           school_association: schoolAssociation,
 
-          sentiments
+          sentiments,
+          AI_sentiment: aiReportAnalysis.sentiment,
+
+          AI_riskLevel: aiReportAnalysis.risk_level,
+
+          AI_teacherStrength:
+            aiReportAnalysis.teacher_strengths,
+
+          AI_teacherIssues:
+            aiReportAnalysis.teacher_issues,
+
+          AI_schoolStrength:
+            aiReportAnalysis.school_strengths,
+
+          AI_schoolIssues:
+            aiReportAnalysis.school_issues,
         },
       ])
       .select();
@@ -118,7 +144,7 @@ export async function POST(req: Request) {
         }
       );
     }
-
+  
     return NextResponse.json({
       success: true,
       data,
