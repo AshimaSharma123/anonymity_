@@ -75,7 +75,7 @@ export async function incrementSchoolAnalytics(
         sentiment = "Positive";
     } else if (avgRating >= 3) {
         sentiment = "Neutral";
-    } else if (avgRating > 0 && avgRating < 3) {
+    } else if (avgRating < 3) {
         sentiment = "Negative";
     }
 
@@ -88,7 +88,7 @@ export async function incrementSchoolAnalytics(
         calculatedRisk = "Low";
     } else if (avgRating >= 3) {
         calculatedRisk = "Medium";
-    } else if (avgRating > 0 && avgRating < 3) {
+    } else if (avgRating < 3) {
         calculatedRisk = "High";
     }
 
