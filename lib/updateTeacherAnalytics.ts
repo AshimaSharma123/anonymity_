@@ -12,7 +12,7 @@ export async function updateTeacherAnalytics(
 
   const { data: analytics } = await supabase
     .from("teachers")
-    .select("total_reports,high_risk_reports,avg_rating")
+    .select("total_reports,high_risk_reports,avg_rating,ai_summary")
     .eq("id", teacherId)
     .maybeSingle();
 
@@ -103,12 +103,14 @@ Generate a concise administrator-facing teacher risk summary.
 Statistics:
 Total Reports: ${totalReports}
 High Risk Reports: ${highRiskReports}
+Existing Feedback: ${analytics?.ai_summary || "No existing summary"}
 
 High Risk Feedback:
 ${feedbackText}
 
 Instructions:
 - Write 1-2 sentences.
+- If Existing Summary is "No existing summary", generate the summary using only the latest feedback.
 - Focus on recurring concerns and patterns.
 - Mention classroom management, student behavior, professionalism, preparation, or safety concerns when applicable.
 - Include overall trend information using the report statistics.

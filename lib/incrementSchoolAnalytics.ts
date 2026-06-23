@@ -184,13 +184,19 @@ export async function incrementSchoolAnalytics(
                     await openai.responses.create({
                         model: "gpt-5-mini",
 
-                        input: `Generate a short natural sounding school summary based on guest teacher feedback.
+                        input: `Generate an updated school feedback using the existing feedback and the latest guest teacher feedback.
+
+                        Existing Feedback:
+${school.ai_summary || "No existing feedback"}
         
-        Feedback:
+        Latest Feedback:
         ${feedbackText}
         
         Rules:
         - Write exactly 1 sentence.
+        - If Existing Feedback is "No existing feedback", generate the feedback using only the latest feedback.
+        - Do not mention the existence or absence of a previous feedback.
+        - Do not reference "existing feedback", "previous feedback", or "latest feedback" in the output.        
         - Maximum 20 words.
         - Highlight strengths first.
         - Do not mention individual incidents unless they appear repeatedly.
