@@ -4,7 +4,6 @@ import { colors, getTeacherColor } from "@/lib/function";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/lib/icons";
 import { Report } from "@/lib/types";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -18,9 +17,9 @@ const EmptyStateIcon = () => (
 );
 
 export default function HighRiskAlertsPage() {
-  const searchParams = useSearchParams();
   const [teachers, setTeachers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -30,8 +29,6 @@ export default function HighRiskAlertsPage() {
   const [search, setSearch] = useState("");
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
-
-  const page = parseInt(searchParams.get("page") || "1", 10);
 
   const fetchReports = async (pageNum: number, searchQuery: string) => {
     // setLoading(true);
@@ -65,20 +62,17 @@ export default function HighRiskAlertsPage() {
   };
 
   useEffect(() => {
-    fetchReports(page, search);
-  }, [page]);
+    fetchReports(currentPage, search);
+  }, [currentPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setCurrentPage(1);
     fetchReports(1, search);
-     
-    
   };
 
   const goToPage = (pageNum: number) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("page", pageNum.toString());
-    window.history.pushState({}, "", url);
+    setCurrentPage(pageNum);
   };
 
   if (loading) {

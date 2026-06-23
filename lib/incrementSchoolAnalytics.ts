@@ -73,9 +73,9 @@ export async function incrementSchoolAnalytics(
 
     if (avgRating >= 4) {
         sentiment = "Positive";
-    } else if (avgRating > 2.5) {
+    } else if (avgRating >= 3) {
         sentiment = "Neutral";
-    } else if (avgRating > 0 && avgRating <= 2.5) {
+    } else if (avgRating > 0 && avgRating < 3) {
         sentiment = "Negative";
     }
 
@@ -86,9 +86,9 @@ export async function incrementSchoolAnalytics(
     let calculatedRisk;
     if (avgRating >= 4) {
         calculatedRisk = "Low";
-    } else if (avgRating > 2.5) {
+    } else if (avgRating >= 3) {
         calculatedRisk = "Medium";
-    } else if (avgRating > 0 && avgRating <= 2.5) {
+    } else if (avgRating > 0 && avgRating < 3) {
         calculatedRisk = "High";
     }
 
@@ -129,19 +129,19 @@ export async function incrementSchoolAnalytics(
 
         positive_reports:
             (school.positive_reports || 0) +
-            (report.sentiments === "Positive" ? 1 : 0),
+            (report.AI_sentiment === "Positive" ? 1 : 0),
 
         neutral_reports:
             (school.neutral_reports || 0) +
-            (report.sentiments === "Neutral" ? 1 : 0),
+            (report.AI_sentiment === "Neutral" ? 1 : 0),
 
         negative_reports:
             (school.negative_reports || 0) +
-            (report.sentiments === "Negative" ? 1 : 0),
+            (report.AI_sentiment === "Negative" ? 1 : 0),
 
         high_risk_reports:
             (school.high_risk_reports || 0) +
-            (report.risk_level === "High" ? 1 : 0),
+            (report.AI_riskLevel === "High" ? 1 : 0),
 
         sentiment,
         calculated_risk: calculatedRisk,

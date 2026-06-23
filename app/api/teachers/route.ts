@@ -133,6 +133,14 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Risk filter
+    if (riskFilter && riskFilter !== "All") {
+      teachersQuery = teachersQuery.eq(
+        "risk",
+        riskFilter
+      );
+    }
+
     const {
       data: teachersData,
       error: teachersError,

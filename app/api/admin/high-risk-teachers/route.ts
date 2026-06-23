@@ -29,10 +29,9 @@ export async function GET(request: NextRequest) {
 
 
     if (search.trim()) {
-      query = query.or(
-        [
-          `name.ilike.%${search}%`,
-        ].join(",")
+      query = query.ilike(
+        "name",
+        `%${search}%`
       );
     }
 

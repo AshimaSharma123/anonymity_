@@ -32,14 +32,14 @@ export async function updateTeacherAnalytics(
     report.return_to_teacher === 1
       ? 5 // Yes
       : report.return_to_teacher === 3
-      ? 3 // Maybe
-      : 0; // No
+        ? 3 // Maybe
+        : 0; // No
 
   const avgRating = Number(
   (
     (currentAvg * currentReports + newRating) /
     totalReports
-  ).toFixed(1)
+  ).toFixed(2)
 );
 
 
@@ -52,25 +52,28 @@ export async function updateTeacherAnalytics(
   }
 
   // Generate summary on first report and every 5 reports thereafter
-  
+
   if (
     (analytics?.high_risk_reports === 0 && report.return_to_teacher === 2) ||
-   (highRiskReports % 5 === 0 && report.return_to_teacher === 2)
+    (highRiskReports % 5 === 0 && report.return_to_teacher === 2)
   ) {
     try {
-      const { data: recentReports } =
+
+      const { data: recentReports, error: reportsError } =
         await supabase
           .from("reports")
           .select(
-            "feedback, teacher_comment, risk_level, AI_teacherIssues"
+            "feedback, teacher_comment, AI_teacherIssues"
           )
           .eq("teacher_id", teacherId)
-          .eq("AI_riskLevel", "High")
+          .eq("return_to_teacher", 2)
           .eq("status", 2)
           .order("created_at", {
             ascending: false,
           })
           .limit(5);
+
+
 
       const feedbackText =
         recentReports
@@ -129,15 +132,15 @@ Return JSON only:
       await supabase
         .from("teachers")
         .update({
-          ai_summary:
-            result.summary || null,
+          ai_summary: result.summary || null,
           total_reports: totalReports,
           high_risk_reports: highRiskReports,
-          high_risk_percentage: (highRiskReports / totalReports) * 100,
+          high_risk_percentage:
+            (highRiskReports / totalReports) * 100,
           avg_rating: avgRating,
-          risk
+          risk,
         })
-        .eq("id", teacherId);
+        .eq("id", teacherId)
 
       console.log(
         `Teacher summary updated for ${teacherId}`
@@ -148,16 +151,17 @@ Return JSON only:
         error
       );
     }
-  }else{
+  } else {
     await supabase
-    .from("teachers")
-    .update({
-      total_reports: totalReports,
-      high_risk_reports: highRiskReports,
-      high_risk_percentage: (highRiskReports / totalReports) * 100,
-      avg_rating: avgRating,
-      risk
-    })
-    .eq("id", teacherId);
+      .from("teachers")
+      .update({
+        total_reports: totalReports,
+        high_risk_reports: highRiskReports,
+        high_risk_percentage:
+          (highRiskReports / totalReports) * 100,
+        avg_rating: avgRating,
+        risk,
+      })
+      .eq("id", teacherId);
   }
 }

@@ -32,12 +32,18 @@ export async function GET(req: NextRequest) {
     // =========================
     // SEARCH FILTER
     // =========================
+
+
     if (search.trim()) {
+      const safeSearch = search
+        .trim()
+        .replace(/,/g, "");
+
       query = query.or(
         [
-          `school_name.ilike.%${search}%`,
-          `city.ilike.%${search}%`,
-          `state.ilike.%${search}%`,
+          `school_name.ilike.%${safeSearch}%`,
+          `city.ilike.%${safeSearch}%`,
+          `state.ilike.%${safeSearch}%`,
         ].join(",")
       );
     }
